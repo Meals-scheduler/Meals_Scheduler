@@ -6,13 +6,18 @@
     </shared>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc7026c1-3f4f-4b10-9a5d-641607054c66" name="Default Changelist" comment="Started implementing..." />
+    <list default="true" id="fc7026c1-3f4f-4b10-9a5d-641607054c66" name="Default Changelist" comment="Started implementing...">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[192.168.221.103:5555]" />
+  <component name="ExportToHTMLSettings">
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../Meals_Scheduler\exportToHTML" />
+  </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -42,7 +47,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Meals_Scheduler/Meals_Scheduler" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -189,18 +194,22 @@
       <screen x="0" y="0" width="1600" height="860" />
     </state>
     <state x="317" y="176" key="#PSD/0.0.1600.860@0.0.1600.860" timestamp="1614685784783" />
-    <state x="249" y="7" key="CommitChangelistDialog2" timestamp="1614689309279">
+    <state x="549" y="266" key="#com.intellij.ide.actions.ChooseComponentsToExportDialog" timestamp="1614695242445">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
-    <state x="249" y="7" key="CommitChangelistDialog2/0.0.1600.860@0.0.1600.860" timestamp="1614689309279" />
+    <state x="549" y="266" key="#com.intellij.ide.actions.ChooseComponentsToExportDialog/0.0.1600.860@0.0.1600.860" timestamp="1614695242445" />
+    <state x="249" y="7" key="CommitChangelistDialog2" timestamp="1614689930103">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="249" y="7" key="CommitChangelistDialog2/0.0.1600.860@0.0.1600.860" timestamp="1614689930103" />
     <state x="152" y="67" key="DiffContextDialog" timestamp="1614689259331">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
     <state x="152" y="67" key="DiffContextDialog/0.0.1600.860@0.0.1600.860" timestamp="1614689259331" />
-    <state x="580" y="171" key="FileChooserDialogImpl" timestamp="1614689842101">
+    <state x="580" y="171" key="FileChooserDialogImpl" timestamp="1614689646895">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
-    <state x="580" y="171" key="FileChooserDialogImpl/0.0.1600.860@0.0.1600.860" timestamp="1614689842101" />
+    <state x="580" y="171" key="FileChooserDialogImpl/0.0.1600.860@0.0.1600.860" timestamp="1614689646895" />
     <state x="662" y="327" key="Github.ShareDialog" timestamp="1614688817315">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
@@ -209,18 +218,18 @@
       <screen x="0" y="0" width="1600" height="860" />
     </state>
     <state x="380" y="172" key="IDE.errors.dialog/0.0.1600.860@0.0.1600.860" timestamp="1614681073101" />
-    <state x="301" y="74" key="SettingsEditor" timestamp="1614689683027">
+    <state x="301" y="74" key="SettingsEditor" timestamp="1614689637950">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
-    <state x="301" y="74" key="SettingsEditor/0.0.1600.860@0.0.1600.860" timestamp="1614689683027" />
+    <state x="301" y="74" key="SettingsEditor/0.0.1600.860@0.0.1600.860" timestamp="1614689637950" />
     <state x="392" y="162" key="Vcs.Push.Dialog.v2" timestamp="1614689183734">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
     <state x="392" y="162" key="Vcs.Push.Dialog.v2/0.0.1600.860@0.0.1600.860" timestamp="1614689183734" />
-    <state x="463" y="180" width="672" height="678" key="search.everywhere.popup" timestamp="1614689703396">
+    <state x="463" y="180" width="672" height="678" key="search.everywhere.popup" timestamp="1614688425869">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
-    <state x="463" y="180" width="672" height="678" key="search.everywhere.popup/0.0.1600.860@0.0.1600.860" timestamp="1614689703396" />
+    <state x="463" y="180" width="672" height="678" key="search.everywhere.popup/0.0.1600.860@0.0.1600.860" timestamp="1614688425869" />
     <state x="630" y="220" key="svn.repositoryBrowser" timestamp="1614688973761">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
