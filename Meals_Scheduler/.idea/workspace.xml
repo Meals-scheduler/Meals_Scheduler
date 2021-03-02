@@ -42,7 +42,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Meals_Scheduler/Meals_Scheduler" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -197,10 +197,10 @@
       <screen x="0" y="0" width="1600" height="860" />
     </state>
     <state x="152" y="67" key="DiffContextDialog/0.0.1600.860@0.0.1600.860" timestamp="1614689259331" />
-    <state x="580" y="171" key="FileChooserDialogImpl" timestamp="1614689646895">
+    <state x="580" y="171" key="FileChooserDialogImpl" timestamp="1614689842101">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
-    <state x="580" y="171" key="FileChooserDialogImpl/0.0.1600.860@0.0.1600.860" timestamp="1614689646895" />
+    <state x="580" y="171" key="FileChooserDialogImpl/0.0.1600.860@0.0.1600.860" timestamp="1614689842101" />
     <state x="662" y="327" key="Github.ShareDialog" timestamp="1614688817315">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
@@ -209,18 +209,18 @@
       <screen x="0" y="0" width="1600" height="860" />
     </state>
     <state x="380" y="172" key="IDE.errors.dialog/0.0.1600.860@0.0.1600.860" timestamp="1614681073101" />
-    <state x="301" y="74" key="SettingsEditor" timestamp="1614689637950">
+    <state x="301" y="74" key="SettingsEditor" timestamp="1614689683027">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
-    <state x="301" y="74" key="SettingsEditor/0.0.1600.860@0.0.1600.860" timestamp="1614689637950" />
+    <state x="301" y="74" key="SettingsEditor/0.0.1600.860@0.0.1600.860" timestamp="1614689683027" />
     <state x="392" y="162" key="Vcs.Push.Dialog.v2" timestamp="1614689183734">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
     <state x="392" y="162" key="Vcs.Push.Dialog.v2/0.0.1600.860@0.0.1600.860" timestamp="1614689183734" />
-    <state x="463" y="180" width="672" height="678" key="search.everywhere.popup" timestamp="1614688425869">
+    <state x="463" y="180" width="672" height="678" key="search.everywhere.popup" timestamp="1614689703396">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
-    <state x="463" y="180" width="672" height="678" key="search.everywhere.popup/0.0.1600.860@0.0.1600.860" timestamp="1614688425869" />
+    <state x="463" y="180" width="672" height="678" key="search.everywhere.popup/0.0.1600.860@0.0.1600.860" timestamp="1614689703396" />
     <state x="630" y="220" key="svn.repositoryBrowser" timestamp="1614688973761">
       <screen x="0" y="0" width="1600" height="860" />
     </state>

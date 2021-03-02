@@ -1,0 +1,2 @@
+com/example/meals_scheduler/shared/BuildConfig.java
+ com.example.meals_scheduler.shared.BuildConfig
