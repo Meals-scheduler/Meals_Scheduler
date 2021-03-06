@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\elad1\\AndroidStudioProjects\\Meals_Scheduler\\androidApp\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-ro\\values-ro.xml",
+            "outputFile": "C:\\Users\\elad1\\Desktop\\Meals_Scheduler\\Meals_Scheduler\\androidApp\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-ro\\values-ro.xml",
             "map": [
                 {
                     "source": "C:\\Users\\elad1\\.gradle\\caches\\transforms-2\\files-2.1\\45f74a3f564318e660e3f50be32aa2da\\core-1.3.1\\res\\values-ro\\values-ro.xml",

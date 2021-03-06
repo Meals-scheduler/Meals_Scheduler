@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\elad1\\AndroidStudioProjects\\Meals_Scheduler\\androidApp\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-h360dp-land-v13\\values-h360dp-land-v13.xml",
+            "outputFile": "C:\\Users\\elad1\\Desktop\\Meals_Scheduler\\Meals_Scheduler\\androidApp\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-h360dp-land-v13\\values-h360dp-land-v13.xml",
             "map": [
                 {
                     "source": "C:\\Users\\elad1\\.gradle\\caches\\transforms-2\\files-2.1\\cf427e9faffda67f3c990611b264d08c\\material-1.2.1\\res\\values-h360dp-land-v13\\values-h360dp-land-v13.xml",

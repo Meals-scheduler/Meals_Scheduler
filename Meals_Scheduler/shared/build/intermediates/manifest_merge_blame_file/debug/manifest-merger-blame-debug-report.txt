@@ -4,8 +4,8 @@
 4
 5    <uses-sdk
 6        android:minSdkVersion="24"
-6-->C:\Users\elad1\AndroidStudioProjects\Meals_Scheduler\shared\src\androidMain\AndroidManifest.xml
+6-->C:\Users\elad1\Desktop\Meals_Scheduler\Meals_Scheduler\shared\src\androidMain\AndroidManifest.xml
 7        android:targetSdkVersion="29" />
-7-->C:\Users\elad1\AndroidStudioProjects\Meals_Scheduler\shared\src\androidMain\AndroidManifest.xml
+7-->C:\Users\elad1\Desktop\Meals_Scheduler\Meals_Scheduler\shared\src\androidMain\AndroidManifest.xml
 8
 9</manifest>
