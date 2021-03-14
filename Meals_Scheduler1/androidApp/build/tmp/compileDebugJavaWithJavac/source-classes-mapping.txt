@@ -1,2 +1,0 @@
-com/example/meals_scheduler/androidApp/BuildConfig.java
- com.example.meals_scheduler.androidApp.BuildConfig
