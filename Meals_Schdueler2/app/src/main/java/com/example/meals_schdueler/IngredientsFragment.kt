@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 
-class TabFragment : Fragment() {
+class IngredientsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,19 +30,19 @@ class TabFragment : Fragment() {
 
         override fun getItem(position: Int): Fragment {
             when(position){
-                0-> return FirstFragment()
-                1-> return SecondFragment()
-                2-> return ThirdFragment()
+                0-> return AddIngredientFragment()
+                1-> return MyIngredientFragment()
+                2-> return AllIngredientsFragment()
             }
-            return FirstFragment()
+            return AddIngredientFragment()
         }
 
 
         override fun getPageTitle(position: Int): CharSequence? {
             when(position){
-                0-> return "First"
-                1-> return "Second"
-                2-> return "Third"
+                0-> return "Add ingredient"
+                1-> return "My ingredietns"
+                2-> return "All ingredietns"
             }
             return null
         }

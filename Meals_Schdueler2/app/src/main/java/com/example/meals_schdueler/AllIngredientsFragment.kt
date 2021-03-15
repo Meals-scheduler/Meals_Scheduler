@@ -8,13 +8,13 @@ import android.widget.TableLayout
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 
-class ThirdFragment : Fragment() {
+class AllIngredientsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-       return  inflater.inflate(R.layout.third_layout,null)
+       return  inflater.inflate(R.layout.all_ingredients_layout,null)
     }
 
 

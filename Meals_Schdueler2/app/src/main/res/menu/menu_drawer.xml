@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:title="Inbox"
-        android:id="@+id/nav_item_inbox"
+        android:title="Ingredients"
+        android:id="@+id/nav_item_ingredients"
         android:icon="@drawable/ic_launcher_foreground"/>
 
     <item
