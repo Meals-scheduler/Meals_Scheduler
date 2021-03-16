@@ -1,21 +1,20 @@
 package com.example.meals_schdueler
 
 
-import androidx.appcompat.app.AppCompatActivity
+//import android.widget.Toolbar
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
-//import android.widget.Toolbar
-import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.navigation.NavigationView
 
 
-class MainActivity : AppCompatActivity() , NutritiousDialog.DialogListener{
+class MainActivity : AppCompatActivity() {
 
     lateinit var mDrawerLayout: DrawerLayout  // lateinit preventing the object from being null.
     lateinit var nNavigationView: NavigationView
@@ -43,6 +42,8 @@ class MainActivity : AppCompatActivity() , NutritiousDialog.DialogListener{
             if (menuItem.itemId == R.id.nav_item_ingredients) {
                 val ft = mFragmentManager.beginTransaction()
                 ft.replace(R.id.containerView, IngredientsFragment()).commit()
+
+
             }
 
             if (menuItem.itemId == R.id.nav_item_sent) {
@@ -63,7 +64,13 @@ class MainActivity : AppCompatActivity() , NutritiousDialog.DialogListener{
 
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
 
-        val mDrawerToggle = ActionBarDrawerToggle(this,mDrawerLayout,toolbar,R.string.app_name,R.string.app_name)
+        val mDrawerToggle = ActionBarDrawerToggle(
+            this,
+            mDrawerLayout,
+            toolbar,
+            R.string.app_name,
+            R.string.app_name
+        )
 
         mDrawerLayout.setDrawerListener(mDrawerToggle)
         mDrawerToggle.syncState()
@@ -75,10 +82,6 @@ class MainActivity : AppCompatActivity() , NutritiousDialog.DialogListener{
 
     }
 
-    override fun applyText(str: String) {
-        Log.v("Elad","HERE MAIN")
-        Toast.makeText(applicationContext, str, Toast.LENGTH_SHORT).show()
-    }
 
 
 }

@@ -1,9 +1,18 @@
 <resources>
     <string name="app_name">Meals_Schdueler</string>
     <string-array name="Type">
+        <item>Type</item>
         <item>Parve</item>
         <item>Meat</item>
         <item>Dairy</item>
+    </string-array>
+
+    <string-array name="TypeSeasson">
+        <item>Season</item>
+        <item>Winter</item>
+        <item>Fall</item>
+        <item>Spring</item>
+        <item>Summer</item>
     </string-array>
 
 

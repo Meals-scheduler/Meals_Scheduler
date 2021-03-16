@@ -19,7 +19,7 @@
             android:src="@drawable/nutritious_foods" />
 
         <EditText
-            android:id="@+id/carbsEditText"
+            android:id="@+id/CarbsEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
