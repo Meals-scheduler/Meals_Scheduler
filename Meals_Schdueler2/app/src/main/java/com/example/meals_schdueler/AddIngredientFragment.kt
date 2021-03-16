@@ -22,24 +22,25 @@ import java.io.*
 class AddIngredientFragment : Fragment(), View.OnClickListener {
 
 
-    lateinit var recipeName: EditText
+    lateinit var ingredientName: EditText
+    lateinit var costPerGram: EditText
     lateinit var typeOfMeal: Spinner
     lateinit var typeOfSeason: Spinner
     lateinit var nutritiousBtn: Button
     lateinit var saveBtn: Button
     lateinit var howToStoreBtn: Button
-    lateinit var buttonCamera: Button
     lateinit var shareIngredient: CheckBox
     lateinit var shareInfo: CheckBox
     lateinit var typeOfMeall: String
     lateinit var typeSeasson: String
-    lateinit var ingredientImage : ImageView
+    lateinit var ingredientImage: ImageView
     private var imageUri: Uri? = null
 
     //for camera intent
     private var userChoosenTask: String? = null
     private val STORAGE_PERMISSION_CODE = 1
-    companion object{
+
+    companion object {
         private val IMAGE_REQUEST = 1
     }
 
@@ -60,7 +61,7 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
         val x = inflater.inflate(R.layout.add_ingredients_layout, null)
-        recipeName = x.findViewById(R.id.editTextRecipeName)
+        ingredientName = x.findViewById(R.id.editTextIngredientName)
         typeOfMeal = x.findViewById(R.id.typeOfMealSpinner)
         typeOfSeason = x.findViewById(R.id.typeOfSeassonSpinner)
         nutritiousBtn = x.findViewById(R.id.buttonNutritious)
@@ -69,9 +70,10 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
         shareInfo = x.findViewById(R.id.checkBoxShareInfo)
         shareIngredient = x.findViewById(R.id.checkBoxShareIngredient)
         ingredientImage = x.findViewById(R.id.imageViewPic)
-        buttonCamera = x.findViewById(R.id.buttonCamera)
+        costPerGram = x.findViewById(R.id.editTextCost)
 
-        buttonCamera.setOnClickListener(this)
+
+        saveBtn.setOnClickListener(this)
         ingredientImage.setOnClickListener(this)
         howToStoreBtn.setOnClickListener(this)
         nutritiousBtn.setOnClickListener(this)
@@ -79,7 +81,7 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
         typeOfSeason.onItemSelectedListener = SpinnerActivity()
 
 
-        //Toast.makeText(activity, "Toast", Toast.LENGTH_SHORT).show()
+
 
         return x
     }
@@ -124,14 +126,24 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
             var dialog = HowToStoreDialog(HowToStoreListener(howToStoreDes), isFirstTimeHowToStore)
             isFirstTimeHowToStore = false
             dialog.show(childFragmentManager, "HowToStoreDialog")
-        } else if (p0 == saveBtn){
+        } else if (p0 == saveBtn) {
+            Log.v("Elad1", "click save")
+            var ingredient = Ingredient(
+                ingredientName.getText().toString(),
+                costPerGram.getText().toString(),
+                typeOfMeall,
+                typeSeasson,
+                "",
+                howToStoreDes,
+                shareInfo.isChecked,
+                shareIngredient.isChecked,
+            1) // owenerId will be changed and will be determined from the user Table in the future.
+            var s  = AsynTaskNew(ingredient)
+            s.execute()
 
-        }
-        else if(p0==buttonCamera){
-            OnUploadOrCaptureClick()
-        }
 
-        else if(p0==ingredientImage){
+
+        } else if (p0 == ingredientImage) {
             OnUploadOrCaptureClick()
         }
     }
@@ -164,10 +176,9 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
     }
 
 
-
     // for camera
 
-     fun OnUploadOrCaptureClick() {
+    fun OnUploadOrCaptureClick() {
 
         // need to ask for permission
 
@@ -222,7 +233,8 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
         if (ActivityCompat.shouldShowRequestPermissionRationale(
                 this.activity!!,
                 Manifest.permission.CAMERA
-            )) {
+            )
+        ) {
             Log.v("Elad", "usser denied be4")
             AlertDialog.Builder(this.context)
                 .setTitle("Permission needed")
@@ -268,7 +280,7 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
         startActivityForResult(intent, CAMERA_REQUEST_CODE)
     }
 
-     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             imageUri = data!!.data
