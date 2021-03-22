@@ -10,9 +10,9 @@ class AsynTaskNew(action : GetAndPost) : AsyncTask<Void, Void, String>() {
     override fun doInBackground(vararg params: Void?): String? {
         // ...
         Log.v("Elad1", "don in background good")
-        action.DoNetWorkOpreation()
+         return action.DoNetWorkOpreation()
 
-        return ""
+
     }
 
     override fun onPreExecute() {
@@ -22,6 +22,9 @@ class AsynTaskNew(action : GetAndPost) : AsyncTask<Void, Void, String>() {
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-        // ...
+        if (result != null) {
+            action.getData(result)
+        }
+
     }
 }

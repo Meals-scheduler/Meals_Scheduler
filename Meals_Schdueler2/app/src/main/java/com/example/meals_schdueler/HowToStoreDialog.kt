@@ -8,12 +8,14 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 
-class HowToStoreDialog(howToStoreListener: AddIngredientFragment.HowToStoreListener,var isFirstTime: Boolean) : DialogFragment() {
+class HowToStoreDialog(howToStoreListener: AddIngredientFragment, var isFirstTime: Boolean) : DialogFragment() {
 
 
     lateinit var description: EditText
     lateinit var btnDone : Button
-    var l: AddIngredientFragment.HowToStoreListener = howToStoreListener
+    var l: AddIngredientFragment = howToStoreListener
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,9 +37,9 @@ class HowToStoreDialog(howToStoreListener: AddIngredientFragment.HowToStoreListe
 
 
             if (description.text.isNotEmpty()) {
-                l.des = description.getText().toString()
+                l.howToStoreDes = description.getText().toString()
             }
-            l.saveData()
+            //l.saveData()
             dismiss()
         })
 
@@ -46,6 +48,6 @@ class HowToStoreDialog(howToStoreListener: AddIngredientFragment.HowToStoreListe
     }
 
     private fun setData() {
-      description.setText(l.des)
+      description.setText(l.howToStoreDes)
     }
 }

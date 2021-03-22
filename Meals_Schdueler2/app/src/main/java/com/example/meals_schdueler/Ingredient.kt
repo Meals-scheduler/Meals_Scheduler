@@ -1,6 +1,9 @@
 package com.example.meals_schdueler
 
+import android.graphics.Bitmap
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
@@ -12,11 +15,11 @@ class Ingredient(
     costPerGram: String,
     typeOfMeal: String,
     TypeOfSeason: String,
-    picture: String,
+    pictureBitMap: Bitmap,
     howToStore: String,
     shareInfo: Boolean,
     shareIngredient: Boolean,
-    ownerId : Int
+    ownerId: Int
 ) : GetAndPost {
 
 
@@ -25,34 +28,46 @@ class Ingredient(
     var costPerGram = costPerGram
     var typeOfMeal = typeOfMeal
     var typeofSeason = TypeOfSeason
-    var picture = picture
+    var pictureBitMap = pictureBitMap
+    var picture:String = ""
     var howToStore = howToStore
     var shareInfo = shareInfo
     var shareIngredient = shareIngredient
     var ownerId = ownerId
+    var ingredientID=4;
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun encodePicture(){
+        var image = ImageConvert(pictureBitMap)
+        picture = image.BitMapToString().toString()
 
 
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun DoNetWorkOpreation(): String {
         Log.v("Elad1", "started asyn")
+        encodePicture()
         return try {
             val link = "https://elad1.000webhostapp.com/postIngredient.php"
-            var data = URLEncoder.encode("HowToStore", "UTF-8") + "=" +
-                    URLEncoder.encode(howToStore, "UTF-8")
-            data += "&" + URLEncoder.encode("Season", "UTF-8") + "=" +
-                    URLEncoder.encode(typeofSeason, "UTF-8")
-            data += "&" + URLEncoder.encode("TypeOfMeal", "UTF-8") + "=" +
-                    URLEncoder.encode(typeOfMeal ,"UTF-8")
-
+            var data = URLEncoder.encode("IngredientID", "UTF-8") + "=" +
+                    URLEncoder.encode(ingredientID.toString(), "UTF-8")
+            data += "&" + URLEncoder.encode("OwnerID", "UTF-8") + "=" +
+                    URLEncoder.encode(ownerId.toString(), "UTF-8")
+            data += "&" + URLEncoder.encode("IngredientName", "UTF-8") + "=" +
+                    URLEncoder.encode(ingridentName, "UTF-8")
             data += "&" + URLEncoder.encode("Picture", "UTF-8") + "=" +
                     URLEncoder.encode(picture ,"UTF-8")
-            data += "&" + URLEncoder.encode("IngredientName", "UTF-8") + "=" +
-                    URLEncoder.encode(ingridentName ,"UTF-8")
-            data += "&" + URLEncoder.encode("OwnerID", "UTF-8") + "=" +
-                    URLEncoder.encode(ownerId.toString() ,"UTF-8")
 
+            data += "&" + URLEncoder.encode("TypeOfMeal", "UTF-8") + "=" +
+                    URLEncoder.encode(typeOfMeal ,"UTF-8")
+            data += "&" + URLEncoder.encode("Season", "UTF-8") + "=" +
+                    URLEncoder.encode(typeofSeason ,"UTF-8")
+            data += "&" + URLEncoder.encode("HowToStore", "UTF-8") + "=" +
+                    URLEncoder.encode(howToStore.toString() ,"UTF-8")
 
+            Log.v("Elad1",data)
             Log.v("Elad1", "started asyn 1")
             val url = URL(link)
             val conn = url.openConnection()
@@ -75,8 +90,12 @@ class Ingredient(
             Log.v("Elad1", builder.toString())
             Log.v("Elad1", "asyn worked")
         } catch (e: Exception) {
-           Log.v("Elad","Failled")
+           Log.v("Elad1","Failled")
         }.toString()
+    }
+
+    override fun getData(str: String) {
+        TODO("Not yet implemented")
     }
 
 

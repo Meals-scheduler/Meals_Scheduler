@@ -9,7 +9,7 @@ import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 
 
-class NutritiousDialog(listener: AddIngredientFragment.NutrituouListener, var isFirstTime: Boolean) :
+class NutritiousDialog(listener: AddIngredientFragment, var isFirstTime: Boolean) :
     DialogFragment() {
 
 
@@ -18,8 +18,8 @@ class NutritiousDialog(listener: AddIngredientFragment.NutrituouListener, var is
     lateinit var fats: EditText
     lateinit var carbs: EditText
     lateinit var protein: EditText
-    var l: AddIngredientFragment.NutrituouListener = listener
-    //var isFirstTimee: Boolean = this.isFirstTime
+    var l: AddIngredientFragment = listener
+
 
 
     override fun onCreateView(
@@ -45,21 +45,21 @@ class NutritiousDialog(listener: AddIngredientFragment.NutrituouListener, var is
         btnOk.setOnClickListener {
             // passing the user inputs to the Addingredients. Listener class
             if (carbs.text.isNotEmpty()) {
-                l.carbs = carbs.getText().toString().toFloat()
+                l.carbs_ = carbs.getText().toString().toFloat()
             }
             if (fats.text.isNotEmpty()) {
-                l.fat = fats.getText().toString().toFloat()
+                l.fat_ = fats.getText().toString().toFloat()
             }
             if (protein.text.isNotEmpty()) {
-                l.protein = protein.getText().toString().toFloat()
+                l.protein_ = protein.getText().toString().toFloat()
             }
             if (description.text.isNotEmpty()) {
-                l.des = description.getText().toString()
+                l.nutritiousDes = description.getText().toString()
 
             }
 
 
-            l.saveData()
+            //l.saveData()
             dismiss()
         }
 
@@ -67,10 +67,10 @@ class NutritiousDialog(listener: AddIngredientFragment.NutrituouListener, var is
     }
 
     private fun setData() {
-        carbs.setText(l.carbs.toString())
-        fats.setText(l.fat.toString())
-        protein.setText(l.protein.toString())
-        description.setText(l.des)
+        carbs.setText(l.carbs_.toString())
+        fats.setText(l.fat_.toString())
+        protein.setText(l.protein_.toString())
+        description.setText(l.nutritiousDes)
     }
 
 

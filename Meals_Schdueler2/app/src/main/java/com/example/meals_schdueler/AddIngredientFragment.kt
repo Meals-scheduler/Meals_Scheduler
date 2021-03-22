@@ -36,12 +36,14 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
     lateinit var ingredientImage: ImageView
     private var imageUri: Uri? = null
 
+
     //for camera intent
     private var userChoosenTask: String? = null
     private val STORAGE_PERMISSION_CODE = 1
 
     companion object {
         private val IMAGE_REQUEST = 1
+        lateinit var bitmap: Bitmap
     }
 
     private val CAMERA_REQUEST_CODE = 0
@@ -116,14 +118,14 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
 
         if (p0 == nutritiousBtn) {
             var dialog = NutritiousDialog(
-                NutrituouListener(protein_, carbs_, fat_, nutritiousDes),
+                this,
                 isFirstTimeNutrtious
             )
             isFirstTimeNutrtious = false
             dialog.show(childFragmentManager, "NutritiousDialog")
 
         } else if (p0 == howToStoreBtn) {
-            var dialog = HowToStoreDialog(HowToStoreListener(howToStoreDes), isFirstTimeHowToStore)
+            var dialog = HowToStoreDialog(this, isFirstTimeHowToStore)
             isFirstTimeHowToStore = false
             dialog.show(childFragmentManager, "HowToStoreDialog")
         } else if (p0 == saveBtn) {
@@ -133,13 +135,15 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
                 costPerGram.getText().toString(),
                 typeOfMeall,
                 typeSeasson,
-                "",
+                bitmap,
                 howToStoreDes,
                 shareInfo.isChecked,
                 shareIngredient.isChecked,
-            1) // owenerId will be changed and will be determined from the user Table in the future.
-            var s  = AsynTaskNew(ingredient)
+                1
+            ) // owenerId will be changed and will be determined from the user Table in the future.
+            var s = AsynTaskNew(ingredient)
             s.execute()
+
 
 
 
@@ -148,39 +152,13 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    // making inner class to pass arguments to it from the NutrituousDialog
-    inner class NutrituouListener(
-        var protein: Float,
-        var carbs: Float,
-        var fat: Float,
-        var des: String
-    ) {
-        fun saveData() {
-            // saving the data the user already wrote
-            nutritiousDes = des
-            fat_ = fat
-            protein_ = protein
-            carbs_ = carbs
-
-        }
-
-    }
-
-    inner class HowToStoreListener(var des: String) {
-        fun saveData() {
-            // saving the data the user already wrote
-            howToStoreDes = des
-
-        }
-
-    }
-
 
     // for camera
 
     fun OnUploadOrCaptureClick() {
 
         // need to ask for permission
+
 
         // first we check if the permission was granted.
         Log.v("Elad", "check if we have permission")
@@ -294,7 +272,7 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
 
 
     private fun onCaptureImageResult(data: Intent) {
-        val bitmap = data.extras!!["data"] as Bitmap?
+        bitmap = (data.extras!!["data"] as Bitmap?)!!
         val bytes = ByteArrayOutputStream()
         bitmap!!.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
         val des: File = File(context!!.filesDir, System.currentTimeMillis().toString() + "jpg")
@@ -314,7 +292,6 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
     }
 
     private fun onSelectFromHalleryResult(data: Intent?) {
-        var bitmap: Bitmap? = null
         if (data != null) {
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(
@@ -327,6 +304,7 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
                 e.printStackTrace()
             }
             ingredientImage.setImageBitmap(bitmap)
+
         }
     }
 
