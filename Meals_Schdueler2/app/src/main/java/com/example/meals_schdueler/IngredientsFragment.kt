@@ -31,7 +31,7 @@ class IngredientsFragment : Fragment() {
         override fun getItem(position: Int): Fragment {
             when(position){
                 0-> return AddIngredientFragment()
-                1-> return MyIngredientFragment()
+                1-> return MyingredientFragment1()
                 2-> return AllIngredientsFragment()
             }
             return AddIngredientFragment()

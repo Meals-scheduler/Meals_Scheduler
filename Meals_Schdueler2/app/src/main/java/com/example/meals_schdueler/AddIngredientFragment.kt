@@ -131,15 +131,21 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
         } else if (p0 == saveBtn) {
             Log.v("Elad1", "click save")
             var ingredient = Ingredient(
+
+                1,
                 ingredientName.getText().toString(),
-                costPerGram.getText().toString(),
+                bitmap,
                 typeOfMeall,
                 typeSeasson,
-                bitmap,
                 howToStoreDes,
-                shareInfo.isChecked,
                 shareIngredient.isChecked,
-                1
+                shareInfo.isChecked,
+                protein_,
+                carbs_,
+                fat_,
+                nutritiousDes,
+                costPerGram.getText().toString()
+
             ) // owenerId will be changed and will be determined from the user Table in the future.
             var s = AsynTaskNew(ingredient)
             s.execute()
