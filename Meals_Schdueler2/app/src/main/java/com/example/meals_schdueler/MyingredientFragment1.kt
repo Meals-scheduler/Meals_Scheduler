@@ -107,37 +107,28 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
         return sb.toString()
     }
 
+
+    // to avoid empty string cells .split function returns.
+    fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
+        return this.split(*delimiters).filter {
+            it.isNotEmpty()
+        }
+    }
     override fun getData(str: String) {
 
-        val ingredients: Array<String> = str.split(",".toRegex()).toTypedArray()
-        var ingredient2 = ingredients[1].split(" ".toRegex()).toTypedArray()
-        var bitmap2 = ImageConvert.StringToBitMap(ingredient2[2])
-                    if(bitmap2!=null){
-                Log.v("Elad1","not null")
+    // fixed a default .split spaces , and fixed spaces in howToStore.
+        // when we add an ingredient it doesnt update in real time. we have to re compile!!!
 
-            }
+      val ingredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
-        Log.v("Elad1",  ingredient2[0].toString())
-        Log.v("Elad1",  ingredient2[1].toString())
-        Log.v("Elad1",  ingredient2[2].toString())
-        Log.v("Elad1",  ingredient2[3].toString())
-        Log.v("Elad1",  ingredient2[4].toString())
-        Log.v("Elad1",  ingredient2[5].toString())
-        Log.v("Elad1",  ingredient2[6].toString())
-        Log.v("Elad1",  ingredient2[7].toString())
-        Log.v("Elad1",  ingredient2[8].toString())
-        Log.v("Elad1",  ingredient2[9].toString())
-        Log.v("Elad1",  ingredient2[10].toString())
-        Log.v("Elad1",  ingredient2[11].toString())
-        Log.v("Elad1",  ingredient2[12].toString())
-
-
-
-                    ingredientList?.add(
+        for (i in ingredients.indices) {
+            Log.v("Elad1", ingredients.indices.toString())
+            var ingredient2 = ingredients[i].splitIgnoreEmpty(",")
+            ingredientList?.add(
                 Ingredient(
                     ingredient2[0].toInt(),
                     ingredient2[1],
-                    bitmap2!!,
+                    ImageConvert.StringToBitMap(ingredient2[2].toString())!!,
                     ingredient2[3],
                     ingredient2[4],
                     ingredient2[5],
@@ -149,43 +140,10 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
                     ingredient2[11],
                     ingredient2[12]
                 ))
+        }
+
+
         ingredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
-//        val ingredients: Array<String> = str.split(",".toRegex()).toTypedArray()
-//        for (i in ingredients.indices) {
-//            if(i==2)
-//                break
-//            var ingredient2 = ingredients[i].split(" ".toRegex()).toTypedArray()
-//            Log.v("Elad1",i.toString())
-//            Log.v("Elad1",ingredient2[2])
-//            Log.v("Elad1", ingredient2[2].length.toString())
-//            Log.v("Elad1", ingredient2[2].get(23286).toString())
-//            Log.v("Elad1",ingredient2[1])
-//            var bitmap2 = ImageConvert.StringToBitMap(ingredients[2])
-//            if(bitmap2!=null){
-//                Log.v("Elad1","not null")
-//
-//            }
-//            ingredientList?.add(
-//                Ingredient(
-//                    ingredient2[0].toInt(),
-//                    ingredient2[1],
-//                    bitmap2!!,
-//                    ingredient2[3],
-//                    ingredient2[4],
-//                    ingredient2[5],
-//                    ingredient2[6].toBoolean(),
-//                    ingredient2[7].toBoolean(),
-//                    ingredient2[8].toFloat(),
-//                    ingredient2[9].toFloat(),
-//                    ingredient2[10].toFloat(),
-//                    ingredient2[11],
-//                    ingredient2[12]
-//                )
-//            )
-//
-//        }
-//
-//        ingredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
 
 
     }
