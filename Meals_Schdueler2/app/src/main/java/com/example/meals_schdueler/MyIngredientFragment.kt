@@ -1,6 +1,5 @@
 package com.example.meals_schdueler
 
-import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import com.example.meals_schdueler.AddIngredientFragment.Companion.bitmap
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStream
@@ -36,8 +34,8 @@ class MyIngredientFragment: Fragment(), GetAndPost {
         val x = inflater.inflate(R.layout.my_ingredients_layout, null)
         img = x.findViewById(R.id.imageViewStam)
 
-        var s = AsynTaskNew(this)
-        s.execute()
+       // var s = AsynTaskNew(this, )
+        //s.execute()
 
         return x
     }

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:layout_margin="30dp"
+    android:layout_margin="5dp"
+    android:padding="8dp"
     android:background="@drawable/shape"
     android:orientation="horizontal">
 
@@ -12,33 +13,33 @@
     <ImageView
         android:id="@+id/imageViewPicIngr"
         android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_height="73dp"
+        android:layout_weight="0.4"
+        android:layout_marginTop="7dp"
         android:adjustViewBounds="false"
         android:contentDescription="TODO"
         android:focusable="true"
         android:maxWidth="200dp"
-        android:maxHeight="100dp"
+        android:maxHeight="80dp"
         android:scaleType="fitCenter"
-        android:layout_weight="0.4"
         android:src="@mipmap/ic_launcher"
         android:visibility="visible"
         tools:srcCompat="@tools:sample/avatars" />
-
 
     <Button
         android:id="@+id/buttonIngredientName"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="0.4"
+        android:textSize="12dp"
+        android:layout_weight="0."
         android:clickable="false"
         android:text="Name" />
 
     <Button
         android:id="@+id/buttonInfo"
         android:layout_width="wrap_content"
-        android:layout_weight="1"
+        android:textSize="10dp"
         android:layout_height="match_parent"
-
         android:text="Information" />
 
     <Button

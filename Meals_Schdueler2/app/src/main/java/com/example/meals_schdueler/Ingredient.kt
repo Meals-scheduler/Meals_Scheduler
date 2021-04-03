@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.FragmentManager
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
@@ -13,6 +14,7 @@ class Ingredient(
 
 
     ownerId: Int,
+    ingredientId : Int,
     ingridentName: String,
     pictureBitMap: Bitmap,
     typeOfMeal: String,
@@ -24,7 +26,8 @@ class Ingredient(
     carbs_: Float,
     fat_: Float,
     nutritiousDes: String,
-    costPerGram: String
+    costPerGram: String,
+
 
 
 //    ingridentName: String,
@@ -54,7 +57,8 @@ class Ingredient(
     var shareInfo = shareInfo
     var shareIngredient = shareIngredient
     var ownerId = ownerId
-    var ingredientID = -1
+    var ingredientID = ingredientId
+    //var ingredientID = -1
     var fat = fat_
     var carbs_ = carbs_
     var protein_ = protein_
@@ -72,10 +76,12 @@ class Ingredient(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun DoNetWorkOpreation(): String {
-        var input: String = ""
 
+
+        var input = ""
         encodePicture()
-        ingredientID = getIngredientID().toInt()+1 // getting current IngredientID first
+        ingredientID = getIngredientID().toInt() + 1 // getting current IngredientID first
+        // ingredientID = 1
         Log.v("Elad1", "current ID " + ingredientID)
         if (ingredientID != -1)
             input = postData() // now we upload the current ingredient details.
@@ -186,7 +192,8 @@ class Ingredient(
     }
 
     override fun getData(str: String) {
-      print("dd")
+        print("dd")
+
 
     }
 

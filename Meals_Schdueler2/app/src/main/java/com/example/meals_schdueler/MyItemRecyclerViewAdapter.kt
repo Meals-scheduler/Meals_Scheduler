@@ -1,15 +1,13 @@
 package com.example.meals_schdueler
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meals_schdueler.dummy.DummyContent.DummyItem
-import java.util.*
 import kotlin.collections.ArrayList
 
 /**
@@ -17,11 +15,12 @@ import kotlin.collections.ArrayList
  * TODO: Replace the implementation with code for your data type.
  */
 class MyItemRecyclerViewAdapter(
-    private var values: ArrayList<Ingredient>
+    private var values: ArrayList<Ingredient>,
+    childFragmentManager: FragmentManager
 ) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
 
     private var mValues: ArrayList<Ingredient> = values
-
+    private var childFragmentManager = childFragmentManager
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_myingredient1, parent, false)
@@ -34,6 +33,12 @@ class MyItemRecyclerViewAdapter(
         holder.ingredientName.setText(item.ingridentName)
         //var bitmap2 = ImageConvert.StringToBitMap(item.picture)
         holder.ingredientImage.setImageBitmap(item.pictureBitMap)
+        holder.ingredientInfo.setOnClickListener{
+            var dialog = IngredientInfo(item)
+            dialog.show(childFragmentManager,"IngredientInfo")
+
+        }
+
 
 
 

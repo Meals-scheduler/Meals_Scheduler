@@ -17,7 +17,7 @@
             android:layout_width="355dp"
             android:layout_height="46dp"
             android:gravity="center"
-            android:text="Create your ingredient:"
+            android:text="Ingredient Information:"
             android:textSize="24dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -40,6 +40,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
+
 
         <EditText
             android:id="@+id/editTextIngredientName"
@@ -66,6 +67,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nameOfIngredient" />
 
+        <Spinner
+            android:id="@+id/typeOfSeassonSpinner"
+            android:layout_width="127dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="4dp"
+            android:clickable="false"
+            android:entries="@array/TypeSeasson"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/typeOfMealSpinner"
+            app:layout_constraintTop_toBottomOf="@+id/editTextIngredientName" />
+
         <TextView
             android:id="@+id/textViewPic"
             android:layout_width="144dp"
@@ -73,11 +88,27 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="40dp"
             android:gravity="center"
-            android:text="Insert a picture"
-            android:textSize="18dp"
+            android:text="Ingredient picture:"
+            android:textSize="17dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/typeOfMealSpinner" />
+
+        <ImageView
+            android:id="@+id/imageViewPic"
+            android:layout_width="98dp"
+            android:layout_height="91dp"
+            android:layout_marginTop="20dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:src="@mipmap/ic_launcher"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.607"
+            app:layout_constraintStart_toEndOf="@+id/textViewPic"
+            app:layout_constraintTop_toBottomOf="@+id/typeOfSeassonSpinner"
+            tools:srcCompat="@tools:sample/avatars" />
+
 
         <TextView
             android:id="@+id/textViewCost"
@@ -93,21 +124,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewPic" />
 
-        <ImageView
-            android:id="@+id/imageViewPic"
-            android:layout_width="98dp"
-            android:layout_height="91dp"
-            android:layout_marginTop="20dp"
-            android:src="@mipmap/ic_launcher"
-            android:visibility="visible"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.607"
-            app:layout_constraintStart_toEndOf="@+id/textViewPic"
-            app:layout_constraintTop_toBottomOf="@+id/typeOfSeassonSpinner"
-            tools:srcCompat="@tools:sample/avatars" />
-
         <EditText
             android:id="@+id/editTextCost"
             android:layout_width="157dp"
@@ -120,6 +136,7 @@
             app:layout_constraintStart_toEndOf="@+id/textViewCost"
             app:layout_constraintTop_toBottomOf="@+id/imageViewPic" />
 
+
         <Button
             android:id="@+id/buttonNutritious"
             android:layout_width="wrap_content"
@@ -129,31 +146,6 @@
             android:text="Nutritious Value"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewCost" />
-
-        <Button
-            android:id="@+id/buttonSave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:gravity="center"
-            android:text="Save"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/buttonNutritious"
-            app:layout_constraintTop_toBottomOf="@+id/checkBoxShareInfo" />
-
-        <Spinner
-            android:id="@+id/typeOfSeassonSpinner"
-            android:layout_width="127dp"
-            android:layout_height="42dp"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="4dp"
-            android:entries="@array/TypeSeasson"
-            android:gravity="center"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/typeOfMealSpinner"
-            app:layout_constraintTop_toBottomOf="@+id/editTextIngredientName" />
 
         <Button
             android:id="@+id/howToStoreBtn"
@@ -171,9 +163,9 @@
             android:layout_width="377dp"
             android:layout_height="31dp"
             android:layout_marginTop="80dp"
-            android:checked="false"
+            android:clickable="false"
             android:text="I would like to share my ingredient"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonNutritious" />
@@ -183,11 +175,34 @@
             android:layout_width="377dp"
             android:layout_height="31dp"
             android:layout_marginTop="16dp"
+            android:clickable="false"
             android:text="I would like to share my information"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/checkBoxShareIngredient" />
+
+        <Button
+            android:id="@+id/buttonEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="Edit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.148"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxShareInfo" />
+
+        <Button
+            android:id="@+id/buttonCopy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Copy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buttonEdit"
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxShareInfo" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

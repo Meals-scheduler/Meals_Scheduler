@@ -44,6 +44,8 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
     companion object {
         private val IMAGE_REQUEST = 1
         lateinit var bitmap: Bitmap
+        lateinit var pbDialog: ProgressBarDialog
+
     }
 
     private val CAMERA_REQUEST_CODE = 0
@@ -75,13 +77,13 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
         costPerGram = x.findViewById(R.id.editTextCost)
 
 
+
         saveBtn.setOnClickListener(this)
         ingredientImage.setOnClickListener(this)
         howToStoreBtn.setOnClickListener(this)
         nutritiousBtn.setOnClickListener(this)
         typeOfMeal.onItemSelectedListener = SpinnerActivity()
         typeOfSeason.onItemSelectedListener = SpinnerActivity()
-
 
 
 
@@ -133,6 +135,7 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
             var ingredient = Ingredient(
 
                 1,
+                -1,
                 ingredientName.getText().toString(),
                 bitmap,
                 typeOfMeall,
@@ -144,13 +147,16 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
                 carbs_,
                 fat_,
                 nutritiousDes,
-                costPerGram.getText().toString()
+                costPerGram.getText().toString(),
 
-            ) // owenerId will be changed and will be determined from the user Table in the future.
+
+
+                ) // owenerId will be changed and will be determined from the user Table in the future.
+            pbDialog = ProgressBarDialog()
+            pbDialog.show(childFragmentManager, "ProgressBarDialog")
             var s = AsynTaskNew(ingredient)
             s.execute()
-
-
+            //pbDialog.dismiss()
 
 
         } else if (p0 == ingredientImage) {
