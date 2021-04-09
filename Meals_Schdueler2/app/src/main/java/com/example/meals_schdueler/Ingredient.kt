@@ -12,9 +12,8 @@ import java.net.URLEncoder
 
 class Ingredient(
 
-
+    ingredientId: Int,
     ownerId: Int,
-    ingredientId : Int,
     ingridentName: String,
     pictureBitMap: Bitmap,
     typeOfMeal: String,
@@ -27,7 +26,7 @@ class Ingredient(
     fat_: Float,
     nutritiousDes: String,
     costPerGram: String,
-
+    isUpdate: Boolean
 
 
 //    ingridentName: String,
@@ -58,11 +57,13 @@ class Ingredient(
     var shareIngredient = shareIngredient
     var ownerId = ownerId
     var ingredientID = ingredientId
+
     //var ingredientID = -1
     var fat = fat_
     var carbs_ = carbs_
     var protein_ = protein_
     var nutritiousDes = nutritiousDes
+    var isUpdate = isUpdate
     //var flag = flag
 
 
@@ -80,7 +81,11 @@ class Ingredient(
 
         var input = ""
         encodePicture()
-        ingredientID = getIngredientID().toInt() + 1 // getting current IngredientID first
+            // if we insert a new ingredient and not updating
+        if (!isUpdate) {
+            ingredientID = getIngredientID().toInt() + 1 // getting current IngredientID first
+        }
+
         // ingredientID = 1
         Log.v("Elad1", "current ID " + ingredientID)
         if (ingredientID != -1)
@@ -122,7 +127,24 @@ class Ingredient(
         return try {
 
             // values go to - Ingredient Table
-            val link = "https://elad1.000webhostapp.com/postIngredient.php"
+            var link = "https://elad1.000webhostapp.com/postIngredient.php"
+            if (isUpdate){
+                link = "https://elad1.000webhostapp.com/updateIngredient.php?ingredientID="+ingredientID
+
+            }
+            Log.v("Elad1",shareInfo.toString())
+            Log.v("Elad1",fat.toString())
+            Log.v("Elad1",carbs_.toString())
+            Log.v("Elad1",protein_.toString())
+            Log.v("Elad1",nutritiousDes.toString())
+            Log.v("Elad1",ingredientID.toString())
+            Log.v("Elad1",ingridentName)
+            Log.v("Elad1",ownerId.toString())
+            Log.v("Elad1",picture)
+            Log.v("Elad1",typeofSeason)
+            Log.v("Elad1",typeOfMeal)
+            Log.v("Elad1",howToStore)
+                // print here ingredient elemtnes
             var data = URLEncoder.encode("IngredientID", "UTF-8") + "=" +
                     URLEncoder.encode(ingredientID.toString(), "UTF-8")
             data += "&" + URLEncoder.encode("OwnerID", "UTF-8") + "=" +
@@ -137,7 +159,7 @@ class Ingredient(
             data += "&" + URLEncoder.encode("Season", "UTF-8") + "=" +
                     URLEncoder.encode(typeofSeason, "UTF-8")
             data += "&" + URLEncoder.encode("HowToStore", "UTF-8") + "=" +
-                    URLEncoder.encode(howToStore.toString(), "UTF-8")
+                    URLEncoder.encode(howToStore, "UTF-8")
 
 
             // now 2 values for another table -  Share_Ingredient_Table

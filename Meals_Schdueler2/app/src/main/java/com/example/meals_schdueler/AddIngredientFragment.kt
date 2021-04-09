@@ -3,6 +3,7 @@ package com.example.meals_schdueler
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -17,6 +18,7 @@ import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import java.io.*
 
 class AddIngredientFragment : Fragment(), View.OnClickListener {
@@ -35,25 +37,26 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
     lateinit var typeSeasson: String
     lateinit var ingredientImage: ImageView
     private var imageUri: Uri? = null
+    var notritousValue: NutritousValues? = null
+    var howToStoreValue: HowToStroreValue? = null
+   // var ingredientImageInit : initImage? = null
 
 
     //for camera intent
     private var userChoosenTask: String? = null
     private val STORAGE_PERMISSION_CODE = 1
+    private val REQUEST_CODE = 1
 
     companion object {
         private val IMAGE_REQUEST = 1
         lateinit var bitmap: Bitmap
         lateinit var pbDialog: ProgressBarDialog
 
+
     }
 
     private val CAMERA_REQUEST_CODE = 0
 
-    var fat_: Float = 0F
-    var carbs_: Float = 0F
-    var protein_: Float = 0F
-    var nutritiousDes: String = ""
     var isFirstTimeNutrtious: Boolean = true
     var isFirstTimeHowToStore: Boolean = true
     var howToStoreDes: String = ""
@@ -76,6 +79,14 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
         ingredientImage = x.findViewById(R.id.imageViewPic)
         costPerGram = x.findViewById(R.id.editTextCost)
 
+        notritousValue = NutritousValues("", 0F, 0F, 0F)
+        howToStoreValue =  HowToStroreValue("")
+       //ingredientImageInit = initImage(ingredientImage)
+
+
+
+
+        Log.v("Elad1","USER IDDDDDDDD" + UserInterFace.userID.toString())
 
 
         saveBtn.setOnClickListener(this)
@@ -118,49 +129,55 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
     override fun onClick(p0: View?) {
 
 
+
         if (p0 == nutritiousBtn) {
             var dialog = NutritiousDialog(
-                this,
+                notritousValue!!,
                 isFirstTimeNutrtious
             )
             isFirstTimeNutrtious = false
             dialog.show(childFragmentManager, "NutritiousDialog")
 
         } else if (p0 == howToStoreBtn) {
-            var dialog = HowToStoreDialog(this, isFirstTimeHowToStore)
+            var dialog = HowToStoreDialog(howToStoreValue!!, isFirstTimeHowToStore)
             isFirstTimeHowToStore = false
             dialog.show(childFragmentManager, "HowToStoreDialog")
         } else if (p0 == saveBtn) {
             Log.v("Elad1", "click save")
+
             var ingredient = Ingredient(
 
                 1,
-                -1,
+                UserInterFace.userID,
                 ingredientName.getText().toString(),
                 bitmap,
                 typeOfMeall,
                 typeSeasson,
-                howToStoreDes,
+                howToStoreValue!!.howToStore,
                 shareIngredient.isChecked,
                 shareInfo.isChecked,
-                protein_,
-                carbs_,
-                fat_,
-                nutritiousDes,
+                notritousValue!!.protein,
+                notritousValue!!.carbs,
+                notritousValue!!.fats,
+                notritousValue!!.des,
                 costPerGram.getText().toString(),
+                false
 
 
-
-                ) // owenerId will be changed and will be determined from the user Table in the future.
-            pbDialog = ProgressBarDialog()
-            pbDialog.show(childFragmentManager, "ProgressBarDialog")
+            ) // owenerId will be changed and will be determined from the user Table in the future.
+//            pbDialog = ProgressBarDialog()
+//            pbDialog.show(childFragmentManager, "ProgressBarDialog")
             var s = AsynTaskNew(ingredient)
             s.execute()
             //pbDialog.dismiss()
 
 
         } else if (p0 == ingredientImage) {
-            OnUploadOrCaptureClick()
+        OnUploadOrCaptureClick()
+            //val c = CameraIntent(activity,context)
+            //val i = Intent(activity, CameraIntent1::class.java)
+            //startActivityForResult(i, REQUEST_CODE);
+
         }
     }
 
@@ -170,12 +187,10 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
     fun OnUploadOrCaptureClick() {
 
         // need to ask for permission
-
-
         // first we check if the permission was granted.
         Log.v("Elad", "check if we have permission")
         if (ContextCompat.checkSelfPermission(
-                this.context!!,
+                this.requireContext(),
                 Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED
         ) {
@@ -188,7 +203,7 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
             builder.setItems(items) { dialogInterface, i -> // boolean result = Utility
                 if (items[i] == "Take Photo") {
                     userChoosenTask = "Take Photo"
-                    cameraIntent()
+                    cameraIntent(activity, context)
                 } else if (items[i] == "Choose from gallery") {
                     userChoosenTask = "Choose from gallery"
                     galleryIntent()
@@ -221,7 +236,7 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
 
         // if the user Deny the permission before we want to open dialog to explain why we ask permission
         if (ActivityCompat.shouldShowRequestPermissionRationale(
-                this.activity!!,
+                this.requireActivity(),
                 Manifest.permission.CAMERA
             )
         ) {
@@ -233,7 +248,7 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
                     "ok"
                 ) { dialogInterface, i -> //ActivityCompat.requestPermissions(FirstTimeLogin.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},STORAGE_PERMISSION_CODE);
                     ActivityCompat.requestPermissions(
-                        activity!!,
+                        requireActivity(),
                         arrayOf(Manifest.permission.CAMERA),
                         STORAGE_PERMISSION_CODE
                     )
@@ -245,7 +260,7 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
         } else {
             // ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},STORAGE_PERMISSION_CODE);
             ActivityCompat.requestPermissions(
-                this.activity!!,
+                requireActivity(),
                 arrayOf(Manifest.permission.CAMERA),
                 STORAGE_PERMISSION_CODE
             )
@@ -265,7 +280,7 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
         )
     }
 
-    private fun cameraIntent() {
+    private fun cameraIntent(activity: FragmentActivity?, context: Context?) {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(intent, CAMERA_REQUEST_CODE)
     }
@@ -280,6 +295,14 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
                 onCaptureImageResult(data)
             }
         }
+//        if (resultCode ==  Activity.RESULT_OK && requestCode == REQUEST_CODE){
+//            imageUri = data!!.data
+//            if (requestCode == IMAGE_REQUEST) {
+//                onSelectFromHalleryResult(data)
+//            } else if (requestCode == CAMERA_REQUEST_CODE) {
+//                onCaptureImageResult(data)
+//            }
+//        }
     }
 
 
@@ -287,7 +310,10 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
         bitmap = (data.extras!!["data"] as Bitmap?)!!
         val bytes = ByteArrayOutputStream()
         bitmap!!.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
-        val des: File = File(context!!.filesDir, System.currentTimeMillis().toString() + "jpg")
+        val des: File = File(
+            requireContext().filesDir,
+            System.currentTimeMillis().toString() + "jpg"
+        )
         var fo: FileOutputStream? = null
         try {
             des.createNewFile()
@@ -320,6 +346,9 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
         }
     }
 
+//    inner class initImage(image: ImageView){
+//        var image = image
+//    }
 
 }
 

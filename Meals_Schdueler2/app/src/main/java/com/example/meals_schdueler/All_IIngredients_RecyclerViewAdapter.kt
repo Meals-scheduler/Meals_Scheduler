@@ -1,30 +1,33 @@
 package com.example.meals_schdueler
 
 import android.util.Log
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.FragmentManager
-import androidx.recyclerview.widget.RecyclerView
+
 import com.example.meals_schdueler.dummy.DummyContent.DummyItem
-import kotlin.collections.ArrayList
+import java.util.ArrayList
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem].
  * TODO: Replace the implementation with code for your data type.
  */
-class MyItemRecyclerViewAdapter(
-    private var values: ArrayList<Ingredient>,
+class All_IIngredients_RecyclerViewAdapter(
+    private val values: ArrayList<Ingredient>,
     childFragmentManager: FragmentManager
-) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<All_IIngredients_RecyclerViewAdapter.ViewHolder>() {
 
     private var mValues: ArrayList<Ingredient> = values
     private var childFragmentManager = childFragmentManager
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_myingredient1, parent, false)
+            .inflate(R.layout.fragment_allingredients1, parent, false)
         return ViewHolder(view)
     }
 
@@ -35,17 +38,16 @@ class MyItemRecyclerViewAdapter(
         //var bitmap2 = ImageConvert.StringToBitMap(item.picture)
         holder.ingredientImage.setImageBitmap(item.pictureBitMap)
         holder.ingredientInfo.setOnClickListener{
+            // opens IngredientInfo
             var dialog = IngredientInfo(item)
             dialog.show(childFragmentManager,"IngredientInfo")
+            Log.v("Elad1",item.ingredientID.toString())
 
         }
 
-
-
-
-
-        //holder.idView.text = item.id
-        // holder.contentView.text = item.content
+        holder.creatorInfo.setOnClickListener{
+            // opens onCreatorInfo
+        }
     }
 
     fun setmValues(mValues: ArrayList<Ingredient>) {
@@ -56,15 +58,13 @@ class MyItemRecyclerViewAdapter(
     override fun getItemCount(): Int = values.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        // val idView: TextView = view.findViewById(R.id.item_number)
-        //val contentView: TextView = view.findViewById(R.id.content)
+
         var ingredientImage: ImageView = view.findViewById(R.id.imageViewPicIngr)
         var ingredientCart: ImageView = view.findViewById(R.id.imageViewCart)
         var ingredientName: Button = view.findViewById(R.id.buttonIngredientName)
         var ingredientInfo: Button = view.findViewById(R.id.buttonInfo)
-        var deleteIngredient: Button = view.findViewById(R.id.buttonDeleteIng)
+        var creatorInfo: Button = view.findViewById(R.id.buttonCreatorInfo)
         lateinit var mItem : Ingredient
-
 
         override fun toString(): String {
             return super.toString()

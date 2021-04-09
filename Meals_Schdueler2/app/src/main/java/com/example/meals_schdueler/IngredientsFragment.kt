@@ -32,7 +32,7 @@ class IngredientsFragment : Fragment() {
             when(position){
                 0-> return AddIngredientFragment()
                 1-> return MyingredientFragment1()
-                2-> return AllIngredientsFragment()
+                2-> return AllingredientsFragment1()
             }
             return AddIngredientFragment()
         }

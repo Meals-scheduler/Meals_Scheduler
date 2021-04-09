@@ -1,37 +1,39 @@
-
 package com.example.meals_schdueler
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.example.meals_schdueler.dummy.DummyContent
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.*
+import java.util.ArrayList
 
 /**
  * A fragment representing a list of Items.
  */
-class MyingredientFragment1 : Fragment(), GetAndPost {
+class AllingredientsFragment1 : Fragment() , GetAndPost {
 
     private var columnCount = 1
     private var ingredientList: ArrayList<Ingredient>? = null // list of ingredietns
-    private var ingredientRecyclerViewAdapter: MyItemRecyclerViewAdapter? =
+    private var AllIngredientRecyclerViewAdapter: All_IIngredients_RecyclerViewAdapter? =
         null // adapter for the list.
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ingredientList = ArrayList<Ingredient>()
-        ingredientRecyclerViewAdapter = MyItemRecyclerViewAdapter(ingredientList!!,childFragmentManager)
+        AllIngredientRecyclerViewAdapter =
+            All_IIngredients_RecyclerViewAdapter(ingredientList!!, childFragmentManager)
+
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
@@ -41,9 +43,10 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_myingredient1_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_allingredients1_list, container, false)
         val recyclerView = view.findViewById<View>(R.id.list) as RecyclerView
 
+        // Set the adapter
         // Set the adapter
         val context = view.context
         instance = this
@@ -55,41 +58,37 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                recyclerView.adapter = ingredientRecyclerViewAdapter
-
+                recyclerView.adapter = AllIngredientRecyclerViewAdapter
             }
         }
-
         startTask()
-//        var s = AsynTaskNew(this)
-//        s.execute()
         return view
     }
 
     companion object {
 
-        var instance : MyingredientFragment1? = null
 
-        fun getInstance1() : MyingredientFragment1{
+        var instance: AllingredientsFragment1? = null
+
+        fun getInstance1(): AllingredientsFragment1 {
             return instance!!
         }
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
 
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            MyingredientFragment1().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
+            // TODO: Customize parameter argument names
+            const val ARG_COLUMN_COUNT = "column-count"
 
+            // TODO: Customize parameter initialization
+            @JvmStatic
+            fun newInstance(columnCount: Int) =
+                AllingredientsFragment1().apply {
+                    arguments = Bundle().apply {
+                        putInt(ARG_COLUMN_COUNT, columnCount)
+                    }
                 }
-            }
-    }
+        }
 
-    /// if WEBHOST doesnt work - this query doesnt excuted and the program falls - need to be fixed!!!!!!
     override fun DoNetWorkOpreation(): String {
-        val link = "https://elad1.000webhostapp.com/getIngredient.php?ownerID="+UserInterFace.userID ;
+        val link = "https://elad1.000webhostapp.com/getSharedIngredients.php?ownerID="+UserInterFace.userID;
         Log.v("Elad1", "here")
 
         val sb = StringBuilder()
@@ -123,6 +122,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
             it.isNotEmpty()
         }
     }
+
     override fun getData(str: String) {
         ingredientList!!.clear()
         // fixed a default .split spaces , and fixed spaces in howToStore.
@@ -155,14 +155,11 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
         }
 
 
-        ingredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
-
-
+        AllIngredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
     }
+
     fun startTask(){
         var s = AsynTaskNew(this)
         s.execute()
     }
-
-
 }

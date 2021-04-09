@@ -8,12 +8,12 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 
-class HowToStoreDialog(howToStoreListener: AddIngredientFragment, var isFirstTime: Boolean) : DialogFragment() {
+class HowToStoreDialog(howToStoreListener: HowToStroreValue, var isFirstTime: Boolean) : DialogFragment() {
 
 
     lateinit var description: EditText
     lateinit var btnDone : Button
-    var l: AddIngredientFragment = howToStoreListener
+    var l: HowToStroreValue = howToStoreListener
 
 
 
@@ -37,7 +37,7 @@ class HowToStoreDialog(howToStoreListener: AddIngredientFragment, var isFirstTim
 
 
             if (description.text.isNotEmpty()) {
-                l.howToStoreDes = description.getText().toString()
+                l.howToStore = description.getText().toString()
             }
             //l.saveData()
             dismiss()
@@ -48,6 +48,6 @@ class HowToStoreDialog(howToStoreListener: AddIngredientFragment, var isFirstTim
     }
 
     private fun setData() {
-      description.setText(l.howToStoreDes)
+      description.setText(l.howToStore)
     }
 }

@@ -1,4 +1,3 @@
-
 package com.example.meals_schdueler
 
 import android.os.AsyncTask
@@ -13,8 +12,7 @@ class AsynTaskNew(action: GetAndPost) : AsyncTask<Void, Void, String>() {
     //In your application, you can use android AsyncTask class for short operations or task ( few seconds),
     // for the long-running operation you have to choose another option.
 
-    var action : GetAndPost = action
-
+    var action: GetAndPost = action
 
 
     override fun doInBackground(vararg params: Void?): String? {
@@ -32,7 +30,6 @@ class AsynTaskNew(action: GetAndPost) : AsyncTask<Void, Void, String>() {
 //        pbDialog.show()
 
 
-
     }
 
     override fun onPostExecute(result: String?) {
@@ -41,10 +38,10 @@ class AsynTaskNew(action: GetAndPost) : AsyncTask<Void, Void, String>() {
             action.getData(result)
         }
         // if we upload a new ingredient we want to refresh the MyIngredients tab so that the user will be able to see the new uploaded ingredient.
-        if(action is Ingredient){
+        if (action is Ingredient) {
             MyingredientFragment1.getInstance1().startTask()
-            AddIngredientFragment.pbDialog.dismiss()
-
+                //            if (AddIngredientFragment.pbDialog != null)
+                //AddIngredientFragment.pbDialog.dismiss()
 
 
         }
