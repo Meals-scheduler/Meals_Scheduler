@@ -131,10 +131,10 @@ class SignUp : AppCompatActivity() ,View.OnClickListener,GetAndPost {
 
 
     private fun postData(): String {
-        return try {
+         try {
 
             // values go to - Ingredient Table
-            var link = "https://elad1.000webhostapp.com/postUser.php"
+            var link = "https://elad1.000webhostapp.com/postUser.php?UserName="+firstName
 
             // print here ingredient elemtnes
             var data = URLEncoder.encode("UserID", "UTF-8") + "=" +
@@ -177,15 +177,22 @@ class SignUp : AppCompatActivity() ,View.OnClickListener,GetAndPost {
         } catch (e: Exception) {
             Log.v("Elad1", "Failled")
         }.toString()
+
+        return builder.toString()
     }
 
     override fun getData(str: String) {
-       if(str!=null){
+        // if user isnt exists yet
+       if(str=="no"){
            Toast.makeText(this,"User registered succussfully",Toast.LENGTH_LONG).show()
            var i = Intent(applicationContext, UserInterFace::class.java)
            i.putExtra("UserID",userID)
            startActivity(i)
 
+       }
+        // if user already exists
+        else{
+           Toast.makeText(this,"User registered faiiled,user name already exists",Toast.LENGTH_LONG).show()
        }
     }
 

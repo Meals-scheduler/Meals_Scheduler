@@ -22,7 +22,10 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
     override fun doInBackground(vararg params: Void?): String? {
         // ...
         Log.v("Elad1", "don in background good")
+
         return action.DoNetWorkOpreation()
+
+
 
 
     }

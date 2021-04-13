@@ -20,7 +20,7 @@ import java.util.ArrayList
 /**
  * A fragment representing a list of Items.
  */
-class AllingredientsFragment1 : Fragment() , GetAndPost {
+class AllingredientsFragment1 : Fragment(), GetAndPost {
 
     private var columnCount = 1
     private var ingredientList: ArrayList<Ingredient>? = null // list of ingredietns
@@ -48,6 +48,13 @@ class AllingredientsFragment1 : Fragment() , GetAndPost {
         // Set the adapter
         // Set the adapter
         val context = view.context
+        if (instance == null){
+            startTask()
+            Log.v("Elad1","LOADED")
+        }
+        else{
+            Log.v("Elad1"," NOT LOADED")
+        }
         instance = this
 
         // Set the adapter
@@ -60,7 +67,9 @@ class AllingredientsFragment1 : Fragment() , GetAndPost {
                 recyclerView.adapter = AllIngredientRecyclerViewAdapter
             }
         }
-        startTask()
+
+
+
         return view
     }
 
@@ -68,26 +77,27 @@ class AllingredientsFragment1 : Fragment() , GetAndPost {
 
 
         var instance: AllingredientsFragment1? = null
+//
+//        fun getInstance1(): AllingredientsFragment1 {
+//            return instance!!
+//        }
 
-        fun getInstance1(): AllingredientsFragment1 {
-            return instance!!
-        }
+        // TODO: Customize parameter argument names
+        const val ARG_COLUMN_COUNT = "column-count"
 
-            // TODO: Customize parameter argument names
-            const val ARG_COLUMN_COUNT = "column-count"
-
-            // TODO: Customize parameter initialization
-            @JvmStatic
-            fun newInstance(columnCount: Int) =
-                AllingredientsFragment1().apply {
-                    arguments = Bundle().apply {
-                        putInt(ARG_COLUMN_COUNT, columnCount)
-                    }
+        // TODO: Customize parameter initialization
+        @JvmStatic
+        fun newInstance(columnCount: Int) =
+            AllingredientsFragment1().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_COLUMN_COUNT, columnCount)
                 }
-        }
+            }
+    }
 
     override fun DoNetWorkOpreation(): String {
-        val link = "https://elad1.000webhostapp.com/getSharedIngredients.php?ownerID="+UserInterFace.userID;
+        val link =
+            "https://elad1.000webhostapp.com/getSharedIngredients.php?ownerID=" + UserInterFace.userID;
         Log.v("Elad1", "here")
 
         val sb = StringBuilder()
@@ -150,14 +160,15 @@ class AllingredientsFragment1 : Fragment() , GetAndPost {
                     ingredient2[13],
                     false
 
-                ))
+                )
+            )
         }
 
 
         AllIngredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
     }
 
-    fun startTask(){
+    fun startTask() {
         var s = AsynTaskNew(this, childFragmentManager)
         s.execute()
     }
