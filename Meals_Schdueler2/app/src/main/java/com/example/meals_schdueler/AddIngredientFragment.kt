@@ -167,7 +167,7 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
             ) // owenerId will be changed and will be determined from the user Table in the future.
 //            pbDialog = ProgressBarDialog()
 //            pbDialog.show(childFragmentManager, "ProgressBarDialog")
-            var s = AsynTaskNew(ingredient)
+            var s = AsynTaskNew(ingredient,childFragmentManager)
             s.execute()
             //pbDialog.dismiss()
 

@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.meals_schdueler.dummy.DummyContent
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStream
@@ -159,7 +158,7 @@ class AllingredientsFragment1 : Fragment() , GetAndPost {
     }
 
     fun startTask(){
-        var s = AsynTaskNew(this)
+        var s = AsynTaskNew(this, childFragmentManager)
         s.execute()
     }
 }

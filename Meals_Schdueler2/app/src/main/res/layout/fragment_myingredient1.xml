@@ -31,34 +31,45 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:textSize="12dp"
-        android:layout_weight="0."
+        android:layout_weight="0.1"
         android:clickable="false"
         android:text="Name" />
 
-    <Button
-        android:id="@+id/buttonInfo"
-        android:layout_width="wrap_content"
-        android:textSize="10dp"
-        android:layout_height="match_parent"
-        android:text="Information" />
+    <ImageView
+        android:id="@+id/imageViewInfo"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:adjustViewBounds="false"
+        android:contentDescription="TODO"
+        android:maxWidth="100dip"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/info"
+        tools:srcCompat="@tools:sample/avatars" />
 
-    <Button
-        android:id="@+id/buttonDeleteIng"
-        android:layout_weight="2"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:text="Delete Ingredient" />
+
+    <ImageView
+        android:id="@+id/imageViewDel"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:adjustViewBounds="false"
+        android:contentDescription="TODO"
+        android:maxWidth="100dip"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/trash"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/imageViewCart"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:adjustViewBounds="false"
         android:contentDescription="TODO"
         android:maxWidth="100dip"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/ic_launcher_background"
+        app:srcCompat="@drawable/cart"
         tools:srcCompat="@tools:sample/avatars" />
 
 </LinearLayout>

@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 
 import com.example.meals_schdueler.dummy.DummyContent.DummyItem
@@ -39,14 +38,15 @@ class All_IIngredients_RecyclerViewAdapter(
         holder.ingredientImage.setImageBitmap(item.pictureBitMap)
         holder.ingredientInfo.setOnClickListener{
             // opens IngredientInfo
-            var dialog = IngredientInfo(item)
+            var dialog = AllIngredientInfo(item)
             dialog.show(childFragmentManager,"IngredientInfo")
-            Log.v("Elad1",item.ingredientID.toString())
+            Log.v("Elad1",item.ownerId.toString())
 
         }
 
         holder.creatorInfo.setOnClickListener{
-            // opens onCreatorInfo
+           var dialog = CreatorInfoDialog(item.shareInfo,item.ownerId)
+            dialog.show(childFragmentManager,"CreatorInfo")
         }
     }
 
@@ -62,8 +62,8 @@ class All_IIngredients_RecyclerViewAdapter(
         var ingredientImage: ImageView = view.findViewById(R.id.imageViewPicIngr)
         var ingredientCart: ImageView = view.findViewById(R.id.imageViewCart)
         var ingredientName: Button = view.findViewById(R.id.buttonIngredientName)
-        var ingredientInfo: Button = view.findViewById(R.id.buttonInfo)
-        var creatorInfo: Button = view.findViewById(R.id.buttonCreatorInfo)
+        var ingredientInfo: ImageView = view.findViewById(R.id.imageViewInfo)
+        var creatorInfo: ImageView = view.findViewById(R.id.imageViewCreatorInfo)
         lateinit var mItem : Ingredient
 
         override fun toString(): String {

@@ -9,16 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.DialogFragment
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.net.URL
-import java.net.URLEncoder
 
 
-class IngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListener {
+class MyIngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListener {
 
-    var builder: java.lang.StringBuilder? = null
     lateinit var ingredientName: EditText
     lateinit var costPerGram: EditText
     lateinit var typeOfMeal: Spinner
@@ -33,6 +27,7 @@ class IngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListener 
     lateinit var typeSeasson: String
     lateinit var picture: String
     lateinit var ingredientImage: ImageView
+    lateinit var imageX : ImageView
     var nutritousValues: NutritousValues? = null
     var howToStoreValue: HowToStroreValue? = null
 
@@ -43,7 +38,7 @@ class IngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListener 
         savedInstanceState: Bundle?
     ): View? {
 
-        var x: View = inflater.inflate(R.layout.ingredeint_info, container, false)
+        var x: View = inflater.inflate(R.layout.my_ingredeint_info, container, false)
         ingredientName = x.findViewById(R.id.editTextIngredientName)
         typeOfMeal = x.findViewById(R.id.typeOfMealSpinner)
         typeOfSeason = x.findViewById(R.id.typeOfSeassonSpinner)
@@ -55,6 +50,7 @@ class IngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListener 
         ingredientImage = x.findViewById(R.id.imageViewPic)
         costPerGram = x.findViewById(R.id.editTextCost)
         saveBtn = x.findViewById(R.id.buttonSave)
+        imageX = x.findViewById(R.id.imageViewX)
         nutritousValues = NutritousValues(
             ingredient.nutritiousDes,
             ingredient.fat,
@@ -68,6 +64,7 @@ class IngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListener 
         editBtn.setOnClickListener(this)
         nutritiousBtn.setOnClickListener(this)
         howToStoreBtn.setOnClickListener(this)
+        imageX.setOnClickListener(this)
         typeOfMeal.onItemSelectedListener = SpinnerActivity()
         typeOfSeason.onItemSelectedListener = SpinnerActivity()
         setIngredientData()
@@ -136,6 +133,7 @@ class IngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListener 
 
 
     override fun onClick(p0: View?) {
+
         // click on edit button
         if (p0 == editBtn) {
             unlockEdit()
@@ -176,11 +174,14 @@ class IngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListener 
 
 
             )
-            var s = AsynTaskNew(ingredient1)
+            var s = AsynTaskNew(ingredient1, childFragmentManager)
             s.execute()
 
 
 
+        }
+        else if(p0 == imageX){
+            dismiss()
         }
     }
 

@@ -61,6 +61,7 @@ class UserInterFace : AppCompatActivity() {
             }
 
             if(menuItem.itemId == R.id.nav_item_logout){
+                // when we click logout we write false into the file
                 var preferences : SharedPreferences = getSharedPreferences("checkbox", MODE_PRIVATE) // private access to the file, only our app can read it
                 var editor : SharedPreferences.Editor = preferences.edit()
                 editor.putString("remember","false")

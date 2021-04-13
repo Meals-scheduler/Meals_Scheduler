@@ -8,12 +8,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import java.io.*
 import java.net.HttpURLConnection
-import java.net.PasswordAuthentication
 import java.net.URL
 import java.net.URLEncoder
 
@@ -70,7 +67,7 @@ class SignUp : AppCompatActivity() ,View.OnClickListener,GetAndPost {
                 email = userEmail.text.toString()
                 password = userPassword.text.toString()
                 picture = "Nothing ATM"
-                var s = AsynTaskNew(this)
+                var s = AsynTaskNew(this, supportFragmentManager)
                 s.execute()
             }
        }
@@ -153,32 +150,6 @@ class SignUp : AppCompatActivity() ,View.OnClickListener,GetAndPost {
                     URLEncoder.encode(password, "UTF-8")
             data += "&" + URLEncoder.encode("Picture", "UTF-8") + "=" +
                     URLEncoder.encode(picture, "UTF-8")
-//            data += "&" + URLEncoder.encode("HowToStore", "UTF-8") + "=" +
-//                    URLEncoder.encode(howToStore, "UTF-8")
-//
-//
-//            // now 2 values for another table -  Share_Ingredient_Table
-//
-//            data += "&" + URLEncoder.encode("ShareInfo", "UTF-8") + "=" +
-//                    URLEncoder.encode(shareInfo.toString(), "UTF-8")
-//            data += "&" + URLEncoder.encode("ShareIngredient", "UTF-8") + "=" +
-//                    URLEncoder.encode(shareIngredient.toString(), "UTF-8")
-//
-//            // 1 value for another table - Ingredient_Cost_Table
-//
-//            data += "&" + URLEncoder.encode("CostPerGram", "UTF-8") + "=" +
-//                    URLEncoder.encode(costPerGram, "UTF-8")
-
-            // 4 values for another table - Nutritious_Table
-//
-//            data += "&" + URLEncoder.encode("Fat", "UTF-8") + "=" +
-//                    URLEncoder.encode(fat.toString(), "UTF-8")
-//            data += "&" + URLEncoder.encode("Carbs", "UTF-8") + "=" +
-//                    URLEncoder.encode(carbs_.toString(), "UTF-8")
-//            data += "&" + URLEncoder.encode("Protein", "UTF-8") + "=" +
-//                    URLEncoder.encode(protein_.toString(), "UTF-8")
-//            data += "&" + URLEncoder.encode("NutritiousDes", "UTF-8") + "=" +
-//                    URLEncoder.encode(nutritiousDes, "UTF-8")
 
 
             Log.v("Elad1", data)

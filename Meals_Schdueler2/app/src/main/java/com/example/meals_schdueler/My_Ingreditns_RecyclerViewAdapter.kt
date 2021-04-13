@@ -1,6 +1,5 @@
 package com.example.meals_schdueler
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,10 +34,16 @@ class MyItemRecyclerViewAdapter(
         //var bitmap2 = ImageConvert.StringToBitMap(item.picture)
         holder.ingredientImage.setImageBitmap(item.pictureBitMap)
         holder.ingredientInfo.setOnClickListener{
-            var dialog = IngredientInfo(item)
+            var dialog = MyIngredientInfo(item)
             dialog.show(childFragmentManager,"IngredientInfo")
 
         }
+        holder.deleteIngredient.setOnClickListener{
+            var dialog = DeleteAlertDialog(item.ingridentName,item.pictureBitMap,item.ingredientID)
+            dialog.show(childFragmentManager,"DeleteAlertDialog")
+        }
+
+
 
 
 
@@ -61,8 +66,8 @@ class MyItemRecyclerViewAdapter(
         var ingredientImage: ImageView = view.findViewById(R.id.imageViewPicIngr)
         var ingredientCart: ImageView = view.findViewById(R.id.imageViewCart)
         var ingredientName: Button = view.findViewById(R.id.buttonIngredientName)
-        var ingredientInfo: Button = view.findViewById(R.id.buttonInfo)
-        var deleteIngredient: Button = view.findViewById(R.id.buttonDeleteIng)
+        var ingredientInfo: ImageView = view.findViewById(R.id.imageViewInfo)
+        var deleteIngredient: ImageView = view.findViewById(R.id.imageViewDel)
         lateinit var mItem : Ingredient
 
 

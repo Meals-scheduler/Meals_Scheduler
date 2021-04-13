@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list"
+    android:background="#3261"
     android:name="com.example.meals_schdueler.AllingredientsFragment1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

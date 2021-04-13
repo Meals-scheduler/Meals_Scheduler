@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="250dp"
+    android:layout_height="250dp"
+    android:background="@drawable/alert_dialog_shape"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/txt_dia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:fontFamily="@font/poppinsbold"
+        android:text="@string/text_view_hover3"
+        android:textColor="@android:color/black"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/creatorName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:layout_marginTop="11dp"
+        android:fontFamily="@font/poppinsbold"
+        android:text="Anonymous"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_dia" />
+
+
+    <ImageView
+        android:id="@+id/imageViewCreaotr"
+        android:layout_width="91dp"
+        android:layout_height="103dp"
+        android:layout_marginTop="12dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/creator_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/creatorName"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/textViewMail"
+        android:layout_width="136dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/poppinsbold"
+        android:gravity="center"
+        android:text="Anonymous "
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewCreaotr" />
+
+    <ImageView
+        android:id="@+id/imageViewX"
+        android:layout_width="38dp"
+        android:layout_height="34dp"
+        android:src="@drawable/x_icon"
+        app:layout_constraintEnd_toStartOf="@+id/txt_dia"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

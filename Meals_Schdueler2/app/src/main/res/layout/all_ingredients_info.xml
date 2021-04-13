@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".MainActivity">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ingredient_info_shape">
+
+        <ImageView
+            android:id="@+id/imageViewX"
+            android:layout_width="38dp"
+            android:layout_height="34dp"
+            android:src="@drawable/x_icon"
+            app:layout_constraintEnd_toStartOf="@+id/txt_dia"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="355dp"
+            android:layout_height="46dp"
+            android:gravity="center"
+            android:text="Ingredient Information:"
+            android:fontFamily="@font/poppinsbold"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.424"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.065" />
+
+        <TextView
+            android:id="@+id/nameOfIngredient"
+            android:layout_width="178dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="32dp"
+            android:gravity="center"
+            android:text="Ingredient  Name:"
+            android:fontFamily="@font/poppinsbold"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
+
+
+        <EditText
+            android:id="@+id/editTextIngredientName"
+            android:layout_width="150dp"
+            android:layout_height="43dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/edit_text_shape"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.277"
+            app:layout_constraintStart_toEndOf="@+id/nameOfIngredient"
+            app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
+
+        <TextView
+            android:id="@+id/typeOfMeal"
+            android:layout_width="108dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="4dp"
+            android:entries="@array/Type"
+            android:src="@drawable/dropdown"
+            android:gravity="center"
+            android:hint="Type"
+            android:fontFamily="@font/poppinsbold"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameOfIngredient" />
+
+        <TextView
+            android:id="@+id/typeOfSeasson"
+            android:layout_width="127dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="58dp"
+            android:layout_marginTop="4dp"
+            android:hint="Season"
+            android:clickable="false"
+            android:src="@drawable/dropdown"
+            android:entries="@array/TypeSeasson"
+            android:fontFamily="@font/poppinsbold"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/typeOfMeal"
+            app:layout_constraintTop_toBottomOf="@+id/editTextIngredientName" />
+
+        <TextView
+            android:id="@+id/textViewPic"
+            android:layout_width="144dp"
+            android:layout_height="47dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:text="Ingredient picture:"
+            android:textSize="17dp"
+            android:fontFamily="@font/poppinsbold"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/typeOfMeal" />
+
+
+        <ImageView
+            android:id="@+id/imageViewPic"
+            android:layout_width="98dp"
+            android:layout_height="91dp"
+            android:layout_marginTop="8dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:src="@mipmap/ic_launcher"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.607"
+            app:layout_constraintStart_toEndOf="@+id/textViewPic"
+            app:layout_constraintTop_toBottomOf="@+id/typeOfSeasson"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/textViewCost"
+            style="@style/Animation.Design.BottomSheetDialog"
+            android:layout_width="144dp"
+            android:layout_height="47dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:fontFamily="@font/poppinsbold"
+            android:text="Cost per 100g:"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewPic" />
+
+
+        <EditText
+            android:id="@+id/editTextCost"
+            android:layout_width="150dp"
+            android:layout_height="43dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/edit_text_shape"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.637"
+            app:layout_constraintStart_toEndOf="@+id/textViewCost"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewPic" />
+
+        <Button
+            android:id="@+id/buttonNutritious"
+            android:layout_width="158dp"
+            android:layout_height="55dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/btn_blue"
+            android:fontFamily="@font/poppinsbold"
+            android:text="Nutritious Value"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCost" />
+
+        <Button
+            android:id="@+id/howToStoreBtn"
+            android:layout_width="158dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="34dp"
+            android:background="@drawable/btn_blue"
+            android:fontFamily="@font/poppinsbold"
+            android:text="How to store"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.455"
+            app:layout_constraintStart_toEndOf="@+id/buttonNutritious"
+            app:layout_constraintTop_toBottomOf="@+id/editTextCost" />
+
+
+        <Button
+            android:id="@+id/buttonCopy"
+            android:layout_width="99dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/btn_blue"
+            android:fontFamily="@font/poppinsbold"
+            android:gravity="center"
+            android:text="Copy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.512"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/howToStoreBtn" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

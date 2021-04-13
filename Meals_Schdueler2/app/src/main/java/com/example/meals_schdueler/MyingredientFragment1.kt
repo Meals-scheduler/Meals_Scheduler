@@ -160,7 +160,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
 
     }
     fun startTask(){
-        var s = AsynTaskNew(this)
+        var s = AsynTaskNew(this, childFragmentManager)
         s.execute()
     }
 
