@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".MainActivity">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#3261">
+
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="355dp"
+            android:layout_height="46dp"
+            android:fontFamily="@font/poppinsbold"
+            android:gravity="center"
+            android:text="Create your recipe:"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.04" />
+
+        <TextView
+            android:id="@+id/nameOfRecipe"
+            android:layout_width="144dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="35dp"
+            android:fontFamily="@font/poppinsbold"
+            android:gravity="center"
+            android:text="Recipe  Name:"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
+
+        <EditText
+            android:id="@+id/editTextRecipetName"
+            android:layout_width="157dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/edit_text_shape"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.394"
+            app:layout_constraintStart_toEndOf="@+id/nameOfRecipe"
+            app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
+
+        <Spinner
+            android:id="@+id/typeOfMealSpinner"
+            android:layout_width="108dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="43dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/spinner_shape"
+            android:entries="@array/Type"
+            android:fontFamily="@font/poppinsbold"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameOfRecipe" />
+
+        <ImageView
+            android:id="@+id/spinnerDropDown"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginStart="96dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/dropdown"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameOfRecipe" />
+
+
+        <TextView
+            android:id="@+id/textViewPic"
+            android:layout_width="144dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/poppinsbold"
+            android:gravity="center"
+            android:text="Insert a picture:"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/typeOfMealSpinner" />
+
+        <ImageView
+            android:id="@+id/imageViewPic"
+            android:layout_width="98dp"
+            android:layout_height="91dp"
+            android:layout_marginTop="52dp"
+            android:layout_marginEnd="76dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@mipmap/ic_launcher"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/textViewPic"
+            app:layout_constraintTop_toBottomOf="@+id/editTextRecipetName"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <Button
+            android:id="@+id/instructionsBtn"
+            android:layout_width="163dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/btn1"
+            android:fontFamily="@font/poppinsbold"
+            android:gravity="center"
+            android:text="Instructions"
+            android:textColor="@drawable/button_states"
+            app:layout_constraintStart_toEndOf="@+id/buttonNutritious"
+            app:layout_constraintTop_toBottomOf="@+id/textViewPic" />
+
+        <Button
+            android:id="@+id/nutriousValueBtn"
+            android:layout_width="163dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/btn1"
+            android:fontFamily="@font/poppinsbold"
+            android:gravity="center"
+            android:text="Nutritious Value"
+            android:textColor="@drawable/button_states"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/instructionsBtn"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewPic" />
+
+        <TextView
+            android:id="@+id/portionsTextView"
+            android:layout_width="248dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/poppinsbold"
+            android:text="Number of portions:"
+            android:textSize="18dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/instructionsBtn" />
+
+<!--        <Spinner-->
+<!--            android:id="@+id/numOfPortionsSpinner"-->
+<!--            android:layout_width="70dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:layout_marginStart="56dp"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:background="@drawable/spinner_shape"-->
+<!--            android:entries="@array/numPortions"-->
+<!--            android:fontFamily="@font/poppinsbold"-->
+<!--            android:gravity="center"-->
+<!--            android:textSize="18dp"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintEnd_toEndOf="portionsTextView"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/portionsTextView"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/nutriousValueBtn" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/spinnerDropDown2"-->
+<!--            android:layout_width="34dp"-->
+<!--            android:layout_height="32dp"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_marginEnd="32dp"-->
+<!--            android:src="@drawable/dropdown"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="1.0"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/numOfPortionsSpinner"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/nutriousValueBtn" />-->
+
+        <TextView
+            android:id="@+id/listIngredientsTextView"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="96dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/poppinsbold"
+            android:gravity="center"
+            android:text="List the ingredients:"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/portionsTextView"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/listView"
+            android:layout_width="376dp"
+            android:layout_height="251dp"
+            app:layoutManager="LinearLayoutManager"
+            android:background="@drawable/edit_text_shape"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:context=".AddRecipeFragment"
+            tools:listitem="@layout/add_recipe_layout"
+            app:layout_constraintTop_toBottomOf="@+id/listIngredientsTextView" />
+
+        <Button
+            android:id="@+id/addIngredientBtn"
+            android:layout_width="163dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/btn1"
+            android:fontFamily="@font/poppinsbold"
+            android:gravity="center"
+            android:text="Add ingredient"
+
+            android:textColor="@drawable/button_states"
+            app:layout_constraintStart_toEndOf="@+id/buttonNutritious"
+            app:layout_constraintTop_toBottomOf="@+id/listView" />
+
+        <Button
+            android:id="@+id/deleteIngredientBtn"
+            android:layout_width="163dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="65dp"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/btn1"
+            android:fontFamily="@font/poppinsbold"
+            android:gravity="center"
+            android:text="Delete ingredient"
+            android:textColor="@drawable/button_states"
+            app:layout_constraintStart_toEndOf="@+id/addIngredientBtn"
+            app:layout_constraintTop_toBottomOf="@+id/listView" />
+
+        <TextView
+            android:id="@+id/totalCost"
+            android:layout_width="144dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="35dp"
+            android:fontFamily="@font/poppinsbold"
+            android:gravity="center"
+            android:text="Total cost:"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addIngredientBtn" />
+
+        <EditText
+            android:id="@+id/editTextTotalCost"
+            android:layout_width="157dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/edit_text_shape"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.394"
+            app:layout_constraintStart_toEndOf="@+id/nameOfRecipe"
+            app:layout_constraintTop_toBottomOf="@+id/deleteIngredientBtn" />
+
+        <CheckBox
+            android:id="@+id/checkBoxShareIngredient"
+            android:layout_width="377dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="28dp"
+            android:checked="false"
+            android:fontFamily="@font/poppinsbold"
+            android:text="I would like to share my ingredient"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/totalCost" />
+
+
+        <CheckBox
+            android:id="@+id/checkBoxShareInfo"
+            android:layout_width="377dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppinsbold"
+            android:text="I would like to share my information"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxShareIngredient" />
+
+        <Button
+            android:id="@+id/buttonSave"
+            android:layout_width="195dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/btn1"
+            android:gravity="center"
+            android:text="save"
+            android:textColor="@drawable/button_states"
+            android:fontFamily="@font/poppinsbold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxShareInfo" />
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

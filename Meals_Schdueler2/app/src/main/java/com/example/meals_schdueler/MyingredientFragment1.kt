@@ -45,6 +45,15 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
         val recyclerView = view.findViewById<View>(R.id.list) as RecyclerView
 
         // Set the adapter
+
+//        if (instance == null){
+//            startTask()
+//            Log.v("Elad1","LOADED")
+//        }
+//        else{
+//            Log.v("Elad1"," NOT LOADED")
+//        }
+
         val context = view.context
         instance = this
 
@@ -154,12 +163,16 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
                 ))
         }
 
-
+        // initializing the singelton with the user's ingredients list to keep it here on code.
+        // should do it on another place !!!
+        UserPropertiesSingelton.getInstance()!!.setUserIngredientss(ingredientList)
+        // sending the last to the adapter.
         ingredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
 
 
     }
     fun startTask(){
+
         var s = AsynTaskNew(this, childFragmentManager)
         s.execute()
     }

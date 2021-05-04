@@ -1,5 +1,6 @@
 package com.example.meals_schdueler
 
+import android.app.AlertDialog
 import android.os.AsyncTask
 import android.util.Log
 import androidx.fragment.app.FragmentManager
@@ -26,8 +27,6 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
         return action.DoNetWorkOpreation()
 
 
-
-
     }
 
     override fun onPreExecute() {
@@ -49,8 +48,9 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
             MyingredientFragment1.getInstance1().startTask()
 
 
-
         }
-        pbDialog.dismiss()
+        if (!(action is DeleteAlertDialog)){
+            pbDialog.dismiss()
+        }
     }
 }

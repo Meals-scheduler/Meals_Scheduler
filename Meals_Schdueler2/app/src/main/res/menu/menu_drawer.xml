@@ -12,8 +12,8 @@
         android:icon="@drawable/ic_launcher_foreground"/>
 
     <item
-        android:title="Sent"
-        android:id="@+id/nav_item_sent"
+        android:title="Recipes"
+        android:id="@+id/nav_item_recipes"
         android:icon="@drawable/ic_launcher_foreground"/>
     <item
         android:title="Logout"

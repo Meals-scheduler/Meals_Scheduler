@@ -15,16 +15,16 @@ import kotlin.collections.ArrayList
  * [RecyclerView.Adapter] that can display a [DummyItem].
  * TODO: Replace the implementation with code for your data type.
  */
-class MyItemRecyclerViewAdapter(
+class Recipe_Ingredients_RecyclerViewAdapter(
     private var values: ArrayList<Ingredient>,
     childFragmentManager: FragmentManager
-) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<Recipe_Ingredients_RecyclerViewAdapter.ViewHolder>() {
 
     private var mValues: ArrayList<Ingredient> = values
     private var childFragmentManager = childFragmentManager
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_myingredient1, parent, false)
+            .inflate(R.layout.recipe_ingredients_list, parent, false)
         return ViewHolder(view)
     }
 
@@ -35,13 +35,14 @@ class MyItemRecyclerViewAdapter(
         //var bitmap2 = ImageConvert.StringToBitMap(item.picture)
         holder.ingredientImage.setImageBitmap(item.pictureBitMap)
         holder.ingredientInfo.setOnClickListener{
-            var dialog = MyIngredientInfo(item,false)
+            var dialog = MyIngredientInfo(item,true)
             dialog.show(childFragmentManager,"IngredientInfo")
 
         }
+
         holder.deleteIngredient.setOnClickListener{
-            var dialog = DeleteAlertDialog(item.ingridentName,item.pictureBitMap,item.ingredientID)
-            dialog.show(childFragmentManager,"DeleteAlertDialog")
+            values.removeAt(position)
+            notifyDataSetChanged()
         }
 
 
@@ -66,7 +67,6 @@ class MyItemRecyclerViewAdapter(
         // val idView: TextView = view.findViewById(R.id.item_number)
         //val contentView: TextView = view.findViewById(R.id.content)
         var ingredientImage: ImageView = view.findViewById(R.id.imageViewPicIngr)
-        var ingredientCart: ImageView = view.findViewById(R.id.imageViewCart)
         var ingredientName: Button = view.findViewById(R.id.buttonIngredientName)
         var ingredientInfo: ImageView = view.findViewById(R.id.imageViewInfo)
         var deleteIngredient: ImageView = view.findViewById(R.id.imageViewDel)

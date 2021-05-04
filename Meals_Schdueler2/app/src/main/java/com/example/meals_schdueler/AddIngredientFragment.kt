@@ -21,7 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import java.io.*
 
-class AddIngredientFragment : Fragment(), View.OnClickListener {
+open class AddIngredientFragment : Fragment(), View.OnClickListener , CameraInterface{
 
 
     lateinit var ingredientName: EditText
@@ -43,9 +43,9 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
 
 
     //for camera intent
-    private var userChoosenTask: String? = null
-    private val STORAGE_PERMISSION_CODE = 1
-    private val REQUEST_CODE = 1
+//    private var userChoosenTask: String? = null
+//    private val STORAGE_PERMISSION_CODE = 1
+//    private val REQUEST_CODE = 1
 
     companion object {
         private val IMAGE_REQUEST = 1
@@ -173,120 +173,18 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
 
 
         } else if (p0 == ingredientImage) {
-        OnUploadOrCaptureClick()
-            //val c = CameraIntent(activity,context)
-            //val i = Intent(activity, CameraIntent1::class.java)
-            //startActivityForResult(i, REQUEST_CODE);
+            val c = CameraIntent(this)
+            c.OnUploadOrCaptureClick()
+
 
         }
     }
-
-
     // for camera
 
-    fun OnUploadOrCaptureClick() {
-
-        // need to ask for permission
-        // first we check if the permission was granted.
-        Log.v("Elad", "check if we have permission")
-        if (ContextCompat.checkSelfPermission(
-                this.requireContext(),
-                Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            Log.v("Elad", "we have permission so access")
-            val items = arrayOf<CharSequence>(
-                "Take Photo", "Choose from gallery", "Cancel"
-            )
-            val builder = AlertDialog.Builder(this.context)
-            builder.setTitle("Add Photo")
-            builder.setItems(items) { dialogInterface, i -> // boolean result = Utility
-                if (items[i] == "Take Photo") {
-                    userChoosenTask = "Take Photo"
-                    cameraIntent(activity, context)
-                } else if (items[i] == "Choose from gallery") {
-                    userChoosenTask = "Choose from gallery"
-                    galleryIntent()
-                } else if (items[i] == "Cancel") {
-                    dialogInterface.dismiss()
-                }
-            }
-            builder.show()
-        } else {
-            requestStoragePermission()
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String?>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == STORAGE_PERMISSION_CODE) {
-            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.v("Elad", "permission granted")
-                OnUploadOrCaptureClick()
-            } else {
-                Toast.makeText(context, "Permission denied", Toast.LENGTH_LONG).show()
-            }
-        }
-    }
-
-    private fun requestStoragePermission() {
-
-        // if the user Deny the permission before we want to open dialog to explain why we ask permission
-        if (ActivityCompat.shouldShowRequestPermissionRationale(
-                this.requireActivity(),
-                Manifest.permission.CAMERA
-            )
-        ) {
-            Log.v("Elad", "usser denied be4")
-            AlertDialog.Builder(this.context)
-                .setTitle("Permission needed")
-                .setMessage("This permisiion is needed because of this and that")
-                .setPositiveButton(
-                    "ok"
-                ) { dialogInterface, i -> //ActivityCompat.requestPermissions(FirstTimeLogin.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},STORAGE_PERMISSION_CODE);
-                    ActivityCompat.requestPermissions(
-                        requireActivity(),
-                        arrayOf(Manifest.permission.CAMERA),
-                        STORAGE_PERMISSION_CODE
-                    )
-                }
-                .setNegativeButton(
-                    "cancel"
-                ) { dialogInterface, i -> dialogInterface.dismiss() }
-                .create().show()
-        } else {
-            // ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},STORAGE_PERMISSION_CODE);
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(Manifest.permission.CAMERA),
-                STORAGE_PERMISSION_CODE
-            )
-            Log.v("Elad", "user didnt denied be4")
-        }
-    }
-
-
-    private fun galleryIntent() {
-        val intent = Intent()
-        intent.type = "image/"
-        intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(
-            Intent.createChooser(intent, "Select File"),
-            IMAGE_REQUEST
-
-        )
-    }
-
-    private fun cameraIntent(activity: FragmentActivity?, context: Context?) {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent, CAMERA_REQUEST_CODE)
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        Log.v("Elad1","FINALLY")
         if (resultCode == Activity.RESULT_OK) {
             imageUri = data!!.data
             if (requestCode == IMAGE_REQUEST) {
@@ -295,18 +193,9 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
                 onCaptureImageResult(data)
             }
         }
-//        if (resultCode ==  Activity.RESULT_OK && requestCode == REQUEST_CODE){
-//            imageUri = data!!.data
-//            if (requestCode == IMAGE_REQUEST) {
-//                onSelectFromHalleryResult(data)
-//            } else if (requestCode == CAMERA_REQUEST_CODE) {
-//                onCaptureImageResult(data)
-//            }
-//        }
     }
 
-
-    private fun onCaptureImageResult(data: Intent) {
+    override fun onCaptureImageResult(data: Intent) {
         bitmap = (data.extras!!["data"] as Bitmap?)!!
         val bytes = ByteArrayOutputStream()
         bitmap!!.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
@@ -329,7 +218,7 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
         ingredientImage.setImageBitmap(bitmap)
     }
 
-    private fun onSelectFromHalleryResult(data: Intent?) {
+    override fun onSelectFromHalleryResult(data: Intent?) {
         if (data != null) {
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(
@@ -346,9 +235,14 @@ class AddIngredientFragment : Fragment(), View.OnClickListener {
         }
     }
 
-//    inner class initImage(image: ImageView){
-//        var image = image
-//    }
+    override fun getActivityy(): Activity? {
+       return activity
+    }
+
+    override fun getContextt(): Context? {
+       return context
+    }
+
 
 }
 

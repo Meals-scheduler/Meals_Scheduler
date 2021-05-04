@@ -1,17 +1,23 @@
 package com.example.meals_schdueler
 
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.DialogFragment
+import java.io.*
 
 
-class MyIngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListener {
+class MyIngredientInfo(item: Ingredient, isRecipeList: Boolean) : DialogFragment(), View.OnClickListener, CameraInterface {
 
     lateinit var ingredientName: EditText
     lateinit var costPerGram: EditText
@@ -30,6 +36,10 @@ class MyIngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListene
     lateinit var imageX : ImageView
     var nutritousValues: NutritousValues? = null
     var howToStoreValue: HowToStroreValue? = null
+    private var imageUri: Uri? = null
+    private val IMAGE_REQUEST = 1
+    private val CAMERA_REQUEST_CODE = 0
+    private var isRecipeList : Boolean = isRecipeList
 
     var ingredient = item
     override fun onCreateView(
@@ -60,6 +70,7 @@ class MyIngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListene
         howToStoreValue = HowToStroreValue(ingredient.howToStore)
 
 
+        ingredientImage.setOnClickListener(this)
         saveBtn.setOnClickListener(this)
         editBtn.setOnClickListener(this)
         nutritiousBtn.setOnClickListener(this)
@@ -69,6 +80,9 @@ class MyIngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListene
         typeOfSeason.onItemSelectedListener = SpinnerActivity()
         setIngredientData()
 
+        if(isRecipeList){
+            editBtn.isClickable=false
+        }
 
         return x
     }
@@ -92,6 +106,7 @@ class MyIngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListene
         typeOfMeal.isEnabled = false
         ingredientName.isEnabled = false
         costPerGram.isEnabled = false
+        ingredientImage.isEnabled =false
 
 
     }
@@ -139,6 +154,9 @@ class MyIngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListene
             unlockEdit()
         } else if (p0 == ingredientImage) {
             // click on image to change it
+            val c = CameraIntent(this)
+            c.OnUploadOrCaptureClick()
+
             Log.v("Elad", "CLICKED")
         } else if (p0 == nutritiousBtn) {
             // click on nutritious dialog
@@ -192,8 +210,70 @@ class MyIngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListene
         shareInfo.isClickable = true
         typeOfSeason!!.isEnabled = true
         typeOfMeal.isEnabled = true
+        ingredientImage.isEnabled = true
 
 
+    }
+
+    override fun onCaptureImageResult(data: Intent) {
+        AddIngredientFragment.bitmap = (data.extras!!["data"] as Bitmap?)!!
+        val bytes = ByteArrayOutputStream()
+        AddIngredientFragment.bitmap!!.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
+        val des: File = File(
+            requireContext().filesDir,
+            System.currentTimeMillis().toString() + "jpg"
+        )
+        var fo: FileOutputStream? = null
+        try {
+            des.createNewFile()
+            fo = FileOutputStream(des)
+            fo.write(bytes.toByteArray())
+            fo.close()
+            imageUri = Uri.fromFile(des)
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        ingredientImage.setImageBitmap(AddIngredientFragment.bitmap)
+    }
+
+    override fun onSelectFromHalleryResult(data: Intent?) {
+        if (data != null) {
+            try {
+                AddIngredientFragment.bitmap = MediaStore.Images.Media.getBitmap(
+                    context?.getContentResolver(),
+                    data.data
+                )
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+            ingredientImage.setImageBitmap(AddIngredientFragment.bitmap)
+        }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.v("Elad1","FINALLY")
+        if (resultCode == Activity.RESULT_OK) {
+            imageUri = data!!.data
+            if (requestCode == IMAGE_REQUEST) {
+                onSelectFromHalleryResult(data)
+            } else if (requestCode == CAMERA_REQUEST_CODE) {
+                onCaptureImageResult(data)
+            }
+        }
+    }
+
+    override fun getActivityy(): Activity? {
+       return activity
+    }
+
+    override fun getContextt(): Context? {
+        return context
     }
 
 }

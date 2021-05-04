@@ -46,8 +46,8 @@ class AllingredientsFragment1 : Fragment(), GetAndPost {
         val recyclerView = view.findViewById<View>(R.id.list) as RecyclerView
 
         // Set the adapter
-        // Set the adapter
         val context = view.context
+        // to avoid constant loading of AllIngredients Data , we want to load only once. - to ask Harel
         if (instance == null){
             startTask()
             Log.v("Elad1","LOADED")
@@ -69,7 +69,7 @@ class AllingredientsFragment1 : Fragment(), GetAndPost {
         }
 
 
-
+       // startTask()
         return view
     }
 
@@ -77,10 +77,7 @@ class AllingredientsFragment1 : Fragment(), GetAndPost {
 
 
         var instance: AllingredientsFragment1? = null
-//
-//        fun getInstance1(): AllingredientsFragment1 {
-//            return instance!!
-//        }
+
 
         // TODO: Customize parameter argument names
         const val ARG_COLUMN_COUNT = "column-count"

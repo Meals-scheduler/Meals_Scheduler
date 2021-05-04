@@ -50,9 +50,9 @@ class UserInterFace : AppCompatActivity() {
 
             }
 
-            if (menuItem.itemId == R.id.nav_item_sent) {
+            if (menuItem.itemId == R.id.nav_item_recipes) {
                 val ft = mFragmentManager.beginTransaction()
-                ft.replace(R.id.containerView, SentFragment()).commit()
+                ft.replace(R.id.containerView, RecipesFragments()).commit()
             }
 
             if (menuItem.itemId == R.id.nav_item_draft) {
@@ -61,6 +61,8 @@ class UserInterFace : AppCompatActivity() {
             }
 
             if(menuItem.itemId == R.id.nav_item_logout){
+                //when we loggd out , i want to destroy the fragments of the previous user
+                //mFragmentTransaction.remove(AllingredientsFragment1())
                 // when we click logout we write false into the file
                 var preferences : SharedPreferences = getSharedPreferences("checkbox", MODE_PRIVATE) // private access to the file, only our app can read it
                 var editor : SharedPreferences.Editor = preferences.edit()
@@ -68,6 +70,8 @@ class UserInterFace : AppCompatActivity() {
                 editor.apply()
                 val i = Intent(applicationContext, MainActivity::class.java)
                 startActivity(i)
+                // to avoid constant loading of AllIngredients Data
+                AllingredientsFragment1.instance=null;
             }
             false
 
