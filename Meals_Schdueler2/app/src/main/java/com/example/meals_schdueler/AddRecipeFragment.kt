@@ -2,6 +2,7 @@ package com.example.meals_schdueler
 
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -13,13 +14,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.io.*
-import java.util.*
 
-class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface {
+
+class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
+    DialogInterface.OnDismissListener {
 
 
     lateinit var recipeName: EditText
@@ -31,7 +31,6 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface {
     lateinit var saveBtn: Button
     lateinit var instructiosBtn: Button
     lateinit var addBtn: Button
-    lateinit var deleteBtn: Button
     lateinit var shareIngredient: CheckBox
     lateinit var shareInfo: CheckBox
     lateinit var typeOfMeall: String
@@ -39,27 +38,40 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface {
     // lateinit var typeSeasson: String
     lateinit var ingredientImage: ImageView
     private var imageUri: Uri? = null
+
     var notritousValue: NutritousValues? = null
     var instructions: HowToStroreValue? = null
+    var listItems: Recipe_Ingredients_List? = null
 
-    var isFirstTimeNutrtious: Boolean = true
+    var isFirstTimeNutrtious: Boolean = false
     var isFirstInstructions: Boolean = true
 
     private var columnCount = 1
-    private var ingredientList: ArrayList<Ingredient>? = null // list of ingredietns
+    private val IMAGE_REQUEST = 1
+    private val CAMERA_REQUEST_CODE = 0
+
+    var ingredientList: ArrayList<Ingredient>? = null // list of ingredietns
     private var ingredientRecyclerViewAdapter: Recipe_Ingredients_RecyclerViewAdapter? =
         null // adapter for the list.
 
-    var listView: ListView? = null
-    private var adapter: ArrayAdapter<Ingredient>? = null
+    // arrary list of int to the wrapper object Recipe_ingredients_list that contains a list of choosen items that
+    // will be returned here for user choosen ingreidetnts.
+    private var listItemsChoosen: ArrayList<Int>? = null
+    var costList: ArrayList<Int>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        listItemsChoosen = ArrayList<Int>()
+        costList = ArrayList()
+        listItems = Recipe_Ingredients_List(listItemsChoosen)
         ingredientList = ArrayList<Ingredient>()
         ingredientRecyclerViewAdapter = Recipe_Ingredients_RecyclerViewAdapter(
-            ingredientList!!,
+            this,
+            //  ingredientList!!,
+            // listItems,
             childFragmentManager
         )
+
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
@@ -67,11 +79,6 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface {
 
     companion object {
 
-//        var instance : MyingredientFragment1? = null
-
-//        fun getInstance1() : MyingredientFragment1{
-//            return instance!!
-//        }
         // TODO: Customize parameter argument names
         const val ARG_COLUMN_COUNT = "column-count"
 
@@ -93,7 +100,7 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface {
         savedInstanceState: Bundle?
     ): View? {
         val x = inflater.inflate(R.layout.add_recipe_layout, null)
-        val recyclerView = x.findViewById<View>(R.id.listView) as RecyclerView
+        val recyclerView = x.findViewById<View>(R.id.listView2) as RecyclerView
 
         recipeName = x.findViewById(R.id.editTextRecipetName)
         typeOfMeal = x.findViewById(R.id.typeOfMealSpinner)
@@ -102,7 +109,6 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface {
         instructiosBtn = x.findViewById(R.id.instructionsBtn)
         saveBtn = x.findViewById(R.id.buttonSave)
         addBtn = x.findViewById(R.id.addIngredientBtn)
-        deleteBtn = x.findViewById(R.id.deleteIngredientBtn)
         shareInfo = x.findViewById(R.id.checkBoxShareInfo)
         shareIngredient = x.findViewById(R.id.checkBoxShareIngredient)
         ingredientImage = x.findViewById(R.id.imageViewPic)
@@ -120,14 +126,12 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface {
         Log.v("Elad1", "USER IDDDDDDDD222" + UserInterFace.userID.toString())
 
         addBtn.setOnClickListener(this)
-        deleteBtn.setOnClickListener(this)
         saveBtn.setOnClickListener(this)
         ingredientImage.setOnClickListener(this)
         instructiosBtn.setOnClickListener(this)
         nutritiousBtn.setOnClickListener(this)
         typeOfMeal.onItemSelectedListener = SpinnerActivity()
         //typeOfSeason.onItemSelectedListener = SpinnerActivity()
-
 
 
         return x
@@ -146,10 +150,6 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface {
                 typeOfMeall = parent.getItemAtPosition(pos).toString()
                 Log.v("Elad", "$typeOfMeall")
             }
-//            } else if (parent == typeOfSeason) {
-//                typeSeasson = parent.getItemAtPosition(pos).toString()
-//                Log.v("Elad", "$typeSeasson")
-//            }
         }
 
         override fun onNothingSelected(parent: AdapterView<*>) {
@@ -172,18 +172,33 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface {
             var dialog = HowToStoreDialog(instructions!!, isFirstInstructions)
             isFirstInstructions = false
             dialog.show(childFragmentManager, "HowToStoreDialog")
-        }
-        else if(p0 == ingredientImage){
+        } else if (p0 == ingredientImage) {
             val c = CameraIntent(this)
             c.OnUploadOrCaptureClick()
-        }
-        else if(p0== addBtn){
-            Log.v("Elad1","ADDBTN")
+        } else if (p0 == addBtn) {
+            //  listItems!!.list!!.clear()
 
-            ingredientList!!.add(UserPropertiesSingelton.getInstance()!!.getUserIngredientss()!!.get(0))
-            Log.v("Elad1", ingredientList!!.count().toString())
-            Log.v("Elad1", ingredientList!!.get(0).ingridentName.toString())
-            ingredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
+            var dialog = Recipe_Ingredients_Choose_Dialog(
+                listItems!!,
+                UserPropertiesSingelton.getInstance()!!.getUserIngredientss()!!,
+                costList!!
+            )
+            dialog.show(childFragmentManager, "Recipe_Ingredietns_Choose")
+
+
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.v("Elad1", "FINALLY")
+        if (resultCode == Activity.RESULT_OK) {
+            imageUri = data!!.data
+            if (requestCode == IMAGE_REQUEST) {
+                onSelectFromHalleryResult(data)
+            } else if (requestCode == CAMERA_REQUEST_CODE) {
+                onCaptureImageResult(data)
+            }
         }
     }
 
@@ -228,12 +243,73 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface {
     }
 
     override fun getActivityy(): Activity? {
-       return activity
+        return activity
     }
 
     override fun getContextt(): Context? {
         return context
     }
 
+    override fun onDismiss(p0: DialogInterface?) {
+        // on dissmiss event , when we dissmiss the ingrdeitns selcection dialog we want to update the list with
+        // the chosen ingredients.
+        for (i in listItems!!.list!!) {
+            var ing = UserPropertiesSingelton.getInstance()!!.getUserIngredientss()!!.get(i)
+            if (!ingredientList!!.contains(ing))
+                ingredientList!!.add(
+                    ing
+
+                )
+        }
+        ingredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
+        calculateCost()
+        calculateNutritiousValues()
+
+    }
+
+    public fun calculateNutritiousValues() {
+        var j = 0
+        // make them 0 because when we delete we dont want to still add to whats exsits.
+        notritousValue!!.carbs = 0f
+        notritousValue!!.protein = 0F
+        notritousValue!!.fats = 0F
+
+        for (i in ingredientList!!) {
+
+
+            var cur = costList!!.get(j) * i.carbs_.toFloat() / 100
+            // Log.v("Elad1",cur.toString())
+            notritousValue!!.carbs += cur
+            cur = costList!!.get(j) * i.protein_.toFloat() / 100
+            notritousValue!!.protein += cur
+            cur = costList!!.get(j) * i.fat.toFloat() / 100
+            notritousValue!!.fats += cur
+            j++
+        }
+
+    }
+
+
+    public fun calculateCost() {
+        var calc: Float = 0f
+        var j = 0
+
+//        Log.v("Elad1", ingredientList!!.size.toString())
+//        Log.v("Elad1", costList!!.size.toString())
+        for (i in ingredientList!!) {
+            // Log.v("Elad1",i.toString())
+
+            var cur = costList!!.get(j) * i.costPerGram.toFloat() / 100
+            // Log.v("Elad1",cur.toString())
+            calc += cur
+            //  Log.v("Elad1",calc.toString())
+            j++
+        }
+        totalCost.setText(calc.toString())
+    }
+
 
 }
+
+
+

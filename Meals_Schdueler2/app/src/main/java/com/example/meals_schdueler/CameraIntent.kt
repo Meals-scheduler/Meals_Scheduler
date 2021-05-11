@@ -30,7 +30,6 @@ class CameraIntent(a: CameraInterface) : Fragment() {
     private val CAMERA_REQUEST_CODE = 0
     private var imageUri: Uri? = null
     private val a = a
-
 //
 //    override fun onCreateView(
 //        inflater: LayoutInflater,
@@ -59,7 +58,7 @@ class CameraIntent(a: CameraInterface) : Fragment() {
 
 
         // first we check if the permission was granted.
-        Log.v("Elad", "check if we have permission")
+        Log.v("Elad1", "check if we have permission")
         if (ContextCompat.checkSelfPermission(
                 a.getActivityy()!!,
                 Manifest.permission.CAMERA
@@ -151,6 +150,8 @@ class CameraIntent(a: CameraInterface) : Fragment() {
         when(a){
             is MyIngredientInfo -> a.startActivityForResult(Intent.createChooser(intent,"Select File"), IMAGE_REQUEST)
             is AddIngredientFragment -> a.startActivityForResult(Intent.createChooser(intent,"Select File"), IMAGE_REQUEST)
+            is AddRecipeFragment -> a.startActivityForResult(Intent.createChooser(intent,"Select File"), IMAGE_REQUEST)
+
         }
 
 
@@ -169,6 +170,7 @@ class CameraIntent(a: CameraInterface) : Fragment() {
         when(a){
            is MyIngredientInfo -> a.startActivityForResult(intent, CAMERA_REQUEST_CODE)
             is AddIngredientFragment -> a.startActivityForResult(intent, CAMERA_REQUEST_CODE)
+            is AddRecipeFragment -> a.startActivityForResult(intent, CAMERA_REQUEST_CODE)
         }
 
 

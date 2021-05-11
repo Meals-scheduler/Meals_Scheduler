@@ -127,7 +127,7 @@
             android:gravity="center"
             android:text="Instructions"
             android:textColor="@drawable/button_states"
-            app:layout_constraintStart_toEndOf="@+id/buttonNutritious"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewPic" />
 
         <Button
@@ -157,36 +157,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/instructionsBtn" />
 
-<!--        <Spinner-->
-<!--            android:id="@+id/numOfPortionsSpinner"-->
-<!--            android:layout_width="70dp"-->
-<!--            android:layout_height="30dp"-->
-<!--            android:layout_marginStart="56dp"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            android:background="@drawable/spinner_shape"-->
-<!--            android:entries="@array/numPortions"-->
-<!--            android:fontFamily="@font/poppinsbold"-->
-<!--            android:gravity="center"-->
-<!--            android:textSize="18dp"-->
-<!--            android:textStyle="bold"-->
-<!--            app:layout_constraintEnd_toEndOf="portionsTextView"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/portionsTextView"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/nutriousValueBtn" />-->
 
-<!--        <ImageView-->
-<!--            android:id="@+id/spinnerDropDown2"-->
-<!--            android:layout_width="34dp"-->
-<!--            android:layout_height="32dp"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            android:layout_marginEnd="32dp"-->
-<!--            android:src="@drawable/dropdown"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintHorizontal_bias="1.0"-->
-<!--            app:layout_constraintStart_toStartOf="@+id/numOfPortionsSpinner"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/nutriousValueBtn" />-->
 
         <TextView
             android:id="@+id/listIngredientsTextView"
@@ -203,47 +174,30 @@
             app:layout_constraintTop_toBottomOf="@id/portionsTextView"
             app:layout_constraintVertical_bias="0.0" />
 
-        <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/listView"
-            android:layout_width="376dp"
-            android:layout_height="251dp"
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listView2"
+            android:layout_width="323dp"
+            android:layout_height="457dp"
             app:layoutManager="LinearLayoutManager"
-            android:background="@drawable/edit_text_shape"
             app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/edit_text_shape"
             app:layout_constraintStart_toStartOf="parent"
-            tools:context=".AddRecipeFragment"
-            tools:listitem="@layout/add_recipe_layout"
             app:layout_constraintTop_toBottomOf="@+id/listIngredientsTextView" />
 
         <Button
             android:id="@+id/addIngredientBtn"
             android:layout_width="163dp"
             android:layout_height="56dp"
-            android:layout_marginTop="36dp"
+            android:layout_marginStart="124dp"
+            android:layout_marginTop="24dp"
             android:background="@drawable/btn1"
             android:fontFamily="@font/poppinsbold"
             android:gravity="center"
             android:text="Add ingredient"
-
             android:textColor="@drawable/button_states"
-            app:layout_constraintStart_toEndOf="@+id/buttonNutritious"
-            app:layout_constraintTop_toBottomOf="@+id/listView" />
-
-        <Button
-            android:id="@+id/deleteIngredientBtn"
-            android:layout_width="163dp"
-            android:layout_height="56dp"
-            android:layout_marginStart="65dp"
-            android:layout_marginTop="36dp"
-            android:background="@drawable/btn1"
-            android:fontFamily="@font/poppinsbold"
-            android:gravity="center"
-            android:text="Delete ingredient"
-            android:textColor="@drawable/button_states"
-            app:layout_constraintStart_toEndOf="@+id/addIngredientBtn"
-            app:layout_constraintTop_toBottomOf="@+id/listView" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/listView2" />
 
         <TextView
             android:id="@+id/totalCost"
@@ -265,15 +219,15 @@
             android:id="@+id/editTextTotalCost"
             android:layout_width="157dp"
             android:layout_height="35dp"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="32dp"
             android:background="@drawable/edit_text_shape"
             android:ems="10"
             android:inputType="textPersonName"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.394"
+            app:layout_constraintHorizontal_bias="0.393"
             app:layout_constraintStart_toEndOf="@+id/nameOfRecipe"
-            app:layout_constraintTop_toBottomOf="@+id/deleteIngredientBtn" />
+            app:layout_constraintTop_toBottomOf="@+id/addIngredientBtn" />
 
         <CheckBox
             android:id="@+id/checkBoxShareIngredient"
@@ -318,7 +272,36 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/checkBoxShareInfo" />
 
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="108dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="43dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="22dp"
+            android:background="@drawable/spinner_shape"
+            android:entries="@array/numPortions"
+            android:fontFamily="@font/poppinsbold"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/portionsTextView"
+            app:layout_constraintTop_toBottomOf="@+id/nutriousValueBtn" />
 
+
+        <ImageView
+            android:id="@+id/spinnerDropDown2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginEnd="15dp"
+            android:src="@drawable/dropdown"
+            app:layout_constraintEnd_toEndOf="@+id/spinner"
+            app:layout_constraintTop_toTopOf="@+id/spinner"></ImageView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

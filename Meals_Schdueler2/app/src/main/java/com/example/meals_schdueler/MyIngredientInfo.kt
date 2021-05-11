@@ -80,8 +80,11 @@ class MyIngredientInfo(item: Ingredient, isRecipeList: Boolean) : DialogFragment
         typeOfSeason.onItemSelectedListener = SpinnerActivity()
         setIngredientData()
 
+        // not to allow to edit and save from the recipe list ingredients.
         if(isRecipeList){
             editBtn.isClickable=false
+            saveBtn.isClickable=false
+
         }
 
         return x

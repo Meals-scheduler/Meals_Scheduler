@@ -51,6 +51,7 @@ class UserInterFace : AppCompatActivity() {
             }
 
             if (menuItem.itemId == R.id.nav_item_recipes) {
+                AllingredientsFragment1.instance=null
                 val ft = mFragmentManager.beginTransaction()
                 ft.replace(R.id.containerView, RecipesFragments()).commit()
             }
@@ -68,6 +69,8 @@ class UserInterFace : AppCompatActivity() {
                 var editor : SharedPreferences.Editor = preferences.edit()
                 editor.putString("remember","false")
                 editor.apply()
+                // change the singletone into null
+                UserPropertiesSingelton.getInstance()!!.logout_setNULL()
                 val i = Intent(applicationContext, MainActivity::class.java)
                 startActivity(i)
                 // to avoid constant loading of AllIngredients Data
