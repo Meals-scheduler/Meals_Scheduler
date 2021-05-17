@@ -25,13 +25,16 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
     lateinit var recipeName: EditText
     lateinit var totalCost: EditText
     lateinit var typeOfMeal: Spinner
+    lateinit var numOfPortions: Spinner
+    lateinit var numOfPortionss: String
+    lateinit var bitmap: Bitmap
 
     //lateinit var typeOfSeason: Spinner
     lateinit var nutritiousBtn: Button
     lateinit var saveBtn: Button
     lateinit var instructiosBtn: Button
     lateinit var addBtn: Button
-    lateinit var shareIngredient: CheckBox
+    lateinit var shareRecipe: CheckBox
     lateinit var shareInfo: CheckBox
     lateinit var typeOfMeall: String
 
@@ -110,9 +113,10 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
         saveBtn = x.findViewById(R.id.buttonSave)
         addBtn = x.findViewById(R.id.addIngredientBtn)
         shareInfo = x.findViewById(R.id.checkBoxShareInfo)
-        shareIngredient = x.findViewById(R.id.checkBoxShareIngredient)
+        shareRecipe = x.findViewById(R.id.checkBoxShareRecipe)
         ingredientImage = x.findViewById(R.id.imageViewPic)
         totalCost = x.findViewById(R.id.editTextTotalCost)
+        numOfPortions = x.findViewById(R.id.numOfPortions)
         //listView = x!!.findViewById<View>(R.id.listView) as ListView
 
 
@@ -131,6 +135,7 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
         instructiosBtn.setOnClickListener(this)
         nutritiousBtn.setOnClickListener(this)
         typeOfMeal.onItemSelectedListener = SpinnerActivity()
+        numOfPortions.onItemSelectedListener = SpinnerActivity()
         //typeOfSeason.onItemSelectedListener = SpinnerActivity()
 
 
@@ -148,7 +153,10 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
 
             if (parent == typeOfMeal) {
                 typeOfMeall = parent.getItemAtPosition(pos).toString()
-                Log.v("Elad", "$typeOfMeall")
+
+            } else if (parent == numOfPortions) {
+
+                numOfPortionss = parent.getItemAtPosition(pos).toString()
             }
         }
 
@@ -157,6 +165,8 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
 
 
         }
+
+
     }
 
     override fun onClick(p0: View?) {
@@ -186,6 +196,24 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
             dialog.show(childFragmentManager, "Recipe_Ingredietns_Choose")
 
 
+        } else if (p0 == saveBtn) {
+            var recipe = Recipe(
+                1,
+                UserInterFace.userID,
+                recipeName.text.toString(),
+                bitmap,
+                typeOfMeall,
+                numOfPortionss,
+                shareRecipe.isChecked,
+                shareInfo.isChecked,
+                totalCost.text.toString().toDouble(),
+                ingredientList!!,
+                costList!!,
+
+                )
+
+            var s = AsynTaskNew(recipe, childFragmentManager)
+            s.execute()
         }
     }
 
@@ -203,9 +231,9 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
     }
 
     override fun onCaptureImageResult(data: Intent) {
-        AddIngredientFragment.bitmap = (data.extras!!["data"] as Bitmap?)!!
+        bitmap = (data.extras!!["data"] as Bitmap?)!!
         val bytes = ByteArrayOutputStream()
-        AddIngredientFragment.bitmap!!.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
+        bitmap!!.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
         val des: File = File(
             requireContext().filesDir,
             System.currentTimeMillis().toString() + "jpg"
@@ -222,13 +250,13 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        ingredientImage.setImageBitmap(AddIngredientFragment.bitmap)
+        ingredientImage.setImageBitmap(bitmap)
     }
 
     override fun onSelectFromHalleryResult(data: Intent?) {
         if (data != null) {
             try {
-                AddIngredientFragment.bitmap = MediaStore.Images.Media.getBitmap(
+                bitmap = MediaStore.Images.Media.getBitmap(
                     context?.getContentResolver(),
                     data.data
                 )
@@ -237,7 +265,7 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-            ingredientImage.setImageBitmap(AddIngredientFragment.bitmap)
+            ingredientImage.setImageBitmap(bitmap)
 
         }
     }

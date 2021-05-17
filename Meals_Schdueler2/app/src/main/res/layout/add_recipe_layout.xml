@@ -230,7 +230,7 @@
             app:layout_constraintTop_toBottomOf="@+id/addIngredientBtn" />
 
         <CheckBox
-            android:id="@+id/checkBoxShareIngredient"
+            android:id="@+id/checkBoxShareRecipe"
             android:layout_width="377dp"
             android:layout_height="31dp"
             android:layout_marginStart="16dp"
@@ -255,7 +255,7 @@
             android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBoxShareIngredient" />
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxShareRecipe" />
 
         <Button
             android:id="@+id/buttonSave"
@@ -273,7 +273,7 @@
             app:layout_constraintTop_toBottomOf="@+id/checkBoxShareInfo" />
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/numOfPortions"
             android:layout_width="108dp"
             android:layout_height="42dp"
             android:layout_marginStart="43dp"
@@ -300,8 +300,8 @@
             android:layout_gravity="center"
             android:layout_marginEnd="15dp"
             android:src="@drawable/dropdown"
-            app:layout_constraintEnd_toEndOf="@+id/spinner"
-            app:layout_constraintTop_toTopOf="@+id/spinner"></ImageView>
+            app:layout_constraintEnd_toEndOf="@+id/numOfPortions"
+            app:layout_constraintTop_toTopOf="@+id/numOfPortions"></ImageView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

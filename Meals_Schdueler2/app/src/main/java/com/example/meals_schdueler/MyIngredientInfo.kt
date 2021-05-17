@@ -26,6 +26,7 @@ class MyIngredientInfo(item: Ingredient, isRecipeList: Boolean) : DialogFragment
     lateinit var nutritiousBtn: Button
     lateinit var editBtn: Button
     lateinit var saveBtn: Button
+    lateinit var bitmap: Bitmap
     lateinit var howToStoreBtn: Button
     lateinit var shareIngredient: CheckBox
     lateinit var shareInfo: CheckBox
@@ -219,9 +220,9 @@ class MyIngredientInfo(item: Ingredient, isRecipeList: Boolean) : DialogFragment
     }
 
     override fun onCaptureImageResult(data: Intent) {
-        AddIngredientFragment.bitmap = (data.extras!!["data"] as Bitmap?)!!
+        bitmap = (data.extras!!["data"] as Bitmap?)!!
         val bytes = ByteArrayOutputStream()
-        AddIngredientFragment.bitmap!!.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
+        bitmap!!.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
         val des: File = File(
             requireContext().filesDir,
             System.currentTimeMillis().toString() + "jpg"
@@ -238,13 +239,13 @@ class MyIngredientInfo(item: Ingredient, isRecipeList: Boolean) : DialogFragment
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        ingredientImage.setImageBitmap(AddIngredientFragment.bitmap)
+        ingredientImage.setImageBitmap(bitmap)
     }
 
     override fun onSelectFromHalleryResult(data: Intent?) {
         if (data != null) {
             try {
-                AddIngredientFragment.bitmap = MediaStore.Images.Media.getBitmap(
+                bitmap = MediaStore.Images.Media.getBitmap(
                     context?.getContentResolver(),
                     data.data
                 )
@@ -253,7 +254,7 @@ class MyIngredientInfo(item: Ingredient, isRecipeList: Boolean) : DialogFragment
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-            ingredientImage.setImageBitmap(AddIngredientFragment.bitmap)
+            ingredientImage.setImageBitmap(bitmap)
         }
     }
 

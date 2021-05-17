@@ -36,6 +36,7 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener , CameraInte
     lateinit var typeOfMeall: String
     lateinit var typeSeasson: String
     lateinit var ingredientImage: ImageView
+    lateinit var bitmap: Bitmap
     private var imageUri: Uri? = null
     var notritousValue: NutritousValues? = null
     var howToStoreValue: HowToStroreValue? = null
@@ -49,7 +50,7 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener , CameraInte
 
     companion object {
         private val IMAGE_REQUEST = 1
-        lateinit var bitmap: Bitmap
+
         lateinit var pbDialog: ProgressBarDialog
 
 
