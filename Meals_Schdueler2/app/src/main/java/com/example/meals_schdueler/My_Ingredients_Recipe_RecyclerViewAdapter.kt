@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,39 +16,35 @@ import kotlin.collections.ArrayList
  * [RecyclerView.Adapter] that can display a [DummyItem].
  * TODO: Replace the implementation with code for your data type.
  */
-class MyItemRecyclerViewAdapter(
+class My_Ingredients_Recipe_RecyclerViewAdapter(
     private var values: ArrayList<Ingredient>,
+    quantityList: ArrayList<Int>,
     childFragmentManager: FragmentManager
-) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<My_Ingredients_Recipe_RecyclerViewAdapter.ViewHolder>() {
 
     private var mValues: ArrayList<Ingredient> = values
     private var childFragmentManager = childFragmentManager
+    private var quantityList = quantityList
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_myingredient1, parent, false)
+            .inflate(R.layout.recipe_ingredients_list_info, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var item : Ingredient = mValues[position] // each item postion
-        holder.mItem =item
+        var item: Ingredient = mValues[position] // each item postion
+        holder.mItem = item
         holder.ingredientName.setText(item.ingridentName)
         //var bitmap2 = ImageConvert.StringToBitMap(item.picture)
         holder.ingredientImage.setImageBitmap(item.pictureBitMap)
-        holder.ingredientInfo.setOnClickListener{
-            var dialog = MyIngredientInfo(item,false)
-            dialog.show(childFragmentManager,"IngredientInfo")
+        holder.ingredientInfo.setOnClickListener {
+            var dialog = AllIngredientInfo(item)
+            dialog.show(childFragmentManager, "IngredientInfo")
 
         }
-        holder.deleteIngredient.setOnClickListener{
-            var dialog = DeleteAlertDialog(item.ingridentName,item.pictureBitMap,item.ingredientID)
-            dialog.show(childFragmentManager,"DeleteAlertDialog")
-        }
 
-
-
-
-
+        holder.cost.setText(quantityList.get(position).toString())
+        holder.cost.isEnabled = false
 
 
         //holder.idView.text = item.id
@@ -55,8 +52,9 @@ class MyItemRecyclerViewAdapter(
     }
 
     fun setmValues(mValues: ArrayList<Ingredient>) {
-        Log.v("Elad1","YESS")
+        Log.v("Elad1", "YESS")
         this.mValues = mValues
+        Log.v("Elad1", mValues.get(0).ingridentName)
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
 
@@ -69,8 +67,8 @@ class MyItemRecyclerViewAdapter(
         var ingredientCart: ImageView = view.findViewById(R.id.imageViewCart)
         var ingredientName: Button = view.findViewById(R.id.buttonIngredientName)
         var ingredientInfo: ImageView = view.findViewById(R.id.imageViewInfo)
-        var deleteIngredient: ImageView = view.findViewById(R.id.imageViewDel)
-        lateinit var mItem : Ingredient
+        var cost: EditText = view.findViewById(R.id.editTextCost)
+        lateinit var mItem: Ingredient
 
 
         override fun toString(): String {

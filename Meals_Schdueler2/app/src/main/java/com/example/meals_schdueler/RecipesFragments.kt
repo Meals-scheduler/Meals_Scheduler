@@ -32,7 +32,7 @@ class RecipesFragments : Fragment() {
         override fun getItem(position: Int): Fragment {
             when(position){
                 0-> return AddRecipeFragment()
-                1-> return AddRecipeFragment()
+                1-> return MyRecipeFragment()
                 2-> return AddRecipeFragment()
             }
             return AddIngredientFragment()

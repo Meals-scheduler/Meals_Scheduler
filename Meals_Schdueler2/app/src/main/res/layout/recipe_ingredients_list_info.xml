@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="100dp"
+    android:layout_margin="5dp"
+    android:background="@drawable/shape"
+    android:padding="8dp">
+
+
+    <ImageView
+        android:id="@+id/imageViewPicIngr"
+        android:layout_width="74dp"
+        android:layout_height="94dp"
+        android:layout_weight="0.4"
+        android:adjustViewBounds="false"
+        android:contentDescription="TODO"
+        android:focusable="true"
+        android:maxWidth="200dp"
+        android:maxHeight="80dp"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/ic_launcher"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <Button
+        android:id="@+id/buttonIngredientName"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="4dp"
+        android:layout_weight="0."
+        android:clickable="false"
+        android:text="Name"
+        android:textSize="12dp"
+        app:layout_constraintStart_toEndOf="@+id/imageViewPicIngr"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageViewInfo"
+        android:layout_width="63dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="3"
+        android:adjustViewBounds="false"
+        android:contentDescription="TODO"
+        android:maxWidth="100dip"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toEndOf="@+id/buttonIngredientName"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/info"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="6dp"
+        android:text="Quantity(Grams)"
+        android:textSize="13dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/imageViewInfo"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+    </TextView>
+
+    <EditText
+        android:id="@+id/editTextCost"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="2dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageViewInfo" />
+
+    <ImageView
+        android:id="@+id/imageViewCart"
+        android:layout_width="41dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="3"
+        android:adjustViewBounds="false"
+        android:contentDescription="TODO"
+        android:maxWidth="100dip"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/cart"
+        tools:srcCompat="@tools:sample/avatars" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

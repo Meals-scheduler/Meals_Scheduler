@@ -44,12 +44,20 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
             action.getData(result)
         }
         // if we upload a new ingredient we want to refresh the MyIngredients tab so that the user will be able to see the new uploaded ingredient.
-        if (action is Ingredient || action is DeleteAlertDialog) {
-            MyingredientFragment1.getInstance1().startTask()
+        if (action is Ingredient) {
+            if (MyingredientFragment1.getInstance1().isAdded)
+                MyingredientFragment1.getInstance1().startTask()
 
-
+        } else if (action is Recipe) {
+            MyRecipeFragment.getInstance1().startTask()
+        } else if (action is DeleteAlertDialog) {
+            if ((action as DeleteAlertDialog).isRecipe == true) {
+                MyRecipeFragment.getInstance1().startTask()
+            } else {
+                MyingredientFragment1.getInstance1().startTask()
+            }
         }
-        if (!(action is DeleteAlertDialog)){
+        if (!(action is DeleteAlertDialog)) {
             pbDialog.dismiss()
         }
     }

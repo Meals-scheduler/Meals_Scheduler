@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,10 +29,12 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
     private var ingredientRecyclerViewAdapter: MyItemRecyclerViewAdapter? =
         null // adapter for the list.
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ingredientList = ArrayList<Ingredient>()
         ingredientRecyclerViewAdapter = MyItemRecyclerViewAdapter(ingredientList!!,childFragmentManager)
+
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
@@ -43,16 +46,6 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_myingredient1_list, container, false)
         val recyclerView = view.findViewById<View>(R.id.list) as RecyclerView
-
-        // Set the adapter
-
-//        if (instance == null){
-//            startTask()
-//            Log.v("Elad1","LOADED")
-//        }
-//        else{
-//            Log.v("Elad1"," NOT LOADED")
-//        }
 
         val context = view.context
         instance = this
@@ -168,11 +161,11 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
         UserPropertiesSingelton.getInstance()!!.setUserIngredientss(ingredientList)
         // sending the last to the adapter.
         ingredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
+        Log.v("Elad1","MOYTEN" + ingredientList!!.size)
 
 
     }
     fun startTask(){
-
         var s = AsynTaskNew(this, childFragmentManager)
         s.execute()
     }

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#3261">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/list_design"
+        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.345"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNumOfPortions"
+        tools:listitem="@layout/recipe_ingredients_list_info" />
+
+    <TextView
+        android:id="@+id/textViewRecipeName"
+        android:layout_width="198dp"
+        android:layout_marginStart="5dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/spinner_shape"
+        android:fontFamily="@font/poppinsbold"
+        android:gravity="center"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageViewX"
+        android:layout_width="38dp"
+        android:layout_height="34dp"
+        android:src="@drawable/x_icon"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/imageViewRecipe"
+        android:layout_width="75dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="60dp"
+        android:background="@drawable/spinner_shape"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/textViewNumOfPortions"
+        android:layout_width="205dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/spinner_shape"
+        android:fontFamily="@font/poppinsbold"
+        android:gravity="start"
+        android:text="Number of Portions : "
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRecipeName" />
+
+    <TextView
+        android:id="@+id/textViewTotalCost"
+        android:layout_width="125dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/spinner_shape"
+        android:fontFamily="@font/poppinsbold"
+        android:gravity="start"
+        android:text="TextView"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/textViewNumOfPortions"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewRecipe" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
+<!--<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:id="@+id/list"-->
+<!--    android:background="#3261"-->
+<!--    android:name="com.example.meals_schdueler.MyingredientFragment1"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:layout_marginLeft="16dp"-->
+<!--    android:layout_marginRight="16dp"-->
+<!--    app:layoutManager="LinearLayoutManager"-->
+<!--    tools:context=".MyingredientFragment1"-->
+<!--    tools:listitem="@layout/recipe_ingredients_list_info" />-->

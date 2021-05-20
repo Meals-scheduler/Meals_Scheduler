@@ -18,7 +18,12 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 
-class DeleteAlertDialog(ingridentName: String, pictureBitMap: Bitmap, ingredientID: Int) :
+class DeleteAlertDialog(
+    ingridentName: String,
+    pictureBitMap: Bitmap,
+    ingredientID: Int,
+    isRecipe: Boolean
+) :
     DialogFragment(), View.OnClickListener, GetAndPost {
 
 
@@ -29,6 +34,7 @@ class DeleteAlertDialog(ingridentName: String, pictureBitMap: Bitmap, ingredient
     var ingridentName = ingridentName
     var pictureBitMap = pictureBitMap
     var ingredientID = ingredientID
+    var isRecipe = isRecipe
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,7 +72,11 @@ class DeleteAlertDialog(ingridentName: String, pictureBitMap: Bitmap, ingredient
     }
 
     override fun DoNetWorkOpreation(): String {
-        val link = "https://elad1.000webhostapp.com/delIngredient.php?ingredientID=" + ingredientID
+        var link = "https://elad1.000webhostapp.com/delIngredient.php?ingredientID=" + ingredientID
+
+        if(isRecipe){
+            link = "https://elad1.000webhostapp.com/deleteRecipe.php?RecipeID=" + ingredientID
+        }
         Log.v("Elad1", "here")
 
         val sb = StringBuilder()
