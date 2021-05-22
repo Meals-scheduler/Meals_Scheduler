@@ -49,7 +49,8 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
                 MyingredientFragment1.getInstance1().startTask()
 
         } else if (action is Recipe) {
-            MyRecipeFragment.getInstance1().startTask()
+            if (MyRecipeFragment.getInstance1().isAdded)
+                MyRecipeFragment.getInstance1().startTask()
         } else if (action is DeleteAlertDialog) {
             if ((action as DeleteAlertDialog).isRecipe == true) {
                 MyRecipeFragment.getInstance1().startTask()

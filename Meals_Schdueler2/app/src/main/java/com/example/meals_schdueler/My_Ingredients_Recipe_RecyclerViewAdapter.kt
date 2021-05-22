@@ -43,8 +43,11 @@ class My_Ingredients_Recipe_RecyclerViewAdapter(
 
         }
 
-        holder.cost.setText(quantityList.get(position).toString())
-        holder.cost.isEnabled = false
+        holder.quantity.setText(quantityList.get(position).toString())
+        holder.quantity.isFocusable = false
+        var cost = quantityList.get(position).toFloat() * item.costPerGram.toFloat()/100
+        holder.cost.setText(cost.toString())
+        holder.cost.isFocusable = false
 
 
         //holder.idView.text = item.id
@@ -67,7 +70,8 @@ class My_Ingredients_Recipe_RecyclerViewAdapter(
         var ingredientCart: ImageView = view.findViewById(R.id.imageViewCart)
         var ingredientName: Button = view.findViewById(R.id.buttonIngredientName)
         var ingredientInfo: ImageView = view.findViewById(R.id.imageViewInfo)
-        var cost: EditText = view.findViewById(R.id.editTextCost)
+        var quantity: EditText = view.findViewById(R.id.editTextCost)
+        var cost : EditText = view.findViewById(R.id.editTextCost2)
         lateinit var mItem: Ingredient
 
 

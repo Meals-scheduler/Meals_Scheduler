@@ -75,6 +75,7 @@ class UserInterFace : AppCompatActivity() {
                 startActivity(i)
                 // to avoid constant loading of AllIngredients Data
                 AllingredientsFragment1.instance=null;
+                AllRecipesFragment.instance=null
             }
             false
 

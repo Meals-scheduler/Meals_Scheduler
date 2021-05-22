@@ -12,17 +12,16 @@
 
     <ImageView
         android:id="@+id/imageViewPicIngr"
-        android:layout_width="74dp"
-        android:layout_height="94dp"
+        android:layout_width="55dp"
+        android:layout_height="match_parent"
         android:layout_weight="0.4"
         android:adjustViewBounds="false"
         android:contentDescription="TODO"
-        android:focusable="true"
-        android:maxWidth="200dp"
-        android:maxHeight="80dp"
-        android:scaleType="fitCenter"
+        android:scaleType="fitStart"
         android:src="@mipmap/ic_launcher"
         android:visibility="visible"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
@@ -42,7 +41,7 @@
 
     <ImageView
         android:id="@+id/imageViewInfo"
-        android:layout_width="63dp"
+        android:layout_width="50dp"
         android:layout_height="66dp"
         android:layout_marginStart="2dp"
         android:layout_marginTop="8dp"
@@ -72,10 +71,11 @@
 
     <EditText
         android:id="@+id/editTextCost"
-        android:layout_width="50dp"
+        android:layout_width="40dp"
         android:layout_height="0dp"
         android:layout_marginStart="5dp"
         android:layout_marginBottom="2dp"
+        android:textSize="10dp"
         android:ems="10"
         android:inputType="numberDecimal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -86,16 +86,39 @@
         android:layout_width="41dp"
         android:layout_height="59dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:layout_weight="3"
         android:adjustViewBounds="false"
         android:contentDescription="TODO"
         android:maxWidth="100dip"
         android:scaleType="fitCenter"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintStart_toEndOf="@+id/textView3"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/cart"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="27dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="6dp"
+        android:text="Cost"
+        android:textSize="13dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <EditText
+        android:id="@+id/editTextCost2"
+        android:layout_width="40dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="2dp"
+        android:textSize="10dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editTextCost" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

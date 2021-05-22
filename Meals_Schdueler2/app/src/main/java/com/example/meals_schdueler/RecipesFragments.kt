@@ -33,7 +33,7 @@ class RecipesFragments : Fragment() {
             when(position){
                 0-> return AddRecipeFragment()
                 1-> return MyRecipeFragment()
-                2-> return AddRecipeFragment()
+                2-> return AllRecipesFragment()
             }
             return AddIngredientFragment()
         }
