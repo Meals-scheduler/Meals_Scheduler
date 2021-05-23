@@ -84,6 +84,7 @@ class Ingredient(
             // if we insert a new ingredient and not updating
         if (!isUpdate) {
             ingredientID = getIngredientID().toInt() + 1 // getting current IngredientID first
+            UserPropertiesSingelton.getInstance()!!.setMaxId(ingredientID)
         }
 
         // ingredientID = 1
@@ -94,6 +95,8 @@ class Ingredient(
         return input
 
     }
+
+
 
     private fun getIngredientID(): String {
         val link = "https://elad1.000webhostapp.com/getIngredientID.php"

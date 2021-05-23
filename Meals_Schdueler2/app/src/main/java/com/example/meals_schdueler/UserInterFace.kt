@@ -1,10 +1,8 @@
 package com.example.meals_schdueler
 
 import android.content.Intent
-import android.content.Intent.getIntent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -51,31 +49,34 @@ class UserInterFace : AppCompatActivity() {
             }
 
             if (menuItem.itemId == R.id.nav_item_recipes) {
-                AllingredientsFragment1.instance=null
+                AllingredientsFragment1.instance = null
                 val ft = mFragmentManager.beginTransaction()
                 ft.replace(R.id.containerView, RecipesFragments()).commit()
             }
 
-            if (menuItem.itemId == R.id.nav_item_draft) {
+            if (menuItem.itemId == R.id.nav_item_daily_schedule) {
                 val ft = mFragmentManager.beginTransaction()
-                ft.replace(R.id.containerView, DraftFragment()).commit()
+                ft.replace(R.id.containerView, DailyScheduleFragments()).commit()
             }
 
-            if(menuItem.itemId == R.id.nav_item_logout){
+            if (menuItem.itemId == R.id.nav_item_logout) {
                 //when we loggd out , i want to destroy the fragments of the previous user
                 //mFragmentTransaction.remove(AllingredientsFragment1())
                 // when we click logout we write false into the file
-                var preferences : SharedPreferences = getSharedPreferences("checkbox", MODE_PRIVATE) // private access to the file, only our app can read it
-                var editor : SharedPreferences.Editor = preferences.edit()
-                editor.putString("remember","false")
+                var preferences: SharedPreferences = getSharedPreferences(
+                    "checkbox",
+                    MODE_PRIVATE
+                ) // private access to the file, only our app can read it
+                var editor: SharedPreferences.Editor = preferences.edit()
+                editor.putString("remember", "false")
                 editor.apply()
                 // change the singletone into null
                 UserPropertiesSingelton.getInstance()!!.logout_setNULL()
                 val i = Intent(applicationContext, MainActivity::class.java)
                 startActivity(i)
                 // to avoid constant loading of AllIngredients Data
-                AllingredientsFragment1.instance=null;
-                AllRecipesFragment.instance=null
+                AllingredientsFragment1.instance = null;
+                AllRecipesFragment.instance = null
             }
             false
 
@@ -102,7 +103,7 @@ class UserInterFace : AppCompatActivity() {
 
     companion object {
 
-        var userID : Int = 0
+        var userID: Int = 0
     }
 
 

@@ -78,7 +78,7 @@ class MyRecipeFragment : Fragment(), GetAndPost {
         // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
-            MyingredientFragment1().apply {
+            MyRecipeFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_COLUMN_COUNT, columnCount)
 
@@ -233,7 +233,6 @@ class MyRecipeFragment : Fragment(), GetAndPost {
         //recipe size 11
         // ingredient size 15
         if (!str.equals("")) {
-            Log.v("Elad1", "REALLY " + str)
             recipeList!!.clear()
             val recipesAndIngredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
