@@ -40,7 +40,7 @@ class MyRecipeRecyclerViewAdapter(
         }
 
         holder.ingredientInfo.setOnClickListener {
-            Log.v("Elad1", "BLABLA" + item.listOfIngredients.size.toString())
+
             var dialog = MyRecipeIngredietns(
                 item.listOfIngredients,
                 item.recipeName,

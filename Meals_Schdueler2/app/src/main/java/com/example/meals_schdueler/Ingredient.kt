@@ -84,7 +84,6 @@ class Ingredient(
             // if we insert a new ingredient and not updating
         if (!isUpdate) {
             ingredientID = getIngredientID().toInt() + 1 // getting current IngredientID first
-            UserPropertiesSingelton.getInstance()!!.setMaxId(ingredientID)
         }
 
         // ingredientID = 1

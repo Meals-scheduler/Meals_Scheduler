@@ -358,6 +358,10 @@ class MyRecipeFragment : Fragment(), GetAndPost {
                 }
             }
 
+
+            // initializing the singelton with the user's Recipes list to keep it here on code.
+            // should do it on another place !!!
+            UserPropertiesSingelton.getInstance()!!.setUserRecipess(recipeList)
             recipeRecyclerViewAdapter!!.setmValues(recipeList!!)
 
             // need to fix getRecipe.php!!!!!!!!!!!!!!!!!!!!

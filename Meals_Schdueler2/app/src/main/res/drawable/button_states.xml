@@ -14,7 +14,7 @@
     <!-- Unfocused and pressed -->
     <item android:state_focused="false"
         android:state_pressed="true"
-        android:color="@color/teal_200" />
+        android:color="@color/black" />
 
     <!-- Default color -->
     <item android:color="@color/white" />

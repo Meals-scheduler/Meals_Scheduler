@@ -2,6 +2,7 @@ package com.example.meals_schdueler
 
 import android.util.Log
 import java.util.*
+import kotlin.collections.ArrayList
 
 class UserPropertiesSingelton {
 
@@ -24,6 +25,7 @@ class UserPropertiesSingelton {
     }
 
     var userIngredients : ArrayList<Ingredient>? = null
+    var userRecipes : ArrayList<Recipe>? = null
 
 
     fun logout_setNULL() {
@@ -37,5 +39,14 @@ class UserPropertiesSingelton {
 
     fun setUserIngredientss(userIngredients:  ArrayList<Ingredient>?){
         this.userIngredients = userIngredients
+    }
+
+    fun getUserRecipess(): ArrayList<Recipe>? {
+        if (userRecipes == null) userRecipes =  ArrayList<Recipe>()
+        return userRecipes
+    }
+
+    fun setUserRecipess(userIngredients:  ArrayList<Recipe>?){
+        this.userRecipes = userIngredients
     }
 }
