@@ -12,8 +12,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.contains
 import androidx.core.view.get
 import androidx.core.view.iterator
+import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import com.example.meals_schdueler.R.layout
 import java.io.*
@@ -51,6 +53,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
     private var totalCostDobule: Double = 0.0
     private var dailyId = 0
     private var tablePosition = 1
+    private var savedSize =0
     var j = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -170,7 +173,8 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
     override fun onClick(p0: View?) {
         if (p0 == breakfastBtn) {
             listItems!!.list!!.clear()
-            recipeList.clear()
+            savedSize = recipeList.size
+            //   recipeList.clear()
             mealChoosen = "Breakfast"
             recipeChoosenNumOfMeal.add(0)
             var dialog = Recipe_Schedule_Choose_Dialog(
@@ -182,7 +186,8 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
         } else if (p0 == lunchBtn) {
             listItems!!.list!!.clear()
-            recipeList.clear()
+            savedSize = recipeList.size
+            // recipeList.clear()
             mealChoosen = "Lunch"
             recipeChoosenNumOfMeal.add(1)
             var dialog = Recipe_Schedule_Choose_Dialog(
@@ -194,7 +199,8 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
         } else if (p0 == dinnerBtn) {
             listItems!!.list!!.clear()
-            recipeList.clear()
+            // recipeList.clear()
+            savedSize = recipeList.size
             mealChoosen = "Dinner"
             recipeChoosenNumOfMeal.add(2)
             var dialog = Recipe_Schedule_Choose_Dialog(
@@ -221,126 +227,142 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
     override fun onDismiss(p0: DialogInterface?) {
         // on dissmiss event , when we dissmiss the ingrdeitns selcection dialog we want to update the list with
         // the chosen ingredients.
+
+
         for (i in listItems!!.list!!) {
+
+
             var recipe = UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(i)
             recipeList.add(recipe)
+
 
         }
         Log.v("Elad1", "Quantities : " + recipesQuantities!!.list.toString())
         Log.v("Elad1", "QuantitiesSize : " + recipesQuantities!!.list!!.size)
 
 
-
+        var j=0
         for (i in recipeList) {
 
             totalCostDobule += i.totalCost
             recipesID.add(i.recipeId)
+            if(j>savedSize-1) {
 
 
-            var tbrow: TableRow = TableRow(this.context)
-            tbrow.setTag(tablePosition)
+                var tbrow: TableRow = TableRow(this.context)
+                tbrow.setTag(tablePosition)
 
-            var t1v: TextView = TextView(context)
-            // t1v.setBackgroundResource(R.drawable.border)
-            t1v.setText(" " + (mealChoosen))
-            t1v.setTextColor(Color.BLACK)
-            t1v.gravity = Gravity.CENTER
-            //  t1v.setBackgroundResource(R.drawable.spinner_shape)
-            tbrow.addView(t1v)
-
-
-            var t2v: ImageView = ImageView(context)
+                var t1v: TextView = TextView(context)
+                // t1v.setBackgroundResource(R.drawable.border)
+                t1v.setText(" " + (mealChoosen))
+                t1v.setTextColor(Color.BLACK)
+                t1v.gravity = Gravity.CENTER
+                //  t1v.setBackgroundResource(R.drawable.spinner_shape)
+                tbrow.addView(t1v)
 
 
-            t2v.setImageBitmap(i.pictureBitMap)
-            val scaled = Bitmap.createScaledBitmap(
-                i.pictureBitMap, 80,
-                ((i.pictureBitMap.getHeight() * (100.0 / i.pictureBitMap.getWidth())).toInt()), true
-            )
-            //t2v.adjustViewBounds = true
-
-            t2v.scaleType = (ImageView.ScaleType.CENTER_INSIDE)
-            t2v.setImageBitmap(scaled)
+                var t2v: ImageView = ImageView(context)
 
 
-            tbrow.addView(t2v)
+                t2v.setImageBitmap(i.pictureBitMap)
+                val scaled = Bitmap.createScaledBitmap(
+                    i.pictureBitMap,
+                    80,
+                    ((i.pictureBitMap.getHeight() * (100.0 / i.pictureBitMap.getWidth())).toInt()),
+                    true
+                )
+                //t2v.adjustViewBounds = true
 
-            var t3v: TextView = TextView(context)
-            // t3v.setBackgroundResource(R.drawable.border)
-            t3v.setText(i.recipeName)
-            t3v.setTextColor(Color.BLACK)
-            t3v.gravity = Gravity.CENTER
-            //    t3v.setBackgroundResource(R.drawable.spinner_shape)
-            tbrow.addView(t3v)
+                t2v.scaleType = (ImageView.ScaleType.CENTER_INSIDE)
+                t2v.setImageBitmap(scaled)
 
-            var t4v: TextView = TextView(context)
-            // t4v.setBackgroundResource(R.drawable.border)
-            t4v.setText(i.totalCost.toString())
-            t4v.setTextColor(Color.BLACK)
-            t4v.gravity = Gravity.CENTER
-            //t4v.setBackgroundResource(R.drawable.spinner_shape)
-            tbrow.addView(t4v)
 
-            var t5v: Button = Button(context)
-            t5v.setTag(tablePosition)
-            t5v.setText("Delete")
-            t5v.setTextColor(Color.BLACK)
-            t5v.gravity = Gravity.CENTER
-            //t5v.setBackgroundResource(R.drawable.spinner_shape)
-            t5v.setOnClickListener {
-                //stk.removeViewAt(t5v.getTag() as Int)
-                var i = t5v.getTag() as Int
+                tbrow.addView(t2v)
 
-                stk.removeView(stk.getChildAt(t5v.getTag() as Int))
-                totalCostDobule -= recipeList.get(t5v.getTag() as Int - 1).totalCost
-                totalCost.setText(totalCostDobule.toString())
-                recipesID.remove(stk.getChildAt(t5v.getTag() as Int))
-                recipesQuantities!!.list!!.removeAt(t5v.getTag() as Int -1)
-                tablePosition--
+                var t3v: TextView = TextView(context)
+                // t3v.setBackgroundResource(R.drawable.border)
+                t3v.setText(i.recipeName)
+                t3v.setTextColor(Color.BLACK)
+                t3v.gravity = Gravity.CENTER
+                //    t3v.setBackgroundResource(R.drawable.spinner_shape)
+                tbrow.addView(t3v)
 
-                for (x in stk) {
-                    if (x.getTag() as Int == 0)
-                        continue
-                    if (x.getTag() as Int > i) {
-                        x.setTag(x.getTag() as Int - 1)
-                        var y = x as TableRow
-                        y.get(4).setTag(y.get(4).getTag() as Int - 1)
+                var t4v: TextView = TextView(context)
+                // t4v.setBackgroundResource(R.drawable.border)
+                t4v.setText(i.totalCost.toString())
+                t4v.setTextColor(Color.BLACK)
+                t4v.gravity = Gravity.CENTER
+                //t4v.setBackgroundResource(R.drawable.spinner_shape)
+                tbrow.addView(t4v)
+
+                var t5v: Button = Button(context)
+                t5v.setTag(tablePosition)
+                t5v.setText("Delete")
+                t5v.setTextColor(Color.BLACK)
+                t5v.gravity = Gravity.CENTER
+                //t5v.setBackgroundResource(R.drawable.spinner_shape)
+                t5v.setOnClickListener {
+                    //stk.removeViewAt(t5v.getTag() as Int)
+                    var i = t5v.getTag() as Int
+
+                    stk.removeView(stk.getChildAt(t5v.getTag() as Int))
+                    totalCostDobule -= recipeList.get(t5v.getTag() as Int - 1).totalCost
+                    totalCost.setText(totalCostDobule.toString())
+                    recipesID.remove(stk.getChildAt(t5v.getTag() as Int))
+                    recipesQuantities!!.list!!.removeAt(t5v.getTag() as Int - 1)
+                    recipeList.removeAt(t5v.getTag() as Int - 1)
+                    tablePosition--
+
+
+                    for (x in stk) {
+                        if (x.getTag() as Int == 0)
+                            continue
+                        if (x.getTag() as Int > i) {
+                            x.setTag(x.getTag() as Int - 1)
+                            var y = x as TableRow
+                            //changing info delete tag
+                            y.get(4).setTag(y.get(4).getTag() as Int - 1)
+                            //changing infp button tag
+                            y.get(5).setTag(y.get(5).getTag() as Int - 1)
+
+                        }
 
                     }
 
+
                 }
+                tbrow.addView(t5v)
 
+
+                var t6v: Button = Button(context)
+                t6v.setTag(tablePosition++)
+                t6v.setText("Info")
+                t6v.setTextColor(Color.BLACK)
+                t6v.gravity = Gravity.CENTER
+                //t5v.setBackgroundResource(R.drawable.spinner_shape)
+                t6v.setOnClickListener {
+                    Log.v("Elad1","List size" + recipeList.size)
+                    Log.v("Elad1","table size" + stk.size)
+                    var dialog = MyRecipeIngredietns(
+                        recipeList.get(t6v.getTag() as Int - 1).listOfIngredients,
+                        recipeList.get(t6v.getTag() as Int - 1).recipeName,
+                        recipeList.get(t6v.getTag() as Int - 1).pictureBitMap,
+                        recipeList.get(t6v.getTag() as Int - 1).numOfPortions,
+                        recipeList.get(t6v.getTag() as Int - 1).quantityList,
+                        recipeList.get(t6v.getTag() as Int - 1).totalCost
+                    )
+                    dialog.show(childFragmentManager, "MyRecipeIngredients")
+                }
+                tbrow.addView(t6v)
+
+
+
+                stk.setBackgroundResource(R.drawable.spinner_shape)
+                tbrow.setBackgroundResource(R.drawable.spinner_shape)
+                stk.addView(tbrow)
 
             }
-            tbrow.addView(t5v)
-
-
-            var t6v: Button = Button(context)
-            t6v.setTag(tablePosition++)
-            t6v.setText("Info")
-            t6v.setTextColor(Color.BLACK)
-            t6v.gravity = Gravity.CENTER
-            //t5v.setBackgroundResource(R.drawable.spinner_shape)
-            t6v.setOnClickListener {
-                var dialog = MyRecipeIngredietns(
-                    recipeList.get(t6v.getTag() as Int - 1).listOfIngredients,
-                    recipeList.get(t6v.getTag() as Int - 1).recipeName,
-                    recipeList.get(t6v.getTag() as Int - 1).pictureBitMap,
-                    recipeList.get(t6v.getTag() as Int - 1).numOfPortions,
-                    recipeList.get(t6v.getTag() as Int - 1).quantityList,
-                    recipeList.get(t6v.getTag() as Int - 1).totalCost
-                )
-                dialog.show(childFragmentManager, "MyRecipeIngredients")
-            }
-            tbrow.addView(t6v)
-
-
-
-            stk.setBackgroundResource(R.drawable.spinner_shape)
-            tbrow.setBackgroundResource(R.drawable.spinner_shape)
-            stk.addView(tbrow)
-
-
+            j++
         }
 
         totalCost.setText(totalCostDobule.toString())
@@ -457,4 +479,5 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
         print("DD")
     }
 }
+
 
