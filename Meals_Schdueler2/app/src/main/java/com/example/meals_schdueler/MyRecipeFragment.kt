@@ -295,7 +295,7 @@ class MyRecipeFragment : Fragment(), GetAndPost {
                 var recipesAndIngredients2 = recipesAndIngredients[i].splitIgnoreEmpty(",")
 
                 if (recipesAndIngredients2.size == 11) {
-                    if (recipesAndIngredients2[0].get(0).toInt() - 48 != currentID) {
+                    if (recipesAndIngredients2[0].toInt()  != currentID) {
 
                         // copying the lists of the ids and aquantities
                         var tmpIds = deepCopy(ids)
@@ -308,7 +308,8 @@ class MyRecipeFragment : Fragment(), GetAndPost {
                         map.put(currentID, tmplist)
 
                         // switching to next recipe id
-                        currentID = recipesAndIngredients2[0].get(0).toInt() - 48
+                        currentID = recipesAndIngredients2[0].toInt()
+                        Log.v("Elad1","Current Id" + currentID)
 
                         // clear all lists for the next recipe lists
                         ingredientList2.clear()
@@ -334,7 +335,7 @@ class MyRecipeFragment : Fragment(), GetAndPost {
                 Log.v("Elad1", recipesAndIngredients.indices.toString())
                 var recipe2 = recipesAndIngredients[i].splitIgnoreEmpty(",")
                 if (recipe2.size == 11) {
-                    var s = recipe2[0].get(0).toInt() - 48
+                    var s = recipe2[0].toInt()
                     if (s != currentID)
                         recipeList?.add(
                             Recipe(
@@ -353,7 +354,7 @@ class MyRecipeFragment : Fragment(), GetAndPost {
                             )
                         )
 
-                    currentID = recipe2[0].get(0).toInt() - 48
+                    currentID = recipe2[0].toInt()
 
                 }
             }
