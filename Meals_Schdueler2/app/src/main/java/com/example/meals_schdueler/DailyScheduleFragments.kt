@@ -33,7 +33,7 @@ class DailyScheduleFragments : Fragment() {
         override fun getItem(position: Int): Fragment {
             when(position){
                 0-> return AddDailyScheduleFragment()
-                1-> return AddDailyScheduleFragment()
+                1-> return MyDailyScheduleFragment()
                 2-> return AddDailyScheduleFragment()
             }
             return AddDailyScheduleFragment()

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +17,8 @@ class Recipe_Schedule_Choose_Dialog(
 
     recipeIngredients: Recipe_Ingredients_List,
     userRecipes: ArrayList<Recipe>,
-    recipeQuantities :Recipe_Ingredients_List
+    recipeQuantities :Recipe_Ingredients_List,
+    typeOfMeal : String
 ) : DialogFragment() {
 
     lateinit var exit: ImageView
@@ -24,6 +26,8 @@ class Recipe_Schedule_Choose_Dialog(
     private var l: Recipe_Ingredients_List = recipeIngredients
     private var quantities : Recipe_Ingredients_List = recipeQuantities
     private lateinit var btnDone : Button
+    private var typeOfMeall = typeOfMeal
+    lateinit var typeOfMeal : TextView
 
 
     private var recipesChoosenRecyclerViewAdapter: Recipe_Schedule_Choose_RecyclerViewAdapter? =
@@ -49,6 +53,8 @@ class Recipe_Schedule_Choose_Dialog(
         recyclerView.adapter = recipesChoosenRecyclerViewAdapter
         recipesChoosenRecyclerViewAdapter!!.setmValues(recipesList!!)
         exit=rootView.findViewById(R.id.imageViewX)
+        typeOfMeal = rootView.findViewById(R.id.textViewChoose)
+        typeOfMeal.setText("Choose " + typeOfMeall +" Recipes :")
 //        cost = rootView.findViewById(R.id.editTextCost)
 
 
