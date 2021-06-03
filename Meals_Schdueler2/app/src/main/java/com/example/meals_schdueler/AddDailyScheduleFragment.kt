@@ -11,8 +11,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.contains
+import android.widget.TableRow
+import android.widget.TableRow.LayoutParams
 import androidx.core.view.get
 import androidx.core.view.iterator
 import androidx.core.view.size
@@ -22,6 +22,7 @@ import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
+import java.text.DecimalFormat
 
 
 /// need to do :
@@ -49,11 +50,12 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
     private var mealChoosen: String = ""
     private var recipeNumbers: String = ""
     private var recipeIds: String = ""
+    private var quantities = ""
     private lateinit var totalCost: EditText
     private var totalCostDobule: Double = 0.0
     private var dailyId = 0
     private var tablePosition = 1
-    private var savedSize =0
+    private var savedSize = 0
     var j = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,23 +104,29 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
         tbrow0.addView(tv4)
 
         var tv5: TextView = TextView(context)
-        tv5.setText(" Delete ")
+        tv5.setText(" Quantity ")
         tv5.setTextColor(Color.BLACK)
         tv5.gravity = Gravity.CENTER
-        // tv5.setBackgroundResource(R.drawable.spinner_shape)
-        tbrow0.setBackgroundResource(R.drawable.spinner_shape)
-        tbrow0.setTag(0)
+        // tv4.setBackgroundResource(R.drawable.spinner_shape)
         tbrow0.addView(tv5)
 
-
         var tv6: TextView = TextView(context)
-        tv6.setText(" Info ")
+        tv6.setText(" Delete ")
         tv6.setTextColor(Color.BLACK)
         tv6.gravity = Gravity.CENTER
         // tv5.setBackgroundResource(R.drawable.spinner_shape)
         tbrow0.setBackgroundResource(R.drawable.spinner_shape)
         tbrow0.setTag(0)
         tbrow0.addView(tv6)
+
+
+        var tv7: TextView = TextView(context)
+        tv7.setText(" Info ")
+        tv7.setTextColor(Color.BLACK)
+        tv7.gravity = Gravity.CENTER
+        // tv5.setBackgroundResource(R.drawable.spinner_shape)
+        tbrow0.setBackgroundResource(R.drawable.spinner_shape)
+        tbrow0.addView(tv7)
 
 
 
@@ -172,11 +180,12 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
     override fun onClick(p0: View?) {
         if (p0 == breakfastBtn) {
+        //    Log.v("Elad1","RecipeQuantity Size breakfast: " + recipesQuantities!!.list!!.size)
+
             listItems!!.list!!.clear()
             savedSize = recipeList.size
             //   recipeList.clear()
             mealChoosen = "Breakfast"
-            recipeChoosenNumOfMeal.add(0)
             var dialog = Recipe_Schedule_Choose_Dialog(
                 listItems!!,
                 UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!,
@@ -185,11 +194,13 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
             dialog.show(childFragmentManager, "Recipe_Schuedle_Choose")
 
         } else if (p0 == lunchBtn) {
+       //     Log.v("Elad1","RecipeQuantity Size lunch: " + recipesQuantities!!.list!!.size)
+
             listItems!!.list!!.clear()
             savedSize = recipeList.size
             // recipeList.clear()
             mealChoosen = "Lunch"
-            recipeChoosenNumOfMeal.add(1)
+
             var dialog = Recipe_Schedule_Choose_Dialog(
                 listItems!!,
                 UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!,
@@ -198,11 +209,13 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
             dialog.show(childFragmentManager, "Recipe_Schuedle_Choose")
 
         } else if (p0 == dinnerBtn) {
+          //  Log.v("Elad1","RecipeQuantity Size dinner: " + recipesQuantities!!.list!!.size)
+
             listItems!!.list!!.clear()
             // recipeList.clear()
             savedSize = recipeList.size
             mealChoosen = "Dinner"
-            recipeChoosenNumOfMeal.add(2)
+
             var dialog = Recipe_Schedule_Choose_Dialog(
                 listItems!!,
                 UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!,
@@ -216,9 +229,14 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
             for (i in recipesID) {
                 recipeIds += "" + i + " "
             }
+
+            for(i in recipesQuantities!!.list!!){
+                quantities += "" + i + " "
+            }
             Log.v("Elad1", "IDS : " + recipeIds)
             var s = AsynTaskNew(this, childFragmentManager)
             s.execute()
+
         }
 
     }
@@ -237,22 +255,37 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
 
         }
-        Log.v("Elad1", "Quantities : " + recipesQuantities!!.list.toString())
-        Log.v("Elad1", "QuantitiesSize : " + recipesQuantities!!.list!!.size)
 
 
-        var j=0
+        // for buttons to shirnk them
+
+        stk.setColumnShrinkable(5, true)
+        stk.setColumnShrinkable(6, true)
+        stk.setColumnStretchable(5, true)
+        stk.setColumnStretchable(6, true)
+        var j = 0
         for (i in recipeList) {
 
-            totalCostDobule += i.totalCost
-            recipesID.add(i.recipeId)
-            if(j>savedSize-1) {
+
+            if (j > savedSize - 1) {
+
+                when (mealChoosen) {
+                    "Breakfast" -> recipeChoosenNumOfMeal.add(0)
+                    "Lunch" -> recipeChoosenNumOfMeal.add(1)
+                    "Dinner" -> recipeChoosenNumOfMeal.add(2)
+                }
 
 
                 var tbrow: TableRow = TableRow(this.context)
                 tbrow.setTag(tablePosition)
+//                Log.v("Elad1","YOSII " + tbrow.getTag())
+//                Log.v("Elad1","RecipeQuantity Size: " + recipesQuantities!!.list!!.size)
+//                Log.v("Elad1","RecipeQuantity: " +recipesQuantities!!.list!!.get(0))
+                totalCostDobule += i.totalCost * recipesQuantities!!.list!!.get(tbrow.getTag() as Int -1 )
+                recipesID.add(i.recipeId)
 
                 var t1v: TextView = TextView(context)
+
                 // t1v.setBackgroundResource(R.drawable.border)
                 t1v.setText(" " + (mealChoosen))
                 t1v.setTextColor(Color.BLACK)
@@ -268,7 +301,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
                 val scaled = Bitmap.createScaledBitmap(
                     i.pictureBitMap,
                     80,
-                    ((i.pictureBitMap.getHeight() * (100.0 / i.pictureBitMap.getWidth())).toInt()),
+                    ((i.pictureBitMap.height * (100.0 / i.pictureBitMap.width)).toInt()),
                     true
                 )
                 //t2v.adjustViewBounds = true
@@ -295,22 +328,42 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
                 //t4v.setBackgroundResource(R.drawable.spinner_shape)
                 tbrow.addView(t4v)
 
-                var t5v: Button = Button(context)
-                t5v.setTag(tablePosition)
-                t5v.setText("Delete")
+
+                var t5v: TextView = TextView(context)
+                // t4v.setBackgroundResource(R.drawable.border)
+                t5v.setText(recipesQuantities!!.list!!.get(tbrow.getTag() as Int -1).toString())
                 t5v.setTextColor(Color.BLACK)
                 t5v.gravity = Gravity.CENTER
-                //t5v.setBackgroundResource(R.drawable.spinner_shape)
-                t5v.setOnClickListener {
-                    //stk.removeViewAt(t5v.getTag() as Int)
-                    var i = t5v.getTag() as Int
+                //t4v.setBackgroundResource(R.drawable.spinner_shape)
+                tbrow.addView(t5v)
 
-                    stk.removeView(stk.getChildAt(t5v.getTag() as Int))
-                    totalCostDobule -= recipeList.get(t5v.getTag() as Int - 1).totalCost
+                var t6v: Button = Button(context)
+                t6v.setTag(tablePosition)
+                t6v.setText("Delete")
+                t6v.setTextColor(Color.BLACK)
+                t6v.gravity = Gravity.CENTER
+                t6v.setTextSize(10F)
+                //t5v.setBackgroundResource(R.drawable.spinner_shape)
+                t6v.setOnClickListener {
+                    //stk.removeViewAt(t5v.getTag() as Int)
+                    var i = t6v.getTag() as Int
+
+                    stk.removeView(stk.getChildAt(t6v.getTag() as Int))
+                    totalCostDobule -= recipeList.get(t6v.getTag() as Int - 1).totalCost * recipesQuantities!!.list!!.get(
+                        t6v.getTag() as Int - 1
+                    )
+                    totalCostDobule = (DecimalFormat("##.####").format(totalCostDobule)).toDouble()
                     totalCost.setText(totalCostDobule.toString())
-                    recipesID.remove(stk.getChildAt(t5v.getTag() as Int))
-                    recipesQuantities!!.list!!.removeAt(t5v.getTag() as Int - 1)
-                    recipeList.removeAt(t5v.getTag() as Int - 1)
+
+
+                    recipesID.removeAt(t6v.getTag() as Int - 1)
+                    Log.v("Elad1", "RecipeIDS Size" + recipesID.size)
+                    Log.v("Elad1", "RecipeIDS : " + recipesID.toString())
+                    recipesQuantities!!.list!!.removeAt(t6v.getTag() as Int - 1)
+                    recipeChoosenNumOfMeal.removeAt(t6v.getTag() as Int - 1)
+                    Log.v("Elad1", "numOfMeals Size" + recipeChoosenNumOfMeal.size)
+                    Log.v("Elad1", "numOfMeals : " + recipeChoosenNumOfMeal.toString())
+                    recipeList.removeAt(t6v.getTag() as Int - 1)
                     tablePosition--
 
 
@@ -321,9 +374,9 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
                             x.setTag(x.getTag() as Int - 1)
                             var y = x as TableRow
                             //changing info delete tag
-                            y.get(4).setTag(y.get(4).getTag() as Int - 1)
-                            //changing infp button tag
                             y.get(5).setTag(y.get(5).getTag() as Int - 1)
+                            //changing infp button tag
+                            y.get(6).setTag(y.get(6).getTag() as Int - 1)
 
                         }
 
@@ -331,29 +384,31 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
 
                 }
-                tbrow.addView(t5v)
+                tbrow.addView(t6v)
 
 
-                var t6v: Button = Button(context)
-                t6v.setTag(tablePosition++)
-                t6v.setText("Info")
-                t6v.setTextColor(Color.BLACK)
-                t6v.gravity = Gravity.CENTER
+                var t7v: Button = Button(context)
+                t7v.setTag(tablePosition++)
+                t7v.setText("Info")
+                t7v.setTextSize(10F)
+                t7v.setTextColor(Color.BLACK)
+                t7v.gravity = Gravity.CENTER
+
                 //t5v.setBackgroundResource(R.drawable.spinner_shape)
-                t6v.setOnClickListener {
-                    Log.v("Elad1","List size" + recipeList.size)
-                    Log.v("Elad1","table size" + stk.size)
+                t7v.setOnClickListener {
+                    Log.v("Elad1", "List size" + recipeList.size)
+                    Log.v("Elad1", "table size" + stk.size)
                     var dialog = MyRecipeIngredietns(
-                        recipeList.get(t6v.getTag() as Int - 1).listOfIngredients,
-                        recipeList.get(t6v.getTag() as Int - 1).recipeName,
-                        recipeList.get(t6v.getTag() as Int - 1).pictureBitMap,
-                        recipeList.get(t6v.getTag() as Int - 1).numOfPortions,
-                        recipeList.get(t6v.getTag() as Int - 1).quantityList,
-                        recipeList.get(t6v.getTag() as Int - 1).totalCost
+                        recipeList.get(t7v.getTag() as Int - 1).listOfIngredients,
+                        recipeList.get(t7v.getTag() as Int - 1).recipeName,
+                        recipeList.get(t7v.getTag() as Int - 1).pictureBitMap,
+                        recipeList.get(t7v.getTag() as Int - 1).numOfPortions,
+                        recipeList.get(t7v.getTag() as Int - 1).quantityList,
+                        recipeList.get(t7v.getTag() as Int - 1).totalCost
                     )
                     dialog.show(childFragmentManager, "MyRecipeIngredients")
                 }
-                tbrow.addView(t6v)
+                tbrow.addView(t7v)
 
 
 
@@ -414,6 +469,9 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
                     URLEncoder.encode(recipeNumbers, "UTF-8")
             data += "&" + URLEncoder.encode("recipeIds", "UTF-8") + "=" +
                     URLEncoder.encode(recipeIds, "UTF-8")
+
+            data += "&" + URLEncoder.encode("quantities", "UTF-8") + "=" +
+                    URLEncoder.encode(quantities, "UTF-8")
 
 
 
@@ -477,6 +535,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
     override fun getData(str: String) {
         print("DD")
+        recipeIds = ""
     }
 }
 

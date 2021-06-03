@@ -66,10 +66,10 @@ class Recipe_Schedule_Choose_RecyclerViewAdapter(
 
 
 
-                if (firstTime && quantitiess.size == mValues.size) {
-                    quantitiess.clear()
-                    firstTime = false
-                }
+//                if (firstTime && quantitiess.size == mValues.size) {
+//                    quantitiess.clear()
+//                    firstTime = false
+//                }
             }
 
 
