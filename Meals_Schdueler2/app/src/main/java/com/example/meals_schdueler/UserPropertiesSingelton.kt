@@ -1,8 +1,10 @@
 package com.example.meals_schdueler
 
 import android.util.Log
+import com.example.meals_schdueler.dummy.DailySchedule
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class UserPropertiesSingelton {
 
@@ -26,10 +28,21 @@ class UserPropertiesSingelton {
 
     var userIngredients : ArrayList<Ingredient>? = null
     var userRecipes : ArrayList<Recipe>? = null
+    var dailySchedule : ArrayList<DailySchedule>? = null
+    var userMapRecipes : HashMap<Int,Recipe>? = null
 
 
     fun logout_setNULL() {
         userproperties = null
+    }
+
+    fun getUserMapRecipe(): HashMap<Int,Recipe>?{
+        if(userMapRecipes == null) userMapRecipes = HashMap()
+        return userMapRecipes
+    }
+
+    fun setUserMapRecipe(userMapRecipe : HashMap<Int,Recipe>?){
+        this.userMapRecipes = userMapRecipe
     }
 
     fun getUserIngredientss(): ArrayList<Ingredient>? {
@@ -48,5 +61,15 @@ class UserPropertiesSingelton {
 
     fun setUserRecipess(userIngredients:  ArrayList<Recipe>?){
         this.userRecipes = userIngredients
+    }
+
+
+    fun getUserDaily(): ArrayList<DailySchedule>? {
+        if (dailySchedule == null) dailySchedule =  ArrayList<DailySchedule>()
+        return dailySchedule
+    }
+
+    fun setUserDaily(dailySchedule:  ArrayList<DailySchedule>?){
+        this.dailySchedule = dailySchedule
     }
 }

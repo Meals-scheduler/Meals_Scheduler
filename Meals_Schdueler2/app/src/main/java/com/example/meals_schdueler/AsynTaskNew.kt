@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.os.AsyncTask
 import android.util.Log
 import androidx.fragment.app.FragmentManager
+import com.example.meals_schdueler.dummy.DailySchedule
 
 
 class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
@@ -57,6 +58,10 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
             } else {
                 MyingredientFragment1.getInstance1().startTask()
             }
+        }
+        else if(action is DailySchedule){
+           // if (MyDailyScheduleFragment.getInstance1().isAdded)
+                MyDailyScheduleFragment.getInstance1().startTask()
         }
         if (!(action is DeleteAlertDialog)) {
             pbDialog.dismiss()

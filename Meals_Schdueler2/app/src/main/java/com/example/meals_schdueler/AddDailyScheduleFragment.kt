@@ -4,6 +4,7 @@ package com.example.meals_schdueler
 import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -11,18 +12,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import android.widget.TableRow
-import android.widget.TableRow.LayoutParams
 import androidx.core.view.get
 import androidx.core.view.iterator
 import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import com.example.meals_schdueler.R.layout
 import com.example.meals_schdueler.dummy.DailySchedule
-import java.io.*
-import java.net.HttpURLConnection
-import java.net.URL
-import java.net.URLEncoder
 import java.text.DecimalFormat
 
 
@@ -284,6 +279,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
         stk.setColumnShrinkable(6, true)
         stk.setColumnStretchable(5, true)
         stk.setColumnStretchable(6, true)
+
         var j = 0
         for (i in recipeList) {
 
@@ -329,7 +325,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
                 t2v.scaleType = (ImageView.ScaleType.CENTER_INSIDE)
                 t2v.setImageBitmap(scaled)
-
+                t2v.foregroundGravity = Gravity.CENTER
 
                 tbrow.addView(t2v)
 

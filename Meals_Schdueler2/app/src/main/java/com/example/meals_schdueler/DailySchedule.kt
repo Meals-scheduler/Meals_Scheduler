@@ -26,12 +26,12 @@ class DailySchedule(
     var recipeIds = recipeIds
 
 
+
     override fun DoNetWorkOpreation(): String {
         var input = ""
         // if we insert a new daily and not updating
         //if (!isUpdate) {
         dailyId = getDaily().toInt() + 1 // getting current RecipeID first
-        // }
         Log.v("Elad1","EHERE" +dailyId)
 
         // ingredientID = 1

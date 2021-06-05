@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_gravity="center"
     android:layout_height="100dp"
     android:layout_margin="5dp"
@@ -13,9 +13,8 @@
 
     <TextView
         android:id="@+id/numOfDailyTextView"
-        android:layout_width="50dp"
+        android:layout_width="30dp"
         android:layout_height="73dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_weight="0.1"
         android:background="@drawable/spinner_shape"
@@ -32,7 +31,7 @@
         android:layout_width="70dp"
         android:layout_height="73dp"
         android:layout_marginTop="8dp"
-        android:layout_weight="0.4"
+        android:layout_weight="0.1"
         android:adjustViewBounds="false"
         android:contentDescription="TODO"
         android:textStyle="bold"
@@ -47,7 +46,7 @@
         android:layout_width="70dp"
         android:layout_height="73dp"
         android:layout_marginTop="8dp"
-        android:layout_weight="0.4"
+        android:layout_weight="0.1"
         android:adjustViewBounds="false"
         android:contentDescription="TODO"
         android:scaleType="fitCenter"
@@ -62,7 +61,7 @@
         android:layout_width="70dp"
         android:layout_height="73dp"
         android:layout_marginTop="8dp"
-        android:layout_weight="0.4"
+        android:layout_weight="0.1"
         android:adjustViewBounds="false"
         android:contentDescription="TODO"
         android:scaleType="fitCenter"
@@ -73,13 +72,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-
     <Button
         android:id="@+id/buttonDel"
         android:layout_width="70dp"
         android:layout_height="73dp"
         android:layout_marginTop="8dp"
-        android:layout_weight="0.4"
+        android:layout_weight="0.1"
         android:adjustViewBounds="false"
         android:contentDescription="TODO"
         android:scaleType="fitCenter"
@@ -89,7 +87,20 @@
         app:layout_constraintStart_toEndOf="@+id/buttonSchedule"
         app:layout_constraintTop_toTopOf="parent" />
 
-
+    <ImageView
+        android:id="@+id/imageViewCart"
+        android:layout_width="50dp"
+        android:layout_height="73dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="0.1"
+        android:adjustViewBounds="false"
+        android:contentDescription="TODO"
+        android:maxWidth="100dip"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toEndOf="@+id/buttonDel"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/cart"
+        tools:srcCompat="@tools:sample/avatars" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

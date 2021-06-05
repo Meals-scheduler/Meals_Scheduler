@@ -331,12 +331,14 @@ class MyRecipeFragment : Fragment(), GetAndPost {
 
 
             currentID = -1
+            var recipeMap  = HashMap<Int,Recipe>()
+            var j=0
             for (i in recipesAndIngredients.indices) {
                 Log.v("Elad1", recipesAndIngredients.indices.toString())
                 var recipe2 = recipesAndIngredients[i].splitIgnoreEmpty(",")
                 if (recipe2.size == 11) {
                     var s = recipe2[0].toInt()
-                    if (s != currentID)
+                    if (s != currentID) {
                         recipeList?.add(
                             Recipe(
                                 recipe2[0].toInt(),
@@ -354,7 +356,10 @@ class MyRecipeFragment : Fragment(), GetAndPost {
                             )
                         )
 
-                    currentID = recipe2[0].toInt()
+                        currentID = recipe2[0].toInt()
+                        recipeMap.put(recipeList!!.get(j).recipeId, recipeList!!.get(j++))
+                    }
+                    // a map to save each recipe by its ID
 
                 }
             }
@@ -363,6 +368,7 @@ class MyRecipeFragment : Fragment(), GetAndPost {
             // initializing the singelton with the user's Recipes list to keep it here on code.
             // should do it on another place !!!
             UserPropertiesSingelton.getInstance()!!.setUserRecipess(recipeList)
+            UserPropertiesSingelton.getInstance()!!.setUserMapRecipe(recipeMap)
             recipeRecyclerViewAdapter!!.setmValues(recipeList!!)
 
             // need to fix getRecipe.php!!!!!!!!!!!!!!!!!!!!
