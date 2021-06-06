@@ -283,7 +283,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
         var j = 0
         for (i in recipeList) {
 
-
+            // saved size to know the size of list before we change  so we wont override all the list.
             if (j > savedSize - 1) {
 
                 when (mealChoosen) {

@@ -138,7 +138,7 @@ class AllingredientsFragment1 : Fragment(), GetAndPost {
 
         for (i in ingredients.indices) {
             Log.v("Elad1", ingredients.indices.toString())
-            var ingredient2 = ingredients[i].splitIgnoreEmpty(",")
+            var ingredient2 = ingredients[i].splitIgnoreEmpty("*")
             ingredientList?.add(
                 Ingredient(
                     ingredient2[0].toInt(),

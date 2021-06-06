@@ -159,8 +159,6 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
                 var dailyInfo2 = dailyInfo[i].splitIgnoreEmpty(",")
                 //means we switch to the next DailyID
                 if (dailyInfo2[0].toInt() != currentDailyID) {
-
-
                     var totalLists: ArrayList<String> = ArrayList()
                     totalLists.add(quantities)
                     totalLists.add(numOfMeal)
