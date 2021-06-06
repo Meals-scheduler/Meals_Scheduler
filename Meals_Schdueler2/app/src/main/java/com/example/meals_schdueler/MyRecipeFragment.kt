@@ -235,9 +235,9 @@ class MyRecipeFragment : Fragment(), GetAndPost {
         if (!str.equals("")) {
             recipeList!!.clear()
             val recipesAndIngredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
-
+            var recipesAndIngredients2 = recipesAndIngredients[0].splitIgnoreEmpty("*")
             // first recipe id
-            var currentID = recipesAndIngredients[0].get(0).toInt() - 48
+            var currentID = recipesAndIngredients2[0].toInt() - 48
 
             // saving all the ingredietns and quantities of each Recipe in map.
             // first we extract the ids and quantity into map.
@@ -254,7 +254,7 @@ class MyRecipeFragment : Fragment(), GetAndPost {
             var currentIngId= -1
             for (i in recipesAndIngredients.indices) {
 
-                var recipesAndIngredients2 = recipesAndIngredients[i].splitIgnoreEmpty(",")
+                var recipesAndIngredients2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
                 //if its ingredients details
                 if(recipesAndIngredients2.size==15 && recipesAndIngredients2[0].toInt()-48!=currentIngId){
                     ingredientList?.add(
@@ -292,7 +292,7 @@ class MyRecipeFragment : Fragment(), GetAndPost {
             var ingredientList2: java.util.ArrayList<Ingredient> = java.util.ArrayList()
             //  var quantities: ArrayList<String> = ArrayList()
             for (i in recipesAndIngredients.indices) {
-                var recipesAndIngredients2 = recipesAndIngredients[i].splitIgnoreEmpty(",")
+                var recipesAndIngredients2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
 
                 if (recipesAndIngredients2.size == 11) {
                     if (recipesAndIngredients2[0].toInt()  != currentID) {
@@ -335,7 +335,7 @@ class MyRecipeFragment : Fragment(), GetAndPost {
             var j=0
             for (i in recipesAndIngredients.indices) {
                 Log.v("Elad1", recipesAndIngredients.indices.toString())
-                var recipe2 = recipesAndIngredients[i].splitIgnoreEmpty(",")
+                var recipe2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
                 if (recipe2.size == 11) {
                     var s = recipe2[0].toInt()
                     if (s != currentID) {

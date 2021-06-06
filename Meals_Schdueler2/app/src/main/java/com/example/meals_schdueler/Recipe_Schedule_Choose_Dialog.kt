@@ -81,9 +81,6 @@ class Recipe_Schedule_Choose_Dialog(
 
 
 
-
-
-
     }
 
 
