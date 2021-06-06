@@ -24,24 +24,24 @@ class EditDailyDialog(
     numOfMeals: String,
     recipeIds: String,
     pos: Int,
-) : DialogFragment(),  View.OnClickListener,
-    DialogInterface.OnDismissListener{
+) : DialogFragment(), View.OnClickListener,
+    DialogInterface.OnDismissListener {
 
 
     private lateinit var stk: TableLayout
     private lateinit var totalCost: EditText
     private lateinit var exit: ImageView
     private lateinit var title: TextView
-    private lateinit var breakFastBtn : Button
-    private lateinit var lunchBtn : Button
-    private lateinit var dinnerBtn : Button
+    private lateinit var breakFastBtn: Button
+    private lateinit var lunchBtn: Button
+    private lateinit var dinnerBtn: Button
     private var listItemsChoosen: ArrayList<Int>? = null
     private var recipeQuantitiy: ArrayList<Int>? = null
     private var listItems: Recipe_Ingredients_List? = null
     private var recipesQuantities: Recipe_Ingredients_List? = null
     private lateinit var recipeChoosenNumOfMeal: ArrayList<Int>
-    private lateinit var quanArrList : ArrayList<Int>
-    private lateinit var recipesID : ArrayList<Int>
+    private lateinit var quanArrList: ArrayList<Int>
+    private lateinit var recipesID: ArrayList<Int>
 
     var recipeIds = recipeIds
     var numOfMeals = numOfMeals
@@ -115,15 +115,15 @@ class EditDailyDialog(
         // converting arr's to Array Lists to be dynamic if we delete or add
         // and at the end we will return it to strings
 
-        for(i in recipeIdsArr){
+        for (i in recipeIdsArr) {
             recipesID.add(i.toInt())
         }
 
-        for(i in numOfMealsArr){
+        for (i in numOfMealsArr) {
             recipeChoosenNumOfMeal.add(i.toInt())
         }
 
-        for(i in quantitiesArr){
+        for (i in quantitiesArr) {
             quanArrList.add(i.toInt())
             recipesQuantities!!.list!!.add(i.toInt())
         }
@@ -138,8 +138,8 @@ class EditDailyDialog(
             }
             if (i.recipeId == recipeIdsArr[j].toInt()) {
 
-                Log.v("Elad1","RECIPE" + i.recipeName)
-                Log.v("Elad1","RECIPE price " + i.totalCost)
+                Log.v("Elad1", "RECIPE" + i.recipeName)
+                Log.v("Elad1", "RECIPE price " + i.totalCost)
 
                 when (numOfMealsArr[j]) {
                     "0" -> mealChoosen = "Breakfast"
@@ -150,6 +150,7 @@ class EditDailyDialog(
                 var tbrow: TableRow = TableRow(this.context)
                 tbrow.setTag(tablePosition++)
                 totalCostDobule += i.totalCost * quantitiesArr[j].toInt()
+                totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
 
 
                 var t1v: TextView = TextView(context)
@@ -217,21 +218,23 @@ class EditDailyDialog(
 
 
                 t6v.setOnClickListener {
-                    var i = tbrow.getTag() as Int -1
+                    var i = tbrow.getTag() as Int - 1
 
-                    Log.v("Elad1","Quantitiy: " +quanArrList.toString())
-                    Log.v("Elad1","pos: " + (tbrow.getTag() as Int))
-                    Log.v("Elad1", recipeList.get(t6v.getTag() as Int ).totalCost.toString())
-                    stk.removeView(stk.getChildAt(tbrow.getTag() as Int ))
-                    totalCostDobule -= recipeList.get(t6v.getTag() as Int ).totalCost * quanArrList.get(tbrow.getTag() as Int -1).toInt()
-                    totalCostDobule = (DecimalFormat("##.####").format(totalCostDobule)).toDouble()
+                    Log.v("Elad1", "Quantitiy: " + recipesQuantities!!.list!!.toString())
+                    Log.v("Elad1", "pos: " + (tbrow.getTag() as Int))
+                    Log.v("Elad1", recipeList.get(t6v.getTag() as Int).totalCost.toString())
+                    stk.removeView(stk.getChildAt(tbrow.getTag() as Int))
+                    totalCostDobule -= recipeList.get(t6v.getTag() as Int).totalCost * recipesQuantities!!.list!!.get(
+                        tbrow.getTag() as Int - 1
+                    ).toInt()
+                    totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
                     totalCost.setText(totalCostDobule.toString())
-                    quanArrList.removeAt(tbrow.getTag() as Int -1)
+                    recipesQuantities!!.list!!.removeAt(tbrow.getTag() as Int - 1)
                     recipeList.removeAt(t6v.getTag() as Int)
-                    recipesID.removeAt(tbrow.getTag() as Int -1)
-                    recipeChoosenNumOfMeal.removeAt(tbrow.getTag() as Int -1)
+                    recipesID.removeAt(tbrow.getTag() as Int - 1)
+                    recipeChoosenNumOfMeal.removeAt(tbrow.getTag() as Int - 1)
                     tablePosition--
-
+                    Log.v("Elad1", "Quantitiy After position" + recipesQuantities!!.list!!.toString())
                     for (x in stk) {
                         if (x.getTag() as Int == 0)
                             continue
@@ -255,17 +258,17 @@ class EditDailyDialog(
 
                 //t5v.setBackgroundResource(R.drawable.spinner_shape)
                 t7v.setOnClickListener {
-                    Log.v("Elad1","pos: " + (tbrow.getTag() as Int))
+                    Log.v("Elad1", "pos: " + (tbrow.getTag() as Int))
                     Log.v("Elad1", "List size" + recipeList.size)
                     Log.v("Elad1", "table size" + stk.size)
                     Log.v("Elad1", "table TAG" + (t7v.getTag() as Int - 1))
                     var dialog = MyRecipeIngredietns(
-                        recipeList.get(t7v.getTag() as Int ).listOfIngredients,
-                        recipeList.get(t7v.getTag() as Int ).recipeName,
-                        recipeList.get(t7v.getTag() as Int ).pictureBitMap,
-                        recipeList.get(t7v.getTag() as Int ).numOfPortions,
-                        recipeList.get(t7v.getTag() as Int ).quantityList,
-                        recipeList.get(t7v.getTag() as Int ).totalCost
+                        recipeList.get(t7v.getTag() as Int).listOfIngredients,
+                        recipeList.get(t7v.getTag() as Int).recipeName,
+                        recipeList.get(t7v.getTag() as Int).pictureBitMap,
+                        recipeList.get(t7v.getTag() as Int).numOfPortions,
+                        recipeList.get(t7v.getTag() as Int).quantityList,
+                        recipeList.get(t7v.getTag() as Int).totalCost
                     )
                     dialog.show(childFragmentManager, "MyRecipeIngredients")
                 }
@@ -277,6 +280,7 @@ class EditDailyDialog(
                 tbrow.setBackgroundResource(R.drawable.spinner_shape)
                 stk.addView(tbrow)
                 j++
+
             }
             recipePos++
         }
@@ -325,7 +329,7 @@ class EditDailyDialog(
         tv4.setTextColor(Color.BLACK)
         tv4.gravity = Gravity.CENTER
         // tv4.setBackgroundResource(R.drawable.spinner_shape)
-       // tv4.setTypeface(boldTypeface)
+        // tv4.setTypeface(boldTypeface)
         tbrow0.addView(tv4)
 
         var tv5: TextView = TextView(context)
@@ -333,7 +337,7 @@ class EditDailyDialog(
         tv5.setTextColor(Color.BLACK)
         tv5.gravity = Gravity.CENTER
         // tv4.setBackgroundResource(R.drawable.spinner_shape)
-       // tv5.setTypeface(boldTypeface)
+        // tv5.setTypeface(boldTypeface)
         tbrow0.addView(tv5)
 
         var tv6: TextView = TextView(context)
@@ -353,7 +357,7 @@ class EditDailyDialog(
         tv7.gravity = Gravity.CENTER
         // tv5.setBackgroundResource(R.drawable.spinner_shape)
         tbrow0.setBackgroundResource(R.drawable.spinner_shape)
-       // tv7.setTypeface(boldTypeface)
+        // tv7.setTypeface(boldTypeface)
         tbrow0.addView(tv7)
 
 
@@ -367,9 +371,7 @@ class EditDailyDialog(
     override fun onClick(p0: View?) {
         if (p0 == exit) {
             dismiss()
-        }
-
-        else if (p0 == breakFastBtn) {
+        } else if (p0 == breakFastBtn) {
             //    Log.v("Elad1","RecipeQuantity Size breakfast: " + recipesQuantities!!.list!!.size)
 
             listItems!!.list!!.clear()
@@ -389,6 +391,7 @@ class EditDailyDialog(
 
             listItems!!.list!!.clear()
             savedSize = recipeList.size
+            Log.v("ELad1", "SAved size is " + savedSize)
             // recipeList.clear()
             mealChoosen = "Lunch"
 
@@ -422,12 +425,12 @@ class EditDailyDialog(
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-
+        recipePos = 0
         val parentFragment: Fragment? = parentFragment
         if (parentFragment is DialogInterface.OnDismissListener) {
             (parentFragment as DialogInterface.OnDismissListener?)!!.onDismiss(dialog)
         }
-    Log.v("Elad1","HERERERERERE@#@#@#@#")
+        Log.v("Elad1", "HERERERERERE@#@#@#@#" + listItems!!.list!!.size)
         for (i in listItems!!.list!!) {
 
 
@@ -436,10 +439,13 @@ class EditDailyDialog(
 
 
         }
+        Log.v("Elad1", "RECIPE list size now " + recipeList.size)
+        Log.v("Elad1", "Saved size is" + savedSize)
+        Log.v("Elad1", "table position is " + tablePosition)
         var j = 0
-        for (i in recipeList){
+        for (i in recipeList) {
             if (j > savedSize - 1) {
-                Log.v("Elad1","OK")
+                Log.v("Elad1", "OK")
                 when (mealChoosen) {
                     "Breakfast" -> recipeChoosenNumOfMeal.add(0)
                     "Lunch" -> recipeChoosenNumOfMeal.add(1)
@@ -448,11 +454,11 @@ class EditDailyDialog(
 
 
                 var tbrow: TableRow = TableRow(this.context)
-                tbrow.setTag(tablePosition)
+                tbrow.setTag(tablePosition++)
 //                Log.v("Elad1","YOSII " + tbrow.getTag())
 //                Log.v("Elad1","RecipeQuantity Size: " + recipesQuantities!!.list!!.size)
 //                Log.v("Elad1","RecipeQuantity: " +recipesQuantities!!.list!!.get(0))
-                totalCostDobule += i.totalCost * recipesQuantities!!.list!!.get(tbrow.getTag() as Int -1 )
+                totalCostDobule += i.totalCost * recipesQuantities!!.list!!.get(tbrow.getTag() as Int - 1)
                 recipesID.add(i.recipeId)
 
                 var t1v: TextView = TextView(context)
@@ -502,13 +508,14 @@ class EditDailyDialog(
 
                 var t5v: TextView = TextView(context)
                 // t4v.setBackgroundResource(R.drawable.border)
-                t5v.setText(recipesQuantities!!.list!!.get(tbrow.getTag() as Int -1).toString())
+                t5v.setText(recipesQuantities!!.list!!.get(tbrow.getTag() as Int - 1).toString())
                 t5v.setTextColor(Color.BLACK)
                 t5v.gravity = Gravity.CENTER
                 //t4v.setBackgroundResource(R.drawable.spinner_shape)
                 tbrow.addView(t5v)
 
                 var t6v: Button = Button(context)
+                Log.v("Elad1", "REcipe pos is" + recipePos)
                 t6v.setTag(recipePos)
                 t6v.setText("Del")
                 t6v.setTextColor(Color.BLACK)
@@ -517,21 +524,26 @@ class EditDailyDialog(
 
 
 
-                t6v.setOnClickListener{
-                    var i = tbrow.getTag() as Int -1
+                t6v.setOnClickListener {
+                    var i = tbrow.getTag() as Int - 1
 
-                    Log.v("Elad1","Quantitiy: " +quanArrList.toString())
-                    Log.v("Elad1","pos: " + (t6v.getTag() as Int))
-                    Log.v("Elad1","pos2: " + (tbrow.getTag() as Int))
-                    Log.v("Elad1", recipeList.get(t6v.getTag() as Int ).totalCost.toString())
-                    stk.removeView(stk.getChildAt(tbrow.getTag() as Int ))
-                    totalCostDobule -= recipeList.get(t6v.getTag() as Int ).totalCost * quanArrList.get(tbrow.getTag() as Int -1).toInt()
-                    totalCostDobule = (DecimalFormat("##.####").format(totalCostDobule)).toDouble()
+                    Log.v("Elad1", "Quantitiy: " +   recipesQuantities!!.list!!.toString())
+                    Log.v("Elad1", "pos: " + (t6v.getTag() as Int))
+                    Log.v("Elad1", "pos2: " + (tbrow.getTag() as Int))
+                    Log.v("Elad1", recipeList.get(t6v.getTag() as Int).totalCost.toString())
+                    Log.v("Elad1", "pos3: " +  (tbrow.getTag() as Int - 1))
+                    stk.removeView(stk.getChildAt(tbrow.getTag() as Int))
+                    totalCostDobule -= recipeList.get(t6v.getTag() as Int).totalCost * recipesQuantities!!.list!!.get(
+                        tbrow.getTag() as Int - 1
+                    ).toInt()
+
+                    totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
                     totalCost.setText(totalCostDobule.toString())
-                    quanArrList.removeAt(tbrow.getTag() as Int -1)
+                    recipesQuantities!!.list!!.removeAt(tbrow.getTag() as Int - 1)
+                    Log.v("Elad1", "Quantitiy after remove: " +   recipesQuantities!!.list!!.toString())
                     recipeList.removeAt(t6v.getTag() as Int)
-                    recipesID.removeAt(tbrow.getTag() as Int -1)
-                    recipeChoosenNumOfMeal.removeAt(tbrow.getTag() as Int -1)
+                    recipesID.removeAt(tbrow.getTag() as Int - 1)
+                    recipeChoosenNumOfMeal.removeAt(tbrow.getTag() as Int - 1)
                     tablePosition--
 
                     for (x in stk) {
@@ -552,9 +564,6 @@ class EditDailyDialog(
                 tbrow.addView(t6v)
 
 
-
-
-
                 var t7v: Button = Button(context)
                 t7v.setTag(recipePos)
                 t7v.setText("Info")
@@ -562,18 +571,18 @@ class EditDailyDialog(
                 t7v.setTextColor(Color.BLACK)
                 t7v.gravity = Gravity.CENTER
 
-                t7v.setOnClickListener{
-                    Log.v("Elad1","pos: " + (tbrow.getTag() as Int))
+                t7v.setOnClickListener {
+                    Log.v("Elad1", "pos: " + (tbrow.getTag() as Int))
                     Log.v("Elad1", "List size" + recipeList.size)
                     Log.v("Elad1", "table size" + stk.size)
                     Log.v("Elad1", "table TAG" + (t7v.getTag() as Int - 1))
                     var dialog = MyRecipeIngredietns(
-                        recipeList.get(t7v.getTag() as Int ).listOfIngredients,
-                        recipeList.get(t7v.getTag() as Int ).recipeName,
-                        recipeList.get(t7v.getTag() as Int ).pictureBitMap,
-                        recipeList.get(t7v.getTag() as Int ).numOfPortions,
-                        recipeList.get(t7v.getTag() as Int ).quantityList,
-                        recipeList.get(t7v.getTag() as Int ).totalCost
+                        recipeList.get(t7v.getTag() as Int).listOfIngredients,
+                        recipeList.get(t7v.getTag() as Int).recipeName,
+                        recipeList.get(t7v.getTag() as Int).pictureBitMap,
+                        recipeList.get(t7v.getTag() as Int).numOfPortions,
+                        recipeList.get(t7v.getTag() as Int).quantityList,
+                        recipeList.get(t7v.getTag() as Int).totalCost
                     )
                     dialog.show(childFragmentManager, "MyRecipeIngredients")
                 }
@@ -584,7 +593,6 @@ class EditDailyDialog(
                 stk.setBackgroundResource(R.drawable.spinner_shape)
                 tbrow.setBackgroundResource(R.drawable.spinner_shape)
                 stk.addView(tbrow)
-
 
 
             }
