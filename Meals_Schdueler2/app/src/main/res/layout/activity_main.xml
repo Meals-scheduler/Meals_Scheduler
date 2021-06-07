@@ -36,11 +36,11 @@
 
 
     <com.google.android.material.navigation.NavigationView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/navView"
         app:menu="@menu/menu_drawer"
-        android:background="@drawable/ingr_background"
+       android:background="@drawable/alert_dialog_shape"
         android:layout_marginTop="2dp"
         android:layout_gravity="start"/>
 

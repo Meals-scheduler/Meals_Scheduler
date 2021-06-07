@@ -3,22 +3,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:title="Ingredients"
         android:id="@+id/nav_item_ingredients"
-        android:icon="@drawable/ingredient_icon"/>
+        android:icon="@drawable/ingredient_icon"
+        android:title="Ingredients" />
 
     <item
-        android:title="Daily Schedule"
-        android:id="@+id/nav_item_daily_schedule"
-        android:icon="@drawable/ic_launcher_foreground"/>
-
-    <item
-        android:title="Recipes"
         android:id="@+id/nav_item_recipes"
-        android:icon="@drawable/recipe_icon"/>
+        android:icon="@drawable/recipe_icon"
+        android:title="Recipes" />
     <item
-        android:title="Logout"
+        android:id="@+id/nav_item_daily_schedule"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Daily Schedule" />
+
+
+    <item
         android:id="@+id/nav_item_logout"
-        android:icon="@drawable/logout"/>
+        android:icon="@drawable/logout"
+        android:title="Logout" />
 
 </menu>

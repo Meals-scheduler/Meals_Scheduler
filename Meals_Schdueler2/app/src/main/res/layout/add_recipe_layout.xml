@@ -62,7 +62,7 @@
             android:id="@+id/typeOfMealSpinner"
             android:layout_width="108dp"
             android:layout_height="42dp"
-            android:layout_marginStart="43dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/spinner_shape"
             android:entries="@array/Type"
@@ -73,6 +73,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nameOfRecipe" />
 
+
         <ImageView
             android:id="@+id/spinnerDropDown"
             android:layout_width="40dp"
@@ -80,12 +81,11 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center"
-            android:layout_marginStart="96dp"
+            android:layout_marginStart="84dp"
             android:layout_marginTop="16dp"
             android:src="@drawable/dropdown"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nameOfRecipe" />
-
 
         <TextView
             android:id="@+id/textViewPic"
@@ -237,7 +237,7 @@
             android:layout_marginTop="28dp"
             android:checked="false"
             android:fontFamily="@font/poppinsbold"
-            android:text="I would like to share my ingredient"
+            android:text="I would like to share my recipe"
             android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"

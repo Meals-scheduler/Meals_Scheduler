@@ -34,7 +34,7 @@ class DailyScheduleFragments : Fragment() {
             when(position){
                 0-> return AddDailyScheduleFragment()
                 1-> return MyDailyScheduleFragment()
-                2-> return AddDailyScheduleFragment()
+
             }
             return AddDailyScheduleFragment()
         }
@@ -44,7 +44,7 @@ class DailyScheduleFragments : Fragment() {
             when(position){
                 0-> return "Add Daily Schedule"
                 1-> return "My Daily Schedule"
-                2-> return "All Recipes"
+
             }
             return null
         }
@@ -57,7 +57,7 @@ class DailyScheduleFragments : Fragment() {
 
         lateinit var tabLayout : TabLayout
         lateinit var  viewPager : ViewPager
-        var  items = 3
+        var  items = 2
 
     }
 

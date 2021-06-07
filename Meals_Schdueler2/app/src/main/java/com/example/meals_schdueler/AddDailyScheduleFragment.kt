@@ -4,6 +4,7 @@ package com.example.meals_schdueler
 import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Color.RED
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity

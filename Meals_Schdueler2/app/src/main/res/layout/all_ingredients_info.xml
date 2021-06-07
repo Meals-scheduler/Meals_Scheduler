@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/ingredient_info_shape">
+        android:background="@drawable/alert_dialog_shape">
 
         <ImageView
             android:id="@+id/imageViewX"
@@ -173,7 +173,7 @@
             android:layout_height="55dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
-            android:background="@drawable/btn_blue"
+            android:background="@drawable/btn1"
             android:fontFamily="@font/poppinsbold"
             android:text="Nutritious Value"
             app:layout_constraintStart_toStartOf="parent"
@@ -184,7 +184,7 @@
             android:layout_width="158dp"
             android:layout_height="55dp"
             android:layout_marginTop="34dp"
-            android:background="@drawable/btn_blue"
+            android:background="@drawable/btn1"
             android:fontFamily="@font/poppinsbold"
             android:text="How to store"
             app:layout_constraintEnd_toEndOf="parent"
@@ -199,7 +199,7 @@
             android:layout_height="50dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="36dp"
-            android:background="@drawable/btn_blue"
+            android:background="@drawable/btn1"
             android:fontFamily="@font/poppinsbold"
             android:gravity="center"
             android:text="Copy"

@@ -180,7 +180,7 @@ class My_Daily_RecylerViewAdapter(
 
         dailySchdueleId = getDailyScheduleID().toInt() + 1 // getting current IngredientID first
 
-       
+
         // ingredientID = 1
 
         if (dailySchdueleId != -1)
