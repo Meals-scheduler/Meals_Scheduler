@@ -63,6 +63,9 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
            // if (MyDailyScheduleFragment.getInstance1().isAdded)
                 MyDailyScheduleFragment.getInstance1().startTask()
         }
+        else if(action is My_Daily_RecylerViewAdapter){
+            MyDailyScheduleFragment.getInstance1().startTask()
+        }
         if (!(action is DeleteAlertDialog)) {
             pbDialog.dismiss()
         }

@@ -20,9 +20,10 @@ import java.net.URL
 
 class DeleteAlertDialog(
     ingridentName: String,
-    pictureBitMap: Bitmap,
+    pictureBitMap: Bitmap?,
     ingredientID: Int,
-    isRecipe: Boolean
+    isRecipe: Boolean,
+    isDaily: Boolean
 ) :
     DialogFragment(), View.OnClickListener, GetAndPost {
 
@@ -35,6 +36,7 @@ class DeleteAlertDialog(
     var pictureBitMap = pictureBitMap
     var ingredientID = ingredientID
     var isRecipe = isRecipe
+    var isDaily = isDaily
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,7 +51,8 @@ class DeleteAlertDialog(
         ingredientName = rootView.findViewById(R.id.ingName)
         btnYes.setOnClickListener(this)
         btnNo.setOnClickListener(this)
-        ingredientImage.setImageBitmap(pictureBitMap)
+        if (ingredientImage != null)
+            ingredientImage.setImageBitmap(pictureBitMap)
         ingredientName.setText(ingridentName)
         return rootView
 
@@ -74,8 +77,11 @@ class DeleteAlertDialog(
     override fun DoNetWorkOpreation(): String {
         var link = "https://elad1.000webhostapp.com/delIngredient.php?ingredientID=" + ingredientID
 
-        if(isRecipe){
+        if (isRecipe) {
             link = "https://elad1.000webhostapp.com/deleteRecipe.php?RecipeID=" + ingredientID
+        }
+        if (isDaily) {
+            link = "https://elad1.000webhostapp.com/delDaily.php?DailyID=" + ingredientID
         }
         Log.v("Elad1", "here")
 

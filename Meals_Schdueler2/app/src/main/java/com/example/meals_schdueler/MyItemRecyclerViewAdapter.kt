@@ -42,7 +42,7 @@ class MyItemRecyclerViewAdapter(
 
         }
         holder.deleteIngredient.setOnClickListener{
-            var dialog = DeleteAlertDialog(item.ingridentName,item.pictureBitMap,item.ingredientID,false)
+            var dialog = DeleteAlertDialog(item.ingridentName,item.pictureBitMap,item.ingredientID,false,false)
             dialog.show(childFragmentManager,"DeleteAlertDialog")
         }
 
