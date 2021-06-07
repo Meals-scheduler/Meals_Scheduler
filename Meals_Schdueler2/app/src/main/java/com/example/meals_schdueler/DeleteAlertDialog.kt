@@ -51,8 +51,9 @@ class DeleteAlertDialog(
         ingredientName = rootView.findViewById(R.id.ingName)
         btnYes.setOnClickListener(this)
         btnNo.setOnClickListener(this)
-        if (ingredientImage != null)
+        if (ingredientImage != null) {
             ingredientImage.setImageBitmap(pictureBitMap)
+        }
         ingredientName.setText(ingridentName)
         return rootView
 

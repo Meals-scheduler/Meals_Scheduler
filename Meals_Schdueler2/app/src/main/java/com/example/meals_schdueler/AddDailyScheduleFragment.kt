@@ -360,7 +360,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
                 var t6v: Button = Button(context)
                 t6v.setTag(tablePosition)
-                t6v.setText("Delete")
+                t6v.setText("Del")
                 t6v.setTextColor(Color.BLACK)
                 t6v.gravity = Gravity.CENTER
                 t6v.setTextSize(10F)
