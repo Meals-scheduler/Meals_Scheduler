@@ -29,11 +29,13 @@ class DailySchedule(
 
     override fun DoNetWorkOpreation(): String {
         var input = ""
-        // if we insert a new daily and not updating
+         //if we insert a new daily and not updating
         if (!isUpdate) {
             dailyId = getDaily().toInt() + 1 // getting current RecipeID first
             Log.v("Elad1", "EHERE" + dailyId)
         }
+
+
         // ingredientID = 1
         //   Log.v("Elad1", "current ID " + ingredientID)
         if (dailyId != -1)
@@ -52,7 +54,8 @@ class DailySchedule(
                 "https://elad1.000webhostapp.com/postDailySchedule.php"
 
             if (isUpdate){
-                "https://elad1.000webhostapp.com/updateDaily.php"
+                Log.v("Elad1","YESSSSSS enter")
+               link = "https://elad1.000webhostapp.com/updateDaily.php"
 
             }
 

@@ -52,7 +52,7 @@ class My_Daily_RecylerViewAdapter (
         holder.edit.setOnClickListener {
 
             var tempRecipeList : ArrayList<Recipe> = ArrayList()
-
+            Log.v("Elad1","recipe list size" + recipeList.size)
 
             // copying the Recipe list so if we edit it and then quit without saving, it wouldn't change the original list
             for(i in recipeList){
@@ -63,7 +63,9 @@ class My_Daily_RecylerViewAdapter (
                 mValues.get(position).quantities,
                 mValues.get(position).numOfMeals,
                 mValues.get(position).recipeIds,
-                position+1
+                position+1,
+                this,
+                mValues.get(position).dailyId
             )
             dialog.show(childFragmentManager, "dailyEdit")
         }
@@ -130,7 +132,8 @@ class My_Daily_RecylerViewAdapter (
 
 
     fun setRecipeList(recipeList: ArrayList<Recipe>) {
-
+        Log.v("Elad1","Successs!!!!!")
+        Log.v("Elad1","recipe size!!!!!" + recipeList.size)
         this.recipeList = recipeList
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }

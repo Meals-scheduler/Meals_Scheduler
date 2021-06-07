@@ -144,6 +144,9 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
     override fun getData(str: String) {
 
         if (!str.equals("")) {
+            quantities = ""
+            numOfMeal = ""
+            recipeIds = ""
             recipeList!!.clear()
             dailyList!!.clear()
             Log.v("Elad1", "STR is" + str)
@@ -234,9 +237,11 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
             }
 
             Log.v("Elad1","DAILY SIZe" + dailyList!!.size)
+            Log.v("Elad1","RECCCCIP#E SIZe" +recipeList!!.size)
             UserPropertiesSingelton.getInstance()!!.setUserDaily(dailyList)
             dailyRecyclerViewAdapter!!.setmValues(dailyList!!)
             dailyRecyclerViewAdapter!!.setRecipeList(recipeList!!)
+
 //            dailyList!!.clear()
 //            recipeList!!.clear()
 
