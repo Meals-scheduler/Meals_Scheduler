@@ -28,14 +28,15 @@
 
     <Button
         android:id="@+id/buttonIngredientName"
-        android:layout_width="wrap_content"
+        android:layout_width="83dp"
         android:layout_height="match_parent"
         android:layout_marginStart="1dp"
         android:layout_marginTop="4dp"
         android:layout_weight="0."
         android:clickable="false"
         android:text="Name"
-        android:textSize="12dp"
+        android:textStyle="bold"
+        android:textSize="10dp"
         app:layout_constraintStart_toEndOf="@+id/imageViewPicIngr"
         app:layout_constraintTop_toTopOf="parent" />
 

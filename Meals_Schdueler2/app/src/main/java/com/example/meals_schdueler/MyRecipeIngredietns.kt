@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
+import java.text.DecimalFormat
 import kotlin.collections.ArrayList
 
 class MyRecipeIngredietns(
@@ -53,6 +54,7 @@ class MyRecipeIngredietns(
             dismiss()
         }
         totalCostEditText = x.findViewById(R.id.textViewTotalCost)
+        totalCost = (DecimalFormat("##.##").format(totalCost)).toDouble()
         totalCostEditText.setText("Cost :" + totalCost.toString())
         numOfPortions = x.findViewById(R.id.textViewNumOfPortions)
         numOfPortions.setText("Num of Portions : " + numOfPortionsInt)

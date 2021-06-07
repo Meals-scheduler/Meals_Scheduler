@@ -16,6 +16,7 @@ import androidx.core.view.iterator
 import androidx.core.view.size
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import com.example.meals_schdueler.dummy.DailySchedule
 import java.text.DecimalFormat
 
 class EditDailyDialog(
@@ -35,6 +36,7 @@ class EditDailyDialog(
     private lateinit var breakFastBtn: Button
     private lateinit var lunchBtn: Button
     private lateinit var dinnerBtn: Button
+    private lateinit var saveBtn: Button
     private var listItemsChoosen: ArrayList<Int>? = null
     private var recipeQuantitiy: ArrayList<Int>? = null
     private var listItems: Recipe_Ingredients_List? = null
@@ -69,10 +71,12 @@ class EditDailyDialog(
         breakFastBtn = x.findViewById(R.id.breakfastBtn)
         lunchBtn = x.findViewById(R.id.lunchBtn)
         dinnerBtn = x.findViewById(R.id.dinnerBtn)
+        saveBtn = x.findViewById(R.id.saveBtn)
 
         breakFastBtn.setOnClickListener(this)
         lunchBtn.setOnClickListener(this)
         dinnerBtn.setOnClickListener(this)
+        saveBtn.setOnClickListener(this)
 
         exit = x.findViewById(R.id.imageViewX)
         exit.setOnClickListener(this)
@@ -170,7 +174,7 @@ class EditDailyDialog(
                 val scaled = Bitmap.createScaledBitmap(
                     i.pictureBitMap,
                     80,
-                    ((i.pictureBitMap.height * (100.0 / i.pictureBitMap.width)).toInt()),
+                    90,
                     true
                 )
                 //t2v.adjustViewBounds = true
@@ -178,6 +182,7 @@ class EditDailyDialog(
                 t2v.scaleType = (ImageView.ScaleType.CENTER_INSIDE)
                 t2v.setImageBitmap(scaled)
                 t2v.foregroundGravity = Gravity.CENTER
+
 
                 tbrow.addView(t2v)
 
@@ -188,14 +193,14 @@ class EditDailyDialog(
                 t3v.gravity = Gravity.CENTER
                 //    t3v.setBackgroundResource(R.drawable.spinner_shape)
                 tbrow.addView(t3v)
-
-                var t4v: TextView = TextView(context)
-                // t4v.setBackgroundResource(R.drawable.border)
-                t4v.setText(i.totalCost.toString())
-                t4v.setTextColor(Color.BLACK)
-                t4v.gravity = Gravity.CENTER
-                //t4v.setBackgroundResource(R.drawable.spinner_shape)
-                tbrow.addView(t4v)
+//
+//                var t4v: TextView = TextView(context)
+//                // t4v.setBackgroundResource(R.drawable.border)
+//                t4v.setText(i.totalCost.toString())
+//                t4v.setTextColor(Color.BLACK)
+//                t4v.gravity = Gravity.CENTER
+//                //t4v.setBackgroundResource(R.drawable.spinner_shape)
+//                tbrow.addView(t4v)
 
 
                 var t5v: TextView = TextView(context)
@@ -234,14 +239,17 @@ class EditDailyDialog(
                     recipesID.removeAt(tbrow.getTag() as Int - 1)
                     recipeChoosenNumOfMeal.removeAt(tbrow.getTag() as Int - 1)
                     tablePosition--
-                    Log.v("Elad1", "Quantitiy After position" + recipesQuantities!!.list!!.toString())
+                    Log.v(
+                        "Elad1",
+                        "Quantitiy After position" + recipesQuantities!!.list!!.toString()
+                    )
                     for (x in stk) {
                         if (x.getTag() as Int == 0)
                             continue
                         if (x.getTag() as Int > i) {
                             x.setTag(x.getTag() as Int - 1)
                             var y = x as TableRow
-                            y.get(6).setTag(y.get(6).getTag() as Int - 1)
+                            y.get(4).setTag(y.get(4).getTag() as Int - 1)
                             y.get(5).setTag(y.get(5).getTag() as Int - 1)
 
                         }
@@ -293,9 +301,11 @@ class EditDailyDialog(
     private fun addTable() {
 
         stk.setColumnShrinkable(5, true)
-        stk.setColumnShrinkable(6, true)
+        stk.setColumnShrinkable(4, true)
+        stk.setColumnShrinkable(2, true)
+        stk.setColumnStretchable(2, true)
         stk.setColumnStretchable(5, true)
-        stk.setColumnStretchable(6, true)
+        stk.setColumnStretchable(4, true)
         val boldTypeface = Typeface.defaultFromStyle(Typeface.BOLD)
         var tbrow0: TableRow = TableRow(context)
 
@@ -304,7 +314,7 @@ class EditDailyDialog(
         tv0.setTextColor(Color.BLACK)
         tv0.gravity = Gravity.CENTER
 
-        tv0.setTypeface(boldTypeface)
+        // tv0.setTypeface(boldTypeface)
         //  tv0.setBackgroundResource(R.drawable.spinner_shape)
         tbrow0.addView(tv0)
 
@@ -313,7 +323,7 @@ class EditDailyDialog(
         tv1.setTextColor(Color.BLACK)
         tv1.gravity = Gravity.CENTER
         // tv1.setBackgroundResource(R.drawable.spinner_shape)
-        tv1.setTypeface(boldTypeface)
+        // tv1.setTypeface(boldTypeface)
         tbrow0.addView(tv1)
 
         var tv3: TextView = TextView(context)
@@ -321,16 +331,16 @@ class EditDailyDialog(
         tv3.setTextColor(Color.BLACK)
         tv3.gravity = Gravity.CENTER
         // tv3.setBackgroundResource(R.drawable.spinner_shape)
-        tv3.setTypeface(boldTypeface)
+        // tv3.setTypeface(boldTypeface)
         tbrow0.addView(tv3)
 
-        var tv4: TextView = TextView(context)
-        tv4.setText(" Price ")
-        tv4.setTextColor(Color.BLACK)
-        tv4.gravity = Gravity.CENTER
-        // tv4.setBackgroundResource(R.drawable.spinner_shape)
-        // tv4.setTypeface(boldTypeface)
-        tbrow0.addView(tv4)
+//        var tv4: TextView = TextView(context)
+//        tv4.setText(" Price ")
+//        tv4.setTextColor(Color.BLACK)
+//        tv4.gravity = Gravity.CENTER
+//        // tv4.setBackgroundResource(R.drawable.spinner_shape)
+//        // tv4.setTypeface(boldTypeface)
+//        tbrow0.addView(tv4)
 
         var tv5: TextView = TextView(context)
         tv5.setText(" Quantity ")
@@ -341,7 +351,7 @@ class EditDailyDialog(
         tbrow0.addView(tv5)
 
         var tv6: TextView = TextView(context)
-        tv6.setText(" Delete ")
+        tv6.setText(" Delete")
         tv6.setTextColor(Color.BLACK)
         tv6.gravity = Gravity.CENTER
         // tv5.setBackgroundResource(R.drawable.spinner_shape)
@@ -419,10 +429,41 @@ class EditDailyDialog(
             )
             dialog.show(childFragmentManager, "Recipe_Schuedle_Choose")
 
+        } else if (p0 == saveBtn) {
+
+            for (i in recipesID) {
+                recipeIds += "" + i + " "
+            }
+
+            for (i in recipesQuantities!!.list!!) {
+                quantities += "" + i + " "
+            }
+            for (i in recipeChoosenNumOfMeal) {
+                numOfMeals += "" + i + " "
+
+            }
+            recipeChoosenNumOfMeal.clear()
+            recipesID.clear()
+            recipesQuantities!!.list!!.clear()
+
+            var daily = DailySchedule(
+                1,
+                UserInterFace.userID,
+                numOfMeals,
+                quantities,
+                recipeIds,
+                true
+            )
+            Log.v("Elad1", "IDS : " + recipeIds)
+            var s = AsynTaskNew(daily, childFragmentManager)
+            s.execute()
+
+            recipeIds = ""
+            quantities = ""
+            numOfMeals = ""
         }
-
-
     }
+
 
     override fun onDismiss(dialog: DialogInterface) {
         recipePos = 0
@@ -478,7 +519,7 @@ class EditDailyDialog(
                 val scaled = Bitmap.createScaledBitmap(
                     i.pictureBitMap,
                     80,
-                    ((i.pictureBitMap.height * (100.0 / i.pictureBitMap.width)).toInt()),
+                    80,
                     true
                 )
                 //t2v.adjustViewBounds = true
@@ -497,13 +538,13 @@ class EditDailyDialog(
                 //    t3v.setBackgroundResource(R.drawable.spinner_shape)
                 tbrow.addView(t3v)
 
-                var t4v: TextView = TextView(context)
-                // t4v.setBackgroundResource(R.drawable.border)
-                t4v.setText(i.totalCost.toString())
-                t4v.setTextColor(Color.BLACK)
-                t4v.gravity = Gravity.CENTER
-                //t4v.setBackgroundResource(R.drawable.spinner_shape)
-                tbrow.addView(t4v)
+//                var t4v: TextView = TextView(context)
+//                // t4v.setBackgroundResource(R.drawable.border)
+//                t4v.setText(i.totalCost.toString())
+//                t4v.setTextColor(Color.BLACK)
+//                t4v.gravity = Gravity.CENTER
+//                //t4v.setBackgroundResource(R.drawable.spinner_shape)
+//                tbrow.addView(t4v)
 
 
                 var t5v: TextView = TextView(context)
@@ -527,11 +568,11 @@ class EditDailyDialog(
                 t6v.setOnClickListener {
                     var i = tbrow.getTag() as Int - 1
 
-                    Log.v("Elad1", "Quantitiy: " +   recipesQuantities!!.list!!.toString())
+                    Log.v("Elad1", "Quantitiy: " + recipesQuantities!!.list!!.toString())
                     Log.v("Elad1", "pos: " + (t6v.getTag() as Int))
                     Log.v("Elad1", "pos2: " + (tbrow.getTag() as Int))
                     Log.v("Elad1", recipeList.get(t6v.getTag() as Int).totalCost.toString())
-                    Log.v("Elad1", "pos3: " +  (tbrow.getTag() as Int - 1))
+                    Log.v("Elad1", "pos3: " + (tbrow.getTag() as Int - 1))
                     stk.removeView(stk.getChildAt(tbrow.getTag() as Int))
                     totalCostDobule -= recipeList.get(t6v.getTag() as Int).totalCost * recipesQuantities!!.list!!.get(
                         tbrow.getTag() as Int - 1
@@ -540,7 +581,10 @@ class EditDailyDialog(
                     totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
                     totalCost.setText(totalCostDobule.toString())
                     recipesQuantities!!.list!!.removeAt(tbrow.getTag() as Int - 1)
-                    Log.v("Elad1", "Quantitiy after remove: " +   recipesQuantities!!.list!!.toString())
+                    Log.v(
+                        "Elad1",
+                        "Quantitiy after remove: " + recipesQuantities!!.list!!.toString()
+                    )
                     recipeList.removeAt(t6v.getTag() as Int)
                     recipesID.removeAt(tbrow.getTag() as Int - 1)
                     recipeChoosenNumOfMeal.removeAt(tbrow.getTag() as Int - 1)
@@ -552,7 +596,7 @@ class EditDailyDialog(
                         if (x.getTag() as Int > i) {
                             x.setTag(x.getTag() as Int - 1)
                             var y = x as TableRow
-                            y.get(6).setTag(y.get(6).getTag() as Int - 1)
+                            y.get(4).setTag(y.get(4).getTag() as Int - 1)
                             y.get(5).setTag(y.get(5).getTag() as Int - 1)
 
                         }
@@ -599,6 +643,7 @@ class EditDailyDialog(
             j++
             recipePos++
         }
+        totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
         totalCost.setText(totalCostDobule.toString())
     }
 

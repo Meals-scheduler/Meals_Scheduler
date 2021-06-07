@@ -200,7 +200,8 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
                             dailyInfo2[1].toInt(),
                             map.get(dailyInfo2[0])!!.get(1),
                             map.get(dailyInfo2[0])!!.get(0),
-                            map.get(dailyInfo2[0])!!.get(2)
+                            map.get(dailyInfo2[0])!!.get(2),
+                            false
 
                         )
                     )

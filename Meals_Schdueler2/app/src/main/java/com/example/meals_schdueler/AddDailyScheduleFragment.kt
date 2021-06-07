@@ -4,14 +4,15 @@ package com.example.meals_schdueler
 import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.*
+import android.widget.TableRow
 import androidx.core.view.get
 import androidx.core.view.iterator
 import androidx.core.view.size
@@ -92,12 +93,12 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
         // tv3.setBackgroundResource(R.drawable.spinner_shape)
         tbrow0.addView(tv3)
 
-        var tv4: TextView = TextView(context)
-        tv4.setText(" Price ")
-        tv4.setTextColor(Color.BLACK)
-        tv4.gravity = Gravity.CENTER
-        // tv4.setBackgroundResource(R.drawable.spinner_shape)
-        tbrow0.addView(tv4)
+//        var tv4: TextView = TextView(context)
+//        tv4.setText(" Price ")
+//        tv4.setTextColor(Color.BLACK)
+//        tv4.gravity = Gravity.CENTER
+//        // tv4.setBackgroundResource(R.drawable.spinner_shape)
+//        tbrow0.addView(tv4)
 
         var tv5: TextView = TextView(context)
         tv5.setText(" Quantity ")
@@ -111,7 +112,6 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
         tv6.setTextColor(Color.BLACK)
         tv6.gravity = Gravity.CENTER
         // tv5.setBackgroundResource(R.drawable.spinner_shape)
-        tbrow0.setBackgroundResource(R.drawable.spinner_shape)
         tbrow0.setTag(0)
         tbrow0.addView(tv6)
 
@@ -121,11 +121,11 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
         tv7.setTextColor(Color.BLACK)
         tv7.gravity = Gravity.CENTER
         // tv5.setBackgroundResource(R.drawable.spinner_shape)
-        tbrow0.setBackgroundResource(R.drawable.spinner_shape)
+
         tbrow0.addView(tv7)
 
 
-
+        tbrow0.setBackgroundResource(R.drawable.spinner_shape)
 
         stk.addView(tbrow0)
 
@@ -244,7 +244,8 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
                 UserInterFace.userID,
                 recipeNumbers,
                 quantities,
-                recipeIds
+                recipeIds,
+                false
             )
             Log.v("Elad1", "IDS : " + recipeIds)
             var s = AsynTaskNew(daily, childFragmentManager)
@@ -276,9 +277,9 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
         // for buttons to shirnk them
 
         stk.setColumnShrinkable(5, true)
-        stk.setColumnShrinkable(6, true)
+        stk.setColumnShrinkable(4, true)
         stk.setColumnStretchable(5, true)
-        stk.setColumnStretchable(6, true)
+        stk.setColumnStretchable(4, true)
 
         var j = 0
         for (i in recipeList) {
@@ -294,6 +295,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
 
                 var tbrow: TableRow = TableRow(this.context)
+
                 tbrow.setTag(tablePosition)
 //                Log.v("Elad1","YOSII " + tbrow.getTag())
 //                Log.v("Elad1","RecipeQuantity Size: " + recipesQuantities!!.list!!.size)
@@ -317,15 +319,15 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
                 t2v.setImageBitmap(i.pictureBitMap)
                 val scaled = Bitmap.createScaledBitmap(
                     i.pictureBitMap,
-                    80,
-                    ((i.pictureBitMap.height * (100.0 / i.pictureBitMap.width)).toInt()),
+                 80,
+                  80,
                     true
                 )
+                //  ((i.pictureBitMap.height * (100.0 / i.pictureBitMap.width)).toInt())
                 //t2v.adjustViewBounds = true
 
-                t2v.scaleType = (ImageView.ScaleType.CENTER_INSIDE)
+                t2v.scaleType = (ImageView.ScaleType.CENTER)
                 t2v.setImageBitmap(scaled)
-                t2v.foregroundGravity = Gravity.CENTER
 
                 tbrow.addView(t2v)
 
@@ -337,13 +339,14 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
                 //    t3v.setBackgroundResource(R.drawable.spinner_shape)
                 tbrow.addView(t3v)
 
-                var t4v: TextView = TextView(context)
-                // t4v.setBackgroundResource(R.drawable.border)
-                t4v.setText(i.totalCost.toString())
-                t4v.setTextColor(Color.BLACK)
-                t4v.gravity = Gravity.CENTER
-                //t4v.setBackgroundResource(R.drawable.spinner_shape)
-                tbrow.addView(t4v)
+//                var t4v: TextView = TextView(context)
+//                // t4v.setBackgroundResource(R.drawable.border)
+//                totalCostDobule = (DecimalFormat("##.##").format(i.totalCost)).toDouble()
+//                t4v.setText(totalCostDobule.toString())
+//                t4v.setTextColor(Color.BLACK)
+//                t4v.gravity = Gravity.CENTER
+//                //t4v.setBackgroundResource(R.drawable.spinner_shape)
+//                tbrow.addView(t4v)
 
 
                 var t5v: TextView = TextView(context)
@@ -369,7 +372,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
                     totalCostDobule -= recipeList.get(t6v.getTag() as Int - 1).totalCost * recipesQuantities!!.list!!.get(
                         t6v.getTag() as Int - 1
                     )
-                    totalCostDobule = (DecimalFormat("##.####").format(totalCostDobule)).toDouble()
+                    totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
                     totalCost.setText(totalCostDobule.toString())
 
 
@@ -393,7 +396,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
                             //changing info delete tag
                             y.get(5).setTag(y.get(5).getTag() as Int - 1)
                             //changing infp button tag
-                            y.get(6).setTag(y.get(6).getTag() as Int - 1)
+                            y.get(4).setTag(y.get(4).getTag() as Int - 1)
 
                         }
 
@@ -437,6 +440,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
             j++
         }
 
+        totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
         totalCost.setText(totalCostDobule.toString())
     }
 

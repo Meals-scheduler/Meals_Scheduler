@@ -13,7 +13,8 @@ class DailySchedule(
     ownerId: Int,
     numOfMeals: String,
     quantities: String,
-    recipeIds: String
+    recipeIds: String,
+    isUpdate: Boolean
 
 
 ) : GetAndPost {
@@ -24,16 +25,15 @@ class DailySchedule(
     var numOfMeals = numOfMeals
     var quantities = quantities
     var recipeIds = recipeIds
-
-
+    var isUpdate = isUpdate
 
     override fun DoNetWorkOpreation(): String {
         var input = ""
         // if we insert a new daily and not updating
-        //if (!isUpdate) {
-        dailyId = getDaily().toInt() + 1 // getting current RecipeID first
-        Log.v("Elad1","EHERE" +dailyId)
-
+        if (!isUpdate) {
+            dailyId = getDaily().toInt() + 1 // getting current RecipeID first
+            Log.v("Elad1", "EHERE" + dailyId)
+        }
         // ingredientID = 1
         //   Log.v("Elad1", "current ID " + ingredientID)
         if (dailyId != -1)
@@ -49,11 +49,12 @@ class DailySchedule(
 
             // values go to - Ingredient Table
             var link =
-                "https://elad1.000webhostapp.com/postDailySchedule.php?ownerID=" + UserInterFace.userID;
-//            if (isUpdate){
-//                link = "https://elad1.000webhostapp.com/updateIngredient.php?ingredientID="+ingredientID
-//
-//            }
+                "https://elad1.000webhostapp.com/postDailySchedule.php"
+
+            if (isUpdate){
+                "https://elad1.000webhostapp.com/updateDaily.php"
+
+            }
 
             // print here ingredient elemtnes
             Log.v("Elad1", numOfMeals)
@@ -67,6 +68,8 @@ class DailySchedule(
 
             data += "&" + URLEncoder.encode("quantities", "UTF-8") + "=" +
                     URLEncoder.encode(quantities, "UTF-8")
+            data += "&" + URLEncoder.encode("ownerID", "UTF-8") + "=" +
+                    URLEncoder.encode(ownerId.toString(), "UTF-8")
 
 
 

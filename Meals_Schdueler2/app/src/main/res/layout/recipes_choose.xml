@@ -12,12 +12,13 @@
 
     <Button
         android:id="@+id/buttonRecipeName"
-        android:layout_width="wrap_content"
+        android:layout_width="83dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.1"
+        android:layout_weight="0.4"
         android:clickable="false"
         android:text="Name"
-        android:textSize="12dp"
+        android:textSize="10dp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="8dp" />
 
@@ -25,15 +26,13 @@
     <ImageView
         android:id="@+id/imageViewPicRecipe"
         android:layout_width="50dp"
-        android:layout_height="73dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="8dp"
         android:layout_weight="0.4"
         android:adjustViewBounds="false"
         android:contentDescription="TODO"
         android:focusable="true"
-        android:maxWidth="200dp"
-        android:maxHeight="80dp"
-        android:scaleType="fitCenter"
+        android:scaleType="fitStart"
         android:src="@mipmap/ic_launcher"
         android:visibility="visible"
         app:layout_constraintStart_toEndOf="@+id/buttonRecipeName"
