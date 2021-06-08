@@ -30,10 +30,20 @@ class UserPropertiesSingelton {
     var userRecipes : ArrayList<Recipe>? = null
     var dailySchedule : ArrayList<DailySchedule>? = null
     var userMapRecipes : HashMap<Int,Recipe>? = null
+    var userUpcomingSchedule : ArrayList<UpComingScheudule>? = null
 
 
     fun logout_setNULL() {
         userproperties = null
+    }
+
+    fun getUserUpcomingSchedulee(): ArrayList<UpComingScheudule>?{
+        if(userUpcomingSchedule == null) userUpcomingSchedule = ArrayList()
+        return  userUpcomingSchedule
+    }
+    fun setUserUpcomingSchedulee(upComingScheudule: ArrayList<UpComingScheudule>?){
+        this.userUpcomingSchedule = upComingScheudule
+
     }
 
     fun getUserMapRecipe(): HashMap<Int,Recipe>?{

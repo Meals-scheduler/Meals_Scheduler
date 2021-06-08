@@ -12,23 +12,23 @@
 
 
     <TextView
-        android:id="@+id/numOfDailyTextView"
-        android:layout_width="50dp"
+        android:id="@+id/dateTextView"
+        android:layout_width="180dp"
         android:layout_height="73dp"
         android:layout_marginTop="8dp"
         android:layout_weight="0.1"
         android:background="@drawable/spinner_shape"
         android:clickable="false"
         android:gravity="center"
-        android:text="1"
-        android:textSize="30dp"
+        android:text="Date"
+        android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonInfo"
-        android:layout_width="70dp"
+        android:layout_width="75dp"
         android:layout_height="73dp"
         android:layout_marginTop="8dp"
         android:layout_weight="0.1"
@@ -38,43 +38,12 @@
         android:textSize="13dp"
         android:text="Info"
         android:scaleType="fitCenter"
-        app:layout_constraintStart_toEndOf="@+id/numOfDailyTextView"
+        app:layout_constraintStart_toEndOf="@+id/dateTextView"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/buttonEdit"
-        android:layout_width="70dp"
-        android:layout_height="73dp"
-        android:layout_marginTop="8dp"
-        android:layout_weight="0.1"
-        android:adjustViewBounds="false"
-        android:contentDescription="TODO"
-        android:scaleType="fitCenter"
-        android:text="Edit"
-        android:textSize="13dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/buttonInfo"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/buttonSchedule"
-        android:layout_width="70dp"
-        android:layout_height="73dp"
-        android:layout_marginTop="8dp"
-        android:layout_weight="0.1"
-        android:adjustViewBounds="false"
-        android:contentDescription="TODO"
-        android:scaleType="fitCenter"
-        android:text="Date"
-        android:textSize="13dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/buttonEdit"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
     <Button
         android:id="@+id/buttonDel"
-        android:layout_width="70dp"
+        android:layout_width="75dp"
         android:layout_height="73dp"
         android:layout_marginTop="8dp"
         android:layout_weight="0.1"
@@ -84,23 +53,28 @@
         android:text="Delete"
         android:textSize="13dp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/buttonSchedule"
+        app:layout_constraintStart_toEndOf="@+id/buttonInfo"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageViewCart"
-        android:layout_width="60dp"
+
+
+    <Button
+        android:id="@+id/buttonDeld"
+        android:layout_width="75dp"
         android:layout_height="73dp"
         android:layout_marginTop="8dp"
         android:layout_weight="0.1"
         android:adjustViewBounds="false"
         android:contentDescription="TODO"
-        android:maxWidth="100dip"
         android:scaleType="fitCenter"
+        android:text="Delete"
+        android:textSize="13dp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/buttonDel"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/cart"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

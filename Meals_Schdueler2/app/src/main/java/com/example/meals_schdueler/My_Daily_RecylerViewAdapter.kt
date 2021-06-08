@@ -29,18 +29,15 @@ class My_Daily_RecylerViewAdapter(
     values: ArrayList<DailySchedule>,
     childFragmentManager: FragmentManager,
     context: Context?,
-) : RecyclerView.Adapter<My_Daily_RecylerViewAdapter.ViewHolder>(), GetAndPost {
+) : RecyclerView.Adapter<My_Daily_RecylerViewAdapter.ViewHolder>() {
 
     var builder: java.lang.StringBuilder? = null
     private var mValues: ArrayList<DailySchedule> = values
     private var childFragmentManager = childFragmentManager
     private var numOfDaily = 1
     private lateinit var recipeList: ArrayList<Recipe>
-    lateinit var dateData: ArrayList<String>
     private var context = context
-    private var dailyToDelete = -1
     private var dailyToSchedule = -1
-    private var dailySchdueleId = -1
     var date = ""
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -121,8 +118,6 @@ class My_Daily_RecylerViewAdapter(
         holder.date.setOnClickListener {
             dailyToSchedule = mValues.get(position).dailyId
 
-            dateData = ArrayList()
-            dateData.add(date)
             val cal = Calendar.getInstance()
             // to open the calender with the current date of this moment.
             val currentYear = cal[Calendar.YEAR]
@@ -131,7 +126,7 @@ class My_Daily_RecylerViewAdapter(
             var dialog = DatePickerDialog(
                 context!!,
                 android.R.style.Theme_Holo_Light,
-                calenderListener(dailyToSchedule, dateData, childFragmentManager, this),
+                calenderListener(dailyToSchedule, date, childFragmentManager),
                 currentYear,
                 currentMonth,
                 currentDay
@@ -174,111 +169,15 @@ class My_Daily_RecylerViewAdapter(
         }
     }
 
-    var link = "https://elad1.000webhostapp.com/delDaily.php?DailyID=" + dailyToDelete
-    override fun DoNetWorkOpreation(): String {
-        var input = ""
-
-        dailySchdueleId = getDailyScheduleID().toInt() + 1 // getting current IngredientID first
 
 
-        // ingredientID = 1
-
-        if (dailySchdueleId != -1)
-            input = postData() // now we upload the current ingredient details.
-
-        return input
-    }
-
-    private fun getDailyScheduleID(): String {
-
-        val link = "https://elad1.000webhostapp.com/getScheduleID.php"
-        Log.v("Elad1", "here")
-
-        val sb = StringBuilder()
-
-        val url = URL(link)
-        val urlConnection = url.openConnection() as HttpURLConnection
-        try {
-            val `in`: InputStream = BufferedInputStream(urlConnection.inputStream)
-            val bin = BufferedReader(InputStreamReader(`in`))
-            // temporary string to hold each line read from the reader.
-            var inputLine: String?
-
-            while (bin.readLine().also { inputLine = it } != null) {
-                sb.append(inputLine)
-
-            }
-        } finally {
-            // regardless of success or failure, we will disconnect from the URLConnection.
-            urlConnection.disconnect()
-        }
-
-
-        Log.v("Elad1", "Id came is" + sb.toString())
-        return sb.toString()
-
-    }
-
-
-    private fun postData(): String {
-
-        return try {
-
-            // values go to - Ingredient Table
-            var link = "https://elad1.000webhostapp.com/postSchedule.php"
-
-            // print here ingredient elemtnes
-            var data = URLEncoder.encode("ScheduleID", "UTF-8") + "=" +
-                    URLEncoder.encode(dailySchdueleId.toString(), "UTF-8")
-            data += "&" + URLEncoder.encode("ownerID", "UTF-8") + "=" +
-                    URLEncoder.encode(UserInterFace.userID.toString(), "UTF-8")
-            data += "&" + URLEncoder.encode("Date", "UTF-8") + "=" +
-                    URLEncoder.encode(dateData.get(0), "UTF-8")
-            data += "&" + URLEncoder.encode("DailyID", "UTF-8") + "=" +
-                    URLEncoder.encode(dailyToSchedule.toString(), "UTF-8")
-
-
-
-            Log.v("Elad1", data)
-            Log.v("Elad1", "started asyn 1")
-            val url = URL(link)
-            val conn = url.openConnection()
-            conn.readTimeout = 10000
-            conn.connectTimeout = 15000
-            conn.doOutput = true
-            val wr = OutputStreamWriter(conn.getOutputStream())
-            wr.write(data)
-            wr.flush()
-            val reader = BufferedReader(InputStreamReader(conn.getInputStream()))
-            builder = StringBuilder()
-            var line: String? = null
-            Log.v("Elad1", "started asyn2")
-            // Read Server Response
-            while (reader.readLine().also { line = it } != null) {
-                builder!!.append(line)
-                break
-            }
-            builder.toString()
-            Log.v("Elad1", builder.toString())
-            Log.v("Elad1", "asyn worked")
-        } catch (e: Exception) {
-            Log.v("Elad1", "Failled")
-        }.toString()
-    }
-
-
-    override fun getData(str: String) {
-        Log.v("Elad1", "Delete successfully")
-    }
 
     internal class calenderListener(
-        dailyToSchedule: Int, date: ArrayList<String>, childFragmentManager: FragmentManager,
-        MyDaily: My_Daily_RecylerViewAdapter
+        dailyToSchedule: Int, date:String, childFragmentManager: FragmentManager,
     ) : OnDateSetListener {
         var dailyToSchedule = dailyToSchedule
         var date = date
         var childFragmentManager = childFragmentManager
-        var myDaily = MyDaily
         override fun onDateSet(view: DatePicker, year: Int, month: Int, dayOfMonth: Int) {
 //            var month = month
 //            val cal = Calendar.getInstance()
@@ -289,10 +188,17 @@ class My_Daily_RecylerViewAdapter(
             Log.v("Sivan", "Year" + year)
             Log.v("Sivan", "month" + month + 1)
             Log.v("Sivan", "day" + dayOfMonth)
-            date[0] += year.toString() + "-" + (month + 1).toString() + "-" + dayOfMonth.toString()
+            date += year.toString() + "-" + (month + 1).toString() + "-" + dayOfMonth.toString()
+
+
+            var upcoming = UpComingScheudule(
+                -1,
+                date,
+                dailyToSchedule
+            )
 
             Log.v("Elad1", "DATE" + date)
-            var s = AsynTaskNew(myDaily, childFragmentManager)
+            var s = AsynTaskNew(upcoming, childFragmentManager)
             s.execute()
 
 

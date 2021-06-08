@@ -59,6 +59,15 @@ class UserInterFace : AppCompatActivity() {
                 ft.replace(R.id.containerView, DailyScheduleFragments()).commit()
             }
 
+            if (menuItem.itemId == R.id.nav_item_upcoming_schedule) {
+                val ft = mFragmentManager.beginTransaction()
+                ft.replace(R.id.containerView, UpcomingScheduleFragment()).commit()
+            }
+
+
+
+
+
             if (menuItem.itemId == R.id.nav_item_logout) {
                 //when we loggd out , i want to destroy the fragments of the previous user
                 //mFragmentTransaction.remove(AllingredientsFragment1())

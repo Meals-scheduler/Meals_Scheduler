@@ -50,7 +50,6 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener , CameraInte
 
     companion object {
         private val IMAGE_REQUEST = 1
-
         lateinit var pbDialog: ProgressBarDialog
 
 
