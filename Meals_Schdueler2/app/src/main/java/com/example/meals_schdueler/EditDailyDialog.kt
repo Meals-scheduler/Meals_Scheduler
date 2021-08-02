@@ -477,6 +477,7 @@ class EditDailyDialog(
                     numOfMeals,
                     quantities,
                     recipeIds,
+                    totalCostDobule,
                     true
                 )
                 Log.v("Elad1", "IDS : " + recipeIds)

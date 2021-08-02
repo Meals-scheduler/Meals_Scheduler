@@ -240,12 +240,15 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
             recipesID.clear()
             recipesQuantities!!.list!!.clear()
 
+
+
             var daily = DailySchedule(
                 1,
                 UserInterFace.userID,
                 recipeNumbers,
                 quantities,
                 recipeIds,
+                totalCostDobule,
                 false
             )
             Log.v("Elad1", "IDS : " + recipeIds)

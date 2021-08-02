@@ -63,6 +63,11 @@ class UserInterFace : AppCompatActivity() {
                 val ft = mFragmentManager.beginTransaction()
                 ft.replace(R.id.containerView, UpcomingScheduleFragment()).commit()
             }
+            if (menuItem.itemId == R.id.nav_item_weekly_schedule) {
+                val ft = mFragmentManager.beginTransaction()
+                ft.replace(R.id.containerView, WeeklySchedukeFragments()).commit()
+            }
+
 
 
 

@@ -1,12 +1,12 @@
-
 package com.example.meals_schdueler
 
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +18,7 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
+
 
 /**
  * A fragment representing a list of Items.
@@ -33,7 +34,8 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ingredientList = ArrayList<Ingredient>()
-        ingredientRecyclerViewAdapter = MyItemRecyclerViewAdapter(ingredientList!!,childFragmentManager)
+        ingredientRecyclerViewAdapter =
+            MyItemRecyclerViewAdapter(ingredientList!!, childFragmentManager)
 
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
@@ -70,11 +72,12 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
 
     companion object {
 
-        var instance : MyingredientFragment1? = null
+        var instance: MyingredientFragment1? = null
 
-        fun getInstance1() : MyingredientFragment1{
+        fun getInstance1(): MyingredientFragment1 {
             return instance!!
         }
+
         // TODO: Customize parameter argument names
         const val ARG_COLUMN_COUNT = "column-count"
 
@@ -91,7 +94,8 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
 
     /// if WEBHOST doesnt work - this query doesnt excuted and the program falls - need to be fixed!!!!!!
     override fun DoNetWorkOpreation(): String {
-        val link = "https://elad1.000webhostapp.com/getIngredient.php?ownerID="+UserInterFace.userID ;
+        val link =
+            "https://elad1.000webhostapp.com/getIngredient.php?ownerID=" + UserInterFace.userID;
         Log.v("Elad1", "here")
 
         val sb = StringBuilder()
@@ -125,6 +129,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
             it.isNotEmpty()
         }
     }
+
     override fun getData(str: String) {
         ingredientList!!.clear()
         // fixed a default .split spaces , and fixed spaces in howToStore.
@@ -135,6 +140,9 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
         for (i in ingredients.indices) {
             Log.v("Elad1", ingredients.indices.toString())
             var ingredient2 = ingredients[i].splitIgnoreEmpty("*")
+
+
+
             ingredientList?.add(
                 Ingredient(
                     ingredient2[0].toInt(),
@@ -153,7 +161,32 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
                     ingredient2[13],
                     false
 
-                ))
+                )
+            )
+
+//
+//            ingredientList?.add(
+//                Ingredient(
+//                    ingredient2[0].toInt(),
+//                    ingredient2[1].toInt(),
+//                    ingredient2[2],
+//                    // ImageConvert.StringToBitMap(ingredient2[3].toString())!!,
+//                    ImageConvert.StringToBitMap(tmp)!!,
+//                    ingredient2[4],
+//                    ingredient2[5],
+//                    ingredient2[6],
+//                    ingredient2[7].toBoolean(),
+//                    ingredient2[8].toBoolean(),
+//                    ingredient2[9].toFloat(),
+//                    ingredient2[10].toFloat(),
+//                    ingredient2[11].toFloat(),
+//                    ingredient2[12],
+//                    ingredient2[13],
+//                    false
+//
+//                )
+//            )
+
         }
 
         // initializing the singelton with the user's ingredients list to keep it here on code.
@@ -161,11 +194,12 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
         UserPropertiesSingelton.getInstance()!!.setUserIngredientss(ingredientList)
         // sending the last to the adapter.
         ingredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
-        Log.v("Elad1","MOYTEN" + ingredientList!!.size)
+        Log.v("Elad1", "MOYTEN" + ingredientList!!.size)
 
 
     }
-    fun startTask(){
+
+    fun startTask() {
         var s = AsynTaskNew(this, childFragmentManager)
         s.execute()
     }

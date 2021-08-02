@@ -14,6 +14,7 @@ class DailySchedule(
     numOfMeals: String,
     quantities: String,
     recipeIds: String,
+    totalCost:Double,
     isUpdate: Boolean
 
 
@@ -26,6 +27,8 @@ class DailySchedule(
     var quantities = quantities
     var recipeIds = recipeIds
     var isUpdate = isUpdate
+    var totalCost = totalCost
+
 
     override fun DoNetWorkOpreation(): String {
         var input = ""
@@ -73,6 +76,8 @@ class DailySchedule(
                     URLEncoder.encode(quantities, "UTF-8")
             data += "&" + URLEncoder.encode("ownerID", "UTF-8") + "=" +
                     URLEncoder.encode(ownerId.toString(), "UTF-8")
+            data += "&" + URLEncoder.encode("totalCost", "UTF-8") + "=" +
+                    URLEncoder.encode(totalCost.toString(), "UTF-8")
 
 
 

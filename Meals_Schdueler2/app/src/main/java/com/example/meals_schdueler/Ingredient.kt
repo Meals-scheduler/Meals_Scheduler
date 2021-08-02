@@ -29,19 +29,6 @@ class Ingredient(
     isUpdate: Boolean
 
 
-//    ingridentName: String,
-//    costPerGram: String,
-//    typeOfMeal: String,
-//    TypeOfSeason: String,
-//    pictureBitMap: Bitmap,
-//    howToStore: String,
-//    shareInfo: Boolean,
-//    shareIngredient: Boolean,
-//    ownerId: Int,
-//    fat_: Float,
-//    carbs_: Float,
-//    protein_: Float,
-//    nutritiousDes: String
 ) : GetAndPost {
 
 
@@ -80,8 +67,9 @@ class Ingredient(
 
 
         var input = ""
-        encodePicture()
-            // if we insert a new ingredient and not updating
+       // if (pictureBitMap != null)
+         //   encodePicture()
+        // if we insert a new ingredient and not updating
         if (!isUpdate) {
             ingredientID = getIngredientID().toInt() + 1 // getting current IngredientID first
         }
@@ -94,7 +82,6 @@ class Ingredient(
         return input
 
     }
-
 
 
     private fun getIngredientID(): String {
@@ -130,23 +117,24 @@ class Ingredient(
 
             // values go to - Ingredient Table
             var link = "https://elad1.000webhostapp.com/postIngredient.php"
-            if (isUpdate){
-                link = "https://elad1.000webhostapp.com/updateIngredient.php?ingredientID="+ingredientID
+            if (isUpdate) {
+                link =
+                    "https://elad1.000webhostapp.com/updateIngredient.php?ingredientID=" + ingredientID
 
             }
-            Log.v("Elad1",shareInfo.toString())
-            Log.v("Elad1",fat.toString())
-            Log.v("Elad1",carbs_.toString())
-            Log.v("Elad1",protein_.toString())
-            Log.v("Elad1",nutritiousDes.toString())
-            Log.v("Elad1",ingredientID.toString())
-            Log.v("Elad1",ingridentName)
-            Log.v("Elad1",ownerId.toString())
-            Log.v("Elad1",picture)
-            Log.v("Elad1",typeofSeason)
-            Log.v("Elad1",typeOfMeal)
-            Log.v("Elad1",howToStore)
-                // print here ingredient elemtnes
+            Log.v("Elad1", shareInfo.toString())
+            Log.v("Elad1", fat.toString())
+            Log.v("Elad1", carbs_.toString())
+            Log.v("Elad1", protein_.toString())
+            Log.v("Elad1", nutritiousDes.toString())
+            Log.v("Elad1", ingredientID.toString())
+            Log.v("Elad1", ingridentName)
+            Log.v("Elad1", ownerId.toString())
+            Log.v("Elad1", picture)
+            Log.v("Elad1", typeofSeason)
+            Log.v("Elad1", typeOfMeal)
+            Log.v("Elad1", howToStore)
+            // print here ingredient elemtnes
             var data = URLEncoder.encode("IngredientID", "UTF-8") + "=" +
                     URLEncoder.encode(ingredientID.toString(), "UTF-8")
             data += "&" + URLEncoder.encode("OwnerID", "UTF-8") + "=" +

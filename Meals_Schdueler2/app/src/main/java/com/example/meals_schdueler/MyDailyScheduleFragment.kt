@@ -29,6 +29,7 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
     private var quantities: String = ""
     private var numOfMeal: String = ""
     private var recipeIds: String = ""
+    private var tmp = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -155,11 +156,11 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
             // map to map each DailyID with a key as ID and contains all 3
             // array lists (e.g - quantities,recipeIds,numOfMeals)
             var map: HashMap<String, ArrayList<String>> = HashMap()
-
+            var mapTotalCost: HashMap<String, Double> = HashMap()
             // first attach each meal to its dailyID.
             var currentDailyID = dailyInfo[0].get(0).toInt() - 48
             for (i in dailyInfo.indices) {
-                var dailyInfo2 = dailyInfo[i].splitIgnoreEmpty(",")
+                var dailyInfo2 = dailyInfo[i].splitIgnoreEmpty("*")
                 //means we switch to the next DailyID
                 if (dailyInfo2[0].toInt() != currentDailyID) {
                     var totalLists: ArrayList<String> = ArrayList()
@@ -170,7 +171,7 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
                     // gathering all quantities , numOfMeal and recipeIds under
                     // the key of that DailyID
                     map.put(currentDailyID.toString(), totalLists)
-
+                    mapTotalCost.put(currentDailyID.toString(), dailyInfo2[2].toDouble())
                     //switching to the next DailyID
                     currentDailyID = dailyInfo2[0].toInt()
 
@@ -179,9 +180,11 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
                     numOfMeal = ""
                     recipeIds = ""
                 }
-                quantities += "" + dailyInfo2[4] + " "
-                numOfMeal += "" + dailyInfo2[2] + " "
-                recipeIds += "" + dailyInfo2[3] + " "
+                quantities += "" + dailyInfo2[5] + " "
+                numOfMeal += "" + dailyInfo2[3] + " "
+                recipeIds += "" + dailyInfo2[4] + " "
+                // saving the last total cost
+                tmp = dailyInfo2[2].toDouble()
             }
             if (!quantities.equals("")) {
                 var totalLists: ArrayList<String> = ArrayList()
@@ -189,13 +192,14 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
                 totalLists.add(numOfMeal)
                 totalLists.add(recipeIds)
                 map.put(currentDailyID.toString(), totalLists)
+                mapTotalCost.put(currentDailyID.toString(), tmp)
             }
 
             //  recipeNumbers += "" + i + " "
 
             currentDailyID = -1
             for (i in dailyInfo.indices) {
-                var dailyInfo2 = dailyInfo[i].splitIgnoreEmpty(",")
+                var dailyInfo2 = dailyInfo[i].splitIgnoreEmpty("*")
                 if (dailyInfo2[0].toInt() != currentDailyID) {
                     dailyList!!.add(
                         DailySchedule(
@@ -204,6 +208,7 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
                             map.get(dailyInfo2[0])!!.get(1),
                             map.get(dailyInfo2[0])!!.get(0),
                             map.get(dailyInfo2[0])!!.get(2),
+                            mapTotalCost.get(dailyInfo2[0])!!,
                             false
 
                         )
@@ -236,15 +241,14 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
 
             }
 
-            Log.v("Elad1","DAILY SIZe" + dailyList!!.size)
-            Log.v("Elad1","RECCCCIP#E SIZe" +recipeList!!.size)
+            Log.v("Elad1", "DAILY SIZe" + dailyList!!.size)
+            Log.v("Elad1", "RECCCCIP#E SIZe" + recipeList!!.size)
             UserPropertiesSingelton.getInstance()!!.setUserDaily(dailyList)
             dailyRecyclerViewAdapter!!.setmValues(dailyList!!)
             dailyRecyclerViewAdapter!!.setRecipeList(recipeList!!)
 
 //            dailyList!!.clear()
 //            recipeList!!.clear()
-
 
 
             //save it also in singleton

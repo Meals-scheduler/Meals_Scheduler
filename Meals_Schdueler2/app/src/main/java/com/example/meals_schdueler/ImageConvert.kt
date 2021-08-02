@@ -32,7 +32,9 @@ class ImageConvert(imgBitMap: Bitmap) {
     companion object {
         @RequiresApi(Build.VERSION_CODES.O)
         fun StringToBitMap(str: String): Bitmap? {
-
+            if(str.equals("")){
+                return null
+            }
             val imageBytes = Base64.getDecoder().decode(str)
             val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
             return image
