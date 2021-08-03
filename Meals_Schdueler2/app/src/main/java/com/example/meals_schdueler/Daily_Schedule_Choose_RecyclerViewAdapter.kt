@@ -20,7 +20,8 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
     private var recipe = recipes
     private var childFragmentManager = childFragmentManager
     private var numOfDaily = 1
-    private var dailyId= dailyId
+    private var dailyId = dailyId
+
 
 
     override fun onCreateViewHolder(
@@ -35,23 +36,23 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var item: DailySchedule = mValues[position] // each item postion
         holder.mItem = item
-        holder.numOfDaily.setText(numOfDaily++.toString())
+        if (numOfDaily < mValues.size) {
+            holder.numOfDaily.setText(numOfDaily++.toString())
+        }
         //var bitmap2 = ImageConvert.StringToBitMap(item.picture)
 
+        Log.v("Elad1", "numof " + numOfDaily)
 
         holder.dailyInfo.setOnClickListener {
 
 
-            Log.v("Elad1" , "Daily ID " + item.dailyId)
 
-            Log.v("Elad1" , "Recipe  Size " + recipe.size)
-            Log.v("Elad1" , "num of recipe idssss   " +   item.recipeIds)
             var dialog = DailyDialogInfo(
                 recipe,
                 item.quantities,
                 item.numOfMeals,
                 item.recipeIds,
-                position+1,
+                position + 1,
                 item.dailyId
 
             )
@@ -64,7 +65,7 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
         holder.choose.setOnClickListener() {
 
 
-            if (holder.choose.isChecked == true && !(dailyId!!.contains(position))) {
+            if (holder.choose.isChecked == true && (dailyId!!.isEmpty())) {
                 dailyId!!.add(position)
                 holder.arr[position] = true
 
@@ -81,14 +82,13 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
         }
 
 
-
-        }
+    }
 
 
     fun setmValues(mValues: ArrayList<DailySchedule>) {
         this.mValues = mValues
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
-        Log.v("Elad1","Hi im here" + mValues.size)
+        Log.v("Elad1", "Hi im here" + mValues.size)
     }
 
 

@@ -177,7 +177,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
     override fun onClick(p0: View?) {
         if (p0 == breakfastBtn) {
-        //    Log.v("Elad1","RecipeQuantity Size breakfast: " + recipesQuantities!!.list!!.size)
+            //    Log.v("Elad1","RecipeQuantity Size breakfast: " + recipesQuantities!!.list!!.size)
 
             listItems!!.list!!.clear()
             savedSize = recipeList.size
@@ -192,7 +192,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
             dialog.show(childFragmentManager, "Recipe_Schuedle_Choose")
 
         } else if (p0 == lunchBtn) {
-       //     Log.v("Elad1","RecipeQuantity Size lunch: " + recipesQuantities!!.list!!.size)
+            //     Log.v("Elad1","RecipeQuantity Size lunch: " + recipesQuantities!!.list!!.size)
 
             listItems!!.list!!.clear()
             savedSize = recipeList.size
@@ -208,7 +208,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
             dialog.show(childFragmentManager, "Recipe_Schuedle_Choose")
 
         } else if (p0 == dinnerBtn) {
-          //  Log.v("Elad1","RecipeQuantity Size dinner: " + recipesQuantities!!.list!!.size)
+            //  Log.v("Elad1","RecipeQuantity Size dinner: " + recipesQuantities!!.list!!.size)
 
             listItems!!.list!!.clear()
             // recipeList.clear()
@@ -229,7 +229,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
                 recipeIds += "" + i + " "
             }
 
-            for(i in recipesQuantities!!.list!!){
+            for (i in recipesQuantities!!.list!!) {
                 quantities += "" + i + " "
             }
             for (i in recipeChoosenNumOfMeal) {
@@ -239,7 +239,6 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
             recipeChoosenNumOfMeal.clear()
             recipesID.clear()
             recipesQuantities!!.list!!.clear()
-
 
 
             var daily = DailySchedule(
@@ -304,7 +303,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 //                Log.v("Elad1","YOSII " + tbrow.getTag())
 //                Log.v("Elad1","RecipeQuantity Size: " + recipesQuantities!!.list!!.size)
 //                Log.v("Elad1","RecipeQuantity: " +recipesQuantities!!.list!!.get(0))
-                totalCostDobule += i.totalCost * recipesQuantities!!.list!!.get(tbrow.getTag() as Int -1 )
+                totalCostDobule += i.totalCost * recipesQuantities!!.list!!.get(tbrow.getTag() as Int - 1)
                 recipesID.add(i.recipeId)
 
                 var t1v: TextView = TextView(context)
@@ -323,8 +322,8 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
                 t2v.setImageBitmap(i.pictureBitMap)
                 val scaled = Bitmap.createScaledBitmap(
                     i.pictureBitMap,
-                 80,
-                  80,
+                    80,
+                    80,
                     true
                 )
                 //  ((i.pictureBitMap.height * (100.0 / i.pictureBitMap.width)).toInt())
@@ -355,7 +354,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
                 var t5v: TextView = TextView(context)
                 // t4v.setBackgroundResource(R.drawable.border)
-                t5v.setText(recipesQuantities!!.list!!.get(tbrow.getTag() as Int -1).toString())
+                t5v.setText(recipesQuantities!!.list!!.get(tbrow.getTag() as Int - 1).toString())
                 t5v.setTextColor(Color.BLACK)
                 t5v.gravity = Gravity.CENTER
                 //t4v.setBackgroundResource(R.drawable.spinner_shape)
@@ -404,6 +403,13 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
                         }
 
+                    }
+
+                    if (tablePosition == 1) {
+                        stk.setColumnShrinkable(4, false)
+                        stk.setColumnShrinkable(5, false)
+                        stk.setColumnStretchable(5, false)
+                        stk.setColumnStretchable(4, false)
                     }
 
 

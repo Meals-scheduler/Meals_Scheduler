@@ -32,8 +32,10 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
     private var dailyID: Recipe_Ingredients_List? = null
     private var listDailyIdChoosen: ArrayList<Int>? = null
     private var dailyList: ArrayList<DailySchedule>? = null
-    private var dailyDays: ArrayList<String>? = null
+    private var dailyDays: String = ""
+    private var dailyDayss: ArrayList<Int>? = null
     private var recipeList: ArrayList<Recipe>? = null
+
 
     private var tablePosition = 1
 
@@ -48,7 +50,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
         listDailyIdChoosen = ArrayList()
         dailyID = Recipe_Ingredients_List(listDailyIdChoosen)
         dailyList = ArrayList()
-        dailyDays = ArrayList()
+        dailyDayss = ArrayList()
 
     }
 
@@ -74,6 +76,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
         tv3.setText(" Delete ")
         tv3.setTextColor(Color.BLACK)
         tv3.gravity = Gravity.CENTER
+        tbrow0.setTag(0)
         // tv3.setBackgroundResource(R.drawable.spinner_shape)
         tbrow0.addView(tv3)
 
@@ -151,6 +154,24 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
             d.show(childFragmentManager, "DailySchudleChooseDialog")
 
 
+        } else if (p0 == saveBtn) {
+
+            var dailyIds = ""
+
+            for (i in dailyList!!) {
+                dailyIds += "" + i.dailyId + " "
+
+            }
+            for(i in dailyDayss!!){
+                dailyDays += "" + i +" "
+            }
+            Log.v("Elad1", "DailyIDS" + dailyIds)
+            Log.v("Elad1", "DailyDays" + dailyDays)
+            var w = WeeklySchedule(1,UserInterFace.userID,dailyDays,dailyIds,totalCostDobule,false)
+            var s = AsynTaskNew(w, childFragmentManager)
+            s.execute()
+
+
         }
 //        if (p0 == saveBtn) {
 //
@@ -189,7 +210,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
 
     override fun onDismiss(p0: DialogInterface?) {
 
-        Log.v("Elad1", "VIKA " + dailyID!!.list!!.size)
+        Log.v("Elad1", "VIKA SIZEEE " + dailyID!!.list!!.size)
         if (!dailyID!!.list!!.isEmpty()) {
             /// need to clear dailyID.list before coming here (in choose button event)
             var daily =
@@ -198,22 +219,22 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
             dailyList!!.add(daily)
 
             Log.v("Elad1", "VIKA " + dailyList!!.get(0).dailyId)
-            Log.v("Elad1", "VIKA " +  dailyList!!.get(0).numOfMeals)
-            Log.v("Elad1", "VIKA " +  dailyList!!.get(0).recipeIds)
-            Log.v("Elad1", "VIKA " +  dailyList!!.get(0).quantities)
+            Log.v("Elad1", "VIKA " + dailyList!!.get(0).numOfMeals)
+            Log.v("Elad1", "VIKA " + dailyList!!.get(0).recipeIds)
+            Log.v("Elad1", "VIKA " + dailyList!!.get(0).quantities)
 
 
-//        stk.setColumnShrinkable(5, true)
-//////        stk.setColumnShrinkable(4, true)
-//////        stk.setColumnStretchable(5, true)
-//////        stk.setColumnStretchable(4, true)
+            stk.setColumnShrinkable(3, true)
+            stk.setColumnShrinkable(4, true)
+            stk.setColumnStretchable(3, true)
+            stk.setColumnStretchable(4, true)
 
 
             var tbrow: TableRow = TableRow(this.context)
             tbrow.setTag(tablePosition)
 
-            totalCostDobule += dailyList!!.get(dailyID!!.list!!.get(0)).totalCost
-
+            totalCostDobule += dailyList!!.get(tablePosition - 1).totalCost
+            totalCost.setText(totalCostDobule.toString())
 
             var t1v: Spinner = Spinner(context)
 
@@ -241,7 +262,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
             var t2v: TextView = TextView(context)
 
             // t1v.setBackgroundResource(R.drawable.border)
-            t2v.setText(dailyList!!.get(dailyID!!.list!!.get(0)).dailyId.toString())
+            t2v.setText(dailyList!!.get(tablePosition - 1).dailyId.toString())
             t2v.setTextColor(Color.BLACK)
             t2v.gravity = Gravity.CENTER
             //  t1v.setBackgroundResource(R.drawable.spinner_shape)
@@ -250,7 +271,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
 
             var t3v: Button = Button(context)
             t3v.setTag(tablePosition)
-            t3v.setText("Del")
+            t3v.setText("Delete")
             t3v.setTextColor(Color.BLACK)
             t3v.gravity = Gravity.CENTER
             t3v.setTextSize(10F)
@@ -264,6 +285,8 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                 totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
                 totalCost.setText(totalCostDobule.toString())
                 dailyList!!.removeAt(t3v.getTag() as Int - 1)
+                // CONTINUE HERE
+              //  dailyDayss.remove()
                 tablePosition--
 
                 for (x in stk) {
@@ -281,54 +304,65 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
 
                 }
 
-
-                var t4v: Button = Button(context)
-                t4v.setTag(tablePosition++)
-                t4v.setText("Info")
-                t4v.setTextSize(10F)
-                t4v.setTextColor(Color.BLACK)
-                t4v.gravity = Gravity.CENTER
-
-                t4v.setOnClickListener {
-                    // making the Recipe list to transfer to the info dialog
-                    recipeList = ArrayList()
-
-                    // taking the Recipe Id's string from this current daily object
-                    var recipeIDS = dailyList!!.get(t3v.getTag() as Int - 1).recipeIds
-                    // split it so i can make a list from it
-                    var recipeIDs = recipeIDS.split(" ")
-
-                    //going through the list and get each recipe by its id
-                    for (i in recipeIDs) {
-                        recipeList!!.add(
-                            UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!
-                                .get(i.toInt())
-                        )
-                    }
-
-//                for (i in )
-//                    dailyList!!.get(t3v.getTag() as Int - 1).recipeIds
-
-                    var dialog = DailyDialogInfo(
-                        recipeList!!,
-                        dailyList!!.get(t3v.getTag() as Int - 1).quantities,
-                        dailyList!!.get(t3v.getTag() as Int - 1).numOfMeals,
-                        dailyList!!.get(t3v.getTag() as Int - 1).recipeIds,
-                        tablePosition,
-                        dailyList!!.get(t3v.getTag() as Int - 1).dailyId
-
-                    )
-                    dialog.show(childFragmentManager, "DailyDialogInfo")
-                }
-                tbrow.addView(t4v)
-
-
-                stk.setBackgroundResource(R.drawable.spinner_shape)
-                tbrow.setBackgroundResource(R.drawable.spinner_shape)
-                stk.addView(tbrow)
-
-
+                stk.setColumnShrinkable(3, false)
+                stk.setColumnStretchable(3, false)
             }
+
+            tbrow.addView(t3v)
+
+            var t4v: Button = Button(context)
+            t4v.setTag(tablePosition++)
+            t4v.setText("Info")
+            t4v.setTextSize(10F)
+            t4v.setTextColor(Color.BLACK)
+            t4v.gravity = Gravity.CENTER
+
+            t4v.setOnClickListener {
+                // making the Recipe list to transfer to the info dialog
+                recipeList = ArrayList()
+
+                // taking the Recipe Id's string from this current daily object
+                var recipeIDS = dailyList!!.get(t3v.getTag() as Int - 1).recipeIds
+                // split it so i can make a list from it
+                var recipeIDs = recipeIDS.splitIgnoreEmpty(" ")
+
+                //going through the list and get each recipe by its id
+                for (i in UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!) {
+                    if (recipeIDs.contains(i.recipeId.toString())) {
+                        recipeList!!.add(i)
+                    }
+                }
+
+                for (i in recipeList!!) {
+                    Log.v("Elad1", "EE" + i.recipeName)
+
+                }
+                Log.v("Elad1", "DD" + dailyList!!.get(t3v.getTag() as Int - 1).quantities)
+                Log.v("Elad1", "DD" + dailyList!!.get(t3v.getTag() as Int - 1).numOfMeals)
+                Log.v(
+                    "Elad1", "DD" + dailyList!!.get(t3v.getTag() as Int - 1).dailyId
+                )
+
+                /// NEED TO CHECK HERE THESE PARAMETERS
+                var dialog = DailyDialogInfo(
+                    recipeList!!,
+                    dailyList!!.get(t3v.getTag() as Int - 1).quantities,
+                    dailyList!!.get(t3v.getTag() as Int - 1).numOfMeals,
+                    dailyList!!.get(t3v.getTag() as Int - 1).recipeIds,
+                    (t4v.getTag() as Int - 1) + 1,
+                    dailyList!!.get(t3v.getTag() as Int - 1).dailyId
+
+                )
+                dialog.show(childFragmentManager, "DailyDialogInfo")
+            }
+            tbrow.addView(t4v)
+
+
+            stk.setBackgroundResource(R.drawable.spinner_shape)
+            tbrow.setBackgroundResource(R.drawable.spinner_shape)
+            stk.addView(tbrow)
+
+
         }
 
     }
@@ -341,9 +375,23 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
             // An item was selected. You can retrieve the selected item using
             // parent.getItemAtPosition(pos)
 
+            Log.v("Elad1", "DDD1 " + parent.getItemAtPosition(pos))
+            var tmp = 0
+            when (parent.getItemAtPosition(pos)){
+                "Sunday" -> tmp = 0
+                "Monday" -> tmp = 1
+                "Tuesday" -> tmp = 2
+                "Wednesday" -> tmp = 3
+                "Thursday" -> tmp = 4
+                "Friday" -> tmp = 5
+                "Saturday" -> tmp = 6
+            }
+            // dailyDays!!.add(parent.getItemAtPosition(pos).toString())
+            if (!(dailyDayss!!.contains(tmp))) {
+                dailyDayss!!.add(pos)
+                Log.v("Elad1", "DDD2 " + dailyDayss)
 
-            dailyDays!!.add(parent.getItemAtPosition(pos).toString())
-
+            }
 
         }
 
@@ -351,6 +399,12 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
             // Another interface callback
 
 
+        }
+    }
+
+    fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
+        return this.split(*delimiters).filter {
+            it.isNotEmpty()
         }
     }
 
