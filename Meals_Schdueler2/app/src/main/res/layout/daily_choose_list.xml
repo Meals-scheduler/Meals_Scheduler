@@ -12,7 +12,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list"
-            android:layout_width="310dp"
+            android:layout_width="wrap_content"
             android:layout_height="420dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/list_design"
@@ -59,14 +59,15 @@
             android:id="@+id/textViewChoose"
             android:layout_width="260dp"
             android:layout_height="32dp"
-            android:layout_marginStart="36dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:background="@drawable/spinner_shape"
             android:fontFamily="@font/poppinsbold"
             android:gravity="center"
             android:text="Choose Daily:"
             android:textSize="18dp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.397"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

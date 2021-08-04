@@ -29,7 +29,7 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
     private var quantities: String = ""
     private var numOfMeal: String = ""
     private var recipeIds: String = ""
-    private var tmp = 0.0
+    private var totalcost = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -184,7 +184,7 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
                 numOfMeal += "" + dailyInfo2[3] + " "
                 recipeIds += "" + dailyInfo2[4] + " "
                 // saving the last total cost
-                tmp = dailyInfo2[2].toDouble()
+                totalcost = dailyInfo2[2].toDouble()
             }
             if (!quantities.equals("")) {
                 var totalLists: ArrayList<String> = ArrayList()
@@ -192,11 +192,11 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
                 totalLists.add(numOfMeal)
                 totalLists.add(recipeIds)
                 map.put(currentDailyID.toString(), totalLists)
-                mapTotalCost.put(currentDailyID.toString(), tmp)
+                mapTotalCost.put(currentDailyID.toString(), totalcost)
             }
 
             //  recipeNumbers += "" + i + " "
-
+            // making DailyScheudle objects
             currentDailyID = -1
             for (i in dailyInfo.indices) {
                 var dailyInfo2 = dailyInfo[i].splitIgnoreEmpty("*")

@@ -173,44 +173,12 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
 
 
         }
-//        if (p0 == saveBtn) {
-//
-//            for (i in recipesID) {
-//                recipeIds += "" + i + " "
-//            }
-//
-//            for(i in recipesQuantities!!.list!!){
-//                quantities += "" + i + " "
-//            }
-//            for (i in recipeChoosenNumOfMeal) {
-//                recipeNumbers += "" + i + " "
-//
-//            }
-//            recipeChoosenNumOfMeal.clear()
-//            recipesID.clear()
-//            recipesQuantities!!.list!!.clear()
-//
-//            var daily = DailySchedule(
-//                1,
-//                UserInterFace.userID,
-//                recipeNumbers,
-//                quantities,
-//                recipeIds,
-//                false
-//            )
-//            Log.v("Elad1", "IDS : " + recipeIds)
-//            var s = AsynTaskNew(daily, childFragmentManager)
-//            s.execute()
-//
-//            recipeIds = ""
-//            quantities = ""
-//            recipeNumbers = ""
-//        }
+
     }
 
     override fun onDismiss(p0: DialogInterface?) {
 
-        Log.v("Elad1", "VIKA SIZEEE " + dailyID!!.list!!.size)
+
         if (!dailyID!!.list!!.isEmpty()) {
             /// need to clear dailyID.list before coming here (in choose button event)
             var daily =
@@ -218,10 +186,6 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                     .get(dailyID!!.list!!.get(0))
             dailyList!!.add(daily)
 
-            Log.v("Elad1", "VIKA " + dailyList!!.get(0).dailyId)
-            Log.v("Elad1", "VIKA " + dailyList!!.get(0).numOfMeals)
-            Log.v("Elad1", "VIKA " + dailyList!!.get(0).recipeIds)
-            Log.v("Elad1", "VIKA " + dailyList!!.get(0).quantities)
 
 
             stk.setColumnShrinkable(3, true)
@@ -333,17 +297,8 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                     }
                 }
 
-                for (i in recipeList!!) {
-                    Log.v("Elad1", "EE" + i.recipeName)
 
-                }
-                Log.v("Elad1", "DD" + dailyList!!.get(t3v.getTag() as Int - 1).quantities)
-                Log.v("Elad1", "DD" + dailyList!!.get(t3v.getTag() as Int - 1).numOfMeals)
-                Log.v(
-                    "Elad1", "DD" + dailyList!!.get(t3v.getTag() as Int - 1).dailyId
-                )
 
-                /// NEED TO CHECK HERE THESE PARAMETERS
                 var dialog = DailyDialogInfo(
                     recipeList!!,
                     dailyList!!.get(t3v.getTag() as Int - 1).quantities,
@@ -392,7 +347,11 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                 Log.v("Elad1", "DDD2 " + dailyDayss)
 
             }
-
+            // to delete unexpected daily days
+            if(dailyDayss!!.size==tablePosition){
+                dailyDayss!!.removeAt(0)
+            }
+            Log.v("Elad1", "DDD3 " + dailyDayss)
         }
 
         override fun onNothingSelected(parent: AdapterView<*>) {

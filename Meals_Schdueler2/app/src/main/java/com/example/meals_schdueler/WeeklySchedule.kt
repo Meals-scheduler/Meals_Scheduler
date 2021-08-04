@@ -131,6 +131,6 @@ class WeeklySchedule(
         return sb.toString()
     }
     override fun getData(str: String) {
-        TODO("Not yet implemented")
+        print("DD")
     }
 }

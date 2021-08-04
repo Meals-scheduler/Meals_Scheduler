@@ -34,14 +34,14 @@
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/dailyInfo"
+                android:id="@+id/weeklyInfo"
                 android:layout_width="224dp"
                 android:layout_height="37dp"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/spinner_shape"
                 android:fontFamily="@font/poppinsbold"
                 android:gravity="center"
-                android:text="Daily No.  :"
+                android:text="Weekly No.  :"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +56,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dailyInfo"
+                app:layout_constraintTop_toBottomOf="@+id/weeklyInfo"
                 app:layout_constraintVertical_bias="0.371">
 
             </TableLayout>
