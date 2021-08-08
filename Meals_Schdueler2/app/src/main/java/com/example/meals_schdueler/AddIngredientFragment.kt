@@ -40,7 +40,7 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener , CameraInte
     private var imageUri: Uri? = null
     var notritousValue: NutritousValues? = null
     var howToStoreValue: HowToStroreValue? = null
-   // var ingredientImageInit : initImage? = null
+
 
 
     //for camera intent
@@ -86,7 +86,7 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener , CameraInte
 
 
 
-        Log.v("Elad1","USER IDDDDDDDD" + UserInterFace.userID.toString())
+       // Log.v("Elad1","USER IDDDDDDDD" + UserInterFace.userID.toString())
 
 
         saveBtn.setOnClickListener(this)
@@ -112,10 +112,10 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener , CameraInte
 
             if (parent == typeOfMeal) {
                 typeOfMeall = parent.getItemAtPosition(pos).toString()
-                Log.v("Elad", "$typeOfMeall")
+
             } else if (parent == typeOfSeason) {
                 typeSeasson = parent.getItemAtPosition(pos).toString()
-                Log.v("Elad", "$typeSeasson")
+
             }
         }
 
@@ -143,7 +143,7 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener , CameraInte
             isFirstTimeHowToStore = false
             dialog.show(childFragmentManager, "HowToStoreDialog")
         } else if (p0 == saveBtn) {
-            Log.v("Elad1", "click save")
+
 
             var ingredient = Ingredient(
 
@@ -184,7 +184,6 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener , CameraInte
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.v("Elad1","FINALLY")
         if (resultCode == Activity.RESULT_OK) {
             imageUri = data!!.data
             if (requestCode == IMAGE_REQUEST) {

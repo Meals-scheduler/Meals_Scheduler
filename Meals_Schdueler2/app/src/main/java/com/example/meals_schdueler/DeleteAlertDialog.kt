@@ -23,7 +23,8 @@ class DeleteAlertDialog(
     pictureBitMap: Bitmap?,
     ingredientID: Int,
     isRecipe: Boolean,
-    isDaily: Boolean
+    isDaily: Boolean,
+    isWeekly: Boolean
 ) :
     DialogFragment(), View.OnClickListener, GetAndPost {
 
@@ -37,6 +38,7 @@ class DeleteAlertDialog(
     var ingredientID = ingredientID
     var isRecipe = isRecipe
     var isDaily = isDaily
+    var isWeekly = isWeekly
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,11 +82,12 @@ class DeleteAlertDialog(
 
         if (isRecipe) {
             link = "https://elad1.000webhostapp.com/deleteRecipe.php?RecipeID=" + ingredientID
-        }
-        if (isDaily) {
+        } else if (isDaily) {
             link = "https://elad1.000webhostapp.com/delDaily.php?DailyID=" + ingredientID
+        } else if (isWeekly){
+            link = "https://elad1.000webhostapp.com/delWeekly.php?WeeklyID=" + ingredientID
         }
-        Log.v("Elad1", "here")
+
 
         val sb = StringBuilder()
 
@@ -106,7 +109,7 @@ class DeleteAlertDialog(
         }
 
 
-        Log.v("Elad1", "Id came is" + sb.toString())
+        //Log.v("Elad1", "Id came is" + sb.toString())
         return sb.toString()
     }
 

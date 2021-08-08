@@ -69,7 +69,6 @@ class AllIngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListen
     /// spinner clickabe false doesnt work
     private fun setIngredientData() {
         ingredientName.setText(ingredient.ingridentName)
-        // Log.v("Elad",getIndex(typeOfMeal,ingredient.typeOfMeal).toString())
         typeOfMeal.setText(ingredient.typeOfMeal)
         typeOfSeason.setText(ingredient.typeofSeason)
         costPerGram.setText(ingredient.costPerGram)

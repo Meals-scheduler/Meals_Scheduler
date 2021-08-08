@@ -41,7 +41,6 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
         }
         //var bitmap2 = ImageConvert.StringToBitMap(item.picture)
 
-        Log.v("Elad1", "numof " + numOfDaily)
 
         holder.dailyInfo.setOnClickListener {
 
@@ -88,7 +87,6 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
     fun setmValues(mValues: ArrayList<DailySchedule>) {
         this.mValues = mValues
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
-        Log.v("Elad1", "Hi im here" + mValues.size)
     }
 
 

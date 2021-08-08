@@ -15,7 +15,6 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meals_schdueler.dummy.DailySchedule
-import com.example.meals_schdueler.dummy.WeeklyDialogInfo
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -55,51 +54,50 @@ class My_Weekly_RecylerViewAdapter(
         holder.numOfWeekly.setText(numOfWeekly++.toString())
 
         holder.edit.setOnClickListener {
+            Log.v("Elad1","FF1" +    item.weeklyId.toString())
+            // copying the list not to override it in the edit .
+            var tmpList: ArrayList<DailySchedule> = ArrayList()
+            for (i in weeklyDaily.get(item.weeklyId.toString())!!) {
+                tmpList.add(i)
+            }
 
-            var tempRecipeList: ArrayList<Recipe> = ArrayList()
-
-            // copying the Recipe list so if we edit it and then quit without saving, it wouldn't change the original list
-//            for (i in recipeList) {
-//                tempRecipeList.add(i)
-//            }
-            // var dialog = EditDailyDialog(
-//                tempRecipeList,
-//                mValues.get(position).quantities,
-//                mValues.get(position).numOfMeals,
-//                mValues.get(position).recipeIds,
-//                position + 1,
-//                this,
-//                mValues.get(position).dailyId
-            //)
-            //  dialog.show(childFragmentManager, "dailyEdit")
+            var dialog = EditWeeklyDialog(
+                tmpList,
+                item.numOfDay,
+                item.dailyIds,
+                position + 1,
+                this,
+                weeklyValues.get(position).weeklyId
+            )
+            dialog.show(childFragmentManager, "weeklyEdit")
         }
 
 
 
         holder.info.setOnClickListener {
+            // Log.v("Elad1","HH" + weeklyDaily.get(item.weeklyId.toString())!!.get(1).recipeIds)
+            Log.v("Elad1","FF2" +    item.weeklyId.toString())
             var dialog = WeeklyDialogInfo(
                 weeklyDaily.get(item.weeklyId.toString())!!,
                 item.numOfDay,
                 item.dailyIds,
                 item.totalCost,
-                position + 1
+                (position + 1)
             )
 
 
+            dialog.show(childFragmentManager, "WeeklyDialogInfo")
 
-            dialog.show(childFragmentManager, "DailyDialogInfo")
 
-
-            Log.v("Elad1", "Test" + weeklyDaily.get(item.weeklyId.toString())!!.get(0).dailyId)
-            Log.v("Elad1", "Test" + item.numOfDay)
-            Log.v("Elad1", "Test" + weeklyDaily.get(item.weeklyId.toString())!!.get(1).dailyId)
         }
 
         holder.delete.setOnClickListener {
+            // deleteing this weekly from the map that holds for every weekly its daily list
+            weeklyDaily.remove(item.weeklyId.toString())!!
 
             var dialog =
-                DeleteAlertDialog("", null, weeklyValues.get(position).weeklyId, false, true)
-            dialog.show(childFragmentManager, "DeleteDaily")
+                DeleteAlertDialog("", null, weeklyValues.get(position).weeklyId, false, false,true)
+            dialog.show(childFragmentManager, "DeleteWeekly")
 
         }
 
@@ -137,14 +135,13 @@ class My_Weekly_RecylerViewAdapter(
     fun setDailyValues(mValues: HashMap<String, ArrayList<DailySchedule>>) {
         numOfWeekly = 1
         this.weeklyDaily = mValues
-        Log.v("Elad1", "HERE AND " + weeklyDaily.size)
+
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
 
 
     fun setRecipeList(recipeList: ArrayList<Recipe>) {
-        Log.v("Elad1", "Successs!!!!!")
-        Log.v("Elad1", "recipe size!!!!!" + recipeList.size)
+
         this.recipeList = recipeList
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
@@ -176,15 +173,7 @@ class My_Weekly_RecylerViewAdapter(
         var date = date
         var childFragmentManager = childFragmentManager
         override fun onDateSet(view: DatePicker, year: Int, month: Int, dayOfMonth: Int) {
-//            var month = month
-//            val cal = Calendar.getInstance()
-//            val currentYear = cal[Calendar.YEAR]
-//            month = month + 1
-//            Log.v("Sivan", currentYear.toString() + "current")
-//            Log.v("Sivan", year.toString() + "year")
-            Log.v("Sivan", "Year" + year)
-            Log.v("Sivan", "month" + month + 1)
-            Log.v("Sivan", "day" + dayOfMonth)
+
             date += year.toString() + "-" + (month + 1).toString() + "-" + dayOfMonth.toString()
 
 
@@ -194,7 +183,7 @@ class My_Weekly_RecylerViewAdapter(
                 dailyToSchedule
             )
 
-            Log.v("Elad1", "DATE" + date)
+
             var s = AsynTaskNew(upcoming, childFragmentManager)
             s.execute()
 

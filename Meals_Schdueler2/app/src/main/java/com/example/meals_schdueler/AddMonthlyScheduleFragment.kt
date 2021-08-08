@@ -1,6 +1,5 @@
 package com.example.meals_schdueler
 
-import android.app.Activity
 import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
@@ -14,29 +13,28 @@ import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
 import com.example.meals_schdueler.dummy.DailySchedule
 import java.text.DecimalFormat
-import kotlin.collections.ArrayList
 
-// NEED TO CHECK  - > WHEN EDITING A DAILY - IF IT CHANGES ITS TOTAL COST OR NOT !!!
-class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
+
+class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
     DialogInterface.OnDismissListener {
 
+
     private var columnCount = 1
+    private var tablePosition = 1
     private lateinit var stk: TableLayout
     private lateinit var saveBtn: Button
-    private lateinit var chooseDayBtn: Button
+    private lateinit var chooseWeekBtn: Button
     private lateinit var totalCost: EditText
     private var totalCostDobule: Double = 0.0
 
-    // saving DailyID
-    private var dailyID: Recipe_Ingredients_List? = null
-    private var listDailyIdChoosen: ArrayList<Int>? = null
-    private var dailyList: ArrayList<DailySchedule>? = null
-    private var dailyDays: String = ""
-    private var dailyDayss: ArrayList<Int>? = null
-    private var recipeList: ArrayList<Recipe>? = null
 
-
-    private var tablePosition = 1
+    //saving weekly id
+    private var weeklyID: Recipe_Ingredients_List? = null
+    private var listWeeklyIdChoosen: ArrayList<Int>? = null
+    private var weeklyList: ArrayList<WeeklySchedule>? = null
+    private var weeklyDays: String = ""
+    private var weeklyIds: String = ""
+    private var weeklyDayss: ArrayList<Int>? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,26 +44,28 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
         }
 
 
-        listDailyIdChoosen = ArrayList()
-        dailyID = Recipe_Ingredients_List(listDailyIdChoosen)
-        dailyList = ArrayList()
-        dailyDayss = ArrayList()
+        listWeeklyIdChoosen = ArrayList()
+        weeklyID = Recipe_Ingredients_List(listWeeklyIdChoosen)
+        weeklyList = ArrayList()
+        weeklyDayss = ArrayList()
+
 
     }
+
 
     private fun addTable() {
 
         var tbrow0: TableRow = TableRow(context)
 
         var tv0: TextView = TextView(context)
-        tv0.setText(" Day ")
+        tv0.setText(" Week ")
         tv0.setTextColor(Color.BLACK)
         tv0.gravity = Gravity.CENTER
         //  tv0.setBackgroundResource(R.drawable.spinner_shape)
         tbrow0.addView(tv0)
 
         var tv1: TextView = TextView(context)
-        tv1.setText(" DailyId ")
+        tv1.setText(" WeeklyId ")
         tv1.setTextColor(Color.BLACK)
         tv1.gravity = Gravity.CENTER
         // tv1.setBackgroundResource(R.drawable.spinner_shape)
@@ -104,14 +104,13 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
         // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
-            AddWeeklyScheduleFragment().apply {
+            AddMonthlyScheduleFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_COLUMN_COUNT, columnCount)
 
                 }
             }
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -125,11 +124,11 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
         totalCost = x.findViewById(R.id.editTextTotalCost)
         saveBtn = x.findViewById(R.id.saveBtn)
 
-        chooseDayBtn = x.findViewById(R.id.chooseBtn)
+        chooseWeekBtn = x.findViewById(R.id.chooseBtn)
         totalCost = x.findViewById(R.id.editTextTotalCost)
         saveBtn = x.findViewById(R.id.saveBtn)
 
-        chooseDayBtn.setOnClickListener(this)
+        chooseWeekBtn.setOnClickListener(this)
         saveBtn.setOnClickListener(this)
 
 
@@ -139,40 +138,46 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
         return x
     }
 
+
     override fun onClick(p0: View?) {
+        if (p0 == chooseWeekBtn) {
+            weeklyID!!.list!!.clear()
 
-        if (p0 == chooseDayBtn) {
-            dailyID!!.list!!.clear()
-
-            var d = Daily_Schedule_Choose_Dialog(
+            var d = Weekly_Schedule_Choose_Dialog(
+                UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!,
                 UserPropertiesSingelton.getInstance()!!.getUserDaily()!!,
                 UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!,
-                dailyID!!
+                weeklyID!!
             )
-
             d.show(childFragmentManager, "DailySchudleChooseDialog")
-
-
         } else if (p0 == saveBtn) {
 
-            var dailyIds = ""
 
-            for (i in dailyList!!) {
-                dailyIds += "" + i.dailyId + " "
+            for (i in weeklyList!!) {
+                weeklyIds += "" + i.weeklyId + " "
 
             }
-            for(i in dailyDayss!!){
-                dailyDays += "" + i +" "
+            for (i in weeklyDayss!!) {
+                weeklyDays += "" + i + " "
             }
 
-            var w = WeeklySchedule(1,UserInterFace.userID,dailyDays,dailyIds,totalCostDobule,false)
-            var s = AsynTaskNew(w, childFragmentManager)
+            var m = MonthlySchedule(
+                1,
+                UserInterFace.userID,
+                weeklyDays,
+                weeklyIds,
+                totalCostDobule,
+                false
+            )
+            var s = AsynTaskNew(m, childFragmentManager)
             s.execute()
 
             clearTable()
         }
 
+
     }
+
     private fun clearTable() {
         tablePosition = 1
         totalCostDobule = 0.0
@@ -188,15 +193,16 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
 
     }
 
+
     override fun onDismiss(p0: DialogInterface?) {
 
 
-        if (!dailyID!!.list!!.isEmpty()) {
+        if (!weeklyID!!.list!!.isEmpty()) {
             /// need to clear dailyID.list before coming here (in choose button event)
-            var daily =
-                UserPropertiesSingelton.getInstance()!!.getUserDaily()!!
-                    .get(dailyID!!.list!!.get(0))
-            dailyList!!.add(daily)
+            var weekly =
+                UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!
+                    .get(weeklyID!!.list!!.get(0))
+            weeklyList!!.add(weekly)
 
 
 
@@ -209,10 +215,10 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
             var tbrow: TableRow = TableRow(this.context)
             tbrow.setTag(tablePosition)
 
-            totalCostDobule += dailyList!!.get(tablePosition - 1).totalCost
+            totalCostDobule += weeklyList!!.get(tablePosition - 1).totalCost
             totalCost.setText(totalCostDobule.toString())
 
-            var t1v: Spinner = Spinner(context)
+            var t1v: Spinner= Spinner(context)
 
 
             ArrayAdapter.createFromResource(
@@ -238,7 +244,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
             var t2v: TextView = TextView(context)
 
             // t1v.setBackgroundResource(R.drawable.border)
-            t2v.setText(dailyList!!.get(tablePosition - 1).dailyId.toString())
+            t2v.setText(weeklyList!!.get(tablePosition - 1).weeklyId.toString())
             t2v.setTextColor(Color.BLACK)
             t2v.gravity = Gravity.CENTER
             //  t1v.setBackgroundResource(R.drawable.spinner_shape)
@@ -257,12 +263,12 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
 
                 stk.removeView(stk.getChildAt(t3v.getTag() as Int))
 
-                totalCostDobule -= dailyList!!.get(t3v.getTag() as Int - 1).totalCost
+                totalCostDobule -= weeklyList!!.get(t3v.getTag() as Int - 1).totalCost
                 totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
                 totalCost.setText(totalCostDobule.toString())
-                dailyList!!.removeAt(t3v.getTag() as Int - 1)
+                weeklyList!!.removeAt(t3v.getTag() as Int - 1)
                 // CONTINUE HERE
-              //  dailyDayss.remove()
+                //  dailyDayss.remove()
                 tablePosition--
 
                 for (x in stk) {
@@ -333,51 +339,4 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
         }
 
     }
-
-
-    inner class SpinnerActivity() : Activity(), AdapterView.OnItemSelectedListener {
-
-
-        override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-            // An item was selected. You can retrieve the selected item using
-            // parent.getItemAtPosition(pos)
-
-            var tmp = 0
-            when (parent.getItemAtPosition(pos)){
-                "Sunday" -> tmp = 0
-                "Monday" -> tmp = 1
-                "Tuesday" -> tmp = 2
-                "Wednesday" -> tmp = 3
-                "Thursday" -> tmp = 4
-                "Friday" -> tmp = 5
-                "Saturday" -> tmp = 6
-            }
-            // dailyDays!!.add(parent.getItemAtPosition(pos).toString())
-            if (!(dailyDayss!!.contains(tmp))) {
-                dailyDayss!!.add(pos)
-
-
-            }
-            // to delete unexpected daily days
-            if(dailyDayss!!.size==tablePosition){
-                dailyDayss!!.removeAt(0)
-            }
-
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>) {
-            // Another interface callback
-
-
-        }
-    }
-
-    fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
-        return this.split(*delimiters).filter {
-            it.isNotEmpty()
-        }
-    }
-
-
 }
-

@@ -120,8 +120,7 @@ class DailyDialogInfo(
             }
             if (recipesID.contains(i.recipeId)) {
 
-                Log.v("Elad1", "RECIPE" + i.recipeName)
-                Log.v("Elad1", "RECIPE price " + i.totalCost)
+
 
                 when (numOfMealsArr[j]) {
                     "0" -> mealChoosen = "Breakfast"
@@ -199,10 +198,6 @@ class DailyDialogInfo(
 
                 //t5v.setBackgroundResource(R.drawable.spinner_shape)
                 t7v.setOnClickListener {
-                    Log.v("Elad1", "pos: " + (tbrow.getTag() as Int))
-                    Log.v("Elad1", "List size" + recipeList.size)
-                    Log.v("Elad1", "table size" + stk.size)
-                    Log.v("Elad1", "table TAG" + (t7v.getTag() as Int - 1))
                     var dialog = MyRecipeIngredietns(
                         recipeList.get(t7v.getTag() as Int).listOfIngredients,
                         recipeList.get(t7v.getTag() as Int).recipeName,

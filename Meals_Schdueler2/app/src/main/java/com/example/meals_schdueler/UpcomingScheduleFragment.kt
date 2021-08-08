@@ -93,7 +93,7 @@ class UpcomingScheduleFragment : Fragment(), GetAndPost {
     override fun DoNetWorkOpreation(): String {
         val link =
             "https://elad1.000webhostapp.com/getSchedule.php?ownerID=" + UserInterFace.userID;
-        Log.v("Elad1", "here")
+
 
         val sb = StringBuilder()
 
@@ -115,7 +115,7 @@ class UpcomingScheduleFragment : Fragment(), GetAndPost {
         }
 
 
-        Log.v("Elad1", "Id came is" + sb.toString())
+        //Log.v("Elad1", "Id came is" + sb.toString())
         return sb.toString()
     }
 

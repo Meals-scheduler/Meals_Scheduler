@@ -48,9 +48,9 @@ class AllRecipesFragment : Fragment(), GetAndPost {
         // to avoid constant loading of AllIngredients Data , we want to load only once. - to ask Harel
         if (instance == null) {
             startTask()
-            Log.v("Elad1", "LOADED")
+
         } else {
-            Log.v("Elad1", " NOT LOADED")
+
         }
         instance = this
 
@@ -93,7 +93,7 @@ class AllRecipesFragment : Fragment(), GetAndPost {
     override fun DoNetWorkOpreation(): String {
         val link =
             "https://elad1.000webhostapp.com/getSharedRecipes.php?ownerID=" + UserInterFace.userID;
-        Log.v("Elad1", "here")
+
 
         val sb = StringBuilder()
 
@@ -115,7 +115,7 @@ class AllRecipesFragment : Fragment(), GetAndPost {
         }
 
 
-        Log.v("Elad1", "Id came is" + sb.toString())
+      //  Log.v("Elad1", "Id came is" + sb.toString())
         return sb.toString()
     }
 
@@ -132,7 +132,6 @@ class AllRecipesFragment : Fragment(), GetAndPost {
         //recipe size 11
         // ingredient size 15
         if (!str.equals("")) {
-            Log.v("Elad1", "REALLY " + str)
             recipeList!!.clear()
             val recipesAndIngredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
@@ -233,7 +232,7 @@ class AllRecipesFragment : Fragment(), GetAndPost {
 
             currentID = -1
             for (i in recipesAndIngredients.indices) {
-                Log.v("Elad1", recipesAndIngredients.indices.toString())
+
                 var recipe2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
                 if (recipe2.size == 11) {
                     var s = recipe2[0].toInt()

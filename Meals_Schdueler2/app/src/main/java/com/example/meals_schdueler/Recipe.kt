@@ -73,7 +73,7 @@ class Recipe(
         // }
 
         // ingredientID = 1
-        //   Log.v("Elad1", "current ID " + ingredientID)
+
         if (recipeId != -1)
             input = postData() // now we upload the current ingredient details.
 
@@ -127,9 +127,6 @@ class Recipe(
 
 
 
-
-            Log.v("Elad1", data)
-            Log.v("Elad1", "started asyn 1")
             val url = URL(link)
             val conn = url.openConnection()
             conn.readTimeout = 10000
@@ -141,15 +138,14 @@ class Recipe(
             val reader = BufferedReader(InputStreamReader(conn.getInputStream()))
             builder = StringBuilder()
             var line: String? = null
-            Log.v("Elad1", "started asyn2")
+
             // Read Server Response
             while (reader.readLine().also { line = it } != null) {
                 builder!!.append(line)
                 break
             }
             builder.toString()
-            Log.v("Elad1", builder.toString())
-            Log.v("Elad1", "asyn worked")
+
         } catch (e: Exception) {
             Log.v("Elad1", "Failled")
         }.toString()

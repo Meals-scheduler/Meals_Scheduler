@@ -35,7 +35,7 @@ class MyRecipeRecyclerViewAdapter(
         holder.recipeImage.setImageBitmap(item.pictureBitMap)
 
         holder.deleteRecipe.setOnClickListener {
-            var dialog = DeleteAlertDialog(item.recipeName, item.pictureBitMap, item.recipeId, true,false)
+            var dialog = DeleteAlertDialog(item.recipeName, item.pictureBitMap, item.recipeId, true,false,false)
             dialog.show(childFragmentManager, "DeleteAlertDialog")
         }
 

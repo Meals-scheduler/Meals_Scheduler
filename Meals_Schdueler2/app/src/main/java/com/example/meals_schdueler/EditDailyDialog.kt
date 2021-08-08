@@ -139,10 +139,7 @@ class EditDailyDialog(
         }
 
 
-        Log.v("Elad1","Recipe IDS" + recipesID.toString())
-        Log.v("Elad1","Recipe numOfMeals" + recipeChoosenNumOfMeal.toString())
-        Log.v("Elad1","Recipe Qujantitites" +  recipesQuantities!!.list!!.toString())
-        Log.v("Elad1","Recipe Qujantitites 222" +  recipeIdsArr.toString())
+
 
 
 
@@ -153,8 +150,7 @@ class EditDailyDialog(
             }
             if (i.recipeId == recipeIdsArr[j].toInt()) {
 
-                Log.v("Elad1", "RECIPE" + i.recipeName)
-                Log.v("Elad1", "RECIPE price " + i.totalCost)
+
 
                 when (numOfMealsArr[j]) {
                     "0" -> mealChoosen = "Breakfast"
@@ -236,9 +232,7 @@ class EditDailyDialog(
                 t6v.setOnClickListener {
                     var i = tbrow.getTag() as Int - 1
 
-                    Log.v("Elad1", "Quantitiy: " + recipesQuantities!!.list!!.toString())
-                    Log.v("Elad1", "pos: " + (tbrow.getTag() as Int))
-                    Log.v("Elad1", recipeList.get(t6v.getTag() as Int).totalCost.toString())
+
                     stk.removeView(stk.getChildAt(tbrow.getTag() as Int))
                     totalCostDobule -= recipeList.get(t6v.getTag() as Int).totalCost * recipesQuantities!!.list!!.get(
                         tbrow.getTag() as Int - 1
@@ -250,10 +244,7 @@ class EditDailyDialog(
                     recipesID.removeAt(tbrow.getTag() as Int - 1)
                     recipeChoosenNumOfMeal.removeAt(tbrow.getTag() as Int - 1)
                     tablePosition--
-                    Log.v(
-                        "Elad1",
-                        "Quantitiy After position" + recipesQuantities!!.list!!.toString()
-                    )
+
                     for (x in stk) {
                         if (x.getTag() as Int == 0)
                             continue
@@ -277,10 +268,7 @@ class EditDailyDialog(
 
                 //t5v.setBackgroundResource(R.drawable.spinner_shape)
                 t7v.setOnClickListener {
-                    Log.v("Elad1", "pos: " + (tbrow.getTag() as Int))
-                    Log.v("Elad1", "List size" + recipeList.size)
-                    Log.v("Elad1", "table size" + stk.size)
-                    Log.v("Elad1", "table TAG" + (t7v.getTag() as Int - 1))
+
                     var dialog = MyRecipeIngredietns(
                         recipeList.get(t7v.getTag() as Int).listOfIngredients,
                         recipeList.get(t7v.getTag() as Int).recipeName,
@@ -393,7 +381,7 @@ class EditDailyDialog(
         if (p0 == exit) {
             dismiss()
         } else if (p0 == breakFastBtn) {
-            //    Log.v("Elad1","RecipeQuantity Size breakfast: " + recipesQuantities!!.list!!.size)
+
 
             listItems!!.list!!.clear()
             savedSize = recipeList.size
@@ -408,11 +396,11 @@ class EditDailyDialog(
             dialog.show(childFragmentManager, "Recipe_Schuedle_Choose")
 
         } else if (p0 == lunchBtn) {
-            //     Log.v("Elad1","RecipeQuantity Size lunch: " + recipesQuantities!!.list!!.size)
+
 
             listItems!!.list!!.clear()
             savedSize = recipeList.size
-            Log.v("ELad1", "SAved size is " + savedSize)
+
             // recipeList.clear()
             mealChoosen = "Lunch"
 
@@ -425,7 +413,7 @@ class EditDailyDialog(
             dialog.show(childFragmentManager, "Recipe_Schuedle_Choose")
 
         } else if (p0 == dinnerBtn) {
-            //  Log.v("Elad1","RecipeQuantity Size dinner: " + recipesQuantities!!.list!!.size)
+
 
             listItems!!.list!!.clear()
             // recipeList.clear()
@@ -461,15 +449,9 @@ class EditDailyDialog(
 
                 }
 
-                Log.v("Elad1", "GGGGGGGGGGg" + recipeIds)
-                Log.v("Elad1", "GGGGGGGGGGg" + quantities)
-                Log.v("Elad1", "GGGGGGGGGGg" + numOfMeals)
 
-                Log.v("Elad1", "Size:::" + recipeList.size.toString())
                 myDailyRecylerviewadapter!!.setRecipeList(recipeList!!)
-//            recipeChoosenNumOfMeal.clear()
-//            recipesID.clear()
-//            recipesQuantities!!.list!!.clear()
+
 
                 var daily = DailySchedule(
                     dailyId,
@@ -480,7 +462,7 @@ class EditDailyDialog(
                     totalCostDobule,
                     true
                 )
-                Log.v("Elad1", "IDS : " + recipeIds)
+
                 var s = AsynTaskNew(daily, childFragmentManager)
                 s.execute()
 
@@ -519,7 +501,7 @@ class EditDailyDialog(
             if (parentFragment is DialogInterface.OnDismissListener) {
                 (parentFragment as DialogInterface.OnDismissListener?)!!.onDismiss(dialog)
             }
-            Log.v("Elad1", "HERERERERERE@#@#@#@#" + listItems!!.list!!.size)
+
             for (i in listItems!!.list!!) {
 
 
@@ -528,13 +510,10 @@ class EditDailyDialog(
 
 
             }
-            Log.v("Elad1", "RECIPE list size now " + recipeList.size)
-            Log.v("Elad1", "Saved size is" + savedSize)
-            Log.v("Elad1", "table position is " + tablePosition)
+
             var j = 0
             for (i in recipeList) {
                 if (j > savedSize - 1) {
-                    Log.v("Elad1", "OK")
                     when (mealChoosen) {
                         "Breakfast" -> recipeChoosenNumOfMeal.add(0)
                         "Lunch" -> recipeChoosenNumOfMeal.add(1)
@@ -544,9 +523,7 @@ class EditDailyDialog(
 
                     var tbrow: TableRow = TableRow(this.context)
                     tbrow.setTag(tablePosition++)
-//                Log.v("Elad1","YOSII " + tbrow.getTag())
-//                Log.v("Elad1","RecipeQuantity Size: " + recipesQuantities!!.list!!.size)
-//                Log.v("Elad1","RecipeQuantity: " +recipesQuantities!!.list!!.get(0))
+
                     totalCostDobule += i.totalCost * recipesQuantities!!.list!!.get(tbrow.getTag() as Int - 1)
                     recipesID.add(i.recipeId)
 
@@ -606,7 +583,7 @@ class EditDailyDialog(
                     tbrow.addView(t5v)
 
                     var t6v: Button = Button(context)
-                    Log.v("Elad1", "REcipe pos is" + recipePos)
+
                     t6v.setTag(recipePos)
                     t6v.setText("Del")
                     t6v.setTextColor(Color.BLACK)
@@ -618,11 +595,7 @@ class EditDailyDialog(
                     t6v.setOnClickListener {
                         var i = tbrow.getTag() as Int - 1
 
-                        Log.v("Elad1", "Quantitiy: " + recipesQuantities!!.list!!.toString())
-                        Log.v("Elad1", "pos: " + (t6v.getTag() as Int))
-                        Log.v("Elad1", "pos2: " + (tbrow.getTag() as Int))
-                        Log.v("Elad1", recipeList.get(t6v.getTag() as Int).totalCost.toString())
-                        Log.v("Elad1", "pos3: " + (tbrow.getTag() as Int - 1))
+
                         stk.removeView(stk.getChildAt(tbrow.getTag() as Int))
                         totalCostDobule -= recipeList.get(t6v.getTag() as Int).totalCost * recipesQuantities!!.list!!.get(
                             tbrow.getTag() as Int - 1
@@ -632,10 +605,7 @@ class EditDailyDialog(
                             (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
                         totalCost.setText(totalCostDobule.toString())
                         recipesQuantities!!.list!!.removeAt(tbrow.getTag() as Int - 1)
-                        Log.v(
-                            "Elad1",
-                            "Quantitiy after remove: " + recipesQuantities!!.list!!.toString()
-                        )
+
                         recipeList.removeAt(t6v.getTag() as Int)
                         recipesID.removeAt(tbrow.getTag() as Int - 1)
                         recipeChoosenNumOfMeal.removeAt(tbrow.getTag() as Int - 1)
@@ -667,10 +637,6 @@ class EditDailyDialog(
                     t7v.gravity = Gravity.CENTER
 
                     t7v.setOnClickListener {
-                        Log.v("Elad1", "pos: " + (tbrow.getTag() as Int))
-                        Log.v("Elad1", "List size" + recipeList.size)
-                        Log.v("Elad1", "table size" + stk.size)
-                        Log.v("Elad1", "table TAG" + (t7v.getTag() as Int - 1))
                         var dialog = MyRecipeIngredietns(
                             recipeList.get(t7v.getTag() as Int).listOfIngredients,
                             recipeList.get(t7v.getTag() as Int).recipeName,

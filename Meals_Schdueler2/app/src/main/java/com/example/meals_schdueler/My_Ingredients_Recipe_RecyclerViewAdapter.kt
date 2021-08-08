@@ -55,9 +55,9 @@ class My_Ingredients_Recipe_RecyclerViewAdapter(
     }
 
     fun setmValues(mValues: ArrayList<Ingredient>) {
-        Log.v("Elad1", "YESS")
+
         this.mValues = mValues
-        Log.v("Elad1", mValues.get(0).ingridentName)
+
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
 

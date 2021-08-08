@@ -127,7 +127,7 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
         //ingredientImageInit = initImage(ingredientImage)
 
 
-        Log.v("Elad1", "USER IDDDDDDDD222" + UserInterFace.userID.toString())
+        //  Log.v("Elad1", "USER IDDDDDDDD222" + UserInterFace.userID.toString())
 
         addBtn.setOnClickListener(this)
         saveBtn.setOnClickListener(this)
@@ -219,7 +219,6 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.v("Elad1", "FINALLY")
         if (resultCode == Activity.RESULT_OK) {
             imageUri = data!!.data
             if (requestCode == IMAGE_REQUEST) {
@@ -306,7 +305,6 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
 
 
             var cur = costList!!.get(j) * i.carbs_.toFloat() / 100
-            // Log.v("Elad1",cur.toString())
             notritousValue!!.carbs += cur
             cur = costList!!.get(j) * i.protein_.toFloat() / 100
             notritousValue!!.protein += cur
@@ -322,15 +320,12 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
         var calc: Float = 0f
         var j = 0
 
-//        Log.v("Elad1", ingredientList!!.size.toString())
-//        Log.v("Elad1", costList!!.size.toString())
         for (i in ingredientList!!) {
-            // Log.v("Elad1",i.toString())
+
 
             var cur = costList!!.get(j) * i.costPerGram.toFloat() / 100
-            // Log.v("Elad1",cur.toString())
+
             calc += cur
-            //  Log.v("Elad1",calc.toString())
             j++
         }
         totalCost.setText(calc.toString())

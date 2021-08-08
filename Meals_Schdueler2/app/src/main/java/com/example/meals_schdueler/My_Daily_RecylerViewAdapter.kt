@@ -92,7 +92,7 @@ class My_Daily_RecylerViewAdapter(
 
         holder.delete.setOnClickListener {
 
-            var dialog = DeleteAlertDialog("", null, mValues.get(position).dailyId, false, true)
+            var dialog = DeleteAlertDialog("", null, mValues.get(position).dailyId, false, true,false)
             dialog.show(childFragmentManager, "DeleteDaily")
 //            val b`uilder: AlertDialog.Builder = AlertDialog.Builder(context)
 //
@@ -147,8 +147,7 @@ class My_Daily_RecylerViewAdapter(
 
 
     fun setRecipeList(recipeList: ArrayList<Recipe>) {
-        Log.v("Elad1", "Successs!!!!!")
-        Log.v("Elad1", "recipe size!!!!!" + recipeList.size)
+
         this.recipeList = recipeList
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
@@ -186,11 +185,7 @@ class My_Daily_RecylerViewAdapter(
 //            val cal = Calendar.getInstance()
 //            val currentYear = cal[Calendar.YEAR]
 //            month = month + 1
-//            Log.v("Sivan", currentYear.toString() + "current")
-//            Log.v("Sivan", year.toString() + "year")
-            Log.v("Sivan", "Year" + year)
-            Log.v("Sivan", "month" + month + 1)
-            Log.v("Sivan", "day" + dayOfMonth)
+
             date += year.toString() + "-" + (month + 1).toString() + "-" + dayOfMonth.toString()
 
 
@@ -200,7 +195,6 @@ class My_Daily_RecylerViewAdapter(
                 dailyToSchedule
             )
 
-            Log.v("Elad1", "DATE" + date)
             var s = AsynTaskNew(upcoming, childFragmentManager)
             s.execute()
 

@@ -75,7 +75,7 @@ class Ingredient(
         }
 
         // ingredientID = 1
-        Log.v("Elad1", "current ID " + ingredientID)
+
         if (ingredientID != -1)
             input = postData() // now we upload the current ingredient details.
 
@@ -86,7 +86,7 @@ class Ingredient(
 
     private fun getIngredientID(): String {
         val link = "https://elad1.000webhostapp.com/getIngredientID.php"
-        Log.v("Elad1", "here")
+
 
         val sb = StringBuilder()
 
@@ -108,7 +108,7 @@ class Ingredient(
         }
 
 
-        Log.v("Elad1", "Id came is" + sb.toString())
+       // Log.v("Elad1", "Id came is" + sb.toString())
         return sb.toString()
     }
 
@@ -122,18 +122,7 @@ class Ingredient(
                     "https://elad1.000webhostapp.com/updateIngredient.php?ingredientID=" + ingredientID
 
             }
-            Log.v("Elad1", shareInfo.toString())
-            Log.v("Elad1", fat.toString())
-            Log.v("Elad1", carbs_.toString())
-            Log.v("Elad1", protein_.toString())
-            Log.v("Elad1", nutritiousDes.toString())
-            Log.v("Elad1", ingredientID.toString())
-            Log.v("Elad1", ingridentName)
-            Log.v("Elad1", ownerId.toString())
-            Log.v("Elad1", picture)
-            Log.v("Elad1", typeofSeason)
-            Log.v("Elad1", typeOfMeal)
-            Log.v("Elad1", howToStore)
+
             // print here ingredient elemtnes
             var data = URLEncoder.encode("IngredientID", "UTF-8") + "=" +
                     URLEncoder.encode(ingredientID.toString(), "UTF-8")
@@ -176,8 +165,6 @@ class Ingredient(
                     URLEncoder.encode(nutritiousDes, "UTF-8")
 
 
-            Log.v("Elad1", data)
-            Log.v("Elad1", "started asyn 1")
             val url = URL(link)
             val conn = url.openConnection()
             conn.readTimeout = 10000
@@ -189,15 +176,13 @@ class Ingredient(
             val reader = BufferedReader(InputStreamReader(conn.getInputStream()))
             builder = StringBuilder()
             var line: String? = null
-            Log.v("Elad1", "started asyn2")
+
             // Read Server Response
             while (reader.readLine().also { line = it } != null) {
                 builder!!.append(line)
                 break
             }
             builder.toString()
-            Log.v("Elad1", builder.toString())
-            Log.v("Elad1", "asyn worked")
         } catch (e: Exception) {
             Log.v("Elad1", "Failled")
         }.toString()

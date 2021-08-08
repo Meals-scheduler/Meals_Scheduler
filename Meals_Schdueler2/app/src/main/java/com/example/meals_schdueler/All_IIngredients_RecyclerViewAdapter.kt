@@ -40,7 +40,7 @@ class All_IIngredients_RecyclerViewAdapter(
             // opens IngredientInfo
             var dialog = AllIngredientInfo(item)
             dialog.show(childFragmentManager,"IngredientInfo")
-            Log.v("Elad1",item.ownerId.toString())
+
 
         }
 

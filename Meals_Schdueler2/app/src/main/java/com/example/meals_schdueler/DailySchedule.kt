@@ -35,12 +35,10 @@ class DailySchedule(
          //if we insert a new daily and not updating
         if (!isUpdate) {
             dailyId = getDaily().toInt() + 1 // getting current RecipeID first
-            Log.v("Elad1", "EHERE" + dailyId)
+
         }
 
 
-        // ingredientID = 1
-        //   Log.v("Elad1", "current ID " + ingredientID)
         if (dailyId != -1)
             input = postData() // now we upload the current ingredient details.
 
@@ -57,14 +55,13 @@ class DailySchedule(
                 "https://elad1.000webhostapp.com/postDailySchedule.php"
 
             if (isUpdate){
-                Log.v("Elad1","YESSSSSS enter")
+
                link = "https://elad1.000webhostapp.com/updateDaily.php"
 
             }
 
             // print here ingredient elemtnes
-            Log.v("Elad1", numOfMeals)
-            Log.v("Elad1", recipeIds)
+
             var data = URLEncoder.encode("DailyID", "UTF-8") + "=" +
                     URLEncoder.encode(dailyId.toString(), "UTF-8")
             data += "&" + URLEncoder.encode("numOfMeals", "UTF-8") + "=" +
@@ -82,8 +79,7 @@ class DailySchedule(
 
 
 
-            Log.v("Elad1", data)
-            Log.v("Elad1", "started asyn 1")
+
             val url = URL(link)
             val conn = url.openConnection()
             conn.readTimeout = 10000
@@ -95,15 +91,14 @@ class DailySchedule(
             val reader = BufferedReader(InputStreamReader(conn.getInputStream()))
             builder = StringBuilder()
             var line: String? = null
-            Log.v("Elad1", "started asyn2")
+
             // Read Server Response
             while (reader.readLine().also { line = it } != null) {
                 builder!!.append(line)
                 break
             }
             builder.toString()
-            Log.v("Elad1", builder.toString())
-            Log.v("Elad1", "asyn worked")
+
         } catch (e: Exception) {
             Log.v("Elad1", "Failled")
         }.toString()
@@ -112,7 +107,7 @@ class DailySchedule(
 
     private fun getDaily(): String {
         val link = "https://elad1.000webhostapp.com/getDailyID.php"
-        Log.v("Elad1", "here222222222")
+
 
         val sb = StringBuilder()
 
@@ -134,7 +129,7 @@ class DailySchedule(
         }
 
 
-        Log.v("Elad1", "Id came is" + sb.toString())
+       // Log.v("Elad1", "Id came is" + sb.toString())
         return sb.toString()
     }
 

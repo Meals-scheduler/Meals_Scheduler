@@ -2,7 +2,6 @@ package com.example.meals_schdueler
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,23 +12,24 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meals_schdueler.dummy.DailySchedule
 
-class Daily_Schedule_Choose_Dialog(
-
+class Weekly_Schedule_Choose_Dialog(
+    weeklyList: ArrayList<WeeklySchedule>,
     dailyList: ArrayList<DailySchedule>,
     recipeList: ArrayList<Recipe>,
     list:Recipe_Ingredients_List,
 ) : DialogFragment() {
 
+
     lateinit var exit: ImageView
-   // private var recipesList: ArrayList<Recipe>? = null
+    // private var recipesList: ArrayList<Recipe>? = null
     private lateinit var btnDone: Button
     private var dailyList = dailyList
     private var recipeList = recipeList
+    private var weeklyList = weeklyList
     private var l: Recipe_Ingredients_List = list
 
-    private var dailyChoosenRecyclerViewAdapter: Daily_Schedule_Choose_RecyclerViewAdapter? =
+    private var weeklyChoosenRecyclerViewAdapter: Weekly_Schedule_Choose_RecyclerViewAdapter? =
         null
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,16 +38,16 @@ class Daily_Schedule_Choose_Dialog(
     ): View? {
 
 
-        dailyChoosenRecyclerViewAdapter = Daily_Schedule_Choose_RecyclerViewAdapter(
-            dailyList!!, recipeList,l.list, childFragmentManager
+        weeklyChoosenRecyclerViewAdapter = Weekly_Schedule_Choose_RecyclerViewAdapter(
+            weeklyList!!,dailyList!!, recipeList,l.list, childFragmentManager
         )
 
         var rootView: View =
-            inflater.inflate(R.layout.daily_choose_list, container, false)
+            inflater.inflate(R.layout.weekly_choose_list, container, false)
         btnDone = rootView.findViewById(R.id.doneBtn)
         val recyclerView = rootView.findViewById<View>(R.id.list) as RecyclerView
-        recyclerView.adapter = dailyChoosenRecyclerViewAdapter
-        dailyChoosenRecyclerViewAdapter!!.setmValues(dailyList!!)
+        recyclerView.adapter = weeklyChoosenRecyclerViewAdapter
+        weeklyChoosenRecyclerViewAdapter!!.setmValues(weeklyList!!)
         exit=rootView.findViewById(R.id.imageViewX)
 
 
@@ -75,4 +75,7 @@ class Daily_Schedule_Choose_Dialog(
 
 
     }
+
+
+
 }

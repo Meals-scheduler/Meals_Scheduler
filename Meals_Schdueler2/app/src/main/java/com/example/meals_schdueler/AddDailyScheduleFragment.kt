@@ -250,13 +250,30 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
                 totalCostDobule,
                 false
             )
-            Log.v("Elad1", "IDS : " + recipeIds)
+
             var s = AsynTaskNew(daily, childFragmentManager)
             s.execute()
 
             recipeIds = ""
             quantities = ""
             recipeNumbers = ""
+            clearTable()
+        }
+
+    }
+
+    private fun clearTable() {
+        tablePosition = 1
+        savedSize = 0
+        totalCostDobule = 0.0
+        totalCost.setText(totalCostDobule.toString())
+        stk.setColumnShrinkable(4, false)
+        stk.setColumnShrinkable(5, false)
+        stk.setColumnStretchable(5, false)
+        stk.setColumnStretchable(4, false)
+        var j = 1
+        for (x in stk) {
+            stk.removeView(stk.getChildAt(j))
         }
 
     }
@@ -300,9 +317,6 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
                 var tbrow: TableRow = TableRow(this.context)
 
                 tbrow.setTag(tablePosition)
-//                Log.v("Elad1","YOSII " + tbrow.getTag())
-//                Log.v("Elad1","RecipeQuantity Size: " + recipesQuantities!!.list!!.size)
-//                Log.v("Elad1","RecipeQuantity: " +recipesQuantities!!.list!!.get(0))
                 totalCostDobule += i.totalCost * recipesQuantities!!.list!!.get(tbrow.getTag() as Int - 1)
                 recipesID.add(i.recipeId)
 
@@ -380,12 +394,8 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
 
                     recipesID.removeAt(t6v.getTag() as Int - 1)
-                    Log.v("Elad1", "RecipeIDS Size" + recipesID.size)
-                    Log.v("Elad1", "RecipeIDS : " + recipesID.toString())
                     recipesQuantities!!.list!!.removeAt(t6v.getTag() as Int - 1)
                     recipeChoosenNumOfMeal.removeAt(t6v.getTag() as Int - 1)
-                    Log.v("Elad1", "numOfMeals Size" + recipeChoosenNumOfMeal.size)
-                    Log.v("Elad1", "numOfMeals : " + recipeChoosenNumOfMeal.toString())
                     recipeList.removeAt(t6v.getTag() as Int - 1)
                     tablePosition--
 
@@ -426,8 +436,6 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
                 //t5v.setBackgroundResource(R.drawable.spinner_shape)
                 t7v.setOnClickListener {
-                    Log.v("Elad1", "List size" + recipeList.size)
-                    Log.v("Elad1", "table size" + stk.size)
                     var dialog = MyRecipeIngredietns(
                         recipeList.get(t7v.getTag() as Int - 1).listOfIngredients,
                         recipeList.get(t7v.getTag() as Int - 1).recipeName,
@@ -454,122 +462,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
         totalCost.setText(totalCostDobule.toString())
     }
 
-//    override fun DoNetWorkOpreation(): String {
-//        // making arr of ingreditns ID to send
-//        for (i in recipeChoosenNumOfMeal) {
-//            recipeNumbers += "" + i + " "
-//
-//        }
-//
-//
-//        recipeChoosenNumOfMeal.clear()
-//
-//
-//        var input = ""
-//
-//        // if we insert a new ingredient and not updating
-//        //if (!isUpdate) {
-//        //   dailyId = getDailyID().toInt() + 1 // getting current RecipeID first
-//        Log.v("Elad1", "Daily is " + dailyId)
-//        // }
-//
-//        // ingredientID = 1
-//        //   Log.v("Elad1", "current ID " + ingredientID)
-//        if (dailyId != -1)
-//            input = postData() // now we upload the current ingredient details.
-//
-//        return input
-//    }
-//
-//    private fun postData(): String {
-//
-//        return try {
-//
-//            // values go to - Ingredient Table
-//            var link =
-//                "https://elad1.000webhostapp.com/postDailySchedule.php?ownerID=" + UserInterFace.userID;
-////            if (isUpdate){
-////                link = "https://elad1.000webhostapp.com/updateIngredient.php?ingredientID="+ingredientID
-////
-////            }
-//
-//            // print here ingredient elemtnes
-//            Log.v("Elad1", recipeNumbers)
-//            Log.v("Elad1", recipeIds)
-//            var data = URLEncoder.encode("DailyID", "UTF-8") + "=" +
-//                    URLEncoder.encode(dailyId.toString(), "UTF-8")
-//            data += "&" + URLEncoder.encode("numOfMeals", "UTF-8") + "=" +
-//                    URLEncoder.encode(recipeNumbers, "UTF-8")
-//            data += "&" + URLEncoder.encode("recipeIds", "UTF-8") + "=" +
-//                    URLEncoder.encode(recipeIds, "UTF-8")
-//
-//            data += "&" + URLEncoder.encode("quantities", "UTF-8") + "=" +
-//                    URLEncoder.encode(quantities, "UTF-8")
-//
-//
-//
-//
-//            Log.v("Elad1", data)
-//            Log.v("Elad1", "started asyn 1")
-//            val url = URL(link)
-//            val conn = url.openConnection()
-//            conn.readTimeout = 10000
-//            conn.connectTimeout = 15000
-//            conn.doOutput = true
-//            val wr = OutputStreamWriter(conn.getOutputStream())
-//            wr.write(data)
-//            wr.flush()
-//            val reader = BufferedReader(InputStreamReader(conn.getInputStream()))
-//            builder = StringBuilder()
-//            var line: String? = null
-//            Log.v("Elad1", "started asyn2")
-//            // Read Server Response
-//            while (reader.readLine().also { line = it } != null) {
-//                builder!!.append(line)
-//                break
-//            }
-//            builder.toString()
-//            Log.v("Elad1", builder.toString())
-//            Log.v("Elad1", "asyn worked")
-//        } catch (e: Exception) {
-//            Log.v("Elad1", "Failled")
-//        }.toString()
-//
-//    }
-//
-//
-//    private fun getDailyID(): String {
-//        val link = "https://elad1.000webhostapp.com/getDailyID.php"
-//        Log.v("Elad1", "here222222222")
-//
-//        val sb = StringBuilder()
-//
-//        val url = URL(link)
-//        val urlConnection = url.openConnection() as HttpURLConnection
-//        try {
-//            val `in`: InputStream = BufferedInputStream(urlConnection.inputStream)
-//            val bin = BufferedReader(InputStreamReader(`in`))
-//            // temporary string to hold each line read from the reader.
-//            var inputLine: String?
-//
-//            while (bin.readLine().also { inputLine = it } != null) {
-//                sb.append(inputLine)
-//
-//            }
-//        } finally {
-//            // regardless of success or failure, we will disconnect from the URLConnection.
-//            urlConnection.disconnect()
-//        }
-//
-//
-//        Log.v("Elad1", "Id came is" + sb.toString())
-//        return sb.toString()
-//    }
-//
-//    override fun getData(str: String) {
-//        print("DD")
-//        recipeIds = ""
-//    }
+
 }
 
 

@@ -96,7 +96,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
     override fun DoNetWorkOpreation(): String {
         val link =
             "https://elad1.000webhostapp.com/getIngredient.php?ownerID=" + UserInterFace.userID;
-        Log.v("Elad1", "here")
+
 
         val sb = StringBuilder()
 
@@ -118,7 +118,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
         }
 
 
-        Log.v("Elad1", "Id came is" + sb.toString())
+        //Log.v("Elad1", "Id came is" + sb.toString())
         return sb.toString()
     }
 
@@ -138,7 +138,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
         val ingredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
         for (i in ingredients.indices) {
-            Log.v("Elad1", ingredients.indices.toString())
+
             var ingredient2 = ingredients[i].splitIgnoreEmpty("*")
 
 
@@ -194,7 +194,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
         UserPropertiesSingelton.getInstance()!!.setUserIngredientss(ingredientList)
         // sending the last to the adapter.
         ingredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
-        Log.v("Elad1", "MOYTEN" + ingredientList!!.size)
+
 
 
     }

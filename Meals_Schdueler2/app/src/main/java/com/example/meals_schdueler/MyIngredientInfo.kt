@@ -95,7 +95,7 @@ class MyIngredientInfo(item: Ingredient, isRecipeList: Boolean) : DialogFragment
     /// spinner clickabe false doesnt work
     private fun setIngredientData() {
         ingredientName.setText(ingredient.ingridentName)
-        // Log.v("Elad",getIndex(typeOfMeal,ingredient.typeOfMeal).toString())
+
         typeOfMeal.setSelection(getIndex(typeOfMeal, ingredient.typeOfMeal))
         typeOfSeason.setSelection(getIndex(typeOfSeason, ingredient.typeofSeason))
         typeOfMeall = typeOfMeal.selectedItem.toString()
@@ -135,10 +135,10 @@ class MyIngredientInfo(item: Ingredient, isRecipeList: Boolean) : DialogFragment
 
             if (parent == typeOfMeal) {
                 typeOfMeall = parent.getItemAtPosition(pos).toString()
-                Log.v("Elad12", "$typeOfMeall")
+
             } else if (parent == typeOfSeason) {
                 typeSeasson = parent.getItemAtPosition(pos).toString()
-                Log.v("Elad12", "$typeSeasson")
+
             }
         }
 
@@ -161,7 +161,7 @@ class MyIngredientInfo(item: Ingredient, isRecipeList: Boolean) : DialogFragment
             val c = CameraIntent(this)
             c.OnUploadOrCaptureClick()
 
-            Log.v("Elad", "CLICKED")
+
         } else if (p0 == nutritiousBtn) {
             // click on nutritious dialog
             var d = NutritiousDialog(nutritousValues!!, false)
@@ -261,7 +261,7 @@ class MyIngredientInfo(item: Ingredient, isRecipeList: Boolean) : DialogFragment
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.v("Elad1","FINALLY")
+
         if (resultCode == Activity.RESULT_OK) {
             imageUri = data!!.data
             if (requestCode == IMAGE_REQUEST) {

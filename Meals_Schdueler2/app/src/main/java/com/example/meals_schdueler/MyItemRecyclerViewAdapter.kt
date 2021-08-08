@@ -59,6 +59,7 @@ class MyItemRecyclerViewAdapter(
                 item.pictureBitMap,
                 item.ingredientID,
                 false,
+                false,
                 false
             )
             dialog.show(childFragmentManager, "DeleteAlertDialog")
@@ -116,56 +117,6 @@ class MyItemRecyclerViewAdapter(
             }
         }
 
-//    override fun DoNetWorkOpreation(): String {
-//        val link =
-//            "https://elad1.000webhostapp.com/getIngredientImg.php?imgId=" + imgId;
-//        Log.v("Elad1", "here")
-//
-//        val sb = StringBuilder()
-//
-//        val url = URL(link)
-//        val urlConnection = url.openConnection() as HttpURLConnection
-//        try {
-//            val `in`: InputStream = BufferedInputStream(urlConnection.inputStream)
-//            val bin = BufferedReader(InputStreamReader(`in`))
-//            // temporary string to hold each line read from the reader.
-//            var inputLine: String?
-//
-//            while (bin.readLine().also { inputLine = it } != null) {
-//                sb.append(inputLine)
-//
-//            }
-//        } finally {
-//            // regardless of success or failure, we will disconnect from the URLConnection.
-//            urlConnection.disconnect()
-//        }
-//
-//
-//        Log.v("Elad1", "Id came is" + sb.toString())
-//        return sb.toString()
-//    }
-//
-//    override fun getData(str: String) {
-//        Log.v("Elad1", "str is " + str)
-//        val images: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
-//
-//
-//        for (i in images.indices) {
-//            Log.v("Elad1", images.indices.toString())
-//            var images2 = images[i].splitIgnoreEmpty("*")
-//            imagesArr.add(ImageConvert.StringToBitMap(images2[0])!!)
-//
-//
-//        }
-//        isFinished = true
-//    }
-//
-//    // to avoid empty string cells .split function returns.
-//    fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
-//        return this.split(*delimiters).filter {
-//            it.isNotEmpty()
-//        }
-//    }
 
     }
 

@@ -1,18 +1,15 @@
-package com.example.meals_schdueler.dummy
+package com.example.meals_schdueler
 
 import android.content.DialogInterface
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.view.size
 import androidx.fragment.app.DialogFragment
-import com.example.meals_schdueler.*
+import com.example.meals_schdueler.dummy.DailySchedule
 import java.text.DecimalFormat
 
 class WeeklyDialogInfo(
@@ -139,7 +136,7 @@ class WeeklyDialogInfo(
 
             //t5v.setBackgroundResource(R.drawable.spinner_shape)
             t3v.setOnClickListener {
-                Log.v("Elad1", "EEEE" + t3v.getTag() as Int)
+              //NEED TO CHECK HERE WHATS WRONG with info button!!!!!
                 // getting this daily recipes
                 var recipeList: ArrayList<Recipe> = ArrayList()
                 var ids = dailyList.get(t3v.getTag() as Int).recipeIds.splitIgnoreEmpty(" ")
@@ -148,17 +145,18 @@ class WeeklyDialogInfo(
                     if (ind == ids.size) {
                         break
                     }
-                    if (k.recipeId == ids[ind].toInt()) {
+                    if(ids.contains(k.recipeId.toString())){
                         recipeList.add(k)
                         ind++
                     }
+
                 }
                 var dialog = DailyDialogInfo(
                     recipeList,
                     i.quantities,
                     i.numOfMeals,
                     i.recipeIds,
-                    t3v.getTag() as Int,
+                    t3v.getTag() as Int +1,
                     i.dailyId
                 )
 

@@ -33,10 +33,9 @@ class WeeklySchedule(
             weeklyId = getWeekly().toInt() + 1 // getting current RecipeID first
 
         }
-
-
+           // weeklyId = 1
         // ingredientID = 1
-        //   Log.v("Elad1", "current ID " + ingredientID)
+
         if (weeklyId != -1)
             input = postData() // now we upload the current ingredient details.
 
@@ -54,8 +53,8 @@ class WeeklySchedule(
                 "https://elad1.000webhostapp.com/postWeeklySchedule.php"
 
             if (isUpdate){
-                Log.v("Elad1","YESSSSSS enter")
-                link = "https://elad1.000webhostapp.com/updateDaily.php"
+                Log.v("Elad1" , "did updateedd")
+                link = "https://elad1.000webhostapp.com/updateWeekly.php"
 
             }
             var data = URLEncoder.encode("WeeklyID", "UTF-8") + "=" +
@@ -72,9 +71,7 @@ class WeeklySchedule(
 
 
 
-
-            Log.v("Elad1", data)
-            Log.v("Elad1", "started asyn 1")
+            Log.v("Elad1" , "data is " + data)
             val url = URL(link)
             val conn = url.openConnection()
             conn.readTimeout = 10000
@@ -86,7 +83,6 @@ class WeeklySchedule(
             val reader = BufferedReader(InputStreamReader(conn.getInputStream()))
             builder = StringBuilder()
             var line: String? = null
-            Log.v("Elad1", "started asyn2")
             // Read Server Response
             while (reader.readLine().also { line = it } != null) {
                 builder!!.append(line)
@@ -105,7 +101,7 @@ class WeeklySchedule(
 
     private fun getWeekly(): String {
         val link = "https://elad1.000webhostapp.com/getWeeklyID.php"
-        Log.v("Elad1", "here222222222")
+
 
         val sb = StringBuilder()
 
@@ -127,7 +123,7 @@ class WeeklySchedule(
         }
 
 
-        Log.v("Elad1", "Id came is" + sb.toString())
+       // Log.v("Elad1", "Id came is" + sb.toString())
         return sb.toString()
     }
     override fun getData(str: String) {

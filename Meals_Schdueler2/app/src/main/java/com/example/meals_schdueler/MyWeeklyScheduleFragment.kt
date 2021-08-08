@@ -116,7 +116,7 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
         var link = "https://elad1.000webhostapp.com/getWeekly.php?ownerID=" + UserInterFace.userID;
 
 
-        Log.v("Elad1", "here")
+
 
         val sb = StringBuilder()
 
@@ -138,7 +138,7 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
         }
 
 
-        Log.v("Elad1", "Id came is" + sb.toString())
+       // Log.v("Elad1", "Id came is" + sb.toString())
         return sb.toString()
     }
 
@@ -246,9 +246,6 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
                 }
             }
 
-            Log.v("Elad1", "HERE BEFORe" + weekly_daily_map!!.size)
-            Log.v("Elad1", "HERE BEFORe" + weekly_daily_map!!.get("1")!!.get(0).dailyId)
-            Log.v("Elad1", "HERE BEFORe" + weekly_daily_map!!.get("1")!!.get(1).dailyId)
 
             weeklyRecyclerViewAdapter!!.setWeeklyValues(weeklyList!!)
             weeklyRecyclerViewAdapter!!.setDailyValues(weekly_daily_map!!)

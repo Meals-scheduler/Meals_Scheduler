@@ -57,7 +57,7 @@ class CreatorInfoDialog(shareInfo: Boolean, ownerId: Int) : DialogFragment() , V
 
     override fun DoNetWorkOpreation(): String {
         val link = "https://elad1.000webhostapp.com/getUserInfo.php?OwnerID="+ownerId ;
-        Log.v("Elad1", "here")
+
 
         val sb = StringBuilder()
 
@@ -79,7 +79,7 @@ class CreatorInfoDialog(shareInfo: Boolean, ownerId: Int) : DialogFragment() , V
         }
 
 
-        Log.v("Elad1", "Id came is" + sb.toString())
+       // Log.v("Elad1", "Id came is" + sb.toString())
         return sb.toString()
     }
 

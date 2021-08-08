@@ -110,7 +110,7 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
         var link = "https://elad1.000webhostapp.com/getDaily.php?ownerID=" + UserInterFace.userID;
 
 
-        Log.v("Elad1", "here")
+
 
         val sb = StringBuilder()
 
@@ -132,7 +132,7 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
         }
 
 
-        Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 
@@ -150,7 +150,7 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
             recipeIds = ""
             recipeList!!.clear()
             dailyList!!.clear()
-            Log.v("Elad1", "STR is" + str)
+
             val dailyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
             // map to map each DailyID with a key as ID and contains all 3
@@ -241,8 +241,6 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
 
             }
 
-            Log.v("Elad1", "DAILY SIZe" + dailyList!!.size)
-            Log.v("Elad1", "RECCCCIP#E SIZe" + recipeList!!.size)
             UserPropertiesSingelton.getInstance()!!.setUserDaily(dailyList)
             dailyRecyclerViewAdapter!!.setmValues(dailyList!!)
             dailyRecyclerViewAdapter!!.setRecipeList(recipeList!!)

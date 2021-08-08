@@ -94,7 +94,7 @@ class SignUp : AppCompatActivity() ,View.OnClickListener,GetAndPost {
 
 
         // ingredientID = 1
-        Log.v("Elad1", "current ID " + userID)
+
         if (userID != 0)
             input = postData() // now we upload the current ingredient details.
 
@@ -103,7 +103,7 @@ class SignUp : AppCompatActivity() ,View.OnClickListener,GetAndPost {
 
     private fun getUserID(): String {
         val link = "https://elad1.000webhostapp.com/getUserID.php"
-        Log.v("Elad1", "here")
+
 
         val sb = StringBuilder()
 
@@ -125,7 +125,7 @@ class SignUp : AppCompatActivity() ,View.OnClickListener,GetAndPost {
         }
 
 
-        Log.v("Elad1", "Id came is" + sb.toString())
+        //Log.v("Elad1", "Id came is" + sb.toString())
         return sb.toString()
     }
 
@@ -152,8 +152,7 @@ class SignUp : AppCompatActivity() ,View.OnClickListener,GetAndPost {
                     URLEncoder.encode(picture, "UTF-8")
 
 
-            Log.v("Elad1", data)
-            Log.v("Elad1", "started asyn 1")
+
             val url = URL(link)
             val conn = url.openConnection()
             conn.readTimeout = 10000
@@ -165,15 +164,14 @@ class SignUp : AppCompatActivity() ,View.OnClickListener,GetAndPost {
             val reader = BufferedReader(InputStreamReader(conn.getInputStream()))
             builder = StringBuilder()
             var line: String? = null
-            Log.v("Elad1", "started asyn2")
+
             // Read Server Response
             while (reader.readLine().also { line = it } != null) {
                 builder!!.append(line)
                 break
             }
             builder.toString()
-            Log.v("Elad1", builder.toString())
-            Log.v("Elad1", "asyn worked")
+
         } catch (e: Exception) {
             Log.v("Elad1", "Failled")
         }.toString()

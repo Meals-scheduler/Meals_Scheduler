@@ -30,18 +30,6 @@ class CameraIntent(a: CameraInterface) : Fragment() {
     private val CAMERA_REQUEST_CODE = 0
     private var imageUri: Uri? = null
     private val a = a
-//
-//    override fun onCreateView(
-//        inflater: LayoutInflater,
-//        container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        val x = inflater.inflate(R.layout.add_ingredients_layout, null)
-//
-//
-//
-//        return x
-//    }
 
 
     companion object {
@@ -58,13 +46,12 @@ class CameraIntent(a: CameraInterface) : Fragment() {
 
 
         // first we check if the permission was granted.
-        Log.v("Elad1", "check if we have permission")
         if (ContextCompat.checkSelfPermission(
                 a.getActivityy()!!,
                 Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            Log.v("Elad", "we have permission so access")
+
             val items = arrayOf<CharSequence>(
                 "Take Photo", "Choose from gallery", "Cancel"
             )
@@ -76,7 +63,7 @@ class CameraIntent(a: CameraInterface) : Fragment() {
                     cameraIntent()
                 } else if (items[i] == "Choose from gallery") {
                     userChoosenTask = "Choose from gallery"
-                    Log.v("Elad1", "HHHHH")
+
                     galleryIntent()
                 } else if (items[i] == "Cancel") {
                     dialogInterface.dismiss()
@@ -96,7 +83,7 @@ class CameraIntent(a: CameraInterface) : Fragment() {
     ) {
         if (requestCode == STORAGE_PERMISSION_CODE) {
             if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.v("Elad", "permission granted")
+
                 OnUploadOrCaptureClick()
             } else {
                 Toast.makeText(a.getContextt(), "Permission denied", Toast.LENGTH_LONG).show()
@@ -112,7 +99,7 @@ class CameraIntent(a: CameraInterface) : Fragment() {
                 Manifest.permission.CAMERA
             )
         ) {
-            Log.v("Elad", "usser denied be4")
+
             AlertDialog.Builder(a.getActivityy())
                 .setTitle("Permission needed")
                 .setMessage("This permisiion is needed because of this and that")
@@ -136,13 +123,13 @@ class CameraIntent(a: CameraInterface) : Fragment() {
                 arrayOf(Manifest.permission.CAMERA),
                 STORAGE_PERMISSION_CODE
             )
-            Log.v("Elad", "user didnt denied be4")
+
         }
     }
 
 
     private fun galleryIntent() {
-        Log.v("Elad1", "AWESOME")
+
         val intent = Intent()
         intent.type = "image/"
         intent.action = Intent.ACTION_GET_CONTENT
@@ -161,9 +148,7 @@ class CameraIntent(a: CameraInterface) : Fragment() {
 
 
     private fun cameraIntent() {
-//        if(a.getActivityy()==null){
-//            Log.v("Elad1","NULL")
-//        }
+
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
 
@@ -175,62 +160,6 @@ class CameraIntent(a: CameraInterface) : Fragment() {
 
 
     }
-//
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        Log.v("Elad1", "i know")
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (resultCode == Activity.RESULT_OK) {
-//            imageUri = data!!.data
-//            if (requestCode == IMAGE_REQUEST) {
-//                //onSelectFromHalleryResult(data)
-//            } else if (requestCode == CAMERA_REQUEST_CODE) {
-//                // onCaptureImageResult(data)
-//            }
-//        }
-//    }
-//
-//
-//
-//
-//    private fun onCaptureImageResult(data: Intent) {
-//        AddIngredientFragment.bitmap = (data.extras!!["data"] as Bitmap?)!!
-//        val bytes = ByteArrayOutputStream()
-//        AddIngredientFragment.bitmap!!.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
-//        val des: File = File(
-//            activity!!.filesDir,
-//            System.currentTimeMillis().toString() + "jpg"
-//        )
-//        var fo: FileOutputStream? = null
-//        try {
-//            des.createNewFile()
-//            fo = FileOutputStream(des)
-//            fo.write(bytes.toByteArray())
-//            fo.close()
-//            imageUri = Uri.fromFile(des)
-//        } catch (e: FileNotFoundException) {
-//            e.printStackTrace()
-//        } catch (e: IOException) {
-//            e.printStackTrace()
-//        }
-//        //ingredientImage.setImageBitmap(AddIngredientFragment.bitmap)
-//    }
-//
-//    private fun onSelectFromHalleryResult(data: Intent?) {
-//        if (data != null) {
-//            try {
-//                AddIngredientFragment.bitmap = MediaStore.Images.Media.getBitmap(
-//                    context?.getContentResolver(),
-//                    data.data
-//                )
-//            } catch (e: FileNotFoundException) {
-//                e.printStackTrace()
-//            } catch (e: IOException) {
-//                e.printStackTrace()
-//            }
-//            // ingredientImage.setImageBitmap(AddIngredientFragment.bitmap)
-//
-//        }
-//    }
 
 
 }

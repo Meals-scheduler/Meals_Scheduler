@@ -58,6 +58,9 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
             } else if((action as DeleteAlertDialog).isDaily == true) {
                 MyDailyScheduleFragment.getInstance1().startTask()
             }
+            else if(((action as DeleteAlertDialog).isWeekly == true)){
+                MyWeeklyScheduleFragment.getInstance1().startTask()
+            }
             else{
                 MyingredientFragment1.getInstance1().startTask()
             }
@@ -69,6 +72,9 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
 //        else if(action is My_Daily_RecylerViewAdapter){
 //            MyDailyScheduleFragment.getInstance1().startTask()
 //        }
+        else if(action is WeeklySchedule){
+            MyWeeklyScheduleFragment.getInstance1().startTask()
+        }
         if (!(action is DeleteAlertDialog)) {
             pbDialog.dismiss()
         }

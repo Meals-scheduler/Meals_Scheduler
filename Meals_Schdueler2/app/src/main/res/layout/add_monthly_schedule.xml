@@ -35,7 +35,7 @@
                     android:layout_marginTop="28dp"
                     android:fontFamily="@font/poppinsbold"
                     android:gravity="center"
-                    android:text="Create Your Weekly Schedule :"
+                    android:text="Create Your Monthly Schedule :"
                     android:textSize="20dp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"

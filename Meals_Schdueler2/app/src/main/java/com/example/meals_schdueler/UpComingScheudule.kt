@@ -55,8 +55,6 @@ class UpComingScheudule (
 
 
 
-      Log.v("Elad1", data)
-      Log.v("Elad1", "started asyn 1")
       val url = URL(link)
       val conn = url.openConnection()
       conn.readTimeout = 10000
@@ -68,15 +66,13 @@ class UpComingScheudule (
       val reader = BufferedReader(InputStreamReader(conn.getInputStream()))
       builder = StringBuilder()
       var line: String? = null
-      Log.v("Elad1", "started asyn2")
       // Read Server Response
       while (reader.readLine().also { line = it } != null) {
         builder!!.append(line)
         break
       }
       builder.toString()
-      Log.v("Elad1", builder.toString())
-      Log.v("Elad1", "asyn worked")
+
     } catch (e: Exception) {
       Log.v("Elad1", "Failled")
     }.toString()
@@ -86,7 +82,7 @@ class UpComingScheudule (
   private fun getDailyScheduleID(): String {
 
     val link = "https://elad1.000webhostapp.com/getScheduleID.php"
-    Log.v("Elad1", "here")
+
 
     val sb = StringBuilder()
 
@@ -108,7 +104,7 @@ class UpComingScheudule (
     }
 
 
-    Log.v("Elad1", "Id came is" + sb.toString())
+   // Log.v("Elad1", "Id came is" + sb.toString())
     return sb.toString()
 
   }

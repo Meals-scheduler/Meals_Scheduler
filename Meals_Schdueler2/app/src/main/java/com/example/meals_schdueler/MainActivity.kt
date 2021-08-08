@@ -83,7 +83,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GetAndPost,Compo
     override fun DoNetWorkOpreation(): String {
         val link =
             "https://elad1.000webhostapp.com/getUser.php?Username=" + username + "&Password=" + password
-        Log.v("Elad1", "here")
 
         val sb = StringBuilder()
 
@@ -105,7 +104,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GetAndPost,Compo
         }
 
 
-        Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 
