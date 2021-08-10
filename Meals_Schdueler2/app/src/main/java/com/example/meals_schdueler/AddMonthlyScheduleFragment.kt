@@ -232,111 +232,111 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
                 t1v.adapter = adapter
             }
 
-            t1v.onItemSelectedListener = SpinnerActivity()
-            // t1v.setBackgroundResource(R.drawable.border)
-//        t1v.setText(" " + (mealChoosen))
-//        t1v.setTextColor(Color.BLACK)
-//        t1v.gravity = Gravity.CENTER
-            //  t1v.setBackgroundResource(R.drawable.spinner_shape)
-
-            tbrow.addView(t1v)
-
-            var t2v: TextView = TextView(context)
-
-            // t1v.setBackgroundResource(R.drawable.border)
-            t2v.setText(weeklyList!!.get(tablePosition - 1).weeklyId.toString())
-            t2v.setTextColor(Color.BLACK)
-            t2v.gravity = Gravity.CENTER
-            //  t1v.setBackgroundResource(R.drawable.spinner_shape)
-            tbrow.addView(t2v)
-
-
-            var t3v: Button = Button(context)
-            t3v.setTag(tablePosition)
-            t3v.setText("Delete")
-            t3v.setTextColor(Color.BLACK)
-            t3v.gravity = Gravity.CENTER
-            t3v.setTextSize(10F)
-            t3v.setOnClickListener {
-
-                var i = t3v.getTag() as Int
-
-                stk.removeView(stk.getChildAt(t3v.getTag() as Int))
-
-                totalCostDobule -= weeklyList!!.get(t3v.getTag() as Int - 1).totalCost
-                totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
-                totalCost.setText(totalCostDobule.toString())
-                weeklyList!!.removeAt(t3v.getTag() as Int - 1)
-                // CONTINUE HERE
-                //  dailyDayss.remove()
-                tablePosition--
-
-                for (x in stk) {
-                    if (x.getTag() as Int == 0)
-                        continue
-                    if (x.getTag() as Int > i) {
-                        x.setTag(x.getTag() as Int - 1)
-                        var y = x as TableRow
-                        //changing info delete tag
-                        y.get(2).setTag(y.get(2).getTag() as Int - 1)
-                        //changing infp button tag
-                        y.get(3).setTag(y.get(3).getTag() as Int - 1)
-
-                    }
-
-                }
-
-                stk.setColumnShrinkable(3, false)
-                stk.setColumnStretchable(3, false)
-            }
-
-            tbrow.addView(t3v)
-
-            var t4v: Button = Button(context)
-            t4v.setTag(tablePosition++)
-            t4v.setText("Info")
-            t4v.setTextSize(10F)
-            t4v.setTextColor(Color.BLACK)
-            t4v.gravity = Gravity.CENTER
-
-            t4v.setOnClickListener {
-                // making the Recipe list to transfer to the info dialog
-                recipeList = ArrayList()
-
-                // taking the Recipe Id's string from this current daily object
-                var recipeIDS = dailyList!!.get(t3v.getTag() as Int - 1).recipeIds
-                // split it so i can make a list from it
-                var recipeIDs = recipeIDS.splitIgnoreEmpty(" ")
-
-                //going through the list and get each recipe by its id
-                for (i in UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!) {
-                    if (recipeIDs.contains(i.recipeId.toString())) {
-                        recipeList!!.add(i)
-                    }
-                }
-
-
-
-                var dialog = DailyDialogInfo(
-                    recipeList!!,
-                    dailyList!!.get(t3v.getTag() as Int - 1).quantities,
-                    dailyList!!.get(t3v.getTag() as Int - 1).numOfMeals,
-                    dailyList!!.get(t3v.getTag() as Int - 1).recipeIds,
-                    (t4v.getTag() as Int - 1) + 1,
-                    dailyList!!.get(t3v.getTag() as Int - 1).dailyId
-
-                )
-                dialog.show(childFragmentManager, "DailyDialogInfo")
-            }
-            tbrow.addView(t4v)
-
-
-            stk.setBackgroundResource(R.drawable.spinner_shape)
-            tbrow.setBackgroundResource(R.drawable.spinner_shape)
-            stk.addView(tbrow)
-
-
+//            t1v.onItemSelectedListener = SpinnerActivity()
+//            // t1v.setBackgroundResource(R.drawable.border)
+////        t1v.setText(" " + (mealChoosen))
+////        t1v.setTextColor(Color.BLACK)
+////        t1v.gravity = Gravity.CENTER
+//            //  t1v.setBackgroundResource(R.drawable.spinner_shape)
+//
+//            tbrow.addView(t1v)
+//
+//            var t2v: TextView = TextView(context)
+//
+//            // t1v.setBackgroundResource(R.drawable.border)
+//            t2v.setText(weeklyList!!.get(tablePosition - 1).weeklyId.toString())
+//            t2v.setTextColor(Color.BLACK)
+//            t2v.gravity = Gravity.CENTER
+//            //  t1v.setBackgroundResource(R.drawable.spinner_shape)
+//            tbrow.addView(t2v)
+//
+//
+//            var t3v: Button = Button(context)
+//            t3v.setTag(tablePosition)
+//            t3v.setText("Delete")
+//            t3v.setTextColor(Color.BLACK)
+//            t3v.gravity = Gravity.CENTER
+//            t3v.setTextSize(10F)
+//            t3v.setOnClickListener {
+//
+//                var i = t3v.getTag() as Int
+//
+//                stk.removeView(stk.getChildAt(t3v.getTag() as Int))
+//
+//                totalCostDobule -= weeklyList!!.get(t3v.getTag() as Int - 1).totalCost
+//                totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
+//                totalCost.setText(totalCostDobule.toString())
+//                weeklyList!!.removeAt(t3v.getTag() as Int - 1)
+//                // CONTINUE HERE
+//                //  dailyDayss.remove()
+//                tablePosition--
+//
+//                for (x in stk) {
+//                    if (x.getTag() as Int == 0)
+//                        continue
+//                    if (x.getTag() as Int > i) {
+//                        x.setTag(x.getTag() as Int - 1)
+//                        var y = x as TableRow
+//                        //changing info delete tag
+//                        y.get(2).setTag(y.get(2).getTag() as Int - 1)
+//                        //changing infp button tag
+//                        y.get(3).setTag(y.get(3).getTag() as Int - 1)
+//
+//                    }
+//
+//                }
+//
+//                stk.setColumnShrinkable(3, false)
+//                stk.setColumnStretchable(3, false)
+//            }
+//
+//            tbrow.addView(t3v)
+//
+//            var t4v: Button = Button(context)
+//            t4v.setTag(tablePosition++)
+//            t4v.setText("Info")
+//            t4v.setTextSize(10F)
+//            t4v.setTextColor(Color.BLACK)
+//            t4v.gravity = Gravity.CENTER
+//
+//            t4v.setOnClickListener {
+//                // making the Recipe list to transfer to the info dialog
+//                recipeList = ArrayList()
+//
+//                // taking the Recipe Id's string from this current daily object
+//                var recipeIDS = dailyList!!.get(t3v.getTag() as Int - 1).recipeIds
+//                // split it so i can make a list from it
+//                var recipeIDs = recipeIDS.splitIgnoreEmpty(" ")
+//
+//                //going through the list and get each recipe by its id
+//                for (i in UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!) {
+//                    if (recipeIDs.contains(i.recipeId.toString())) {
+//                        recipeList!!.add(i)
+//                    }
+//                }
+//
+//
+//
+//                var dialog = DailyDialogInfo(
+//                    recipeList!!,
+//                    dailyList!!.get(t3v.getTag() as Int - 1).quantities,
+//                    dailyList!!.get(t3v.getTag() as Int - 1).numOfMeals,
+//                    dailyList!!.get(t3v.getTag() as Int - 1).recipeIds,
+//                    (t4v.getTag() as Int - 1) + 1,
+//                    dailyList!!.get(t3v.getTag() as Int - 1).dailyId
+//
+//                )
+//                dialog.show(childFragmentManager, "DailyDialogInfo")
+//            }
+//            tbrow.addView(t4v)
+//
+//
+//            stk.setBackgroundResource(R.drawable.spinner_shape)
+//            tbrow.setBackgroundResource(R.drawable.spinner_shape)
+//            stk.addView(tbrow)
+//
+//
         }
-
-    }
+//
+  }
 }

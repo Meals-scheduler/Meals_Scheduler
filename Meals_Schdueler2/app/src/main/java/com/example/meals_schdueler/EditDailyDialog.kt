@@ -379,6 +379,7 @@ class EditDailyDialog(
 
     override fun onClick(p0: View?) {
         if (p0 == exit) {
+            flag=false
             dismiss()
         } else if (p0 == breakFastBtn) {
 
@@ -524,7 +525,7 @@ class EditDailyDialog(
                     var tbrow: TableRow = TableRow(this.context)
                     tbrow.setTag(tablePosition++)
 
-                    totalCostDobule += i.totalCost * recipesQuantities!!.list!!.get(tbrow.getTag() as Int - 1)
+                    totalCostDobule += i.totalCost * recipesQuantities!!.list!!.get(tbrow.getTag() as Int -1 )
                     recipesID.add(i.recipeId)
 
                     var t1v: TextView = TextView(context)

@@ -1,9 +1,11 @@
 package com.example.meals_schdueler
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -34,7 +36,8 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
     private var dailyDays: String = ""
     private var dailyDayss: ArrayList<Int>? = null
     private var recipeList: ArrayList<Recipe>? = null
-
+    private var flag = true
+    private var duplicateDay = -1
 
     private var tablePosition = 1
 
@@ -156,23 +159,59 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
         } else if (p0 == saveBtn) {
 
             var dailyIds = ""
+            dailyDays = ""
 
+            val arr = IntArray(7)
+
+
+            Log.v("Elad1", "Daily days" + dailyDayss)
             for (i in dailyList!!) {
                 dailyIds += "" + i.dailyId + " "
 
             }
-            for(i in dailyDayss!!){
-                dailyDays += "" + i +" "
+            for (i in dailyDayss!!) {
+                if (arr[i] != 0) {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+
+                    builder.setTitle("Adding Weekly")
+                    builder.setMessage("You cannot have a duplicate of the same day.")
+
+                    builder.setPositiveButton(
+                        "OK",
+                        DialogInterface.OnClickListener { dialog, which -> // Do nothing but close the dialog
+
+                            dialog.dismiss()
+                        })
+                    val alert: AlertDialog = builder.create()
+                    alert.show()
+                    flag = false
+                    duplicateDay = i
+
+                    break
+                } else {
+                    arr[i] += 1
+                    dailyDays += "" + i + " "
+                }
+
             }
+            if (flag) {
+                var w = WeeklySchedule(
+                    1,
+                    UserInterFace.userID,
+                    dailyDays,
+                    dailyIds,
+                    totalCostDobule,
+                    false
+                )
+                var s = AsynTaskNew(w, childFragmentManager)
+                s.execute()
 
-            var w = WeeklySchedule(1,UserInterFace.userID,dailyDays,dailyIds,totalCostDobule,false)
-            var s = AsynTaskNew(w, childFragmentManager)
-            s.execute()
-
-            clearTable()
+                clearTable()
+            }
         }
 
     }
+
     private fun clearTable() {
         tablePosition = 1
         totalCostDobule = 0.0
@@ -213,6 +252,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
             totalCost.setText(totalCostDobule.toString())
 
             var t1v: Spinner = Spinner(context)
+            t1v.setTag(tablePosition-1)
 
 
             ArrayAdapter.createFromResource(
@@ -226,7 +266,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                 t1v.adapter = adapter
             }
 
-            t1v.onItemSelectedListener = SpinnerActivity()
+            t1v.onItemSelectedListener = SpinnerActivity(t1v.getTag() as Int)
             // t1v.setBackgroundResource(R.drawable.border)
 //        t1v.setText(" " + (mealChoosen))
 //        t1v.setTextColor(Color.BLACK)
@@ -262,7 +302,8 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                 totalCost.setText(totalCostDobule.toString())
                 dailyList!!.removeAt(t3v.getTag() as Int - 1)
                 // CONTINUE HERE
-              //  dailyDayss.remove()
+                dailyDayss!!.removeAt(t3v.getTag() as Int - 1)
+                Log.v("Elad1", "Daily days after delete" + dailyDayss)
                 tablePosition--
 
                 for (x in stk) {
@@ -310,7 +351,6 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                 }
 
 
-
                 var dialog = DailyDialogInfo(
                     recipeList!!,
                     dailyList!!.get(t3v.getTag() as Int - 1).quantities,
@@ -335,15 +375,18 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
     }
 
 
-    inner class SpinnerActivity() : Activity(), AdapterView.OnItemSelectedListener {
+    inner class SpinnerActivity(positionInTable : Int) : Activity(), AdapterView.OnItemSelectedListener {
+        var positionInTable = positionInTable
+
 
 
         override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+            Log.v("Elad1","position in table " + positionInTable)
             // An item was selected. You can retrieve the selected item using
             // parent.getItemAtPosition(pos)
-
+            Log.v("Elad1", "Daily days " + dailyDayss)
             var tmp = 0
-            when (parent.getItemAtPosition(pos)){
+            when (parent.getItemAtPosition(pos)) {
                 "Sunday" -> tmp = 0
                 "Monday" -> tmp = 1
                 "Tuesday" -> tmp = 2
@@ -353,15 +396,28 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                 "Saturday" -> tmp = 6
             }
             // dailyDays!!.add(parent.getItemAtPosition(pos).toString())
-            if (!(dailyDayss!!.contains(tmp))) {
-                dailyDayss!!.add(pos)
-
+//            if (!(dailyDayss!!.contains(tmp))) {
+//                dailyDayss!!.add(pos)
+//
+//
+//            }
+            Log.v("Elad1", "Dup" + duplicateDay)
+            if ((dailyDayss!!.contains(duplicateDay)) && !flag) {
+                dailyDayss!!.remove(duplicateDay)
 
             }
+            Log.v("Elad1", "Tmp is " + tmp)
+            dailyDayss!!.add(tmp)
+            flag = true
+
             // to delete unexpected daily days
-            if(dailyDayss!!.size==tablePosition){
-                dailyDayss!!.removeAt(0)
+            if (dailyDayss!!.size == tablePosition) {
+                dailyDayss!!.removeAt(dailyDayss!!.size-1)
+                dailyDayss!!.add(positionInTable,tmp)
+                dailyDayss!!.removeAt(positionInTable+1)
             }
+
+            Log.v("Elad1", "Daily days 2" + dailyDayss)
 
         }
 

@@ -67,7 +67,7 @@ class My_Weekly_RecylerViewAdapter(
                 item.dailyIds,
                 position + 1,
                 this,
-                weeklyValues.get(position).weeklyId
+                item.weeklyId
             )
             dialog.show(childFragmentManager, "weeklyEdit")
         }
