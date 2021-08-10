@@ -22,12 +22,11 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
 ) : RecyclerView.Adapter<Weekly_Schedule_Choose_RecyclerViewAdapter.ViewHolder>() {
 
     private var mValues: ArrayList<WeeklySchedule> = weeklyValues
-    private var mValuesDaily :  ArrayList<DailySchedule> = dailyValues
-    private var recipe = recipes
+//    private var mValuesDaily: ArrayList<DailySchedule> = dailyValues
+//    private var recipe = recipes
     private var childFragmentManager = childFragmentManager
-    private var numOfWeekly= 1
+    private var numOfWeekly = 1
     private var weeklyId = weeklyId
-
 
 
     override fun onCreateViewHolder(
@@ -37,6 +36,12 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.weekly_choose, parent, false)
         return ViewHolder(view)
+    }
+
+    fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
+        return this.split(*delimiters).filter {
+            it.isNotEmpty()
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -50,18 +55,28 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
 
         holder.weeklyInfo.setOnClickListener {
 
+            var dailyList: ArrayList<DailySchedule> = ArrayList()
+            var dailyArr = item.dailyIds.splitIgnoreEmpty(" ")
+            var j = 0
+            for (i in UserPropertiesSingelton.getInstance()!!.getUserDaily()!!) {
+                if (j == dailyArr.size) {
+                    break
+                }
+                if (i.dailyId == dailyArr.get(j).toInt()) {
+                    dailyList.add(i)
+                    j++
+                }
+            }
 
+            var dialog = WeeklyDialogInfo(
+                dailyList,
+                item.numOfDay,
+                item.dailyIds,
+                item.totalCost,
+                position + 1
+            )
 
-//            var dialog = DailyDialogInfo(
-//                recipe,
-//                item.quantities,
-//                item.numOfMeals,
-//                item.recipeIds,
-//                position + 1,
-//                item.dailyId
-//
-//            )
-      //      dialog.show(childFragmentManager, "MyRecipeIngredients")
+            dialog.show(childFragmentManager, "WeeklyDialgInfo")
 
         }
 
@@ -70,18 +85,18 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
         holder.choose.setOnClickListener() {
 
 //
-//            if (holder.choose.isChecked == true && (dailyId!!.isEmpty())) {
-//                dailyId!!.add(position)
-//                holder.arr[position] = true
-//
-//            } else if (holder.choose.isChecked == false) {
-//                if (dailyId!!.contains(position)) {
-//                    holder.arr[position] = false
-//                    dailyId!!.remove(position)
-//
-//                }
-//
-//            }
+            if (holder.choose.isChecked == true && (weeklyId!!.isEmpty())) {
+                weeklyId!!.add(position)
+                holder.arr[position] = true
+
+            } else if (holder.choose.isChecked == false) {
+                if (weeklyId!!.contains(position)) {
+                    holder.arr[position] = false
+                    weeklyId!!.remove(position)
+
+                }
+
+            }
 
 
         }
@@ -102,8 +117,8 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
 
         var weeklyInfo: Button = view.findViewById(R.id.buttonInfo)
         var cart: ImageView = view.findViewById(R.id.imageViewCart)
-        var numOfDaily: TextView = view.findViewById(R.id.numOfDailyTextView)
-        var choose: CheckBox = view.findViewById(R.id.DailyCheckBox)
+        var numOfDaily: TextView = view.findViewById(R.id.numOfWeeklyTextView)
+        var choose: CheckBox = view.findViewById(R.id.WeeklyCheckBox)
         val arr = Array(mValues.size, { i -> false })
         lateinit var mItem: WeeklySchedule
 

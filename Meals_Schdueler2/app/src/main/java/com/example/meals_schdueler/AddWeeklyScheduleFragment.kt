@@ -34,6 +34,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
     private var listDailyIdChoosen: ArrayList<Int>? = null
     private var dailyList: ArrayList<DailySchedule>? = null
     private var dailyDays: String = ""
+    private var dailyIds: String = ""
     private var dailyDayss: ArrayList<Int>? = null
     private var recipeList: ArrayList<Recipe>? = null
     private var flag = true
@@ -158,8 +159,9 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
 
         } else if (p0 == saveBtn) {
 
-            var dailyIds = ""
+
             dailyDays = ""
+            dailyIds = ""
 
             val arr = IntArray(7)
 
@@ -215,6 +217,9 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
     private fun clearTable() {
         tablePosition = 1
         totalCostDobule = 0.0
+        dailyDays = ""
+        dailyIds = ""
+        dailyList!!.clear()
         totalCost.setText(totalCostDobule.toString())
         stk.setColumnShrinkable(4, false)
         stk.setColumnShrinkable(3, false)
@@ -252,7 +257,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
             totalCost.setText(totalCostDobule.toString())
 
             var t1v: Spinner = Spinner(context)
-            t1v.setTag(tablePosition-1)
+            t1v.setTag(tablePosition - 1)
 
 
             ArrayAdapter.createFromResource(
@@ -375,13 +380,13 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
     }
 
 
-    inner class SpinnerActivity(positionInTable : Int) : Activity(), AdapterView.OnItemSelectedListener {
+    inner class SpinnerActivity(positionInTable: Int) : Activity(),
+        AdapterView.OnItemSelectedListener {
         var positionInTable = positionInTable
 
 
-
         override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-            Log.v("Elad1","position in table " + positionInTable)
+            Log.v("Elad1", "position in table " + positionInTable)
             // An item was selected. You can retrieve the selected item using
             // parent.getItemAtPosition(pos)
             Log.v("Elad1", "Daily days " + dailyDayss)
@@ -412,9 +417,9 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
 
             // to delete unexpected daily days
             if (dailyDayss!!.size == tablePosition) {
-                dailyDayss!!.removeAt(dailyDayss!!.size-1)
-                dailyDayss!!.add(positionInTable,tmp)
-                dailyDayss!!.removeAt(positionInTable+1)
+                dailyDayss!!.removeAt(dailyDayss!!.size - 1)
+                dailyDayss!!.add(positionInTable, tmp)
+                dailyDayss!!.removeAt(positionInTable + 1)
             }
 
             Log.v("Elad1", "Daily days 2" + dailyDayss)

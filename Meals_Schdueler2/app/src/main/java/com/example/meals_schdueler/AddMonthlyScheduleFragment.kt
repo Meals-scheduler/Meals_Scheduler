@@ -1,8 +1,11 @@
 package com.example.meals_schdueler
 
+import android.app.Activity
+import android.app.AlertDialog
 import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.view.get
 import androidx.core.view.iterator
+import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import com.example.meals_schdueler.dummy.DailySchedule
 import java.text.DecimalFormat
@@ -26,6 +30,8 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
     private lateinit var chooseWeekBtn: Button
     private lateinit var totalCost: EditText
     private var totalCostDobule: Double = 0.0
+    private var flag = true
+    private var duplicateWeek = -1
 
 
     //saving weekly id
@@ -117,11 +123,10 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val x = inflater.inflate(R.layout.add_weekly_schedule, null)
+        val x = inflater.inflate(R.layout.add_monthly_schedule, null)
 
         //stam = x.findViewById(R.id.elad)
         stk = x.findViewById(R.id.tableLayout)
-        totalCost = x.findViewById(R.id.editTextTotalCost)
         saveBtn = x.findViewById(R.id.saveBtn)
 
         chooseWeekBtn = x.findViewById(R.id.chooseBtn)
@@ -152,27 +157,54 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
             d.show(childFragmentManager, "DailySchudleChooseDialog")
         } else if (p0 == saveBtn) {
 
-
+            weeklyDays = ""
+            weeklyIds=""
             for (i in weeklyList!!) {
                 weeklyIds += "" + i.weeklyId + " "
 
             }
+            val arr = IntArray(7)
+
             for (i in weeklyDayss!!) {
-                weeklyDays += "" + i + " "
+                if (arr[i] != 0) {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+
+                    builder.setTitle("Adding Weekly")
+                    builder.setMessage("You cannot have a duplicate of the same week.")
+
+                    builder.setPositiveButton(
+                        "OK",
+                        DialogInterface.OnClickListener { dialog, which -> // Do nothing but close the dialog
+
+                            dialog.dismiss()
+                        })
+                    val alert: AlertDialog = builder.create()
+                    alert.show()
+                    flag = false
+                    duplicateWeek = i
+
+                    break
+                } else {
+                    arr[i] += 1
+                    weeklyDays += "" + i + " "
+                }
+
             }
 
-            var m = MonthlySchedule(
-                1,
-                UserInterFace.userID,
-                weeklyDays,
-                weeklyIds,
-                totalCostDobule,
-                false
-            )
-            var s = AsynTaskNew(m, childFragmentManager)
-            s.execute()
+            if (flag) {
+                var m = MonthlySchedule(
+                    1,
+                    UserInterFace.userID,
+                    weeklyDays,
+                    weeklyIds,
+                    totalCostDobule,
+                    false
+                )
+                var s = AsynTaskNew(m, childFragmentManager)
+                s.execute()
 
-            clearTable()
+                clearTable()
+            }
         }
 
 
@@ -181,11 +213,17 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
     private fun clearTable() {
         tablePosition = 1
         totalCostDobule = 0.0
+        weeklyDays = ""
+        weeklyIds=""
+        weeklyDayss!!.clear()
+        weeklyList!!.clear()
         totalCost.setText(totalCostDobule.toString())
-        stk.setColumnShrinkable(4, false)
-        stk.setColumnShrinkable(3, false)
-        stk.setColumnStretchable(3, false)
-        stk.setColumnStretchable(4, false)
+        weeklyDayss
+//        stk.setColumnShrinkable(4,
+//        false)
+//        stk.setColumnShrinkable(3, false)
+//        stk.setColumnStretchable(3, false)
+//        stk.setColumnStretchable(4, false)
         var j = 1
         for (x in stk) {
             stk.removeView(stk.getChildAt(j))
@@ -206,10 +244,10 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
 
 
 
-            stk.setColumnShrinkable(3, true)
-            stk.setColumnShrinkable(4, true)
-            stk.setColumnStretchable(3, true)
-            stk.setColumnStretchable(4, true)
+            stk.setColumnShrinkable(3, false)
+            stk.setColumnShrinkable(2, false)
+            stk.setColumnStretchable(3, false)
+            stk.setColumnStretchable(2, false)
 
 
             var tbrow: TableRow = TableRow(this.context)
@@ -218,12 +256,13 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
             totalCostDobule += weeklyList!!.get(tablePosition - 1).totalCost
             totalCost.setText(totalCostDobule.toString())
 
-            var t1v: Spinner= Spinner(context)
+            var t1v: Spinner = Spinner(context)
+            t1v.setTag(tablePosition - 1)
 
 
             ArrayAdapter.createFromResource(
                 this.requireContext(),
-                R.array.days,
+                R.array.weeks,
                 android.R.layout.simple_spinner_item
             ).also { adapter ->
                 // Specify the layout to use when the list of choices appears
@@ -232,111 +271,167 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
                 t1v.adapter = adapter
             }
 
-//            t1v.onItemSelectedListener = SpinnerActivity()
-//            // t1v.setBackgroundResource(R.drawable.border)
-////        t1v.setText(" " + (mealChoosen))
-////        t1v.setTextColor(Color.BLACK)
-////        t1v.gravity = Gravity.CENTER
-//            //  t1v.setBackgroundResource(R.drawable.spinner_shape)
-//
-//            tbrow.addView(t1v)
-//
-//            var t2v: TextView = TextView(context)
-//
-//            // t1v.setBackgroundResource(R.drawable.border)
-//            t2v.setText(weeklyList!!.get(tablePosition - 1).weeklyId.toString())
-//            t2v.setTextColor(Color.BLACK)
-//            t2v.gravity = Gravity.CENTER
-//            //  t1v.setBackgroundResource(R.drawable.spinner_shape)
-//            tbrow.addView(t2v)
-//
-//
-//            var t3v: Button = Button(context)
-//            t3v.setTag(tablePosition)
-//            t3v.setText("Delete")
-//            t3v.setTextColor(Color.BLACK)
-//            t3v.gravity = Gravity.CENTER
-//            t3v.setTextSize(10F)
-//            t3v.setOnClickListener {
-//
-//                var i = t3v.getTag() as Int
-//
-//                stk.removeView(stk.getChildAt(t3v.getTag() as Int))
-//
-//                totalCostDobule -= weeklyList!!.get(t3v.getTag() as Int - 1).totalCost
-//                totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
-//                totalCost.setText(totalCostDobule.toString())
-//                weeklyList!!.removeAt(t3v.getTag() as Int - 1)
-//                // CONTINUE HERE
-//                //  dailyDayss.remove()
-//                tablePosition--
-//
-//                for (x in stk) {
-//                    if (x.getTag() as Int == 0)
-//                        continue
-//                    if (x.getTag() as Int > i) {
-//                        x.setTag(x.getTag() as Int - 1)
-//                        var y = x as TableRow
-//                        //changing info delete tag
-//                        y.get(2).setTag(y.get(2).getTag() as Int - 1)
-//                        //changing infp button tag
-//                        y.get(3).setTag(y.get(3).getTag() as Int - 1)
-//
-//                    }
-//
-//                }
-//
+            t1v.onItemSelectedListener = SpinnerActivity(t1v.getTag() as Int)
+            tbrow.addView(t1v)
+
+            var t2v: TextView = TextView(context)
+
+
+            t2v.setText(weeklyList!!.get(tablePosition - 1).weeklyId.toString())
+            t2v.setTextColor(Color.BLACK)
+            t2v.gravity = Gravity.CENTER
+            //  t1v.setBackgroundResource(R.drawable.spinner_shape)
+            tbrow.addView(t2v)
+
+
+            var t3v: Button = Button(context)
+            t3v.setTag(tablePosition)
+            t3v.setText("Delete")
+            t3v.setTextColor(Color.BLACK)
+            t3v.gravity = Gravity.CENTER
+            t3v.setTextSize(10F)
+            t3v.setOnClickListener {
+
+
+                var i = t3v.getTag() as Int
+
+                stk.removeView(stk.getChildAt(t3v.getTag() as Int))
+
+                totalCostDobule -= weeklyList!!.get(t3v.getTag() as Int - 1).totalCost
+                totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
+                totalCost.setText(totalCostDobule.toString())
+
+                weeklyList!!.removeAt(t3v.getTag() as Int - 1)
+                weeklyDayss!!.removeAt(t3v.getTag() as Int - 1)
+
+
+
+                tablePosition--
+
+                for (x in stk) {
+                    if (x.getTag() as Int == 0)
+                        continue
+                    if (x.getTag() as Int > i) {
+                        x.setTag(x.getTag() as Int - 1)
+                        var y = x as TableRow
+                        //changing info delete tag
+                        y.get(2).setTag(y.get(2).getTag() as Int - 1)
+                        //changing infp button tag
+                        y.get(3).setTag(y.get(3).getTag() as Int - 1)
+
+                    }
+
+                }
+
 //                stk.setColumnShrinkable(3, false)
 //                stk.setColumnStretchable(3, false)
-//            }
-//
-//            tbrow.addView(t3v)
-//
-//            var t4v: Button = Button(context)
-//            t4v.setTag(tablePosition++)
-//            t4v.setText("Info")
-//            t4v.setTextSize(10F)
-//            t4v.setTextColor(Color.BLACK)
-//            t4v.gravity = Gravity.CENTER
-//
-//            t4v.setOnClickListener {
-//                // making the Recipe list to transfer to the info dialog
-//                recipeList = ArrayList()
-//
-//                // taking the Recipe Id's string from this current daily object
-//                var recipeIDS = dailyList!!.get(t3v.getTag() as Int - 1).recipeIds
-//                // split it so i can make a list from it
-//                var recipeIDs = recipeIDS.splitIgnoreEmpty(" ")
-//
-//                //going through the list and get each recipe by its id
-//                for (i in UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!) {
-//                    if (recipeIDs.contains(i.recipeId.toString())) {
-//                        recipeList!!.add(i)
-//                    }
-//                }
-//
-//
-//
-//                var dialog = DailyDialogInfo(
-//                    recipeList!!,
-//                    dailyList!!.get(t3v.getTag() as Int - 1).quantities,
-//                    dailyList!!.get(t3v.getTag() as Int - 1).numOfMeals,
-//                    dailyList!!.get(t3v.getTag() as Int - 1).recipeIds,
-//                    (t4v.getTag() as Int - 1) + 1,
-//                    dailyList!!.get(t3v.getTag() as Int - 1).dailyId
-//
-//                )
-//                dialog.show(childFragmentManager, "DailyDialogInfo")
-//            }
-//            tbrow.addView(t4v)
-//
-//
-//            stk.setBackgroundResource(R.drawable.spinner_shape)
-//            tbrow.setBackgroundResource(R.drawable.spinner_shape)
-//            stk.addView(tbrow)
-//
-//
+            }
+
+            tbrow.addView(t3v)
+
+            var t4v: Button = Button(context)
+            t4v.setTag(tablePosition++)
+            t4v.setText("Info")
+            t4v.setTextSize(10F)
+            t4v.setTextColor(Color.BLACK)
+            t4v.gravity = Gravity.CENTER
+
+            t4v.setOnClickListener {
+
+                var dailyList: ArrayList<DailySchedule> = ArrayList()
+                var dailyArr =
+                    weeklyList!!.get(t3v.getTag() as Int - 1).dailyIds.splitIgnoreEmpty(" ")
+                var j = 0
+                for (i in UserPropertiesSingelton.getInstance()!!.getUserDaily()!!) {
+                    if (j == dailyArr.size) {
+                        break
+                    }
+                    if (i.dailyId == dailyArr.get(j).toInt()) {
+                        dailyList.add(i)
+                        j++
+                    }
+                }
+
+
+                var dialog = WeeklyDialogInfo(
+                    dailyList,
+                    weeklyList!!.get(t3v.getTag() as Int - 1).numOfDay,
+                    weeklyList!!.get(t3v.getTag() as Int - 1).dailyIds,
+                    weeklyList!!.get(t3v.getTag() as Int - 1).totalCost,
+                    t3v.getTag() as Int
+                )
+                dialog.show(childFragmentManager, "DailyDialogInfo")
+            }
+            tbrow.addView(t4v)
+
+
+            stk.setBackgroundResource(R.drawable.spinner_shape)
+            tbrow.setBackgroundResource(R.drawable.spinner_shape)
+            stk.addView(tbrow)
+
+
         }
+
+    }
+
+
+    inner class SpinnerActivity(positionInTable: Int) : Activity(),
+        AdapterView.OnItemSelectedListener {
+        var positionInTable = positionInTable
+
+
+        override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+            Log.v("Elad1", "position in table " + positionInTable)
+            // An item was selected. You can retrieve the selected item using
+            // parent.getItemAtPosition(pos)
+            Log.v("Elad1", "Weekly days " + weeklyDayss)
+            var tmp = 0
+            when (parent.getItemAtPosition(pos)) {
+                "Week 1" -> tmp = 0
+                "Week 2" -> tmp = 1
+                "Week 3" -> tmp = 2
+                "Week 4" -> tmp = 3
+
+            }
+            // dailyDays!!.add(parent.getItemAtPosition(pos).toString())
+//            if (!(dailyDayss!!.contains(tmp))) {
+//                dailyDayss!!.add(pos)
 //
-  }
+//
+//            }
+            Log.v("Elad1", "Dup" + duplicateWeek)
+            if ((weeklyDayss!!.contains(duplicateWeek)) && !flag) {
+                weeklyDayss!!.remove(duplicateWeek)
+
+            }
+            Log.v("Elad1", "Tmp is " + tmp)
+            weeklyDayss!!.add(tmp)
+            flag = true
+
+            // to delete unexpected daily days
+            if (weeklyDayss!!.size == tablePosition) {
+                weeklyDayss!!.removeAt(weeklyDayss!!.size - 1)
+                weeklyDayss!!.add(positionInTable, tmp)
+                weeklyDayss!!.removeAt(positionInTable + 1)
+            }
+
+            Log.v("Elad1", "Weekly days 2" + weeklyDayss)
+
+        }
+
+        override fun onNothingSelected(parent: AdapterView<*>) {
+            // Another interface callback
+
+
+        }
+    }
+
+
+    fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
+        return this.split(*delimiters).filter {
+            it.isNotEmpty()
+        }
+    }
+
+
 }

@@ -1,7 +1,6 @@
 package com.example.meals_schdueler
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,48 +16,47 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
-class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
+class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
 
     private var columnCount = 1
+    private var monthlyList: ArrayList<MonthlySchedule>? = null
     private var weeklyList: ArrayList<WeeklySchedule>? = null
-    private var dailyList: ArrayList<DailySchedule>? = null
 
-    // each weeklyid will hold all its daily
-    private var weekly_daily_map: HashMap<String, ArrayList<DailySchedule>>? = null
-    private var recipeList: ArrayList<Recipe>? = null
-    private var weeklyRecyclerViewAdapter: My_Weekly_RecylerViewAdapter? = null
+    // each monthlyid will hold all its weekly
+    private var monthly_weekly_map: HashMap<String, ArrayList<WeeklySchedule>>? = null
+
+    private var monthlyRecyclerViewAdapter: My_Monthly_RecylerViewAdapter? = null
 
 
-    var numOfDay: String = ""
-    var dailyIds: String = ""
+    var numOfWeek: String = ""
+    var weeklyIds: String = ""
     private var totalcost = 0.0
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // recipeList = ArrayList()
-        dailyList = ArrayList()
+
+        monthlyList = ArrayList()
         weeklyList = ArrayList()
-        weeklyRecyclerViewAdapter = My_Weekly_RecylerViewAdapter(
+        monthlyRecyclerViewAdapter = My_Monthly_RecylerViewAdapter(
+            monthlyList!!,
             weeklyList!!,
-            dailyList!!,
             childFragmentManager,
             this.context
         )
 
         // to know how many objects from the wanted type will be in a line
         arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
+            columnCount = it.getInt(MyWeeklyScheduleFragment.ARG_COLUMN_COUNT)
         }
 
     }
 
     companion object {
 
-        var instance: MyWeeklyScheduleFragment? = null
+        var instance: MyMonthlyScheudleFragment? = null
 
-        fun getInstance1(): MyWeeklyScheduleFragment {
+        fun getInstance1(): MyMonthlyScheudleFragment {
             return instance!!
         }
 
@@ -69,7 +67,7 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
         // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
-            MyWeeklyScheduleFragment().apply {
+            MyMonthlyScheudleFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_COLUMN_COUNT, columnCount)
 
@@ -83,7 +81,7 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val x = inflater.inflate(R.layout.my_weekly_schedule_list, null)
+        val x = inflater.inflate(R.layout.my_monthly_schedule_list, null)
         val recyclerView = x.findViewById<View>(R.id.list) as RecyclerView
 
 
@@ -95,7 +93,7 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                recyclerView.adapter = weeklyRecyclerViewAdapter
+                recyclerView.adapter = monthlyRecyclerViewAdapter
 
             }
         }
@@ -113,9 +111,7 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
 
     override fun DoNetWorkOpreation(): String {
 
-        var link = "https://elad1.000webhostapp.com/getWeekly.php?ownerID=" + UserInterFace.userID;
-
-
+        var link = "https://elad1.000webhostapp.com/getMonthly.php?ownerID=" + UserInterFace.userID;
 
 
         val sb = StringBuilder()
@@ -138,7 +134,7 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
         }
 
 
-       // Log.v("Elad1", "Id came is" + sb.toString())
+        // Log.v("Elad1", "Id came is" + sb.toString())
         return sb.toString()
     }
 
@@ -152,104 +148,104 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
     override fun getData(str: String) {
         if (!str.equals("")) {
 
-            numOfDay = ""
-            dailyIds = ""
+            numOfWeek = ""
+            weeklyIds = ""
             // recipeList!!.clear()
-            dailyList!!.clear()
+            monthlyList!!.clear()
             weeklyList!!.clear()
 
-            val weeklyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+            val monthlyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
 
-            // map to map each WeeklyID with a key as ID and contains all 2
+            // map to map each MonthlyID with a key as ID and contains all 2
             // array lists (e.g - numOfDay,dailyIds)
             var map: HashMap<String, ArrayList<String>> = HashMap()
             var mapTotalCost: HashMap<String, Double> = HashMap()
 
-            var currentWeeklyID = weeklyInfo[0].get(0).toInt() - 48
+            var currentMonthlyID = monthlyInfo[0].get(0).toInt() - 48
 
-            for (i in weeklyInfo.indices) {
+            for (i in monthlyInfo.indices) {
 
-                var weeklyInfo2 = weeklyInfo[i].splitIgnoreEmpty("*")
+                var monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
 
                 //means we switch to the next WeeklyID
-                if (weeklyInfo2[0].toInt() != currentWeeklyID) {
+                if (monthlyInfo2[0].toInt() != currentMonthlyID) {
 
                     // to keep each Weekly its dailys ids and its num of day.(days in a week)
                     var totalLists: ArrayList<String> = ArrayList()
-                    totalLists.add(numOfDay)
-                    totalLists.add(dailyIds)
+                    totalLists.add(numOfWeek)
+                    totalLists.add(weeklyIds)
                     // saving this weekly daily ids and num of days
-                    map.put(currentWeeklyID.toString(), totalLists)
+                    map.put(currentMonthlyID.toString(), totalLists)
                     // saving this weekly total cost
-                    mapTotalCost.put(currentWeeklyID.toString(), totalcost)
+                    mapTotalCost.put(currentMonthlyID.toString(), totalcost)
 
                     //switching to the next WeeklyID
-                    currentWeeklyID = weeklyInfo2[0].toInt()
+                    currentMonthlyID = monthlyInfo2[0].toInt()
 
                     // clearing the variables for next WeeeklyID
-                    numOfDay = ""
-                    dailyIds = ""
+                    numOfWeek = ""
+                    weeklyIds = ""
 
                 }
 
-                numOfDay += "" + weeklyInfo2[3] + " "
-                dailyIds += "" + weeklyInfo2[4] + " "
+                numOfWeek += "" + monthlyInfo2[3] + " "
+                weeklyIds += "" + monthlyInfo2[4] + " "
                 // saving the last total cost
-                totalcost = weeklyInfo2[2].toDouble()
+                totalcost = monthlyInfo2[2].toDouble()
 
 
             }
 
             // not to skip on the last Weeekly
 
-            if (!numOfDay.equals("")) {
+            if (!numOfWeek.equals("")) {
                 var totalLists: ArrayList<String> = ArrayList()
-                totalLists.add(numOfDay)
-                totalLists.add(dailyIds)
-                map.put(currentWeeklyID.toString(), totalLists)
-                mapTotalCost.put(currentWeeklyID.toString(), totalcost)
+                totalLists.add(numOfWeek)
+                totalLists.add(weeklyIds)
+                map.put(currentMonthlyID.toString(), totalLists)
+                mapTotalCost.put(currentMonthlyID.toString(), totalcost)
             }
 
-            // making WeeklyScheudle objects
-            weekly_daily_map = HashMap()
-            currentWeeklyID = -1
-            for (i in weeklyInfo.indices) {
-                var dailyInfo2 = weeklyInfo[i].splitIgnoreEmpty("*")
-                if (dailyInfo2[0].toInt() != currentWeeklyID) {
-                    dailyList = ArrayList()
-                    weeklyList!!.add(
-                        WeeklySchedule(
-                            dailyInfo2[0].toInt(),
-                            dailyInfo2[1].toInt(),
-                            map.get(dailyInfo2[0])!!.get(0),
-                            map.get(dailyInfo2[0])!!.get(1),
-                            mapTotalCost.get(dailyInfo2[0])!!,
+            // making MonthlyScheudle objects
+            monthly_weekly_map = HashMap()
+            currentMonthlyID = -1
+            for (i in monthlyInfo.indices) {
+                var monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
+                if (monthlyInfo2[0].toInt() != currentMonthlyID) {
+                    weeklyList = ArrayList()
+                    monthlyList!!.add(
+                        MonthlySchedule(
+                            monthlyInfo2[0].toInt(),
+                            monthlyInfo2[1].toInt(),
+                            map.get(monthlyInfo2[0])!!.get(0),
+                            map.get(monthlyInfo2[0])!!.get(1),
+                            mapTotalCost.get(monthlyInfo2[0])!!,
                             false
 
                         )
                     )
                     //making DailyScheule objects in a map with WeeklyID
-                    var dailyIds = map.get(dailyInfo2[0])!!.get(1).splitIgnoreEmpty(" ")
-                    for (i in dailyIds) {
-                        for (j in UserPropertiesSingelton.getInstance()!!.getUserDaily()!!) {
-                            if (j.dailyId.toString().equals(i)) {
-                                dailyList!!.add(j)
+                    var weeklyIds = map.get(monthlyInfo2[0])!!.get(1).splitIgnoreEmpty(" ")
+                    for (i in weeklyIds) {
+                        for (j in UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!) {
+                            if (j.weeklyId.toString().equals(i)) {
+                                weeklyList!!.add(j)
                                 break
                             }
                         }
 
 
                     }
-                    weekly_daily_map!!.put(dailyInfo2[0].toInt().toString(), dailyList!!)
-                    currentWeeklyID = dailyInfo2[0].toInt()
+                   monthly_weekly_map!!.put(monthlyInfo2[0].toInt().toString(), weeklyList!!)
+                    currentMonthlyID = monthlyInfo2[0].toInt()
                 }
             }
 
 
-            weeklyRecyclerViewAdapter!!.setWeeklyValues(weeklyList!!)
-            weeklyRecyclerViewAdapter!!.setDailyValues(weekly_daily_map!!)
-            UserPropertiesSingelton.getInstance()!!.setUserWeekly(weeklyList)
+            monthlyRecyclerViewAdapter!!.setMonthlyValues(monthlyList!!)!!
+            monthlyRecyclerViewAdapter!!.setWeeklyValues(monthly_weekly_map!!)
+            UserPropertiesSingelton.getInstance()!!.setUserMonthly(monthlyList)
 
 
         }

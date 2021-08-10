@@ -33,6 +33,14 @@
         <item>Saturday</item>
     </string-array>
 
+    <string-array name="weeks">
+        <item>Week 1</item>
+        <item>Week 2</item>
+        <item>Week 3</item>
+        <item>Week 4</item>
+
+    </string-array>
+
     <string-array name="quantitiy">
         <item>1</item>
         <item>2</item>

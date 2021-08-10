@@ -25,7 +25,6 @@ class EditWeeklyDialog(
     numOfDay: String,
     dailyIds: String,
     pos: Int,
-    myWeeklyRecylerviewadapter: My_Weekly_RecylerViewAdapter,
     weeklyId: Int,
 
     ) : DialogFragment(), DialogInterface.OnDismissListener, View.OnClickListener {
@@ -91,7 +90,6 @@ class EditWeeklyDialog(
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        Log.v("Elad1", "DDDDD")
         // super.onDismiss(dialog)
         if (flag) {
             dailyPos = savedSize
@@ -324,7 +322,7 @@ class EditWeeklyDialog(
                 t1v.onItemSelectedListener = SpinnerActivity(t1v.getTag() as Int)
 
                 t1v.setSelection(numOfDayArr[k++].toInt())
-          
+
 
                 tbrow.addView(t1v)
 
@@ -575,7 +573,7 @@ class EditWeeklyDialog(
         override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
             // An item was selected. You can retrieve the selected item using
             // parent.getItemAtPosition(pos)\
-            Log.v("Elad1","position in table " + positionInTable)
+           // Log.v("Elad1","position in table " + positionInTable)
             Log.v("Elad1", "Daily days" + dailyDayss)
             var tmp = 0
             when (parent.getItemAtPosition(pos)) {
@@ -587,12 +585,12 @@ class EditWeeklyDialog(
                 "Friday" -> tmp = 5
                 "Saturday" -> tmp = 6
             }
-            Log.v("Elad1","Dup" + duplicateDay)
+            //Log.v("Elad1","Dup" + duplicateDay)
             if ((dailyDayss!!.contains(duplicateDay)) && !flag) {
                 dailyDayss!!.remove(duplicateDay)
 
             }
-            Log.v("Elad1", "Tmp is " + tmp)
+           // Log.v("Elad1", "Tmp is " + tmp)
             dailyDayss!!.add(tmp)
             flag = true
 

@@ -21,6 +21,12 @@
         android:title="Weekly Scheudle" />
 
     <item
+        android:id="@+id/nav_item_monthly_schedule"
+        android:icon="@drawable/logout"
+        android:title="Monthly Scheudle" />
+
+
+    <item
         android:id="@+id/nav_item_upcoming_schedule"
         android:icon="@drawable/ic_launcher_foreground"
         android:title="Upcoming Schedule" />

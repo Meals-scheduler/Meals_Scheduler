@@ -29,6 +29,7 @@ class UserPropertiesSingelton {
     var userRecipes: ArrayList<Recipe>? = null
     var dailySchedule: ArrayList<DailySchedule>? = null
     var weeklyScheudle: ArrayList<WeeklySchedule>? = null
+    var monthlyScheudle: ArrayList<MonthlySchedule>? = null
     var userMapRecipes: HashMap<Int, Recipe>? = null
     var userUpcomingSchedule: ArrayList<UpComingScheudule>? = null
 
@@ -94,5 +95,14 @@ class UserPropertiesSingelton {
 
     fun setUserWeekly(weeklyScheudle: ArrayList<WeeklySchedule>?) {
         this.weeklyScheudle = weeklyScheudle
+    }
+
+    fun getUserMonthly(): ArrayList<MonthlySchedule>? {
+        if (monthlyScheudle == null) monthlyScheudle = ArrayList<MonthlySchedule>()
+        return monthlyScheudle
+    }
+
+    fun setUserMonthly(monthlyScheudle: ArrayList<MonthlySchedule>?) {
+        this.monthlyScheudle = monthlyScheudle
     }
 }
