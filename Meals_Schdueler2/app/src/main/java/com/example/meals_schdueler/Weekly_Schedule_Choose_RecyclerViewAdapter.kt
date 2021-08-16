@@ -22,8 +22,9 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
 ) : RecyclerView.Adapter<Weekly_Schedule_Choose_RecyclerViewAdapter.ViewHolder>() {
 
     private var mValues: ArrayList<WeeklySchedule> = weeklyValues
-//    private var mValuesDaily: ArrayList<DailySchedule> = dailyValues
-//    private var recipe = recipes
+    private var mValuesDaily: ArrayList<DailySchedule> = dailyValues
+
+    //    private var recipe = recipes
     private var childFragmentManager = childFragmentManager
     private var numOfWeekly = 1
     private var weeklyId = weeklyId
@@ -58,12 +59,13 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
             var dailyList: ArrayList<DailySchedule> = ArrayList()
             var dailyArr = item.dailyIds.splitIgnoreEmpty(" ")
             var j = 0
-            for (i in UserPropertiesSingelton.getInstance()!!.getUserDaily()!!) {
-                if (j == dailyArr.size) {
-                    break
+            for (i in dailyArr) {
+
+                if (mValuesDaily.get(j).dailyId == i.toInt()) {
+                    dailyList.add(mValuesDaily.get(j))
+                    j=0
                 }
-                if (i.dailyId == dailyArr.get(j).toInt()) {
-                    dailyList.add(i)
+                else{
                     j++
                 }
             }

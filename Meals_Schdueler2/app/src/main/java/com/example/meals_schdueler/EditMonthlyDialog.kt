@@ -1,6 +1,5 @@
 package com.example.meals_schdueler
 
-
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
@@ -21,14 +20,13 @@ import com.example.meals_schdueler.dummy.DailySchedule
 import java.text.DecimalFormat
 
 
-class EditWeeklyDialog(
-    dailyList: ArrayList<DailySchedule>,
-    numOfDay: String,
-    dailyIds: String,
+class EditMonthlyDialog(
+    weeklyList: ArrayList<WeeklySchedule>,
+    numOfWeek: String,
+    weeklyIds: String,
     pos: Int,
-    weeklyId: Int,
-
-    ) : DialogFragment(), DialogInterface.OnDismissListener, View.OnClickListener {
+    monthlyId: Int,
+) : DialogFragment(), DialogInterface.OnDismissListener, View.OnClickListener {
 
 
     private lateinit var stk: TableLayout
@@ -37,25 +35,23 @@ class EditWeeklyDialog(
     private lateinit var title: TextView
     private lateinit var chooseBtn: Button
     private lateinit var saveBtn: Button
-    private lateinit var numOfDayArrlist: ArrayList<Int>
-    private lateinit var dailyIdsArrlist: ArrayList<Int>
-    private lateinit var dailyDayss: ArrayList<Int>
-    private var dailyID: Recipe_Ingredients_List? = null
-    private var listDailyIdChoosen: ArrayList<Int>? = null
+    private lateinit var numOfWeekArrlist: ArrayList<Int>
+    private lateinit var weeklyIdsArrlist: ArrayList<Int>
+    private lateinit var weeklyDayss: ArrayList<Int>
+    private var weeklyID: Recipe_Ingredients_List? = null
+    private var listWeeklyIdChoosen: ArrayList<Int>? = null
 
 
-
-    // private var myWeeklyRecylerviewadapter = myWeeklyRecylerviewadapter
-    private var weeklyId = weeklyId
-    private var numOfDay = numOfDay
-    private var dailyIds = dailyIds
-    private var dailyList = dailyList
+    private var monthlyId = monthlyId
+    private var numOfWeek = numOfWeek
+    private var weeklyIds = weeklyIds
+    private var weeklyList = weeklyList
     private var tablePosition = 1
     private var totalCostDobule: Double = 0.0
     private var position = pos
-    private var dailyPos = 0
+    private var weeklyPos = 0
     private var savedSize = 0
-    private var flag = true // this flag is for the duplicated days check.
+    private var flag = true // this flag is for the duplicated weeks check
 
 
 
@@ -65,16 +61,16 @@ class EditWeeklyDialog(
         savedInstanceState: Bundle?
     ): View? {
 
-        var x: View = inflater.inflate(R.layout.edit_weekly, container, false)
+        var x: View = inflater.inflate(R.layout.edit_monthly, container, false)
         stk = x.findViewById(R.id.tableLayout)
         totalCost = x.findViewById(R.id.editTextTotalCost)
-        title = x.findViewById(R.id.editNumberOfWeeklyTextView)
-        title.setText("Edit Weekly No. " + position)
-        dailyIdsArrlist = ArrayList()
-        numOfDayArrlist = ArrayList()
-        dailyDayss = ArrayList()
-        listDailyIdChoosen = ArrayList()
-        dailyID = Recipe_Ingredients_List(listDailyIdChoosen)
+        title = x.findViewById(R.id.editNumberOfMonthlyTextView)
+        title.setText("Edit Monthly No. " + position)
+        weeklyIdsArrlist = ArrayList()
+        numOfWeekArrlist = ArrayList()
+        weeklyDayss = ArrayList()
+        listWeeklyIdChoosen = ArrayList()
+        weeklyID = Recipe_Ingredients_List(listWeeklyIdChoosen)
         chooseBtn = x.findViewById(R.id.chooseBtn)
         saveBtn = x.findViewById(R.id.saveBtn)
 
@@ -86,7 +82,7 @@ class EditWeeklyDialog(
         exit.setOnClickListener(this)
 
         addTable()
-        initWeekly()
+        initMonthly()
         return x
 
 
@@ -95,19 +91,19 @@ class EditWeeklyDialog(
     override fun onDismiss(dialog: DialogInterface) {
         // super.onDismiss(dialog)
         if (flag) {
-            dailyPos = savedSize
+            weeklyPos = savedSize
             val parentFragment: Fragment? = parentFragment
             if (parentFragment is DialogInterface.OnDismissListener) {
                 (parentFragment as DialogInterface.OnDismissListener?)!!.onDismiss(dialog)
             }
 
 
-            for (i in dailyID!!.list!!) {
+            for (i in weeklyID!!.list!!) {
 
 
-                var daily = UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(i)
-                dailyList.add(daily)
-
+                var weekly = UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!.get(i)
+                weeklyList.add(weekly)
+                //   numOfDayArrlist.add(0)
 
 
             }
@@ -115,24 +111,26 @@ class EditWeeklyDialog(
 
             var j = savedSize
 
-            for (i in j..dailyList.size - 1) {
+            for (i in j..weeklyList.size - 1) {
+//
+//                if (j >= numOfDayArrlist.size) {
+//                    break
 
-                var t1v: Spinner = Spinner(context)
-                dailyIdsArrlist.add(dailyList.get(i).dailyId)
-                //dailyDayss.add(0)
-                t1v.setTag(tablePosition - 1)
+//                }
+
 
                 var tbrow: TableRow = TableRow(this.context)
-                //t1v.setTag(tablePosition)
                 tbrow.setTag(tablePosition++)
 
 
-
+                var t1v: Spinner = Spinner(context)
+                weeklyIdsArrlist.add(weeklyList.get(i).weeklyId)
+                t1v.setTag(tablePosition - 1)
 
 
                 ArrayAdapter.createFromResource(
                     this.requireContext(),
-                    R.array.days,
+                    R.array.weeks,
                     android.R.layout.simple_spinner_item
                 ).also { adapter ->
                     // Specify the layout to use when the list of choices appears
@@ -141,9 +139,6 @@ class EditWeeklyDialog(
                     t1v.adapter = adapter
                 }
 
-               /// t1v.onItemSelectedListener = SpinnerActivity(t1v.getTag() as Int)
-
-                /// if we have sunday - the next one will be monday..
                 if (j > 0) {
                     var o = stk.get(stk.size-1)
                     var y = o as TableRow
@@ -151,13 +146,10 @@ class EditWeeklyDialog(
                     var value = s.selectedItem
 
                     when (value) {
-                        "Sunday" -> value = 0
-                        "Monday" -> value = 1
-                        "Tuesday" -> value = 2
-                        "Wednesday" -> value = 3
-                        "Thursday" -> value = 4
-                        "Friday" -> value = 5
-                        "Saturday" -> value = 6
+                        "Week 1" -> value = 0
+                        "Week 2" -> value = 1
+                        "Week 3" -> value = 2
+                        "Week 4" -> value = 3
 
                     }
                     var k = value as Int
@@ -167,21 +159,20 @@ class EditWeeklyDialog(
                 }
 
 
-
                 tbrow.addView(t1v)
 
 
                 var t2v: TextView = TextView(context)
 
 
-                t2v.setText(" " + (dailyList.get(i).dailyId))
+                t2v.setText(" " + (weeklyList.get(i).weeklyId))
                 t2v.setTextColor(Color.BLACK)
                 t2v.gravity = Gravity.CENTER
 
                 tbrow.addView(t2v)
 
                 var t4v: Button = Button(context)
-                t4v.setTag(dailyPos)
+                t4v.setTag(weeklyPos)
                 t4v.setText("Delete")
                 t4v.setTextSize(8F)
                 t4v.setTextColor(Color.BLACK)
@@ -192,19 +183,14 @@ class EditWeeklyDialog(
 
                     var i = t4v.getTag() as Int
 
-//                    stk.removeView(stk.getChildAt(t4v.getTag() as Int))
+
                     stk.removeView(stk.getChildAt(tbrow.getTag() as Int))
-                    totalCostDobule -= dailyList!!.get(t4v.getTag() as Int).totalCost
+                    totalCostDobule -= weeklyList!!.get(t4v.getTag() as Int).totalCost
                     totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
                     totalCost.setText(totalCostDobule.toString())
-                    dailyList!!.removeAt(t4v.getTag() as Int)
-                    dailyIdsArrlist.removeAt(t4v.getTag() as Int)
-                  //  dailyDayss.removeAt(t4v.getTag() as Int)
+                    weeklyList!!.removeAt(t4v.getTag() as Int)
+                    weeklyIdsArrlist.removeAt(t4v.getTag() as Int)
 
-
-
-                    // CONTINUE HERE
-                    //  dailyDayss.remove()
                     tablePosition--
 
 
@@ -229,7 +215,7 @@ class EditWeeklyDialog(
 
 
                 var t3v: Button = Button(context)
-                t3v.setTag(dailyPos++)
+                t3v.setTag(weeklyPos++)
                 t3v.setText("Info")
                 t3v.setTextSize(10F)
                 t3v.setTextColor(Color.BLACK)
@@ -239,26 +225,27 @@ class EditWeeklyDialog(
                 t3v.setOnClickListener {
                     //NEED TO CHECK HERE WHATS WRONG with info button!!!!!
                     // getting this daily recipes
-                    var recipeList: ArrayList<Recipe> = ArrayList()
-                    var ids = dailyList.get(t3v.getTag() as Int).recipeIds.splitIgnoreEmpty(" ")
-                    var ind = 0
-                    for (k in UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!) {
-                        if (ind == ids.size) {
-                            break
+                    var dailyList: ArrayList<DailySchedule> = ArrayList()
+                    var ids = weeklyList.get(t3v.getTag() as Int).dailyIds.splitIgnoreEmpty(" ")
+                    var m =0
+                    //going through the list and get each recipe by its id
+                    for (i in ids) {
+                        if (UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(m).dailyId == i.toInt()) {
+                            dailyList!!.add(UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(m))
+                            m=0
                         }
-                        if (ids.contains(k.recipeId.toString())) {
-                            recipeList.add(k)
-                            ind++
+                        else {
+                            m++
                         }
-
                     }
-                    var dialog = DailyDialogInfo(
-                        recipeList,
-                        dailyList.get(i).quantities,
-                        dailyList.get(i).numOfMeals,
-                        dailyList.get(i).recipeIds,
-                        t3v.getTag() as Int + 1,
-                        dailyList.get(i).dailyId
+
+                    var dialog = WeeklyDialogInfo(
+                        dailyList,
+                        weeklyList.get(i).numOfDay,
+                        weeklyList.get(i).dailyIds,
+                        weeklyList.get(i).totalCost,
+                        t3v.getTag() as Int + 1
+
                     )
 
 
@@ -272,64 +259,59 @@ class EditWeeklyDialog(
                 tbrow.setBackgroundResource(R.drawable.spinner_shape)
                 stk.addView(tbrow)
                 j++
-                totalCostDobule += dailyList.get(i).totalCost
+                totalCostDobule += weeklyList.get(i).totalCost
 
 
             }
 
-            dailyPos++
+            weeklyPos++
 
             totalCostDobule = (DecimalFormat("##.####").format(totalCostDobule)).toDouble()
             totalCost.setText(totalCostDobule.toString())
-            savedSize = dailyList.size
+            savedSize = weeklyList.size
 
 
         }
     }
 
-
-    fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
-        return this.split(*delimiters).filter {
-            it.isNotEmpty()
-        }
-    }
-
-    private fun initWeekly() {
+    private fun initMonthly() {
         var j = 0
         var k = 0
-        dailyPos = 0
+        weeklyPos = 0
 
         // converting the strings into arr's
-        var numOfDayArr = numOfDay.splitIgnoreEmpty(" ")
-        var dailyIdsArr = dailyIds.splitIgnoreEmpty(" ")
+        var numOfWeekArr = numOfWeek.splitIgnoreEmpty(" ")
+        var weeklyIdsArr = weeklyIds.splitIgnoreEmpty(" ")
 
+//        for (i in numOfDayArr) {
+//            dailyDayss.add(i.toInt())
+//
+//        }
 
-        for (i in dailyIdsArr) {
-            dailyIdsArrlist.add(i.toInt())
+        for (i in weeklyIdsArr) {
+            weeklyIdsArrlist.add(i.toInt())
         }
 
 
-        for (i in dailyList) {
+        for (i in weeklyList) {
 
-            if (j >= dailyIdsArr.size) {
+            if (j >= weeklyIdsArr.size) {
                 break
             }
 
-            if (i.dailyId == dailyIdsArr[j].toInt()) {
+            if (i.weeklyId == weeklyIdsArr[j].toInt()) {
 
 
                 var t1v: Spinner = Spinner(context)
                 t1v.setTag(tablePosition - 1)
-                t1v.id = android.R.id.list
 
                 var tbrow: TableRow = TableRow(this.context)
-
                 tbrow.setTag(tablePosition++)
 
 
                 ArrayAdapter.createFromResource(
                     this.requireContext(),
-                    R.array.days,
+                    R.array.weeks,
                     android.R.layout.simple_spinner_item
                 ).also { adapter ->
                     // Specify the layout to use when the list of choices appears
@@ -338,9 +320,9 @@ class EditWeeklyDialog(
                     t1v.adapter = adapter
                 }
 
-               // t1v.onItemSelectedListener = SpinnerActivity(t1v.getTag() as Int)
 
-                t1v.setSelection(numOfDayArr[k++].toInt())
+
+                t1v.setSelection(numOfWeekArr[k++].toInt())
 
 
                 tbrow.addView(t1v)
@@ -349,14 +331,14 @@ class EditWeeklyDialog(
                 var t2v: TextView = TextView(context)
 
 
-                t2v.setText(" " + (i.dailyId))
+                t2v.setText(" " + (i.weeklyId))
                 t2v.setTextColor(Color.BLACK)
                 t2v.gravity = Gravity.CENTER
 
                 tbrow.addView(t2v)
 
                 var t4v: Button = Button(context)
-                t4v.setTag(dailyPos)
+                t4v.setTag(weeklyPos)
                 t4v.setText("Delete")
                 t4v.setTextSize(10F)
                 t4v.setTextColor(Color.BLACK)
@@ -369,25 +351,21 @@ class EditWeeklyDialog(
 
 //                    stk.removeView(stk.getChildAt(t4v.getTag() as Int))
                     stk.removeView(stk.getChildAt(tbrow.getTag() as Int))
-                    totalCostDobule -= dailyList!!.get(t4v.getTag() as Int).totalCost
+                    totalCostDobule -= weeklyList!!.get(t4v.getTag() as Int).totalCost
                     totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
                     totalCost.setText(totalCostDobule.toString())
-                    dailyList!!.removeAt(t4v.getTag() as Int)
-                    dailyIdsArrlist.removeAt(t4v.getTag() as Int)
-                   // dailyDayss.removeAt(t4v.getTag() as Int)
-                    savedSize = dailyList.size
-
+                    weeklyList!!.removeAt(t4v.getTag() as Int)
+                    weeklyIdsArrlist.removeAt(t4v.getTag() as Int)
+                    Log.v("Elad1", "Daily days after del" + weeklyDayss)
+                    // CONTINUE HERE
+                    //  dailyDayss.remove()
                     tablePosition--
-                    Log.v("Elad1", "HEREEEEEEE")
-
 
                     for (x in stk) {
-                        Log.v("Elad1", "I is " + i)
-                        Log.v("Elad1", " row tage is " + x.getTag())
                         if (x.getTag() as Int == 0)
                             continue
                         if (x.getTag() as Int > i) {
-                            x.setTag((x.getTag() as Int) - 1)
+                            x.setTag(x.getTag() as Int - 1)
                             var y = x as TableRow
                             //changing info delete tag
                             y.get(2).setTag(y.get(2).getTag() as Int - 1)
@@ -405,7 +383,7 @@ class EditWeeklyDialog(
 
 
                 var t3v: Button = Button(context)
-                t3v.setTag(dailyPos++)
+                t3v.setTag(weeklyPos++)
                 t3v.setText("Info")
                 t3v.setTextSize(10F)
                 t3v.setTextColor(Color.BLACK)
@@ -414,15 +392,15 @@ class EditWeeklyDialog(
                 //t5v.setBackgroundResource(R.drawable.spinner_shape)
                 t3v.setOnClickListener {
                     //NEED TO CHECK HERE WHATS WRONG with info button!!!!!
-                    // getting this daily recipes
-                    var recipeList: ArrayList<Recipe> = ArrayList()
-                    var ids = dailyList.get(t3v.getTag() as Int).recipeIds.splitIgnoreEmpty(" ")
+                    // getting this weekly recipes
+                    var dailyList: ArrayList<DailySchedule> = ArrayList()
+                    var ids = weeklyList.get(t3v.getTag() as Int).dailyIds.splitIgnoreEmpty(" ")
 
                     var m =0
                     //going through the list and get each recipe by its id
                     for (i in ids) {
-                        if (UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(m).recipeId == i.toInt()) {
-                            recipeList!!.add(UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(m))
+                        if (UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(m).dailyId == i.toInt()) {
+                            dailyList!!.add(UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(m))
                             m=0
                         }
                         else {
@@ -431,14 +409,16 @@ class EditWeeklyDialog(
                     }
 
 
-                    var dialog = DailyDialogInfo(
-                        recipeList,
-                        i.quantities,
-                        i.numOfMeals,
-                        i.recipeIds,
+
+
+                    var dialog = WeeklyDialogInfo(
+                        dailyList,
+                        i.numOfDay,
+                        i.dailyIds,
+                        i.totalCost,
                         t3v.getTag() as Int + 1,
-                        i.dailyId
-                    )
+
+                        )
 
 
                     dialog!!.show(childFragmentManager, "DailyDialogInfo")
@@ -460,7 +440,7 @@ class EditWeeklyDialog(
 
         totalCostDobule = (DecimalFormat("##.####").format(totalCostDobule)).toDouble()
         totalCost.setText(totalCostDobule.toString())
-        savedSize = dailyList.size
+        savedSize = weeklyList.size
 
     }
 
@@ -470,14 +450,14 @@ class EditWeeklyDialog(
         var tbrow0: TableRow = TableRow(context)
 
         var tv0: TextView = TextView(context)
-        tv0.setText(" Day ")
+        tv0.setText(" Week ")
         tv0.setTextColor(Color.BLACK)
         tv0.gravity = Gravity.CENTER
         //  tv0.setBackgroundResource(R.drawable.spinner_shape)
         tbrow0.addView(tv0)
 
         var tv1: TextView = TextView(context)
-        tv1.setText(" DailyId ")
+        tv1.setText(" WeeklyId ")
         tv1.setTextColor(Color.BLACK)
         tv1.gravity = Gravity.CENTER
         // tv1.setBackgroundResource(R.drawable.spinner_shape)
@@ -508,26 +488,42 @@ class EditWeeklyDialog(
 
     }
 
+    fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
+        return this.split(*delimiters).filter {
+            it.isNotEmpty()
+        }
+    }
+
+
+
+
     override fun onClick(p0: View?) {
-
         if (p0 == chooseBtn) {
-            dailyID!!.list!!.clear()
-            savedSize = dailyList.size
+            flag = true
+            weeklyID!!.list!!.clear()
+            savedSize = weeklyList.size
 
-            var dialog = Daily_Schedule_Choose_Dialog(
+            var dialog = Weekly_Schedule_Choose_Dialog(
+                UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!,
                 UserPropertiesSingelton.getInstance()!!.getUserDaily()!!,
                 UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!,
-                dailyID!!
+                weeklyID!!
             )
             dialog.show(childFragmentManager, "DailySchudleChooseDialog")
         } else if (p0 == saveBtn) {
+            if (weeklyIdsArrlist.isNotEmpty()) {
 
-            if (dailyIdsArrlist.isNotEmpty()) {
-
-                numOfDay = ""
-                dailyIds = ""
-                dailyDayss.clear()
+                weeklyDayss.clear()
                 flag = true
+                numOfWeek = ""
+                weeklyIds = ""
+
+                val arr = IntArray(7)
+
+                // getting these weeks id's
+                for (i in weeklyIdsArrlist) {
+                    weeklyIds += "" + i + " "
+                }
 
                 for (x in stk) {
                     if (x.getTag() as Int == 0)
@@ -537,36 +533,26 @@ class EditWeeklyDialog(
                     var value = s.selectedItem
 
                     when (value) {
-                        "Sunday" -> value = 0
-                        "Monday" -> value = 1
-                        "Tuesday" -> value = 2
-                        "Wednesday" -> value = 3
-                        "Thursday" -> value = 4
-                        "Friday" -> value = 5
-                        "Saturday" -> value = 6
+                        "Week 1" -> value = 0
+                        "Week 2" -> value = 1
+                        "Week 3" -> value = 2
+                        "Week 4" -> value = 3
 
                     }
-                    dailyDayss.add(value as Int)
+                    weeklyDayss.add(value as Int)
                     Log.v("Elad1", "YOSIII " + value)
 
 
                 }
 
 
-                val arr = IntArray(7)
-
-                // collecting dailys id's
-                for (i in dailyIdsArrlist) {
-                    dailyIds += "" + i + " "
-                }
-
-                // collectiing daily days, checking no duplicates
-                for (i in dailyDayss) {
+                // getting number of weeks , checking duplicate
+                for (i in weeklyDayss) {
                     if (arr[i] != 0) {
                         val builder: AlertDialog.Builder = AlertDialog.Builder(context)
 
                         builder.setTitle("Edit Weekly")
-                        builder.setMessage("You cannot have a duplicate of the same day.")
+                        builder.setMessage("You cannot have a duplicate of the same week.")
 
                         builder.setPositiveButton(
                             "OK",
@@ -582,7 +568,7 @@ class EditWeeklyDialog(
                         break
                     } else {
                         arr[i] += 1
-                        numOfDay += "" + i + " "
+                        numOfWeek += "" + i + " "
                     }
 
                 }
@@ -590,11 +576,11 @@ class EditWeeklyDialog(
 
 
                 if (flag) {
-                    var weekly = WeeklySchedule(
-                        weeklyId,
+                    var weekly = MonthlySchedule(
+                        monthlyId,
                         UserInterFace.userID,
-                        numOfDay,
-                        dailyIds,
+                        numOfWeek,
+                        weeklyIds,
                         totalCostDobule,
                         true
                     )
@@ -602,8 +588,8 @@ class EditWeeklyDialog(
                     var s = AsynTaskNew(weekly, childFragmentManager)
                     s.execute()
 
-                    numOfDay = ""
-                    dailyIds = ""
+                    numOfWeek = ""
+                    weeklyIds = ""
 
                 }
 
@@ -616,74 +602,5 @@ class EditWeeklyDialog(
         } else if (p0 == exit) {
             dismiss()
         }
-
     }
-
-
-//    inner class SpinnerActivity() : Activity(),
-//        AdapterView.OnItemSelectedListener {
-//
-//
-//        override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-//            // An item was selected. You can retrieve the selected item using
-//            // parent.getItemAtPosition(pos)\
-////            Log.v("Elad1", "position in table " + positionInTable)
-////            Log.v("Elad1", "deleted is " + deletedTimes)
-////            Log.v("Elad1", "Daily days" + dailyDayss)
-////            positionInTable -= deletedTimes
-//            var tmp = 0
-//            when (parent.getItemAtPosition(pos)) {
-//                "Sunday" -> tmp = 0
-//                "Monday" -> tmp = 1
-//                "Tuesday" -> tmp = 2
-//                "Wednesday" -> tmp = 3
-//                "Thursday" -> tmp = 4
-//                "Friday" -> tmp = 5
-//                "Saturday" -> tmp = 6
-//            }
-////            //Log.v("Elad1","Dup" + duplicateDay)
-////            if ((dailyDayss!!.contains(duplicateDay)) && !flag) {
-////                dailyDayss!!.remove(duplicateDay)
-////
-////            }
-////            // if we dont add new day and just change the day
-////            Log.v("Elad1", "Saved is " + savedSize)
-////            if (dailyDayss.size == savedSize) {
-////                Log.v("Elad1", "daily size " + dailyDayss.size)
-////                Log.v("Elad1", "didnt add new day")
-////                // means we change the last day
-////                if (positionInTable - deletedTimes == dailyDayss.size - 1) {
-////                    Log.v("Elad1", "End")
-////                    dailyDayss.removeAt(dailyDayss.size - 1)
-////                    dailyDayss.add(tmp)
-////                }
-////
-////                // first day and day in the middle changes are the same
-////                else if (positionInTable - deletedTimes == 0) {
-////                    Log.v("Elad1", "start")
-////                    dailyDayss.add(positionInTable, tmp)
-////                    dailyDayss.removeAt(positionInTable + 1)
-////                }
-////                // middle day change
-////                else {
-////                    Log.v("Elad1", "mid")
-////                    dailyDayss.add(positionInTable, tmp)
-////                    dailyDayss.removeAt(positionInTable + 1)
-////                }
-////
-////            } else {
-////                Log.v("Elad1", "add new day")
-////                dailyDayss.add(tmp)
-////            }
-////
-////            Log.v("Elad1", "Daily days2" + dailyDayss)
-//        }
-//
-//        override fun onNothingSelected(parent: AdapterView<*>) {
-//            // Another interface callback
-//
-//
-//        }
-//    }
-
 }

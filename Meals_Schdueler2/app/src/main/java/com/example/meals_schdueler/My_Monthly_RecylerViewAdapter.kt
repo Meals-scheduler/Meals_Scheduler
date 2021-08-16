@@ -56,22 +56,22 @@ class My_Monthly_RecylerViewAdapter(
         holder.numOfWeekly.setText(numOfMonthly++.toString())
 
         holder.edit.setOnClickListener {
-//            Log.v("Elad1", "FF1" + item.weeklyId.toString())
-//            // copying the list not to override it in the edit .
-//            var tmpList: ArrayList<WeeklySchedule> = ArrayList()
-//            for (i in monthlyWeekly.get(item.weeklyId.toString())!!) {
-//                tmpList.add(i)
-//            }
-//
-//            var dialog = EditWeeklyDialog(
-//                tmpList,
-//                item.numOfDay,
-//                item.dailyIds,
-//                position + 1,
-//                item.weeklyId
-//
-//            )
-//            dialog.show(childFragmentManager, "weeklyEdit")
+            Log.v("Elad1", "FF1" + item.monthlyId.toString())
+            // copying the list not to override it in the edit .
+            var tmpList: ArrayList<WeeklySchedule> = ArrayList()
+            for (i in monthlyWeekly.get(item.monthlyId.toString())!!) {
+                tmpList.add(i)
+            }
+
+            var dialog = EditMonthlyDialog(
+                tmpList,
+                item.numOfWeek,
+                item.weeklyIds,
+                position + 1,
+                item.monthlyId
+
+            )
+            dialog.show(childFragmentManager, "weeklyEdit")
         }
 
 

@@ -22,17 +22,20 @@ import java.net.URL
 import java.net.URLEncoder
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class My_Daily_RecylerViewAdapter(
 
-    values: ArrayList<DailySchedule>,
+   // values: ArrayList<DailySchedule>,
+    values : HashMap<String,DailySchedule>,
     childFragmentManager: FragmentManager,
     context: Context?,
 ) : RecyclerView.Adapter<My_Daily_RecylerViewAdapter.ViewHolder>() {
 
     var builder: java.lang.StringBuilder? = null
-    private var mValues: ArrayList<DailySchedule> = values
+   // private var mValues: ArrayList<DailySchedule> = values
+   private var mValues:HashMap<String,DailySchedule> = values
     private var childFragmentManager = childFragmentManager
     private var numOfDaily = 1
     private lateinit var recipeList: ArrayList<Recipe>
@@ -49,7 +52,7 @@ class My_Daily_RecylerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: My_Daily_RecylerViewAdapter.ViewHolder, position: Int) {
-        var item: DailySchedule = mValues[position] // each item postion
+        var item: DailySchedule = mValues[position]!! // each item postion
         holder.mItem = item
 
         holder.numOfDaily.setText(numOfDaily++.toString())
@@ -77,6 +80,7 @@ class My_Daily_RecylerViewAdapter(
 
 
         holder.info.setOnClickListener {
+            Log.v("Elad1" , "OKKK1")
             var dialog = DailyDialogInfo(
                 recipeList!!,
                 mValues.get(position).quantities,

@@ -29,12 +29,12 @@ class MonthlySchedule(
     override fun DoNetWorkOpreation(): String {
         var input = ""
         //if we insert a new daily and not updating
-//        if (!isUpdate) {
-//            monthlyId = getMonthly().toInt() + 1 // getting current RecipeID first
-//
-//        }
+        if (!isUpdate) {
+            monthlyId = getMonthly().toInt() + 1 // getting current RecipeID first
 
-        monthlyId = 1
+        }
+           // monthlyId = 1
+
         if (monthlyId != -1)
             input = postData() // now we upload the current ingredient details.
 

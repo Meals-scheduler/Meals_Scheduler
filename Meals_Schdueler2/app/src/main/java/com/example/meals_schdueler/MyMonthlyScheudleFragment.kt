@@ -162,11 +162,13 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
             var map: HashMap<String, ArrayList<String>> = HashMap()
             var mapTotalCost: HashMap<String, Double> = HashMap()
 
-            var currentMonthlyID = monthlyInfo[0].get(0).toInt() - 48
+
+            var monthlyInfo2 = monthlyInfo[0].splitIgnoreEmpty("*")
+            var currentMonthlyID = monthlyInfo2[0].toInt()
 
             for (i in monthlyInfo.indices) {
 
-                var monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
+                 monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
 
                 //means we switch to the next WeeklyID
                 if (monthlyInfo2[0].toInt() != currentMonthlyID) {

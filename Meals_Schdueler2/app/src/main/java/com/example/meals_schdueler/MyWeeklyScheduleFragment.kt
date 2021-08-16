@@ -166,11 +166,12 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
             var map: HashMap<String, ArrayList<String>> = HashMap()
             var mapTotalCost: HashMap<String, Double> = HashMap()
 
-            var currentWeeklyID = weeklyInfo[0].get(0).toInt() - 48
+            var weeklyInfo2 = weeklyInfo[0].splitIgnoreEmpty("*")
+            var currentWeeklyID = weeklyInfo2[0].toInt()
 
             for (i in weeklyInfo.indices) {
 
-                var weeklyInfo2 = weeklyInfo[i].splitIgnoreEmpty("*")
+                 weeklyInfo2 = weeklyInfo[i].splitIgnoreEmpty("*")
 
                 //means we switch to the next WeeklyID
                 if (weeklyInfo2[0].toInt() != currentWeeklyID) {

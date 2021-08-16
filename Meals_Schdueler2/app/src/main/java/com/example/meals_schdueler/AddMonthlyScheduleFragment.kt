@@ -30,8 +30,8 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
     private lateinit var chooseWeekBtn: Button
     private lateinit var totalCost: EditText
     private var totalCostDobule: Double = 0.0
-    private var flag = true
-    private var duplicateWeek = -1
+    private var flag = true // this flag is for the duplicated week check
+
 
 
     //saving weekly id
@@ -159,10 +159,38 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
 
             weeklyDays = ""
             weeklyIds=""
+            flag = true
+            weeklyDayss!!.clear()
+
+            // getting these weekks id's
             for (i in weeklyList!!) {
                 weeklyIds += "" + i.weeklyId + " "
 
             }
+
+            for (x in stk) {
+                if (x.getTag() as Int == 0)
+                    continue
+                var y = x as TableRow
+                var s: Spinner = y.getChildAt(0) as Spinner
+                var value = s.selectedItem
+
+                when (value) {
+                    "Week 1" -> value = 0
+                    "Week 2" -> value = 1
+                    "Week 3" -> value = 2
+                    "Week 4" -> value = 3
+
+
+                }
+
+                weeklyDayss!!.add(value as Int)
+
+
+
+            }
+
+
             val arr = IntArray(7)
 
             for (i in weeklyDayss!!) {
@@ -181,7 +209,7 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
                     val alert: AlertDialog = builder.create()
                     alert.show()
                     flag = false
-                    duplicateWeek = i
+
 
                     break
                 } else {
@@ -218,16 +246,11 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
         weeklyDayss!!.clear()
         weeklyList!!.clear()
         totalCost.setText(totalCostDobule.toString())
-        weeklyDayss
-//        stk.setColumnShrinkable(4,
-//        false)
-//        stk.setColumnShrinkable(3, false)
-//        stk.setColumnStretchable(3, false)
-//        stk.setColumnStretchable(4, false)
         var j = 1
         for (x in stk) {
             stk.removeView(stk.getChildAt(j))
         }
+        stk.removeView(stk.getChildAt(j))
 
     }
 
@@ -271,7 +294,26 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
                 t1v.adapter = adapter
             }
 
-            t1v.onItemSelectedListener = SpinnerActivity(t1v.getTag() as Int)
+            if (stk.size > 1) {
+                var o = stk.get(stk.size - 1)
+                var y = o as TableRow
+                var s: Spinner = y.getChildAt(0) as Spinner
+                var value = s.selectedItem
+
+                when (value) {
+                    "Week 1" -> value = 0
+                    "Week 2" -> value = 1
+                    "Week 3" -> value = 2
+                    "Week 4" -> value = 3
+
+
+                }
+                var k = value as Int
+                t1v.setSelection(k + 1)
+            } else {
+                t1v.setSelection(0)
+            }
+
             tbrow.addView(t1v)
 
             var t2v: TextView = TextView(context)
@@ -300,9 +342,8 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
                 totalCostDobule -= weeklyList!!.get(t3v.getTag() as Int - 1).totalCost
                 totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
                 totalCost.setText(totalCostDobule.toString())
-
                 weeklyList!!.removeAt(t3v.getTag() as Int - 1)
-                weeklyDayss!!.removeAt(t3v.getTag() as Int - 1)
+
 
 
 
@@ -375,56 +416,6 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
     }
 
 
-    inner class SpinnerActivity(positionInTable: Int) : Activity(),
-        AdapterView.OnItemSelectedListener {
-        var positionInTable = positionInTable
-
-
-        override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-            Log.v("Elad1", "position in table " + positionInTable)
-            // An item was selected. You can retrieve the selected item using
-            // parent.getItemAtPosition(pos)
-            Log.v("Elad1", "Weekly days " + weeklyDayss)
-            var tmp = 0
-            when (parent.getItemAtPosition(pos)) {
-                "Week 1" -> tmp = 0
-                "Week 2" -> tmp = 1
-                "Week 3" -> tmp = 2
-                "Week 4" -> tmp = 3
-
-            }
-            // dailyDays!!.add(parent.getItemAtPosition(pos).toString())
-//            if (!(dailyDayss!!.contains(tmp))) {
-//                dailyDayss!!.add(pos)
-//
-//
-//            }
-            Log.v("Elad1", "Dup" + duplicateWeek)
-            if ((weeklyDayss!!.contains(duplicateWeek)) && !flag) {
-                weeklyDayss!!.remove(duplicateWeek)
-
-            }
-            Log.v("Elad1", "Tmp is " + tmp)
-            weeklyDayss!!.add(tmp)
-            flag = true
-
-            // to delete unexpected daily days
-            if (weeklyDayss!!.size == tablePosition) {
-                weeklyDayss!!.removeAt(weeklyDayss!!.size - 1)
-                weeklyDayss!!.add(positionInTable, tmp)
-                weeklyDayss!!.removeAt(positionInTable + 1)
-            }
-
-            Log.v("Elad1", "Weekly days 2" + weeklyDayss)
-
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>) {
-            // Another interface callback
-
-
-        }
-    }
 
 
     fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {

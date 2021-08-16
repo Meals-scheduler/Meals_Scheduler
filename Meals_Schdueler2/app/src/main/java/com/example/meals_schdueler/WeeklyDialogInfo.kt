@@ -138,18 +138,17 @@ class WeeklyDialogInfo(
             t3v.setOnClickListener {
               //NEED TO CHECK HERE WHATS WRONG with info button!!!!!
                 // getting this daily recipes
+                var k =0
                 var recipeList: ArrayList<Recipe> = ArrayList()
                 var ids = dailyList.get(t3v.getTag() as Int).recipeIds.splitIgnoreEmpty(" ")
-                var ind = 0
-                for (k in UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!) {
-                    if (ind == ids.size) {
-                        break
+                for (i in ids) {
+                    if (UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(k).recipeId == i.toInt()) {
+                        recipeList!!.add(UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(k))
+                        k=0
                     }
-                    if(ids.contains(k.recipeId.toString())){
-                        recipeList.add(k)
-                        ind++
+                    else {
+                        k++
                     }
-
                 }
                 var dialog = DailyDialogInfo(
                     recipeList,

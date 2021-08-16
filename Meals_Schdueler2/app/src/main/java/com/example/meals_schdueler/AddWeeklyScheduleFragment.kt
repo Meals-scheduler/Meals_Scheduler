@@ -12,7 +12,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.view.get
+import androidx.core.view.isNotEmpty
 import androidx.core.view.iterator
+import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import com.example.meals_schdueler.dummy.DailySchedule
 import java.text.DecimalFormat
@@ -37,8 +39,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
     private var dailyIds: String = ""
     private var dailyDayss: ArrayList<Int>? = null
     private var recipeList: ArrayList<Recipe>? = null
-    private var flag = true
-    private var duplicateDay = -1
+    private var flag = true // this flag is for the duplicated days check.
 
     private var tablePosition = 1
 
@@ -159,56 +160,86 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
 
         } else if (p0 == saveBtn) {
 
+            if (stk.isNotEmpty()) {
 
-            dailyDays = ""
-            dailyIds = ""
+                dailyDays = ""
+                dailyIds = ""
+                dailyDayss!!.clear()
+                flag = true
 
-            val arr = IntArray(7)
+                val arr = IntArray(7)
 
 
-            Log.v("Elad1", "Daily days" + dailyDayss)
-            for (i in dailyList!!) {
-                dailyIds += "" + i.dailyId + " "
+                // collecting dailys id's
+                for (i in dailyList!!) {
+                    dailyIds += "" + i.dailyId + " "
 
-            }
-            for (i in dailyDayss!!) {
-                if (arr[i] != 0) {
-                    val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-
-                    builder.setTitle("Adding Weekly")
-                    builder.setMessage("You cannot have a duplicate of the same day.")
-
-                    builder.setPositiveButton(
-                        "OK",
-                        DialogInterface.OnClickListener { dialog, which -> // Do nothing but close the dialog
-
-                            dialog.dismiss()
-                        })
-                    val alert: AlertDialog = builder.create()
-                    alert.show()
-                    flag = false
-                    duplicateDay = i
-
-                    break
-                } else {
-                    arr[i] += 1
-                    dailyDays += "" + i + " "
                 }
 
-            }
-            if (flag) {
-                var w = WeeklySchedule(
-                    1,
-                    UserInterFace.userID,
-                    dailyDays,
-                    dailyIds,
-                    totalCostDobule,
-                    false
-                )
-                var s = AsynTaskNew(w, childFragmentManager)
-                s.execute()
+                for (x in stk) {
+                    if (x.getTag() as Int == 0)
+                        continue
+                    var y = x as TableRow
+                    var s: Spinner = y.getChildAt(0) as Spinner
+                    var value = s.selectedItem
 
-                clearTable()
+                    when (value) {
+                        "Sunday" -> value = 0
+                        "Monday" -> value = 1
+                        "Tuesday" -> value = 2
+                        "Wednesday" -> value = 3
+                        "Thursday" -> value = 4
+                        "Friday" -> value = 5
+                        "Saturday" -> value = 6
+
+                    }
+
+                    dailyDayss!!.add(value as Int)
+                    Log.v("Elad1", "YOSIII " + value)
+
+
+                }
+
+                // collectiing daily days, checking no duplicates
+                for (i in dailyDayss!!) {
+                    if (arr[i] != 0) {
+                        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+
+                        builder.setTitle("Adding Weekly")
+                        builder.setMessage("You cannot have a duplicate of the same day.")
+
+                        builder.setPositiveButton(
+                            "OK",
+                            DialogInterface.OnClickListener { dialog, which -> // Do nothing but close the dialog
+
+                                dialog.dismiss()
+                            })
+                        val alert: AlertDialog = builder.create()
+                        alert.show()
+                        flag = false
+
+
+                        break
+                    } else {
+                        arr[i] += 1
+                        dailyDays += "" + i + " "
+                    }
+
+                }
+                if (flag) {
+                    var w = WeeklySchedule(
+                        1,
+                        UserInterFace.userID,
+                        dailyDays,
+                        dailyIds,
+                        totalCostDobule,
+                        false
+                    )
+                    var s = AsynTaskNew(w, childFragmentManager)
+                    s.execute()
+
+                    clearTable()
+                }
             }
         }
 
@@ -229,6 +260,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
         for (x in stk) {
             stk.removeView(stk.getChildAt(j))
         }
+        stk.removeView(stk.getChildAt(j))
 
     }
 
@@ -271,12 +303,34 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                 t1v.adapter = adapter
             }
 
-            t1v.onItemSelectedListener = SpinnerActivity(t1v.getTag() as Int)
+            // t1v.onItemSelectedListener = SpinnerActivity(t1v.getTag() as Int)
             // t1v.setBackgroundResource(R.drawable.border)
 //        t1v.setText(" " + (mealChoosen))
 //        t1v.setTextColor(Color.BLACK)
 //        t1v.gravity = Gravity.CENTER
             //  t1v.setBackgroundResource(R.drawable.spinner_shape)
+
+            if (stk.size > 1) {
+                var o = stk.get(stk.size - 1)
+                var y = o as TableRow
+                var s: Spinner = y.getChildAt(0) as Spinner
+                var value = s.selectedItem
+
+                when (value) {
+                    "Sunday" -> value = 0
+                    "Monday" -> value = 1
+                    "Tuesday" -> value = 2
+                    "Wednesday" -> value = 3
+                    "Thursday" -> value = 4
+                    "Friday" -> value = 5
+                    "Saturday" -> value = 6
+
+                }
+                var k = value as Int
+                t1v.setSelection(k + 1)
+            } else {
+                t1v.setSelection(0)
+            }
 
             tbrow.addView(t1v)
 
@@ -307,7 +361,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                 totalCost.setText(totalCostDobule.toString())
                 dailyList!!.removeAt(t3v.getTag() as Int - 1)
                 // CONTINUE HERE
-                dailyDayss!!.removeAt(t3v.getTag() as Int - 1)
+             //   dailyDayss!!.removeAt(t3v.getTag() as Int - 1)
                 Log.v("Elad1", "Daily days after delete" + dailyDayss)
                 tablePosition--
 
@@ -348,10 +402,16 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                 // split it so i can make a list from it
                 var recipeIDs = recipeIDS.splitIgnoreEmpty(" ")
 
+
+                var m =0
                 //going through the list and get each recipe by its id
-                for (i in UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!) {
-                    if (recipeIDs.contains(i.recipeId.toString())) {
-                        recipeList!!.add(i)
+                for (i in recipeIDs) {
+                    if (UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(m).recipeId == i.toInt()) {
+                        recipeList!!.add(UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(m))
+                        m=0
+                    }
+                    else {
+                        m++
                     }
                 }
 
@@ -380,58 +440,58 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
     }
 
 
-    inner class SpinnerActivity(positionInTable: Int) : Activity(),
-        AdapterView.OnItemSelectedListener {
-        var positionInTable = positionInTable
-
-
-        override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-            Log.v("Elad1", "position in table " + positionInTable)
-            // An item was selected. You can retrieve the selected item using
-            // parent.getItemAtPosition(pos)
-            Log.v("Elad1", "Daily days " + dailyDayss)
-            var tmp = 0
-            when (parent.getItemAtPosition(pos)) {
-                "Sunday" -> tmp = 0
-                "Monday" -> tmp = 1
-                "Tuesday" -> tmp = 2
-                "Wednesday" -> tmp = 3
-                "Thursday" -> tmp = 4
-                "Friday" -> tmp = 5
-                "Saturday" -> tmp = 6
-            }
-            // dailyDays!!.add(parent.getItemAtPosition(pos).toString())
-//            if (!(dailyDayss!!.contains(tmp))) {
-//                dailyDayss!!.add(pos)
+//    inner class SpinnerActivity(positionInTable: Int) : Activity(),
+//        AdapterView.OnItemSelectedListener {
+//        var positionInTable = positionInTable
 //
+//
+//        override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+//            Log.v("Elad1", "position in table " + positionInTable)
+//            // An item was selected. You can retrieve the selected item using
+//            // parent.getItemAtPosition(pos)
+//            Log.v("Elad1", "Daily days " + dailyDayss)
+//            var tmp = 0
+//            when (parent.getItemAtPosition(pos)) {
+//                "Sunday" -> tmp = 0
+//                "Monday" -> tmp = 1
+//                "Tuesday" -> tmp = 2
+//                "Wednesday" -> tmp = 3
+//                "Thursday" -> tmp = 4
+//                "Friday" -> tmp = 5
+//                "Saturday" -> tmp = 6
+//            }
+//            // dailyDays!!.add(parent.getItemAtPosition(pos).toString())
+////            if (!(dailyDayss!!.contains(tmp))) {
+////                dailyDayss!!.add(pos)
+////
+////
+////            }
+//            Log.v("Elad1", "Dup" + duplicateDay)
+//            if ((dailyDayss!!.contains(duplicateDay)) && !flag) {
+//                dailyDayss!!.remove(duplicateDay)
 //
 //            }
-            Log.v("Elad1", "Dup" + duplicateDay)
-            if ((dailyDayss!!.contains(duplicateDay)) && !flag) {
-                dailyDayss!!.remove(duplicateDay)
-
-            }
-            Log.v("Elad1", "Tmp is " + tmp)
-            dailyDayss!!.add(tmp)
-            flag = true
-
-            // to delete unexpected daily days
-            if (dailyDayss!!.size == tablePosition) {
-                dailyDayss!!.removeAt(dailyDayss!!.size - 1)
-                dailyDayss!!.add(positionInTable, tmp)
-                dailyDayss!!.removeAt(positionInTable + 1)
-            }
-
-            Log.v("Elad1", "Daily days 2" + dailyDayss)
-
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>) {
-            // Another interface callback
-
-
-        }
-    }
+//            Log.v("Elad1", "Tmp is " + tmp)
+//            dailyDayss!!.add(tmp)
+//            flag = true
+//
+//            // to delete unexpected daily days
+//            if (dailyDayss!!.size == tablePosition) {
+//                dailyDayss!!.removeAt(dailyDayss!!.size - 1)
+//                dailyDayss!!.add(positionInTable, tmp)
+//                dailyDayss!!.removeAt(positionInTable + 1)
+//            }
+//
+//            Log.v("Elad1", "Daily days 2" + dailyDayss)
+//
+//        }
+//
+//        override fun onNothingSelected(parent: AdapterView<*>) {
+//            // Another interface callback
+//
+//
+//        }
+//    }
 
     fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
         return this.split(*delimiters).filter {

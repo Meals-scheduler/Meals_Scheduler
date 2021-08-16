@@ -21,7 +21,8 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
 
 
     private var columnCount = 1
-    private var dailyList: ArrayList<DailySchedule>? = null
+    //private var dailyList: ArrayList<DailySchedule>? = null
+    private var dailyList: HashMap<String,DailySchedule>? = null
     private var recipeList: ArrayList<Recipe>? = null
     private var dailyRecyclerViewAdapter: My_Daily_RecylerViewAdapter? = null
 
@@ -35,7 +36,8 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
         super.onCreate(savedInstanceState)
 
         recipeList = ArrayList()
-        dailyList = ArrayList()
+       // dailyList = ArrayList()
+        dailyList = HashMap()
         dailyRecyclerViewAdapter = My_Daily_RecylerViewAdapter(
             dailyList!!,
             childFragmentManager,
@@ -158,9 +160,10 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
             var map: HashMap<String, ArrayList<String>> = HashMap()
             var mapTotalCost: HashMap<String, Double> = HashMap()
             // first attach each meal to its dailyID.
-            var currentDailyID = dailyInfo[0].get(0).toInt() - 48
+            var dailyInfo2 = dailyInfo[0].splitIgnoreEmpty("*")
+            var currentDailyID = dailyInfo2[0].toInt()
             for (i in dailyInfo.indices) {
-                var dailyInfo2 = dailyInfo[i].splitIgnoreEmpty("*")
+                 dailyInfo2 = dailyInfo[i].splitIgnoreEmpty("*")
                 //means we switch to the next DailyID
                 if (dailyInfo2[0].toInt() != currentDailyID) {
                     var totalLists: ArrayList<String> = ArrayList()
@@ -171,7 +174,7 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
                     // gathering all quantities , numOfMeal and recipeIds under
                     // the key of that DailyID
                     map.put(currentDailyID.toString(), totalLists)
-                    mapTotalCost.put(currentDailyID.toString(), dailyInfo2[2].toDouble())
+                    mapTotalCost.put(currentDailyID.toString(), totalcost)
                     //switching to the next DailyID
                     currentDailyID = dailyInfo2[0].toInt()
 

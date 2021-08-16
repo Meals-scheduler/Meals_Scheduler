@@ -75,6 +75,9 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
         else if(action is WeeklySchedule){
             MyWeeklyScheduleFragment.getInstance1().startTask()
         }
+        else if(action is MonthlySchedule){
+            MyMonthlyScheudleFragment.getInstance1().startTask()
+        }
         if (!(action is DeleteAlertDialog)) {
             pbDialog.dismiss()
         }

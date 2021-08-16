@@ -135,17 +135,18 @@ class MonthlyDialogInfo(
                 // getting this daily recipes
                 var dailyList: ArrayList<DailySchedule> = ArrayList()
                 var ids = weeklyList.get(t3v.getTag() as Int).dailyIds.splitIgnoreEmpty(" ")
-                var ind = 0
-                for (k in UserPropertiesSingelton.getInstance()!!.getUserDaily()!!) {
-                    if (ind == ids.size) {
-                        break
+                var m =0
+                //going through the list and get each recipe by its id
+                for (i in ids) {
+                    if (UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(m).dailyId == i.toInt()) {
+                        dailyList!!.add(UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(m))
+                        m=0
                     }
-                    if (ids.contains(k.dailyId.toString())) {
-                        dailyList.add(k)
-                        ind++
+                    else {
+                        m++
                     }
-
                 }
+
                 var dialog = WeeklyDialogInfo(
                     dailyList,
                     i.numOfDay,

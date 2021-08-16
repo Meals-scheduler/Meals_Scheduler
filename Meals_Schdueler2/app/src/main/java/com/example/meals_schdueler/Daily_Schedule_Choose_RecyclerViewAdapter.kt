@@ -23,7 +23,6 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
     private var dailyId = dailyId
 
 
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -31,6 +30,12 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.daily_choose, parent, false)
         return ViewHolder(view)
+    }
+
+    fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
+        return this.split(*delimiters).filter {
+            it.isNotEmpty()
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -45,9 +50,24 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
         holder.dailyInfo.setOnClickListener {
 
 
+            Log.v("Elad1", "OKKK2")
+            var recipeist: ArrayList<Recipe> = ArrayList()
+            var recipesArr = item.recipeIds.splitIgnoreEmpty(" ")
+            var j = 0
+            for (i in recipesArr) {
+
+                if (recipe.get(j).recipeId == i.toInt()) {
+                    recipeist.add(recipe.get(j))
+                    j = 0
+                } else {
+                    j++
+                }
+
+            }
+
 
             var dialog = DailyDialogInfo(
-                recipe,
+                recipeist,
                 item.quantities,
                 item.numOfMeals,
                 item.recipeIds,

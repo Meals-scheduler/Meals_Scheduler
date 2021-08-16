@@ -275,6 +275,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
         for (x in stk) {
             stk.removeView(stk.getChildAt(j))
         }
+        stk.removeView(stk.getChildAt(j))
 
     }
 
