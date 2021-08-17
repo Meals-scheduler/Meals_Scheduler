@@ -21,14 +21,14 @@ import kotlin.collections.HashMap
 
 class My_Weekly_RecylerViewAdapter(
 
-    weeklyValues: ArrayList<WeeklySchedule>,
-    dailyValues: ArrayList<DailySchedule>,
+    weeklyValues: TreeMap<String, WeeklySchedule>,
+   // dailyValues: HashMap<String, DailySchedule>,
     childFragmentManager: FragmentManager,
     context: Context?,
 ) : RecyclerView.Adapter<My_Weekly_RecylerViewAdapter.ViewHolder>() {
 
-    private var weeklyValues: ArrayList<WeeklySchedule> = weeklyValues
-    private var dailyyValues: ArrayList<DailySchedule> = dailyValues
+    private var weeklyValues: TreeMap<String, WeeklySchedule> = weeklyValues
+    //private var dailyValues: HashMap<String, DailySchedule> = dailyValues
     private var weeklyDaily: HashMap<String, ArrayList<DailySchedule>> = HashMap()
 
     private var childFragmentManager = childFragmentManager
@@ -37,6 +37,7 @@ class My_Weekly_RecylerViewAdapter(
     private var context = context
     private var weeklyToSchedule = -1
     var date = ""
+    private var weeklyList: ArrayList<WeeklySchedule> = ArrayList()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -44,17 +45,22 @@ class My_Weekly_RecylerViewAdapter(
     ): My_Weekly_RecylerViewAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.my_weekly_schedule, parent, false)
+
+
+        for (i in weeklyValues) {
+            weeklyList.add(i.value)
+        }
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: My_Weekly_RecylerViewAdapter.ViewHolder, position: Int) {
-        var item: WeeklySchedule = weeklyValues[position] // each item postion
+        var item: WeeklySchedule = weeklyList[position]!! // each item postion
         holder.mItem = item
 
         holder.numOfWeekly.setText(numOfWeekly++.toString())
 
         holder.edit.setOnClickListener {
-            Log.v("Elad1","FF1" +    item.weeklyId.toString())
+            Log.v("Elad1", "FF1" + item.weeklyId.toString())
             // copying the list not to override it in the edit .
             var tmpList: ArrayList<DailySchedule> = ArrayList()
             for (i in weeklyDaily.get(item.weeklyId.toString())!!) {
@@ -76,7 +82,7 @@ class My_Weekly_RecylerViewAdapter(
 
         holder.info.setOnClickListener {
             // Log.v("Elad1","HH" + weeklyDaily.get(item.weeklyId.toString())!!.get(1).recipeIds)
-            Log.v("Elad1","FF2" +    item.weeklyId.toString())
+            Log.v("Elad1", "FF2" + item.weeklyId.toString())
             var dialog = WeeklyDialogInfo(
                 weeklyDaily.get(item.weeklyId.toString())!!,
                 item.numOfDay,
@@ -96,13 +102,20 @@ class My_Weekly_RecylerViewAdapter(
             weeklyDaily.remove(item.weeklyId.toString())!!
 
             var dialog =
-                DeleteAlertDialog("", null, weeklyValues.get(position).weeklyId, false, false,true)
+                DeleteAlertDialog(
+                    "",
+                    null,
+                    weeklyValues.get(item.weeklyId.toString())!!.weeklyId,
+                    false,
+                    false,
+                    true
+                )
             dialog.show(childFragmentManager, "DeleteWeekly")
 
         }
 
         holder.date.setOnClickListener {
-            weeklyToSchedule = weeklyValues.get(position).weeklyId
+            weeklyToSchedule = weeklyValues.get(item.weeklyId.toString())!!.weeklyId
 
             val cal = Calendar.getInstance()
             // to open the calender with the current date of this moment.
@@ -126,9 +139,13 @@ class My_Weekly_RecylerViewAdapter(
         }
     }
 
-    fun setWeeklyValues(mValues: ArrayList<WeeklySchedule>) {
+    fun setWeeklyValues(mValues: TreeMap<String, WeeklySchedule>) {
         numOfWeekly = 1
         this.weeklyValues = mValues
+        weeklyList.clear()
+        for (i in mValues) {
+            weeklyList.add(i.value)
+        }
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
 

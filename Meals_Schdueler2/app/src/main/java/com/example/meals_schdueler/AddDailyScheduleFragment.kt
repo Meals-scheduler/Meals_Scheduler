@@ -288,8 +288,8 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
         for (i in listItems!!.list!!) {
 
 
-            var recipe = UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(i)
-            recipeList.add(recipe)
+            var recipe = UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(i.toString())
+            recipeList.add(recipe!!)
 
 
         }

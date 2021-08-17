@@ -105,8 +105,8 @@ class EditWeeklyDialog(
             for (i in dailyID!!.list!!) {
 
 
-                var daily = UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(i)
-                dailyList.add(daily)
+                var daily = UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(i.toString())
+                dailyList.add(daily!!)
 
 
 
@@ -241,15 +241,9 @@ class EditWeeklyDialog(
                     // getting this daily recipes
                     var recipeList: ArrayList<Recipe> = ArrayList()
                     var ids = dailyList.get(t3v.getTag() as Int).recipeIds.splitIgnoreEmpty(" ")
-                    var ind = 0
-                    for (k in UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!) {
-                        if (ind == ids.size) {
-                            break
-                        }
-                        if (ids.contains(k.recipeId.toString())) {
-                            recipeList.add(k)
-                            ind++
-                        }
+
+                    for (i in ids) {
+                        recipeList.add(UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(i)!!)
 
                     }
                     var dialog = DailyDialogInfo(
@@ -418,16 +412,11 @@ class EditWeeklyDialog(
                     var recipeList: ArrayList<Recipe> = ArrayList()
                     var ids = dailyList.get(t3v.getTag() as Int).recipeIds.splitIgnoreEmpty(" ")
 
-                    var m =0
+
                     //going through the list and get each recipe by its id
                     for (i in ids) {
-                        if (UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(m).recipeId == i.toInt()) {
-                            recipeList!!.add(UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(m))
-                            m=0
-                        }
-                        else {
-                            m++
-                        }
+                        recipeList.add(UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(i)!!)
+
                     }
 
 

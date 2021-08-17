@@ -33,7 +33,7 @@ class WeeklySchedule(
             weeklyId = getWeekly().toInt() + 1 // getting current RecipeID first
 
         }
-            //weeklyId = 1
+           // weeklyId = 1
         // ingredientID = 1
 
         if (weeklyId != -1)

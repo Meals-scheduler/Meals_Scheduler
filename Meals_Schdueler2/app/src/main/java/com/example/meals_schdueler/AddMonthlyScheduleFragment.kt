@@ -262,8 +262,8 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
             /// need to clear dailyID.list before coming here (in choose button event)
             var weekly =
                 UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!
-                    .get(weeklyID!!.list!!.get(0))
-            weeklyList!!.add(weekly)
+                    .get(weeklyID!!.list!!.get(0).toString())
+            weeklyList!!.add(weekly!!)
 
 
 
@@ -382,16 +382,11 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
                 var dailyList: ArrayList<DailySchedule> = ArrayList()
                 var dailyArr =
                     weeklyList!!.get(t3v.getTag() as Int - 1).dailyIds.splitIgnoreEmpty(" ")
-                var j = 0
-                for (i in UserPropertiesSingelton.getInstance()!!.getUserDaily()!!) {
-                    if (j == dailyArr.size) {
-                        break
-                    }
-                    if (i.dailyId == dailyArr.get(j).toInt()) {
-                        dailyList.add(i)
-                        j++
-                    }
+                for (i in dailyArr) {
+                    dailyList.add(UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(i)!!)
+
                 }
+
 
 
                 var dialog = WeeklyDialogInfo(

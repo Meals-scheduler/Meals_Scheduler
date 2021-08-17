@@ -225,6 +225,9 @@ class AllRecipesFragment : Fragment(), GetAndPost {
 
 
                 }
+                else {
+                    break
+                }
             }
             hashMap.put(currentID, Pair(ids, quantities))
             map.put(currentID, ingredientList2)

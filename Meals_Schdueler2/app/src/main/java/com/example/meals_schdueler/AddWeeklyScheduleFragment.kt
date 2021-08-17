@@ -271,8 +271,8 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
             /// need to clear dailyID.list before coming here (in choose button event)
             var daily =
                 UserPropertiesSingelton.getInstance()!!.getUserDaily()!!
-                    .get(dailyID!!.list!!.get(0))
-            dailyList!!.add(daily)
+                    .get(dailyID!!.list!!.get(0).toString())
+            dailyList!!.add(daily!!)
 
 
 
@@ -403,16 +403,11 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                 var recipeIDs = recipeIDS.splitIgnoreEmpty(" ")
 
 
-                var m =0
+
                 //going through the list and get each recipe by its id
-                for (i in recipeIDs) {
-                    if (UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(m).recipeId == i.toInt()) {
-                        recipeList!!.add(UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(m))
-                        m=0
-                    }
-                    else {
-                        m++
-                    }
+                for (i in recipeIDS) {
+                    recipeList!!.add(UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(i)!!)
+
                 }
 
 

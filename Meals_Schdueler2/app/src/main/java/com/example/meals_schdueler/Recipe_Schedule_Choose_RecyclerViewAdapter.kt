@@ -12,18 +12,19 @@ import androidx.recyclerview.widget.RecyclerView
 
 class Recipe_Schedule_Choose_RecyclerViewAdapter(
 
-    private var values: ArrayList<Recipe>,
+    private var values:  HashMap<String,Recipe>,
     private var intValues: ArrayList<Int>,
     private var quantities: ArrayList<Int>,
     childFragmentManager: FragmentManager
 ) : RecyclerView.Adapter<Recipe_Schedule_Choose_RecyclerViewAdapter.ViewHolder>() {
 
-    private var mValues: ArrayList<Recipe> = values
+    private var mValues:  HashMap<String,Recipe> = values
     private var mIntValues: ArrayList<Int> = intValues
     private var childFragmentManager = childFragmentManager
     private var quantitiess = quantities
     private var firstTime: Boolean = true
     var str: String = ""
+    private var recipeList : ArrayList<Recipe> = ArrayList()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -31,12 +32,16 @@ class Recipe_Schedule_Choose_RecyclerViewAdapter(
     ): Recipe_Schedule_Choose_RecyclerViewAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.recipes_choose, parent, false)
+
+        for(i in values){
+            recipeList.add(i.value)
+        }
         return ViewHolder(view)
     }
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var item: Recipe = mValues[position] // each item postion
+        var item: Recipe = recipeList[position]!! // each item postion
         holder.mItem = item
         holder.ingredientName.setText(item.recipeName)
         //var bitmap2 = ImageConvert.StringToBitMap(item.picture)
@@ -83,7 +88,7 @@ class Recipe_Schedule_Choose_RecyclerViewAdapter(
 
 
             if (holder.choose.isChecked == true && !(mIntValues.contains(position))) {
-                mIntValues.add(position)
+                mIntValues.add(item.recipeId)
                 holder.arr[position] = true
                 if (str == "") {
                     quantitiess.add(1)
@@ -114,7 +119,7 @@ class Recipe_Schedule_Choose_RecyclerViewAdapter(
     }
 
 
-    fun setmValues(mValues: ArrayList<Recipe>) {
+    fun setmValues(mValues:  HashMap<String,Recipe>) {
         this.mValues = mValues
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }

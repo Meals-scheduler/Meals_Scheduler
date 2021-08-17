@@ -8,19 +8,24 @@ import android.widget.*
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meals_schdueler.dummy.DailySchedule
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class Daily_Schedule_Choose_RecyclerViewAdapter(
 
-    var values: ArrayList<DailySchedule>,
-    var recipes: ArrayList<Recipe>,
+    var values: TreeMap<String, DailySchedule>,
+    var recipes: HashMap<String, Recipe>,
     dailyId: ArrayList<Int>?,
     childFragmentManager: FragmentManager
 ) : RecyclerView.Adapter<Daily_Schedule_Choose_RecyclerViewAdapter.ViewHolder>() {
-    private var mValues: ArrayList<DailySchedule> = values
+    private var mValues: TreeMap<String, DailySchedule> = values
     private var recipe = recipes
     private var childFragmentManager = childFragmentManager
     private var numOfDaily = 1
     private var dailyId = dailyId
+
+    private var dailyList: ArrayList<DailySchedule> = ArrayList()
 
 
     override fun onCreateViewHolder(
@@ -29,6 +34,10 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
     ): Daily_Schedule_Choose_RecyclerViewAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.daily_choose, parent, false)
+
+        for(i in values){
+            dailyList.add(i.value)
+        }
         return ViewHolder(view)
     }
 
@@ -39,7 +48,7 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var item: DailySchedule = mValues[position] // each item postion
+        var item: DailySchedule = dailyList[position]!! // each item postion
         holder.mItem = item
         if (numOfDaily < mValues.size) {
             holder.numOfDaily.setText(numOfDaily++.toString())
@@ -55,13 +64,7 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
             var recipesArr = item.recipeIds.splitIgnoreEmpty(" ")
             var j = 0
             for (i in recipesArr) {
-
-                if (recipe.get(j).recipeId == i.toInt()) {
-                    recipeist.add(recipe.get(j))
-                    j = 0
-                } else {
-                    j++
-                }
+                recipeist.add(UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(i)!!)
 
             }
 
@@ -85,7 +88,7 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
 
 
             if (holder.choose.isChecked == true && (dailyId!!.isEmpty())) {
-                dailyId!!.add(position)
+                dailyId!!.add(item.dailyId)
                 holder.arr[position] = true
 
             } else if (holder.choose.isChecked == false) {
@@ -104,7 +107,7 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
     }
 
 
-    fun setmValues(mValues: ArrayList<DailySchedule>) {
+    fun setmValues(mValues: TreeMap<String, DailySchedule>) {
         this.mValues = mValues
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }

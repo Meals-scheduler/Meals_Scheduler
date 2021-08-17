@@ -80,6 +80,7 @@ class DailySchedule(
 
 
 
+
             val url = URL(link)
             val conn = url.openConnection()
             conn.readTimeout = 10000

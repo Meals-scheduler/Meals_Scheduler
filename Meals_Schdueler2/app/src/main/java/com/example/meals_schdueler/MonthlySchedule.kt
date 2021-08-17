@@ -25,7 +25,6 @@ class MonthlySchedule(
     var isUpdate = isUpdate
 
 
-
     override fun DoNetWorkOpreation(): String {
         var input = ""
         //if we insert a new daily and not updating
@@ -33,7 +32,7 @@ class MonthlySchedule(
             monthlyId = getMonthly().toInt() + 1 // getting current RecipeID first
 
         }
-           // monthlyId = 1
+       // monthlyId = 1
 
         if (monthlyId != -1)
             input = postData() // now we upload the current ingredient details.
@@ -50,8 +49,8 @@ class MonthlySchedule(
             var link =
                 "https://elad1.000webhostapp.com/postMonthlySchedule.php"
 
-            if (isUpdate){
-                Log.v("Elad1" , "did updateedd")
+            if (isUpdate) {
+                Log.v("Elad1", "did updateedd")
                 link = "https://elad1.000webhostapp.com/updateMonthly.php"
 
             }
@@ -69,7 +68,7 @@ class MonthlySchedule(
 
 
 
-            Log.v("Elad1" , "data is " + data)
+            Log.v("Elad1", "data is " + data)
             val url = URL(link)
             val conn = url.openConnection()
             conn.readTimeout = 10000

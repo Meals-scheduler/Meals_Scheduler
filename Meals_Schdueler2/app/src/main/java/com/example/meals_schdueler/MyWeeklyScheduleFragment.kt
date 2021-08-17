@@ -16,12 +16,20 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
 
     private var columnCount = 1
-    private var weeklyList: ArrayList<WeeklySchedule>? = null
-    private var dailyList: ArrayList<DailySchedule>? = null
+
+    //private var weeklyList: ArrayList<WeeklySchedule>? = null
+    private var weeklyList: HashMap<String, WeeklySchedule>? = null
+    private var dailyTmp: ArrayList<DailySchedule>? = null
+
+    // private var dailyList: HashMap<String,DailySchedule>? = null
+    private var sorted: TreeMap<String, WeeklySchedule>? = null
 
     // each weeklyid will hold all its daily
     private var weekly_daily_map: HashMap<String, ArrayList<DailySchedule>>? = null
@@ -38,11 +46,12 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
         super.onCreate(savedInstanceState)
 
         // recipeList = ArrayList()
-        dailyList = ArrayList()
-        weeklyList = ArrayList()
+        //  weeklyList = ArrayList()
+
+        weeklyList = HashMap()
+        sorted = TreeMap()
         weeklyRecyclerViewAdapter = My_Weekly_RecylerViewAdapter(
-            weeklyList!!,
-            dailyList!!,
+            sorted!!,
             childFragmentManager,
             this.context
         )
@@ -116,8 +125,6 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
         var link = "https://elad1.000webhostapp.com/getWeekly.php?ownerID=" + UserInterFace.userID;
 
 
-
-
         val sb = StringBuilder()
 
         val url = URL(link)
@@ -138,7 +145,7 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
         }
 
 
-       // Log.v("Elad1", "Id came is" + sb.toString())
+        // Log.v("Elad1", "Id came is" + sb.toString())
         return sb.toString()
     }
 
@@ -155,7 +162,7 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
             numOfDay = ""
             dailyIds = ""
             // recipeList!!.clear()
-            dailyList!!.clear()
+
             weeklyList!!.clear()
 
             val weeklyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
@@ -171,7 +178,7 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
 
             for (i in weeklyInfo.indices) {
 
-                 weeklyInfo2 = weeklyInfo[i].splitIgnoreEmpty("*")
+                weeklyInfo2 = weeklyInfo[i].splitIgnoreEmpty("*")
 
                 //means we switch to the next WeeklyID
                 if (weeklyInfo2[0].toInt() != currentWeeklyID) {
@@ -218,8 +225,9 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
             for (i in weeklyInfo.indices) {
                 var dailyInfo2 = weeklyInfo[i].splitIgnoreEmpty("*")
                 if (dailyInfo2[0].toInt() != currentWeeklyID) {
-                    dailyList = ArrayList()
-                    weeklyList!!.add(
+                    dailyTmp = ArrayList()
+                    weeklyList!!.put(
+                        dailyInfo2[0],
                         WeeklySchedule(
                             dailyInfo2[0].toInt(),
                             dailyInfo2[1].toInt(),
@@ -232,25 +240,32 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
                     )
                     //making DailyScheule objects in a map with WeeklyID
                     var dailyIds = map.get(dailyInfo2[0])!!.get(1).splitIgnoreEmpty(" ")
-                    for (i in dailyIds) {
-                        for (j in UserPropertiesSingelton.getInstance()!!.getUserDaily()!!) {
-                            if (j.dailyId.toString().equals(i)) {
-                                dailyList!!.add(j)
-                                break
-                            }
-                        }
 
-
+                    for (o in UserPropertiesSingelton.getInstance()!!.getUserDaily()!!) {
+                        Log.v("Elad1", "Daily id " + o.key)
                     }
-                    weekly_daily_map!!.put(dailyInfo2[0].toInt().toString(), dailyList!!)
+
+                    for (i in dailyIds) {
+
+                        dailyTmp!!.add(
+                            UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(i)!!
+                        )
+                    }
+
+                    weekly_daily_map!!.put(dailyInfo2[0].toInt().toString(), dailyTmp!!)
                     currentWeeklyID = dailyInfo2[0].toInt()
                 }
+
+
             }
 
+            sorted!!.clear()
+            sorted!!.putAll(weeklyList!!)
 
-            weeklyRecyclerViewAdapter!!.setWeeklyValues(weeklyList!!)
+
+            weeklyRecyclerViewAdapter!!.setWeeklyValues(sorted!!)
             weeklyRecyclerViewAdapter!!.setDailyValues(weekly_daily_map!!)
-            UserPropertiesSingelton.getInstance()!!.setUserWeekly(weeklyList)
+            UserPropertiesSingelton.getInstance()!!.setUserWeekly(sorted)
 
 
         }

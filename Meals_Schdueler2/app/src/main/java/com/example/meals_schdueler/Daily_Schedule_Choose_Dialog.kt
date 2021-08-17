@@ -12,11 +12,13 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meals_schdueler.dummy.DailySchedule
+import java.util.*
+import kotlin.collections.HashMap
 
 class Daily_Schedule_Choose_Dialog(
 
-    dailyList: ArrayList<DailySchedule>,
-    recipeList: ArrayList<Recipe>,
+    dailyList: TreeMap<String,DailySchedule>,
+    recipeList:  HashMap<String,Recipe>,
     list:Recipe_Ingredients_List,
 ) : DialogFragment() {
 

@@ -20,15 +20,15 @@ import kotlin.collections.HashMap
 
 class My_Monthly_RecylerViewAdapter(
 
-    monthlyValues: ArrayList<MonthlySchedule>,
-    weeklyValues: ArrayList<WeeklySchedule>,
+    monthlyValues: TreeMap<String, MonthlySchedule>,
+   // weeklyValues: HashMap<String, WeeklySchedule>,
     childFragmentManager: FragmentManager,
     context: Context?,
 
     ) : RecyclerView.Adapter<My_Monthly_RecylerViewAdapter.ViewHolder>() {
 
-    private var monthlyValues: ArrayList<MonthlySchedule> = monthlyValues
-    private var weeklyValues: ArrayList<WeeklySchedule> = weeklyValues
+    private var monthlyValues: TreeMap<String, MonthlySchedule> = monthlyValues
+   // private var weeklyValues: HashMap<String, WeeklySchedule> = weeklyValues
     private var monthlyWeekly: HashMap<String, ArrayList<WeeklySchedule>> = HashMap()
 
     private var childFragmentManager = childFragmentManager
@@ -39,18 +39,24 @@ class My_Monthly_RecylerViewAdapter(
     private var monthlyToSchedule = -1
     var date = ""
 
+    private var monthlyList: ArrayList<MonthlySchedule> = ArrayList()
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): My_Monthly_RecylerViewAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.my_monthly_schedule, parent, false)
+
+        for (i in monthlyValues) {
+            monthlyList.add(i.value)
+        }
         return ViewHolder(view)
     }
 
 
     override fun onBindViewHolder(holder: My_Monthly_RecylerViewAdapter.ViewHolder, position: Int) {
-        var item: MonthlySchedule = monthlyValues[position] // each item postion
+        var item: MonthlySchedule = monthlyList[position]!! // each item postion
         holder.mItem = item
 
         holder.numOfWeekly.setText(numOfMonthly++.toString())
@@ -112,7 +118,7 @@ class My_Monthly_RecylerViewAdapter(
         }
 
         holder.date.setOnClickListener {
-            monthlyToSchedule = weeklyValues.get(position).weeklyId
+            monthlyToSchedule = monthlyValues.get(item.monthlyId.toString())!!.monthlyId
 
             val cal = Calendar.getInstance()
             // to open the calender with the current date of this moment.
@@ -136,9 +142,13 @@ class My_Monthly_RecylerViewAdapter(
         }
     }
 
-    fun setMonthlyValues(mValues: ArrayList<MonthlySchedule>) {
+    fun setMonthlyValues(mValues: TreeMap<String, MonthlySchedule>) {
         numOfMonthly = 1
         this.monthlyValues = mValues
+        monthlyList.clear()
+        for (i in mValues) {
+            monthlyList.add(i.value)
+        }
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
 

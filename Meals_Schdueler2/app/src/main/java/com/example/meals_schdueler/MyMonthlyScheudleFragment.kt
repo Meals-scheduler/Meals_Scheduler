@@ -15,16 +15,19 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
 
     private var columnCount = 1
-    private var monthlyList: ArrayList<MonthlySchedule>? = null
-    private var weeklyList: ArrayList<WeeklySchedule>? = null
+    private var monthlyList: HashMap<String, MonthlySchedule>? = null
+    private var weeklyTmp: ArrayList<WeeklySchedule>? = null
 
     // each monthlyid will hold all its weekly
     private var monthly_weekly_map: HashMap<String, ArrayList<WeeklySchedule>>? = null
-
+    private var sorted: TreeMap<String, MonthlySchedule>? = null
     private var monthlyRecyclerViewAdapter: My_Monthly_RecylerViewAdapter? = null
 
 
@@ -36,11 +39,11 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
         super.onCreate(savedInstanceState)
 
 
-        monthlyList = ArrayList()
-        weeklyList = ArrayList()
+        monthlyList = HashMap()
+        weeklyTmp = ArrayList()
+        sorted = TreeMap()
         monthlyRecyclerViewAdapter = My_Monthly_RecylerViewAdapter(
-            monthlyList!!,
-            weeklyList!!,
+            sorted!!,
             childFragmentManager,
             this.context
         )
@@ -152,7 +155,7 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
             weeklyIds = ""
             // recipeList!!.clear()
             monthlyList!!.clear()
-            weeklyList!!.clear()
+
 
             val monthlyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
@@ -168,7 +171,7 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
 
             for (i in monthlyInfo.indices) {
 
-                 monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
+                monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
 
                 //means we switch to the next WeeklyID
                 if (monthlyInfo2[0].toInt() != currentMonthlyID) {
@@ -215,8 +218,9 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
             for (i in monthlyInfo.indices) {
                 var monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
                 if (monthlyInfo2[0].toInt() != currentMonthlyID) {
-                    weeklyList = ArrayList()
-                    monthlyList!!.add(
+                  weeklyTmp = ArrayList()
+                    monthlyList!!.put(
+                        monthlyInfo2[0],
                         MonthlySchedule(
                             monthlyInfo2[0].toInt(),
                             monthlyInfo2[1].toInt(),
@@ -229,27 +233,31 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
                     )
                     //making DailyScheule objects in a map with WeeklyID
                     var weeklyIds = map.get(monthlyInfo2[0])!!.get(1).splitIgnoreEmpty(" ")
+
                     for (i in weeklyIds) {
-                        for (j in UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!) {
-                            if (j.weeklyId.toString().equals(i)) {
-                                weeklyList!!.add(j)
-                                break
-                            }
-                        }
+
+                        weeklyTmp!!.add(UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!.get(i)!!)
+                    }
+
 
 
                     }
-                   monthly_weekly_map!!.put(monthlyInfo2[0].toInt().toString(), weeklyList!!)
+                    monthly_weekly_map!!.put(monthlyInfo2[0].toInt().toString(), weeklyTmp!!)
                     currentMonthlyID = monthlyInfo2[0].toInt()
                 }
-            }
 
 
-            monthlyRecyclerViewAdapter!!.setMonthlyValues(monthlyList!!)!!
+            sorted!!.clear()
+            sorted!!.putAll(monthlyList!!)
+
+            monthlyRecyclerViewAdapter!!.setMonthlyValues(sorted!!)!!
             monthlyRecyclerViewAdapter!!.setWeeklyValues(monthly_weekly_map!!)
-            UserPropertiesSingelton.getInstance()!!.setUserMonthly(monthlyList)
+            UserPropertiesSingelton.getInstance()!!.setUserMonthly(sorted)
+
+        }
+
+
 
 
         }
     }
-}

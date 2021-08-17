@@ -10,19 +10,24 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meals_schdueler.dummy.DailySchedule
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class Weekly_Schedule_Choose_RecyclerViewAdapter(
 
-    var weeklyValues: ArrayList<WeeklySchedule>,
-    var dailyValues: ArrayList<DailySchedule>,
-    var recipes: ArrayList<Recipe>,
+    var weeklyValues: TreeMap<String, WeeklySchedule>,
+    var dailyValues: TreeMap<String, DailySchedule>,
+    var recipes:HashMap<String, Recipe>,
     weeklyId: ArrayList<Int>?,
     childFragmentManager: FragmentManager
 ) : RecyclerView.Adapter<Weekly_Schedule_Choose_RecyclerViewAdapter.ViewHolder>() {
 
-    private var mValues: ArrayList<WeeklySchedule> = weeklyValues
-    private var mValuesDaily: ArrayList<DailySchedule> = dailyValues
+    private var mValues: TreeMap<String, WeeklySchedule> = weeklyValues
+    private var mValuesDaily: TreeMap<String, DailySchedule> = dailyValues
+
+    private var weeklyList: ArrayList<WeeklySchedule> = ArrayList()
 
     //    private var recipe = recipes
     private var childFragmentManager = childFragmentManager
@@ -36,6 +41,10 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
     ): Weekly_Schedule_Choose_RecyclerViewAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.weekly_choose, parent, false)
+
+        for(i in weeklyValues){
+            weeklyList.add(i.value)
+        }
         return ViewHolder(view)
     }
 
@@ -46,7 +55,7 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var item: WeeklySchedule = mValues[position] // each item postion
+        var item: WeeklySchedule = weeklyList[position]!! // each item postion
         holder.mItem = item
         if (numOfWeekly < mValues.size) {
             holder.numOfDaily.setText(numOfWeekly++.toString())
@@ -61,13 +70,7 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
             var j = 0
             for (i in dailyArr) {
 
-                if (mValuesDaily.get(j).dailyId == i.toInt()) {
-                    dailyList.add(mValuesDaily.get(j))
-                    j=0
-                }
-                else{
-                    j++
-                }
+                dailyList.add(UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(i)!!)
             }
 
             var dialog = WeeklyDialogInfo(
@@ -88,7 +91,7 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
 
 //
             if (holder.choose.isChecked == true && (weeklyId!!.isEmpty())) {
-                weeklyId!!.add(position)
+                weeklyId!!.add(item.weeklyId)
                 holder.arr[position] = true
 
             } else if (holder.choose.isChecked == false) {
@@ -107,7 +110,7 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
     }
 
 
-    fun setmValues(mValues: ArrayList<WeeklySchedule>) {
+    fun setmValues(mValues: TreeMap<String, WeeklySchedule>) {
         this.mValues = mValues
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }

@@ -138,13 +138,8 @@ class MonthlyDialogInfo(
                 var m =0
                 //going through the list and get each recipe by its id
                 for (i in ids) {
-                    if (UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(m).dailyId == i.toInt()) {
-                        dailyList!!.add(UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(m))
-                        m=0
-                    }
-                    else {
-                        m++
-                    }
+                    dailyList.add(UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(i)!!)
+
                 }
 
                 var dialog = WeeklyDialogInfo(

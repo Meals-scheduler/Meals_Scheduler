@@ -16,16 +16,26 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.collections.List
+import kotlin.collections.filter
+import kotlin.collections.indices
+import kotlin.collections.iterator
+import kotlin.collections.toTypedArray
+
 
 class MyDailyScheduleFragment : Fragment(), GetAndPost {
 
 
     private var columnCount = 1
+
     //private var dailyList: ArrayList<DailySchedule>? = null
-    private var dailyList: HashMap<String,DailySchedule>? = null
+    private var dailyList: HashMap<String, DailySchedule>? = null
     private var recipeList: ArrayList<Recipe>? = null
     private var dailyRecyclerViewAdapter: My_Daily_RecylerViewAdapter? = null
-
+    private var sorted: TreeMap<String, DailySchedule>? = null
 
     private var quantities: String = ""
     private var numOfMeal: String = ""
@@ -36,10 +46,11 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
         super.onCreate(savedInstanceState)
 
         recipeList = ArrayList()
-       // dailyList = ArrayList()
+        sorted = TreeMap()
+        // dailyList = ArrayList()
         dailyList = HashMap()
         dailyRecyclerViewAdapter = My_Daily_RecylerViewAdapter(
-            dailyList!!,
+            sorted!!,
             childFragmentManager,
             this.context
         )
@@ -112,8 +123,6 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
         var link = "https://elad1.000webhostapp.com/getDaily.php?ownerID=" + UserInterFace.userID;
 
 
-
-
         val sb = StringBuilder()
 
         val url = URL(link)
@@ -163,7 +172,7 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
             var dailyInfo2 = dailyInfo[0].splitIgnoreEmpty("*")
             var currentDailyID = dailyInfo2[0].toInt()
             for (i in dailyInfo.indices) {
-                 dailyInfo2 = dailyInfo[i].splitIgnoreEmpty("*")
+                dailyInfo2 = dailyInfo[i].splitIgnoreEmpty("*")
                 //means we switch to the next DailyID
                 if (dailyInfo2[0].toInt() != currentDailyID) {
                     var totalLists: ArrayList<String> = ArrayList()
@@ -204,7 +213,8 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
             for (i in dailyInfo.indices) {
                 var dailyInfo2 = dailyInfo[i].splitIgnoreEmpty("*")
                 if (dailyInfo2[0].toInt() != currentDailyID) {
-                    dailyList!!.add(
+                    dailyList!!.put(
+                        dailyInfo2[0],
                         DailySchedule(
                             dailyInfo2[0].toInt(),
                             dailyInfo2[1].toInt(),
@@ -220,32 +230,55 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
                 }
             }
 
+            // TreeMap to store values of HashMap
+
+            // TreeMap to store values of HashMap
+            // sorted = TreeMap<String, DailySchedule>()
+
+            // Copy all data from hashMap into TreeMap
+
+            // Copy all data from hashMap into TreeMap
+            sorted!!.clear()
+            sorted!!.putAll(dailyList!!)
+
+
             // now getting the recipes for each daily
 
-            var j = 0
+
             currentDailyID = -1
-            for (i in dailyList!!) {
+            for (i in sorted!!) {
                 //taking all the recipes for this daily
-                if (currentDailyID != i.dailyId) {
-                    var ids = i.recipeIds.splitIgnoreEmpty(" ")
-                    for (k in ids.indices) {
+                if (currentDailyID != i.key.toInt() && dailyList!!.containsKey(i.key)) {
+                    var ids = i.value.recipeIds.splitIgnoreEmpty(" ")
+                    for (k in ids) {
+//                        var recipe = deepCopyRecipe(
+//                            UserPropertiesSingelton.getInstance()!!.getUserMapRecipe()!!
+//                                .get(ids[j++].toInt())!!
+//
+//                        )
+
+                        for (y in UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!) {
+                            Log.v("Elad1", y.key)
+                        }
+
                         var recipe = deepCopyRecipe(
-                            UserPropertiesSingelton.getInstance()!!.getUserMapRecipe()!!
-                                .get(ids[j++].toInt())!!
-
+                            UserPropertiesSingelton.getInstance()!!
+                                .getUserRecipess()!!.get(k)!!
                         )
+                        if (!recipeList!!.contains(recipe))
+                            recipeList!!.add(recipe)
 
 
-                        recipeList!!.add(recipe)
+                        //recipeList!!.add(recipe)
                     }
-                    j = 0
-                    currentDailyID = i.dailyId
+
+                    currentDailyID = i.value.dailyId
                 }
 
             }
 
-            UserPropertiesSingelton.getInstance()!!.setUserDaily(dailyList)
-            dailyRecyclerViewAdapter!!.setmValues(dailyList!!)
+            UserPropertiesSingelton.getInstance()!!.setUserDaily(sorted)
+            dailyRecyclerViewAdapter!!.setmValues(sorted!!)
             dailyRecyclerViewAdapter!!.setRecipeList(recipeList!!)
 
 //            dailyList!!.clear()

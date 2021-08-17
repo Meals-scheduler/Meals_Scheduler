@@ -21,14 +21,14 @@ import java.net.URL
 class MyRecipeFragment : Fragment(), GetAndPost {
 
     private var columnCount = 1
-    private var recipeList: ArrayList<Recipe>? = null // list of ingredietns
+    private var recipeList: HashMap<String, Recipe>? = null // list of ingredietns
     private var recipeRecyclerViewAdapter: MyRecipeRecyclerViewAdapter? =
         null // adapter for the list.
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        recipeList = ArrayList<Recipe>()
+        recipeList = HashMap()
         recipeRecyclerViewAdapter = MyRecipeRecyclerViewAdapter(recipeList!!, childFragmentManager)
         arguments?.let {
             columnCount = it.getInt(MyingredientFragment1.ARG_COLUMN_COUNT)
@@ -93,8 +93,6 @@ class MyRecipeFragment : Fragment(), GetAndPost {
         var link = "https://elad1.000webhostapp.com/getRecipe.php?ownerID=" + UserInterFace.userID;
 
 
-
-
         val sb = StringBuilder()
 
         val url = URL(link)
@@ -136,7 +134,7 @@ class MyRecipeFragment : Fragment(), GetAndPost {
             val recipesAndIngredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
             var recipesAndIngredients2 = recipesAndIngredients[0].splitIgnoreEmpty("*")
             // first recipe id
-            var currentID = recipesAndIngredients2[0].toInt() - 48
+            var currentID = recipesAndIngredients2[0].toInt()
 
             // saving all the ingredietns and quantities of each Recipe in map.
             // first we extract the ids and quantity into map.
@@ -150,12 +148,12 @@ class MyRecipeFragment : Fragment(), GetAndPost {
             var ingredientList: java.util.ArrayList<Ingredient> = java.util.ArrayList()
 
             // first extracting all ingredients ids and make them Ingredients.
-            var currentIngId= -1
+            var currentIngId = -1
             for (i in recipesAndIngredients.indices) {
 
                 var recipesAndIngredients2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
                 //if its ingredients details
-                if(recipesAndIngredients2.size==15 && recipesAndIngredients2[0].toInt()-48!=currentIngId){
+                if (recipesAndIngredients2.size == 15 && recipesAndIngredients2[0].toInt()!= currentIngId) {
                     ingredientList?.add(
                         Ingredient(
                             recipesAndIngredients2[0].toInt(),
@@ -174,9 +172,10 @@ class MyRecipeFragment : Fragment(), GetAndPost {
                             recipesAndIngredients2[13],
                             false
 
-                        ))
+                        )
+                    )
 
-                    currentIngId =recipesAndIngredients2[0].toInt()-48
+                    currentIngId = recipesAndIngredients2[0].toInt()
 
                 }
             }
@@ -190,11 +189,12 @@ class MyRecipeFragment : Fragment(), GetAndPost {
             var ids: java.util.ArrayList<String> = java.util.ArrayList()
             var ingredientList2: java.util.ArrayList<Ingredient> = java.util.ArrayList()
             //  var quantities: ArrayList<String> = ArrayList()
+
             for (i in recipesAndIngredients.indices) {
                 var recipesAndIngredients2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
 
                 if (recipesAndIngredients2.size == 11) {
-                    if (recipesAndIngredients2[0].toInt()  != currentID) {
+                    if (recipesAndIngredients2[0].toInt() != currentID) {
 
                         // copying the lists of the ids and aquantities
                         var tmpIds = deepCopy(ids)
@@ -222,23 +222,28 @@ class MyRecipeFragment : Fragment(), GetAndPost {
                     ingredientList2.add(fromListToMap.get(recipesAndIngredients2[9])!!)
 
 
-
+                }
+                else{
+                    break
                 }
             }
             hashMap.put(currentID, Pair(ids, quantities))
             map.put(currentID, ingredientList2)
 
 
-            currentID = -1
-            var recipeMap  = HashMap<Int,Recipe>()
-            var j=0
+             currentID = -1
+//            recipesAndIngredients2 = recipesAndIngredients[0].splitIgnoreEmpty("*")
+//            currentID = recipesAndIngredients2[0].toInt()
+            var recipeMap = HashMap<Int, Recipe>()
+            var j = 0
             for (i in recipesAndIngredients.indices) {
 
                 var recipe2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
                 if (recipe2.size == 11) {
                     var s = recipe2[0].toInt()
                     if (s != currentID) {
-                        recipeList?.add(
+                        recipeList?.put(
+                            recipe2[0],
                             Recipe(
                                 recipe2[0].toInt(),
                                 recipe2[1].toInt(),
@@ -254,9 +259,9 @@ class MyRecipeFragment : Fragment(), GetAndPost {
 
                             )
                         )
-
+                        recipeMap.put( recipe2[0].toInt(), recipeList!!.get(recipe2[0])!!)
                         currentID = recipe2[0].toInt()
-                        recipeMap.put(recipeList!!.get(j).recipeId, recipeList!!.get(j++))
+
                     }
                     // a map to save each recipe by its ID
 

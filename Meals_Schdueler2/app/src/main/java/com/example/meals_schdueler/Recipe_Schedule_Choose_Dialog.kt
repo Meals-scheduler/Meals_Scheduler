@@ -16,13 +16,13 @@ import androidx.recyclerview.widget.RecyclerView
 class Recipe_Schedule_Choose_Dialog(
 
     recipeIngredients: Recipe_Ingredients_List,
-    userRecipes: ArrayList<Recipe>,
+    userRecipes: HashMap<String,Recipe>,
     recipeQuantities :Recipe_Ingredients_List,
     typeOfMeal : String
 ) : DialogFragment() {
 
     lateinit var exit: ImageView
-    private var recipesList: ArrayList<Recipe>? = userRecipes
+    private var recipesList:  HashMap<String,Recipe> = userRecipes
     private var l: Recipe_Ingredients_List = recipeIngredients
     private var quantities : Recipe_Ingredients_List = recipeQuantities
     private lateinit var btnDone : Button

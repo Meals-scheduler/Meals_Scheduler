@@ -10,12 +10,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MyRecipeRecyclerViewAdapter(
-    private var values: ArrayList<Recipe>,
+    private var values:HashMap<String,Recipe>,
     childFragmentManager: FragmentManager
 ) : RecyclerView.Adapter<MyRecipeRecyclerViewAdapter.ViewHolder>() {
 
-    private var mValues: ArrayList<Recipe> = values
+    private var mValues:HashMap<String,Recipe> = values
     private var childFragmentManager = childFragmentManager
+    private var RecipeList : ArrayList<Recipe> = ArrayList()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -23,12 +24,17 @@ class MyRecipeRecyclerViewAdapter(
     ): MyRecipeRecyclerViewAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_myrecipe, parent, false)
+
+        for(i in values){
+            RecipeList.add(i.value)
+        }
         return ViewHolder(view)
     }
 
 
     override fun onBindViewHolder(holder: MyRecipeRecyclerViewAdapter.ViewHolder, position: Int) {
-        var item: Recipe = mValues[position] // each item postion
+
+        var item: Recipe = RecipeList[position]!! // each item postion
         holder.mItem = item
         holder.RecipeName.setText(item.recipeName)
         //var bitmap2 = ImageConvert.StringToBitMap(item.picture)
@@ -54,7 +60,7 @@ class MyRecipeRecyclerViewAdapter(
 
     }
 
-    fun setmValues(mValues: ArrayList<Recipe>) {
+    fun setmValues(mValues: HashMap<String,Recipe>) {
         this.mValues = mValues
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }

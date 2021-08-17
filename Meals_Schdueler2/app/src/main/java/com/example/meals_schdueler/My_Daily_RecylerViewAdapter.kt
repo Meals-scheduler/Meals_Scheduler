@@ -27,32 +27,41 @@ import kotlin.collections.HashMap
 
 class My_Daily_RecylerViewAdapter(
 
-   // values: ArrayList<DailySchedule>,
-    values : HashMap<String,DailySchedule>,
+    // values: ArrayList<DailySchedule>,
+    values: TreeMap<String, DailySchedule>,
     childFragmentManager: FragmentManager,
     context: Context?,
 ) : RecyclerView.Adapter<My_Daily_RecylerViewAdapter.ViewHolder>() {
 
     var builder: java.lang.StringBuilder? = null
-   // private var mValues: ArrayList<DailySchedule> = values
-   private var mValues:HashMap<String,DailySchedule> = values
+
+    // private var mValues: ArrayList<DailySchedule> = values
+    private var mValues: TreeMap<String, DailySchedule> = values
     private var childFragmentManager = childFragmentManager
     private var numOfDaily = 1
     private lateinit var recipeList: ArrayList<Recipe>
     private var context = context
     private var dailyToSchedule = -1
     var date = ""
+    private var dailyList: ArrayList<DailySchedule> = ArrayList()
+
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): My_Daily_RecylerViewAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.my_daily_schedule, parent, false)
+
+
+        for (i in mValues) {
+            dailyList.add(i.value)
+        }
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: My_Daily_RecylerViewAdapter.ViewHolder, position: Int) {
-        var item: DailySchedule = mValues[position]!! // each item postion
+        var item: DailySchedule = dailyList[position]!! // each item postion
         holder.mItem = item
 
         holder.numOfDaily.setText(numOfDaily++.toString())
@@ -67,12 +76,12 @@ class My_Daily_RecylerViewAdapter(
             }
             var dialog = EditDailyDialog(
                 tempRecipeList,
-                mValues.get(position).quantities,
-                mValues.get(position).numOfMeals,
-                mValues.get(position).recipeIds,
+                mValues.get(item.dailyId.toString())!!.quantities,
+                mValues.get(item.dailyId.toString())!!.numOfMeals,
+                mValues.get(item.dailyId.toString())!!.recipeIds,
                 position + 1,
                 this,
-                mValues.get(position).dailyId
+                mValues.get(item.dailyId.toString())!!.dailyId
             )
             dialog.show(childFragmentManager, "dailyEdit")
         }
@@ -80,14 +89,18 @@ class My_Daily_RecylerViewAdapter(
 
 
         holder.info.setOnClickListener {
-            Log.v("Elad1" , "OKKK1")
+            Log.v("Elad1", "OKKK1")
+            Log.v("Elad1", "ID" + item.dailyId.toString())
+            Log.v("Elad1", "Quantities " + mValues.get(item.dailyId.toString())!!.quantities)
+            Log.v("Elad1", "num of meals " + mValues.get(item.dailyId.toString())!!.numOfMeals)
+            Log.v("Elad1", "recipe ids " + mValues.get(item.dailyId.toString())!!.recipeIds)
             var dialog = DailyDialogInfo(
                 recipeList!!,
-                mValues.get(position).quantities,
-                mValues.get(position).numOfMeals,
-                mValues.get(position).recipeIds,
+                mValues.get(item.dailyId.toString())!!.quantities,
+                mValues.get(item.dailyId.toString())!!.numOfMeals,
+                mValues.get(item.dailyId.toString())!!.recipeIds,
                 position + 1,
-                mValues.get(position).dailyId
+                mValues.get(item.dailyId.toString())!!.dailyId
 
             )
             dialog.show(childFragmentManager, "DailyDialogInfo")
@@ -96,34 +109,20 @@ class My_Daily_RecylerViewAdapter(
 
         holder.delete.setOnClickListener {
 
-            var dialog = DeleteAlertDialog("", null, mValues.get(position).dailyId, false, true,false)
+            var dialog = DeleteAlertDialog(
+                "",
+                null,
+                mValues.get(item.dailyId.toString())!!.dailyId,
+                false,
+                true,
+                false
+            )
             dialog.show(childFragmentManager, "DeleteDaily")
-//            val b`uilder: AlertDialog.Builder = AlertDialog.Builder(context)
-//
-//            builder.setTitle("Delete Daily")
-//            builder.setMessage("Are you sure?")
-//
-//            builder.setPositiveButton(
-//                "YES",
-//                DialogInterface.OnClickListener { dialog, which -> // Do nothing but close the dialog
-//                    dailyToDelete = item.dailyId
-//                    var s = AsynTaskNew(this,childFragmentManager)
-//                    s.execute()
-//                    dialog.dismiss()
-//                })
-//
-//            builder.setNegativeButton(
-//                "NO",
-//                DialogInterface.OnClickListener { dialog, which -> // Do nothing
-//                    dialog.dismiss()
-//                })
-//
-//            val alert: AlertDialog = builder.create()
-//            alert.show()
+
         }
 
         holder.date.setOnClickListener {
-            dailyToSchedule = mValues.get(position).dailyId
+            dailyToSchedule = mValues.get(item.dailyId.toString())!!.dailyId
 
             val cal = Calendar.getInstance()
             // to open the calender with the current date of this moment.
@@ -143,9 +142,13 @@ class My_Daily_RecylerViewAdapter(
         }
     }
 
-    fun setmValues(mValues: ArrayList<DailySchedule>) {
+    fun setmValues(mValues: TreeMap<String, DailySchedule>) {
         numOfDaily = 1
         this.mValues = mValues
+        dailyList.clear()
+        for (i in mValues) {
+            dailyList.add(i.value)
+        }
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
 
@@ -153,6 +156,7 @@ class My_Daily_RecylerViewAdapter(
     fun setRecipeList(recipeList: ArrayList<Recipe>) {
 
         this.recipeList = recipeList
+
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
 
@@ -176,10 +180,8 @@ class My_Daily_RecylerViewAdapter(
     }
 
 
-
-
     internal class calenderListener(
-        dailyToSchedule: Int, date:String, childFragmentManager: FragmentManager,
+        dailyToSchedule: Int, date: String, childFragmentManager: FragmentManager,
     ) : OnDateSetListener {
         var dailyToSchedule = dailyToSchedule
         var date = date

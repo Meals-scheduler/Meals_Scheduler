@@ -101,8 +101,8 @@ class EditMonthlyDialog(
             for (i in weeklyID!!.list!!) {
 
 
-                var weekly = UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!.get(i)
-                weeklyList.add(weekly)
+                var weekly = UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!.get(i.toString())
+                weeklyList.add(weekly!!)
                 //   numOfDayArrlist.add(0)
 
 
@@ -227,16 +227,11 @@ class EditMonthlyDialog(
                     // getting this daily recipes
                     var dailyList: ArrayList<DailySchedule> = ArrayList()
                     var ids = weeklyList.get(t3v.getTag() as Int).dailyIds.splitIgnoreEmpty(" ")
-                    var m =0
+
                     //going through the list and get each recipe by its id
                     for (i in ids) {
-                        if (UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(m).dailyId == i.toInt()) {
-                            dailyList!!.add(UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(m))
-                            m=0
-                        }
-                        else {
-                            m++
-                        }
+                        dailyList.add(UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(i)!!)
+
                     }
 
                     var dialog = WeeklyDialogInfo(
@@ -399,15 +394,9 @@ class EditMonthlyDialog(
                     var m =0
                     //going through the list and get each recipe by its id
                     for (i in ids) {
-                        if (UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(m).dailyId == i.toInt()) {
-                            dailyList!!.add(UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(m))
-                            m=0
-                        }
-                        else {
-                            m++
-                        }
-                    }
+                        dailyList.add(UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(i)!!)
 
+                    }
 
 
 
