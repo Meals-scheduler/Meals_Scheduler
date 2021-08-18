@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.meals_schdueler.dummy.DailySchedule
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStream
@@ -19,30 +18,30 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
+
+class MyYearlyScheudleFragment : Fragment(), GetAndPost {
 
     private var columnCount = 1
-    private var monthlyList: HashMap<String, MonthlySchedule>? = null
-    private var weeklyTmp: ArrayList<WeeklySchedule>? = null
+    private var yearlyList: HashMap<String, YearlySchedule>? = null
+    private var monthlyTmp: ArrayList<MonthlySchedule>? = null
 
-    // each monthlyid will hold all its weekly
-    private var monthly_weekly_map: HashMap<String, ArrayList<WeeklySchedule>>? = null
-    private var sorted: TreeMap<String, MonthlySchedule>? = null
-    private var monthlyRecyclerViewAdapter: My_Monthly_RecylerViewAdapter? = null
+    // each yearid will hold all its monthly
+    private var yearly_monthly_map: HashMap<String, ArrayList<MonthlySchedule>>? = null
+    private var sorted: TreeMap<String, YearlySchedule>? = null
+    private var yearlyRecyclerViewAdapter: My_Yearly_RecylerViewAdapter? = null
 
-
-    var numOfWeek: String = ""
-    var weeklyIds: String = ""
+    var numOfMonth: String = ""
+    var monthlyIds: String = ""
     private var totalcost = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
 
-        monthlyList = HashMap()
-        weeklyTmp = ArrayList()
+        yearlyList = HashMap()
+        monthlyTmp = ArrayList()
         sorted = TreeMap()
-        monthlyRecyclerViewAdapter = My_Monthly_RecylerViewAdapter(
+        yearlyRecyclerViewAdapter = My_Yearly_RecylerViewAdapter(
             sorted!!,
             childFragmentManager,
             this.context
@@ -55,11 +54,12 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
 
     }
 
+
     companion object {
 
-        var instance: MyMonthlyScheudleFragment? = null
+        var instance: MyYearlyScheudleFragment? = null
 
-        fun getInstance1(): MyMonthlyScheudleFragment {
+        fun getInstance1(): MyYearlyScheudleFragment {
             return instance!!
         }
 
@@ -70,7 +70,7 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
         // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
-            MyMonthlyScheudleFragment().apply {
+            MyYearlyScheudleFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_COLUMN_COUNT, columnCount)
 
@@ -84,7 +84,7 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val x = inflater.inflate(R.layout.my_monthly_schedule_list, null)
+        val x = inflater.inflate(R.layout.my_yearly_schedule_list, null)
         val recyclerView = x.findViewById<View>(R.id.list) as RecyclerView
 
 
@@ -96,7 +96,7 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                recyclerView.adapter = monthlyRecyclerViewAdapter
+                recyclerView.adapter = yearlyRecyclerViewAdapter
 
             }
         }
@@ -114,7 +114,7 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
 
     override fun DoNetWorkOpreation(): String {
 
-        var link = "https://elad1.000webhostapp.com/getMonthly.php?ownerID=" + UserInterFace.userID;
+        var link = "https://elad1.000webhostapp.com/getYearly.php?ownerID=" + UserInterFace.userID;
 
 
         val sb = StringBuilder()
@@ -151,13 +151,13 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
     override fun getData(str: String) {
         if (!str.equals("")) {
 
-            numOfWeek = ""
-            weeklyIds = ""
+            numOfMonth = ""
+            monthlyIds = ""
             // recipeList!!.clear()
-            monthlyList!!.clear()
+            yearlyList!!.clear()
 
 
-            val monthlyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+            val yearlyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
 
             // map to map each MonthlyID with a key as ID and contains all 2
@@ -166,98 +166,97 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
             var mapTotalCost: HashMap<String, Double> = HashMap()
 
 
-            var monthlyInfo2 = monthlyInfo[0].splitIgnoreEmpty("*")
-            var currentMonthlyID = monthlyInfo2[0].toInt()
+            var yearlyInfo2 = yearlyInfo[0].splitIgnoreEmpty("*")
+            var currentYearlyID = yearlyInfo2[0].toInt()
 
-            for (i in monthlyInfo.indices) {
+            for (i in yearlyInfo.indices) {
 
-                monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
+                yearlyInfo2 = yearlyInfo[i].splitIgnoreEmpty("*")
 
                 //means we switch to the next WeeklyID
-                if (monthlyInfo2[0].toInt() != currentMonthlyID) {
+                if (yearlyInfo2[0].toInt() != currentYearlyID) {
 
                     // to keep each Weekly its dailys ids and its num of day.(days in a week)
                     var totalLists: ArrayList<String> = ArrayList()
-                    totalLists.add(numOfWeek)
-                    totalLists.add(weeklyIds)
+                    totalLists.add(numOfMonth)
+                    totalLists.add(monthlyIds)
                     // saving this weekly daily ids and num of days
-                    map.put(currentMonthlyID.toString(), totalLists)
+                    map.put(currentYearlyID.toString(), totalLists)
                     // saving this weekly total cost
-                    mapTotalCost.put(currentMonthlyID.toString(), totalcost)
+                    mapTotalCost.put(currentYearlyID.toString(), totalcost)
 
                     //switching to the next WeeklyID
-                    currentMonthlyID = monthlyInfo2[0].toInt()
+                    currentYearlyID = yearlyInfo2[0].toInt()
 
                     // clearing the variables for next WeeeklyID
-                    numOfWeek = ""
-                    weeklyIds = ""
+                    numOfMonth = ""
+                    monthlyIds = ""
 
                 }
 
-                numOfWeek += "" + monthlyInfo2[3] + " "
-                weeklyIds += "" + monthlyInfo2[4] + " "
+                numOfMonth += "" + yearlyInfo2[3] + " "
+                monthlyIds += "" + yearlyInfo2[4] + " "
                 // saving the last total cost
-                totalcost = monthlyInfo2[2].toDouble()
+                totalcost = yearlyInfo2[2].toDouble()
 
 
             }
 
             // not to skip on the last Weeekly
 
-            if (!numOfWeek.equals("")) {
+            if (!numOfMonth.equals("")) {
                 var totalLists: ArrayList<String> = ArrayList()
-                totalLists.add(numOfWeek)
-                totalLists.add(weeklyIds)
-                map.put(currentMonthlyID.toString(), totalLists)
-                mapTotalCost.put(currentMonthlyID.toString(), totalcost)
+                totalLists.add(numOfMonth)
+                totalLists.add(monthlyIds)
+                map.put(currentYearlyID.toString(), totalLists)
+                mapTotalCost.put(currentYearlyID.toString(), totalcost)
             }
 
             // making MonthlyScheudle objects
-            monthly_weekly_map = HashMap()
-            currentMonthlyID = -1
-            for (i in monthlyInfo.indices) {
-                var monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
-                if (monthlyInfo2[0].toInt() != currentMonthlyID) {
-                  weeklyTmp = ArrayList()
-                    monthlyList!!.put(
-                        monthlyInfo2[0],
-                        MonthlySchedule(
-                            monthlyInfo2[0].toInt(),
-                            monthlyInfo2[1].toInt(),
-                            map.get(monthlyInfo2[0])!!.get(0),
-                            map.get(monthlyInfo2[0])!!.get(1),
-                            mapTotalCost.get(monthlyInfo2[0])!!,
+            yearly_monthly_map = HashMap()
+            currentYearlyID = -1
+            for (i in yearlyInfo.indices) {
+                var yearlyInfo2 = yearlyInfo[i].splitIgnoreEmpty("*")
+                if (yearlyInfo2[0].toInt() != currentYearlyID) {
+                    monthlyTmp = ArrayList()
+                    yearlyList!!.put(
+                        yearlyInfo2[0],
+                        YearlySchedule(
+                            yearlyInfo2[0].toInt(),
+                            yearlyInfo2[1].toInt(),
+                            map.get(yearlyInfo2[0])!!.get(0),
+                            map.get(yearlyInfo2[0])!!.get(1),
+                            mapTotalCost.get(yearlyInfo2[0])!!,
                             false
 
                         )
                     )
                     //making DailyScheule objects in a map with WeeklyID
-                    var weeklyIds = map.get(monthlyInfo2[0])!!.get(1).splitIgnoreEmpty(" ")
+                    var monthlyIds = map.get(yearlyInfo2[0])!!.get(1).splitIgnoreEmpty(" ")
 
-                    for (i in weeklyIds) {
+                    for (i in monthlyIds) {
 
-                        weeklyTmp!!.add(UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!.get(i)!!)
+                        monthlyTmp!!.add(
+                            UserPropertiesSingelton.getInstance()!!.getUserMonthly()!!.get(i)!!
+                        )
                     }
 
 
-
-                    }
-                    monthly_weekly_map!!.put(monthlyInfo2[0].toInt().toString(), weeklyTmp!!)
-                    currentMonthlyID = monthlyInfo2[0].toInt()
                 }
+                yearly_monthly_map!!.put(yearlyInfo2[0].toInt().toString(), monthlyTmp!!)
+                currentYearlyID = yearlyInfo2[0].toInt()
+            }
 
 
             sorted!!.clear()
-            sorted!!.putAll(monthlyList!!)
+            sorted!!.putAll(yearlyList!!)
 
-            monthlyRecyclerViewAdapter!!.setMonthlyValues(sorted!!)!!
-            monthlyRecyclerViewAdapter!!.setWeeklyValues(monthly_weekly_map!!)
-            UserPropertiesSingelton.getInstance()!!.setUserMonthly(sorted)
-
-        }
-
-
-
+            yearlyRecyclerViewAdapter!!.setYearlyValues(sorted!!)!!
+            yearlyRecyclerViewAdapter!!.setMonthlyValues(yearly_monthly_map!!)
+            UserPropertiesSingelton.getInstance()!!.setUserYearly(sorted!!)!!
 
         }
+
+
     }
+}

@@ -26,10 +26,11 @@ class UserPropertiesSingelton {
     }
 
     var userIngredients: ArrayList<Ingredient>? = null
-    var userRecipes: HashMap<String,Recipe>? = null
-    var dailySchedule: TreeMap<String,DailySchedule>? = null
-    var weeklyScheudle: TreeMap<String,WeeklySchedule>? = null
-    var monthlyScheudle: TreeMap<String,MonthlySchedule>? = null
+    var userRecipes: HashMap<String, Recipe>? = null
+    var dailySchedule: TreeMap<String, DailySchedule>? = null
+    var weeklyScheudle: TreeMap<String, WeeklySchedule>? = null
+    var monthlyScheudle: TreeMap<String, MonthlySchedule>? = null
+    var yearlyScheudle: TreeMap<String, YearlySchedule>? = null
     var userMapRecipes: HashMap<Int, Recipe>? = null
     var userUpcomingSchedule: ArrayList<UpComingScheudule>? = null
 
@@ -66,43 +67,52 @@ class UserPropertiesSingelton {
         this.userIngredients = userIngredients
     }
 
-    fun getUserRecipess(): HashMap<String,Recipe>? {
-        if (userRecipes == null) userRecipes = HashMap<String,Recipe>()
+    fun getUserRecipess(): HashMap<String, Recipe>? {
+        if (userRecipes == null) userRecipes = HashMap<String, Recipe>()
         return userRecipes
     }
 
-    fun setUserRecipess(userIngredients: HashMap<String,Recipe>?) {
+    fun setUserRecipess(userIngredients: HashMap<String, Recipe>?) {
         this.userRecipes = userIngredients
     }
 
 
-    fun getUserDaily():  TreeMap<String,DailySchedule>? {
-        if (dailySchedule == null) dailySchedule =  TreeMap<String,DailySchedule>()
+    fun getUserDaily(): TreeMap<String, DailySchedule>? {
+        if (dailySchedule == null) dailySchedule = TreeMap<String, DailySchedule>()
         return dailySchedule
     }
 
 
-
-    fun setUserDaily(dailySchedule:  TreeMap<String,DailySchedule>?) {
+    fun setUserDaily(dailySchedule: TreeMap<String, DailySchedule>?) {
         this.dailySchedule = dailySchedule
     }
 
 
-    fun getUserWeekly(): TreeMap<String,WeeklySchedule>? {
-        if (weeklyScheudle == null) weeklyScheudle =TreeMap<String,WeeklySchedule>()
+    fun getUserWeekly(): TreeMap<String, WeeklySchedule>? {
+        if (weeklyScheudle == null) weeklyScheudle = TreeMap<String, WeeklySchedule>()
         return weeklyScheudle
     }
 
-    fun setUserWeekly(weeklyScheudle:TreeMap<String,WeeklySchedule>?) {
+    fun setUserWeekly(weeklyScheudle: TreeMap<String, WeeklySchedule>?) {
         this.weeklyScheudle = weeklyScheudle
     }
 
-    fun getUserMonthly():TreeMap<String,MonthlySchedule>? {
-        if (monthlyScheudle == null) monthlyScheudle = TreeMap<String,MonthlySchedule>()
+    fun getUserMonthly(): TreeMap<String, MonthlySchedule>? {
+        if (monthlyScheudle == null) monthlyScheudle = TreeMap<String, MonthlySchedule>()
         return monthlyScheudle
     }
 
-    fun setUserMonthly(monthlyScheudle:TreeMap<String,MonthlySchedule>?) {
+    fun setUserMonthly(monthlyScheudle: TreeMap<String, MonthlySchedule>?) {
         this.monthlyScheudle = monthlyScheudle
+    }
+
+
+    fun getUserYearly(): TreeMap<String, YearlySchedule>? {
+        if (yearlyScheudle == null) yearlyScheudle = TreeMap<String, YearlySchedule>()
+        return yearlyScheudle
+    }
+
+    fun setUserYearly(yearlyScheudle: TreeMap<String, YearlySchedule>?) {
+        this.yearlyScheudle = yearlyScheudle
     }
 }

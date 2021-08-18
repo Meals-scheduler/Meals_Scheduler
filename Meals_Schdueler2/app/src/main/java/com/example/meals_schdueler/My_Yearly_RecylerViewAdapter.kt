@@ -15,80 +15,78 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
-class My_Monthly_RecylerViewAdapter(
-
-    monthlyValues: TreeMap<String, MonthlySchedule>,
-   // weeklyValues: HashMap<String, WeeklySchedule>,
+class My_Yearly_RecylerViewAdapter(
+    yearlyValues: TreeMap<String, YearlySchedule>,
     childFragmentManager: FragmentManager,
     context: Context?,
 
-    ) : RecyclerView.Adapter<My_Monthly_RecylerViewAdapter.ViewHolder>() {
+    ) : RecyclerView.Adapter<My_Yearly_RecylerViewAdapter.ViewHolder>() {
 
-    private var monthlyValues: TreeMap<String, MonthlySchedule> = monthlyValues
-   // private var weeklyValues: HashMap<String, WeeklySchedule> = weeklyValues
-    private var monthlyWeekly: HashMap<String, ArrayList<WeeklySchedule>> = HashMap()
+
+    private var yearlyValues: TreeMap<String, YearlySchedule> = yearlyValues
+
+    // private var weeklyValues: HashMap<String, WeeklySchedule> = weeklyValues
+    private var yearlyMonthly: HashMap<String, ArrayList<MonthlySchedule>> = HashMap()
 
     private var childFragmentManager = childFragmentManager
 
     // private lateinit var recipeList: ArrayList<Recipe>
-    private var numOfMonthly = 1
+    private var numOfYearly = 1
     private var context = context
-    private var monthlyToSchedule = -1
+    private var yearlyToSchedule = -1
     var date = ""
 
-    private var monthlyList: ArrayList<MonthlySchedule> = ArrayList()
+    private var yearlyList: ArrayList<YearlySchedule> = ArrayList()
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): My_Monthly_RecylerViewAdapter.ViewHolder {
+    ): My_Yearly_RecylerViewAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.my_monthly_schedule, parent, false)
+            .inflate(R.layout.my_yearly_schedule, parent, false)
 
-        for (i in monthlyValues) {
-            monthlyList.add(i.value)
+        for (i in yearlyValues) {
+            yearlyList.add(i.value)
         }
         return ViewHolder(view)
     }
 
 
-    override fun onBindViewHolder(holder: My_Monthly_RecylerViewAdapter.ViewHolder, position: Int) {
-        var item: MonthlySchedule = monthlyList[position]!! // each item postion
+    override fun onBindViewHolder(holder: My_Yearly_RecylerViewAdapter.ViewHolder, position: Int) {
+        var item: YearlySchedule = yearlyList[position]!! // each item postion
         holder.mItem = item
 
-        holder.numOfWeekly.setText(numOfMonthly++.toString())
+        holder.numOfYearly.setText(numOfYearly++.toString())
 
         holder.edit.setOnClickListener {
-            Log.v("Elad1", "FF1" + item.monthlyId.toString())
+           // Log.v("Elad1", "FF1" + item.monthlyId.toString())
             // copying the list not to override it in the edit .
-            var tmpList: ArrayList<WeeklySchedule> = ArrayList()
-            for (i in monthlyWeekly.get(item.monthlyId.toString())!!) {
+            var tmpList: ArrayList<MonthlySchedule> = ArrayList()
+            for (i in yearlyMonthly.get(item.yearlyId.toString())!!) {
                 tmpList.add(i)
             }
 
-            var dialog = EditMonthlyDialog(
+            var dialog = EditYearlyDialog(
                 tmpList,
-                item.numOfWeek,
-                item.weeklyIds,
+                item.numOfMonth,
+                item.monthlyIds,
                 position + 1,
-                item.monthlyId
+                item.yearlyId
 
             )
-            dialog.show(childFragmentManager, "weeklyEdit")
+            dialog.show(childFragmentManager, "yearlyEdit")
         }
 
 
 
         holder.info.setOnClickListener {
-            // Log.v("Elad1","HH" + weeklyDaily.get(item.weeklyId.toString())!!.get(1).recipeIds)
-            Log.v("Elad1", "FF2" + item.monthlyId.toString())
-            var dialog = MonthlyDialogInfo(
-                monthlyWeekly.get(item.monthlyId.toString())!!,
-                item.numOfWeek,
-                item.weeklyIds,
+
+            var dialog = YearlyDialogInfo(
+                yearlyMonthly.get(item.yearlyId.toString())!!,
+                item.numOfMonth,
+                item.monthlyIds,
                 item.totalCost,
                 (position + 1)
             )
@@ -118,7 +116,7 @@ class My_Monthly_RecylerViewAdapter(
         }
 
         holder.date.setOnClickListener {
-            monthlyToSchedule = monthlyValues.get(item.monthlyId.toString())!!.monthlyId
+            yearlyToSchedule = yearlyValues.get(item.yearlyId.toString())!!.yearlyId
 
             val cal = Calendar.getInstance()
             // to open the calender with the current date of this moment.
@@ -129,7 +127,7 @@ class My_Monthly_RecylerViewAdapter(
                 context!!,
                 android.R.style.Theme_Holo_Light,
                 calenderListener(
-                    monthlyToSchedule,
+                    yearlyToSchedule,
                     date,
                     childFragmentManager
                 ),
@@ -142,35 +140,35 @@ class My_Monthly_RecylerViewAdapter(
         }
     }
 
-    fun setMonthlyValues(mValues: TreeMap<String, MonthlySchedule>) {
-        numOfMonthly = 1
-        this.monthlyValues = mValues
-        monthlyList.clear()
+    fun setYearlyValues(mValues: TreeMap<String, YearlySchedule>) {
+        //numOfMonthly = 1
+        this.yearlyValues = mValues
+        yearlyList.clear()
         for (i in mValues) {
-            monthlyList.add(i.value)
+            yearlyList.add(i.value)
         }
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
 
-    fun setWeeklyValues(mValues: HashMap<String, ArrayList<WeeklySchedule>>) {
-        numOfMonthly = 1
-        this.monthlyWeekly = mValues
+    fun setMonthlyValues(mValues: HashMap<String, ArrayList<MonthlySchedule>>) {
+        //numOfMonthly = 1
+        this.yearlyMonthly = mValues
 
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
 
-    override fun getItemCount(): Int = monthlyValues.size
+    override fun getItemCount(): Int = yearlyValues.size
 
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        var numOfWeekly: TextView = view.findViewById(R.id.numOfMonthlyTextView)
+        var numOfYearly: TextView = view.findViewById(R.id.numOfYearlyTextView)
         var info: Button = view.findViewById(R.id.buttonInfo)
         var edit: Button = view.findViewById(R.id.buttonEdit)
         var date: Button = view.findViewById(R.id.buttonSchedule)
         var delete: Button = view.findViewById(R.id.buttonDel)
         var cart: ImageView = view.findViewById(R.id.imageViewCart)
-        lateinit var mItem: MonthlySchedule
+        lateinit var mItem: YearlySchedule
 
 
         override fun toString(): String {
@@ -203,6 +201,5 @@ class My_Monthly_RecylerViewAdapter(
 
         }
     }
-
 
 }

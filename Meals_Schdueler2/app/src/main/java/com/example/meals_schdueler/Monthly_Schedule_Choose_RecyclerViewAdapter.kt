@@ -11,39 +11,36 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meals_schdueler.dummy.DailySchedule
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
+class Monthly_Schedule_Choose_RecyclerViewAdapter(
 
-class Weekly_Schedule_Choose_RecyclerViewAdapter(
-
-    var weeklyValues: TreeMap<String, WeeklySchedule>,
-   //var dailyValues: TreeMap<String, DailySchedule>,
-    //var recipes:HashMap<String, Recipe>,
-    weeklyId: ArrayList<Int>?,
+    var monthlyValues: TreeMap<String, MonthlySchedule>,
+    monthlyId: ArrayList<Int>?,
     childFragmentManager: FragmentManager
-) : RecyclerView.Adapter<Weekly_Schedule_Choose_RecyclerViewAdapter.ViewHolder>() {
 
-    private var mValues: TreeMap<String, WeeklySchedule> = weeklyValues
-        // private var mValuesDaily: TreeMap<String, DailySchedule> = dailyValues
+) : RecyclerView.Adapter<Monthly_Schedule_Choose_RecyclerViewAdapter.ViewHolder>()  {
 
-    private var weeklyList: ArrayList<WeeklySchedule> = ArrayList()
+
+    private var mValues: TreeMap<String, MonthlySchedule> = monthlyValues
+    // private var mValuesDaily: TreeMap<String, DailySchedule> = dailyValues
+
+    private var monthylList: ArrayList<MonthlySchedule> = ArrayList()
 
     //    private var recipe = recipes
     private var childFragmentManager = childFragmentManager
-    private var numOfWeekly = 1
-    private var weeklyId = weeklyId
+    private var numOfMonthly = 1
+    private var monthlyId = monthlyId
 
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): Weekly_Schedule_Choose_RecyclerViewAdapter.ViewHolder {
+    ): Monthly_Schedule_Choose_RecyclerViewAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.weekly_choose, parent, false)
+            .inflate(R.layout.monthly_choose, parent, false)
 
-        for(i in weeklyValues){
-            weeklyList.add(i.value)
+        for(i in monthlyValues){
+            monthylList.add(i.value)
         }
         return ViewHolder(view)
     }
@@ -54,29 +51,31 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var item: WeeklySchedule = weeklyList[position]!! // each item postion
+
+
+    override fun onBindViewHolder(holder: Monthly_Schedule_Choose_RecyclerViewAdapter.ViewHolder, position: Int) {
+        var item: MonthlySchedule = monthylList[position]!! // each item postion
         holder.mItem = item
-        if (numOfWeekly < mValues.size) {
-            holder.numOfDaily.setText(numOfWeekly++.toString())
+        if (numOfMonthly < mValues.size) {
+            holder.numOfMonthly.setText(numOfMonthly++.toString())
         }
         //var bitmap2 = ImageConvert.StringToBitMap(item.picture)
 
 
-        holder.weeklyInfo.setOnClickListener {
+        holder.monthlyInfo.setOnClickListener {
 
-            var dailyList: ArrayList<DailySchedule> = ArrayList()
-            var dailyArr = item.dailyIds.splitIgnoreEmpty(" ")
+            var weeklyList: ArrayList<WeeklySchedule> = ArrayList()
+            var dailyArr = item.weeklyIds.splitIgnoreEmpty(" ")
             var j = 0
             for (i in dailyArr) {
 
-                dailyList.add(UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(i)!!)
+                weeklyList.add(UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!.get(i)!!)
             }
 
-            var dialog = WeeklyDialogInfo(
-                dailyList,
-                item.numOfDay,
-                item.dailyIds,
+            var dialog = MonthlyDialogInfo(
+                weeklyList,
+                item.numOfWeek,
+                item.weeklyIds,
                 item.totalCost,
                 position + 1
             )
@@ -90,14 +89,14 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
         holder.choose.setOnClickListener() {
 
 //
-            if (holder.choose.isChecked == true && (weeklyId!!.isEmpty())) {
-                weeklyId!!.add(item.weeklyId)
+            if (holder.choose.isChecked == true && (monthlyId!!.isEmpty())) {
+                monthlyId!!.add(item.monthlyId)
                 holder.arr[position] = true
 
             } else if (holder.choose.isChecked == false) {
-                if (weeklyId!!.contains(position)) {
+                if (monthlyId!!.contains(position)) {
                     holder.arr[position] = false
-                    weeklyId!!.remove(position)
+                    monthlyId!!.remove(position)
 
                 }
 
@@ -110,7 +109,7 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
     }
 
 
-    fun setmValues(mValues: TreeMap<String, WeeklySchedule>) {
+    fun setmValues(mValues: TreeMap<String, MonthlySchedule>) {
         this.mValues = mValues
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
@@ -120,12 +119,12 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
         // val idView: TextView = view.findViewById(R.id.item_number)
         //val contentView: TextView = view.findViewById(R.id.content)
 
-        var weeklyInfo: Button = view.findViewById(R.id.buttonInfo)
+        var monthlyInfo: Button = view.findViewById(R.id.buttonInfo)
         var cart: ImageView = view.findViewById(R.id.imageViewCart)
-        var numOfDaily: TextView = view.findViewById(R.id.numOfWeeklyTextView)
+        var numOfMonthly: TextView = view.findViewById(R.id.numOfMonthlyTextView)
         var choose: CheckBox = view.findViewById(R.id.WeeklyCheckBox)
         val arr = Array(mValues.size, { i -> false })
-        lateinit var mItem: WeeklySchedule
+        lateinit var mItem: MonthlySchedule
 
 
         override fun toString(): String {
@@ -135,6 +134,7 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
 
     }
 
-    override fun getItemCount(): Int = weeklyValues.size
+    override fun getItemCount(): Int = monthlyValues.size
+
 
 }

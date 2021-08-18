@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#3261"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:id="@+id/scrollTable"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalscrollTable"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/relativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textViewWeekly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:fontFamily="@font/poppinsbold"
+                    android:gravity="center"
+                    android:text="Create Your Yearly Schedule :"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TableLayout
+                    android:id="@+id/tableLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/chooseBtn"
+                    app:layout_constraintVertical_bias="0.371"
+                    >
+
+                </TableLayout>
+
+                <Button
+                    android:id="@+id/saveBtn"
+                    android:layout_width="104dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="56dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/btn1"
+                    android:fontFamily="@font/poppinsbold"
+                    android:gravity="center"
+                    android:text="Save"
+                    android:stretchColumns="*"
+                    android:shrinkColumns="*"
+                    android:textColor="@drawable/button_states"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+                    app:layout_constraintVertical_bias="0.0"></Button>
+
+                <TextView
+                    android:id="@+id/totalCostTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/poppinsbold"
+                    android:gravity="center"
+                    android:text="Total Cost :"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+                    app:layout_constraintVertical_bias="1.0">
+
+                </TextView>
+
+                <EditText
+                    android:id="@+id/editTextTotalCost"
+                    android:layout_width="70dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="56dp"
+                    android:layout_marginEnd="172dp"
+                    android:background="@drawable/edit_text_shape"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.833"
+                    app:layout_constraintStart_toEndOf="@+id/totalCostTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/tableLayout">
+
+                </EditText>
+
+                <Button
+                    android:id="@+id/chooseBtn"
+                    android:layout_width="104dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/btn1"
+                    android:fontFamily="@font/poppinsbold"
+                    android:textColor="@drawable/button_states"
+                    android:layout_marginTop="28dp"
+                    android:text="Choose"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewWeekly" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </HorizontalScrollView>
+
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -72,6 +72,11 @@ class UserInterFace : AppCompatActivity() {
                 ft.replace(R.id.containerView, MonthlySchedukeFragments()).commit()
             }
 
+            if (menuItem.itemId == R.id.nav_item_yearly_schedule) {
+                val ft = mFragmentManager.beginTransaction()
+                ft.replace(R.id.containerView,YearlySchedukeFragments()).commit()
+            }
+
 
 
 

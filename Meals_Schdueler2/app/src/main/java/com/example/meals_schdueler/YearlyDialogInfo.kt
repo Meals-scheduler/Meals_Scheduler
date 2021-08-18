@@ -12,12 +12,11 @@ import androidx.fragment.app.DialogFragment
 import com.example.meals_schdueler.dummy.DailySchedule
 import java.text.DecimalFormat
 
+class YearlyDialogInfo(
 
-class MonthlyDialogInfo(
-
-    weeklyList: ArrayList<WeeklySchedule>,
-    numOfWeek: String,
-    weeklyIds: String,
+    monthlyList: ArrayList<MonthlySchedule>,
+    numOfMonth: String,
+    monthlyIds: String,
     totalCost: Double,
     pos: Int,
 ) : DialogFragment(), View.OnClickListener, DialogInterface.OnDismissListener {
@@ -27,20 +26,19 @@ class MonthlyDialogInfo(
     private lateinit var exit: ImageView
     private lateinit var title: TextView
 
-    private var weeklyList = weeklyList
+    private var monthlyList = monthlyList
 
     //  private var weeklyList = weeklyList
     // private var weeklyId = weeklyId
     private var totalCostt = totalCost
-    private var numOfWeek = numOfWeek
-    private var weeklyIds = weeklyIds
+    private var numOfMonth = numOfMonth
+    private var monthlyIds = monthlyIds
 
     //   private var totalCost = totalCost
     private var tablePosition = 1
     private var totalCostDobule: Double = 0.0
     private var position = pos
-    private var weeklyPos = 0
-
+    private var monthlyPos = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,36 +46,29 @@ class MonthlyDialogInfo(
         savedInstanceState: Bundle?
     ): View? {
 
-        var x: View = inflater.inflate(R.layout.monthly_info, container, false)
+        var x: View = inflater.inflate(R.layout.yearly_info, container, false)
         stk = x.findViewById(R.id.tableLayout)
         totalCost = x.findViewById(R.id.editTextTotalCost)
-        title = x.findViewById(R.id.monthlyInfo)
-        title.setText("Month No. " + position)
+        title = x.findViewById(R.id.yearlyInfo)
+        title.setText("Year No. " + position)
 
 
         exit = x.findViewById(R.id.imageViewX)
         exit.setOnClickListener(this)
 
         addTable()
-        initMonthly()
+        initYearly()
         return x
 
 
     }
 
-    fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
-        return this.split(*delimiters).filter {
-            it.isNotEmpty()
-        }
-    }
-
-
-    private fun initMonthly() {
+    private fun initYearly() {
 
 
         // converting the strings into arr's
-        var numOfWeekArr = numOfWeek.splitIgnoreEmpty(" ")
-        var weekIdsArr = weeklyIds.splitIgnoreEmpty(" ")
+        var numOfMonthArr = numOfMonth.splitIgnoreEmpty(" ")
+        var monthIdsArr = monthlyIds.splitIgnoreEmpty(" ")
 
         totalCostDobule += totalCostt
         totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
@@ -85,7 +76,7 @@ class MonthlyDialogInfo(
 
 
         var j = 0
-        for (i in weeklyList) {
+        for (i in monthlyList) {
 
 
             var tbrow: TableRow = TableRow(this.context)
@@ -95,17 +86,17 @@ class MonthlyDialogInfo(
             var t1v: TextView = TextView(context)
 
             // t1v.setBackgroundResource(R.drawable.border)
-            var weekChoosen = ""
-            when (numOfWeekArr[j++]) {
-                "0" -> weekChoosen = "Week 1"
-                "1" -> weekChoosen = "Week 2"
-                "2" -> weekChoosen = "Week 3"
-                "3" -> weekChoosen = "Week 4"
+            var monthChoosen = ""
+            when (numOfMonthArr[j++]) {
+                "0" -> monthChoosen = "Month 1"
+                "1" -> monthChoosen = "Month 2"
+                "2" -> monthChoosen = "Month 3"
+                "3" -> monthChoosen = "Month 4"
 
 
             }
 
-            t1v.setText(" " + (weekChoosen))
+            t1v.setText(" " + (monthChoosen))
             t1v.setTextColor(Color.BLACK)
             t1v.gravity = Gravity.CENTER
             //  t1v.setBackgroundResource(R.drawable.spinner_shape)
@@ -115,7 +106,7 @@ class MonthlyDialogInfo(
             var t2v: TextView = TextView(context)
 
 
-            t2v.setText(" " + (i.weeklyId))
+            t2v.setText(" " + (i.monthlyId))
             t2v.setTextColor(Color.BLACK)
             t2v.gravity = Gravity.CENTER
 
@@ -123,7 +114,7 @@ class MonthlyDialogInfo(
 
 
             var t3v: Button = Button(context)
-            t3v.setTag(weeklyPos++)
+            t3v.setTag(monthlyPos++)
             t3v.setText("Info")
             t3v.setTextSize(10F)
             t3v.setTextColor(Color.BLACK)
@@ -133,19 +124,21 @@ class MonthlyDialogInfo(
             t3v.setOnClickListener {
                 //NEED TO CHECK HERE WHATS WRONG with info button!!!!!
                 // getting this daily recipes
-                var dailyList: ArrayList<DailySchedule> = ArrayList()
-                var ids = weeklyList.get(t3v.getTag() as Int).dailyIds.splitIgnoreEmpty(" ")
-                var m =0
+                var weeklyist: ArrayList<WeeklySchedule> = ArrayList()
+                var ids = monthlyList.get(t3v.getTag() as Int).weeklyIds.splitIgnoreEmpty(" ")
+                var m = 0
                 //going through the list and get each recipe by its id
                 for (i in ids) {
-                    dailyList.add(UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(i)!!)
+                    weeklyist.add(
+                        UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!.get(i)!!
+                    )
 
                 }
 
-                var dialog = WeeklyDialogInfo(
-                    dailyList,
-                    i.numOfDay,
-                    i.dailyIds,
+                var dialog = MonthlyDialogInfo(
+                    weeklyist,
+                    i.numOfWeek,
+                    i.weeklyIds,
                     i.totalCost,
                     t3v.getTag() as Int + 1
                 )
@@ -172,14 +165,14 @@ class MonthlyDialogInfo(
         var tbrow0: TableRow = TableRow(context)
 
         var tv0: TextView = TextView(context)
-        tv0.setText(" Week ")
+        tv0.setText(" Month ")
         tv0.setTextColor(Color.BLACK)
         tv0.gravity = Gravity.CENTER
         //  tv0.setBackgroundResource(R.drawable.spinner_shape)
         tbrow0.addView(tv0)
 
         var tv1: TextView = TextView(context)
-        tv1.setText(" WeeklyId ")
+        tv1.setText(" MonthlyId ")
         tv1.setTextColor(Color.BLACK)
         tv1.gravity = Gravity.CENTER
         // tv1.setBackgroundResource(R.drawable.spinner_shape)
@@ -200,10 +193,17 @@ class MonthlyDialogInfo(
 
     }
 
+    fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
+        return this.split(*delimiters).filter {
+            it.isNotEmpty()
+        }
+    }
+
 
     override fun onClick(p0: View?) {
         if (p0 == exit) {
             dismiss()
         }
     }
+
 }

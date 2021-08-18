@@ -1,6 +1,5 @@
 package com.example.meals_schdueler
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.graphics.Color
@@ -19,13 +18,13 @@ import androidx.fragment.app.Fragment
 import com.example.meals_schdueler.dummy.DailySchedule
 import java.text.DecimalFormat
 
+class EditYearlyDialog(
 
-class EditMonthlyDialog(
-    weeklyList: ArrayList<WeeklySchedule>,
-    numOfWeek: String,
-    weeklyIds: String,
+    monthlyList: ArrayList<MonthlySchedule>,
+    numOfMonth: String,
+    monthlyIds: String,
     pos: Int,
-    monthlyId: Int,
+    yearlyId: Int,
 ) : DialogFragment(), DialogInterface.OnDismissListener, View.OnClickListener {
 
 
@@ -35,24 +34,24 @@ class EditMonthlyDialog(
     private lateinit var title: TextView
     private lateinit var chooseBtn: Button
     private lateinit var saveBtn: Button
-    private lateinit var numOfWeekArrlist: ArrayList<Int>
-    private lateinit var weeklyIdsArrlist: ArrayList<Int>
-    private lateinit var weeklyDayss: ArrayList<Int>
-    private var weeklyID: Recipe_Ingredients_List? = null
-    private var listWeeklyIdChoosen: ArrayList<Int>? = null
 
 
-    private var monthlyId = monthlyId
-    private var numOfWeek = numOfWeek
-    private var weeklyIds = weeklyIds
-    private var weeklyList = weeklyList
+    private lateinit var numOfMonthArrlist: ArrayList<Int>
+    private lateinit var monthlyIdsArrlist: ArrayList<Int>
+    private lateinit var monthlyDayss: ArrayList<Int>
+    private var monthlyID: Recipe_Ingredients_List? = null
+    private var listMonthlyIdChoosen: ArrayList<Int>? = null
+
+    private var yearlyId = yearlyId
+    private var numOfMonth = numOfMonth
+    private var monthlyIds = monthlyIds
+    private var monthlyList = monthlyList
     private var tablePosition = 1
     private var totalCostDobule: Double = 0.0
     private var position = pos
-    private var weeklyPos = 0
+    private var monthlyPos = 0
     private var savedSize = 0
-    private var flag = true // this flag is for the duplicated weeks check
-
+    private var flag = true // this flag is for the duplicated months check
 
 
     override fun onCreateView(
@@ -61,16 +60,16 @@ class EditMonthlyDialog(
         savedInstanceState: Bundle?
     ): View? {
 
-        var x: View = inflater.inflate(R.layout.edit_monthly, container, false)
+        var x: View = inflater.inflate(R.layout.edit_yearly, container, false)
         stk = x.findViewById(R.id.tableLayout)
         totalCost = x.findViewById(R.id.editTextTotalCost)
-        title = x.findViewById(R.id.editNumberOfMonthlyTextView)
-        title.setText("Edit Monthly No. " + position)
-        weeklyIdsArrlist = ArrayList()
-        numOfWeekArrlist = ArrayList()
-        weeklyDayss = ArrayList()
-        listWeeklyIdChoosen = ArrayList()
-        weeklyID = Recipe_Ingredients_List(listWeeklyIdChoosen)
+        title = x.findViewById(R.id.editNumberOfYearlyTextView)
+        title.setText("Edit Yearly No. " + position)
+        monthlyIdsArrlist = ArrayList()
+        numOfMonthArrlist = ArrayList()
+        monthlyDayss = ArrayList()
+        listMonthlyIdChoosen = ArrayList()
+        monthlyID = Recipe_Ingredients_List(listMonthlyIdChoosen)
         chooseBtn = x.findViewById(R.id.chooseBtn)
         saveBtn = x.findViewById(R.id.saveBtn)
 
@@ -82,220 +81,38 @@ class EditMonthlyDialog(
         exit.setOnClickListener(this)
 
         addTable()
-        initMonthly()
+        initYearly()
         return x
 
 
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        // super.onDismiss(dialog)
-        if (flag) {
-            weeklyPos = savedSize
-            val parentFragment: Fragment? = parentFragment
-            if (parentFragment is DialogInterface.OnDismissListener) {
-                (parentFragment as DialogInterface.OnDismissListener?)!!.onDismiss(dialog)
-            }
-
-
-            for (i in weeklyID!!.list!!) {
-
-
-                var weekly = UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!.get(i.toString())
-                weeklyList.add(weekly!!)
-                //   numOfDayArrlist.add(0)
-
-
-            }
-
-
-            var j = savedSize
-
-            for (i in j..weeklyList.size - 1) {
-//
-//                if (j >= numOfDayArrlist.size) {
-//                    break
-
-//                }
-
-
-                var tbrow: TableRow = TableRow(this.context)
-                tbrow.setTag(tablePosition++)
-
-
-                var t1v: Spinner = Spinner(context)
-                weeklyIdsArrlist.add(weeklyList.get(i).weeklyId)
-                t1v.setTag(tablePosition - 1)
-
-
-                ArrayAdapter.createFromResource(
-                    this.requireContext(),
-                    R.array.weeks,
-                    android.R.layout.simple_spinner_item
-                ).also { adapter ->
-                    // Specify the layout to use when the list of choices appears
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    // Apply the adapter to the spinner
-                    t1v.adapter = adapter
-                }
-
-                if (j > 0) {
-                    var o = stk.get(stk.size-1)
-                    var y = o as TableRow
-                    var s: Spinner = y.getChildAt(0) as Spinner
-                    var value = s.selectedItem
-
-                    when (value) {
-                        "Week 1" -> value = 0
-                        "Week 2" -> value = 1
-                        "Week 3" -> value = 2
-                        "Week 4" -> value = 3
-
-                    }
-                    var k = value as Int
-                    t1v.setSelection(k + 1)
-                } else {
-                    t1v.setSelection(0)
-                }
-
-
-                tbrow.addView(t1v)
-
-
-                var t2v: TextView = TextView(context)
-
-
-                t2v.setText(" " + (weeklyList.get(i).weeklyId))
-                t2v.setTextColor(Color.BLACK)
-                t2v.gravity = Gravity.CENTER
-
-                tbrow.addView(t2v)
-
-                var t4v: Button = Button(context)
-                t4v.setTag(weeklyPos)
-                t4v.setText("Delete")
-                t4v.setTextSize(8F)
-                t4v.setTextColor(Color.BLACK)
-                t4v.gravity = Gravity.CENTER
-                tbrow.addView(t4v)
-
-                t4v.setOnClickListener {
-
-                    var i = t4v.getTag() as Int
-
-
-                    stk.removeView(stk.getChildAt(tbrow.getTag() as Int))
-                    totalCostDobule -= weeklyList!!.get(t4v.getTag() as Int).totalCost
-                    totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
-                    totalCost.setText(totalCostDobule.toString())
-                    weeklyList!!.removeAt(t4v.getTag() as Int)
-                    weeklyIdsArrlist.removeAt(t4v.getTag() as Int)
-
-                    tablePosition--
-
-
-                    for (x in stk) {
-                        if (x.getTag() as Int == 0)
-                            continue
-                        if (x.getTag() as Int > i) {
-                            x.setTag(x.getTag() as Int - 1)
-                            var y = x as TableRow
-                            //changing info delete tag
-                            y.get(2).setTag(y.get(2).getTag() as Int - 1)
-                            //changing infp button tag
-                            y.get(3).setTag(y.get(3).getTag() as Int - 1)
-
-                        }
-
-                    }
-
-                    stk.setColumnShrinkable(3, false)
-                    stk.setColumnStretchable(3, false)
-                }
-
-
-                var t3v: Button = Button(context)
-                t3v.setTag(weeklyPos++)
-                t3v.setText("Info")
-                t3v.setTextSize(10F)
-                t3v.setTextColor(Color.BLACK)
-                t3v.gravity = Gravity.CENTER
-
-                //t5v.setBackgroundResource(R.drawable.spinner_shape)
-                t3v.setOnClickListener {
-                    //NEED TO CHECK HERE WHATS WRONG with info button!!!!!
-                    // getting this daily recipes
-                    var dailyList: ArrayList<DailySchedule> = ArrayList()
-                    var ids = weeklyList.get(t3v.getTag() as Int).dailyIds.splitIgnoreEmpty(" ")
-
-                    //going through the list and get each recipe by its id
-                    for (i in ids) {
-                        dailyList.add(UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(i)!!)
-
-                    }
-
-                    var dialog = WeeklyDialogInfo(
-                        dailyList,
-                        weeklyList.get(i).numOfDay,
-                        weeklyList.get(i).dailyIds,
-                        weeklyList.get(i).totalCost,
-                        t3v.getTag() as Int + 1
-
-                    )
-
-
-                    dialog!!.show(childFragmentManager, "WeeklyDialogInfo")
-                }
-                tbrow.addView(t3v)
-
-
-
-                stk.setBackgroundResource(R.drawable.spinner_shape)
-                tbrow.setBackgroundResource(R.drawable.spinner_shape)
-                stk.addView(tbrow)
-                j++
-                totalCostDobule += weeklyList.get(i).totalCost
-
-
-            }
-
-            weeklyPos++
-
-            totalCostDobule = (DecimalFormat("##.####").format(totalCostDobule)).toDouble()
-            totalCost.setText(totalCostDobule.toString())
-            savedSize = weeklyList.size
-
-
-        }
-    }
-
-    private fun initMonthly() {
-
+    private fun initYearly() {
         var j = 0
         var k = 0
-        weeklyPos = 0
+        monthlyPos = 0
 
         // converting the strings into arr's
-        var numOfWeekArr = numOfWeek.splitIgnoreEmpty(" ")
-        var weeklyIdsArr = weeklyIds.splitIgnoreEmpty(" ")
+        var numOfMonthArr = numOfMonth.splitIgnoreEmpty(" ")
+        var monthlydsArr = monthlyIds.splitIgnoreEmpty(" ")
 
 //        for (i in numOfDayArr) {
 //            dailyDayss.add(i.toInt())
 //
 //        }
 
-        for (i in weeklyIdsArr) {
-            weeklyIdsArrlist.add(i.toInt())
+        for (i in monthlydsArr) {
+            monthlyIdsArrlist.add(i.toInt())
         }
 
 
-        for (i in weeklyList) {
+        for (i in monthlyList) {
 
-            if (j >= weeklyIdsArr.size) {
+            if (j >= monthlydsArr.size) {
                 break
             }
 
-            if (i.weeklyId == weeklyIdsArr[j].toInt()) {
+            if (i.monthlyId == monthlydsArr[j].toInt()) {
 
 
                 var t1v: Spinner = Spinner(context)
@@ -307,7 +124,7 @@ class EditMonthlyDialog(
 
                 ArrayAdapter.createFromResource(
                     this.requireContext(),
-                    R.array.weeks,
+                    R.array.months,
                     android.R.layout.simple_spinner_item
                 ).also { adapter ->
                     // Specify the layout to use when the list of choices appears
@@ -318,7 +135,7 @@ class EditMonthlyDialog(
 
 
 
-                t1v.setSelection(numOfWeekArr[k++].toInt())
+                t1v.setSelection(numOfMonthArr[k++].toInt())
 
 
                 tbrow.addView(t1v)
@@ -327,14 +144,14 @@ class EditMonthlyDialog(
                 var t2v: TextView = TextView(context)
 
 
-                t2v.setText(" " + (i.weeklyId))
+                t2v.setText(" " + (i.monthlyId))
                 t2v.setTextColor(Color.BLACK)
                 t2v.gravity = Gravity.CENTER
 
                 tbrow.addView(t2v)
 
                 var t4v: Button = Button(context)
-                t4v.setTag(weeklyPos)
+                t4v.setTag(monthlyPos)
                 t4v.setText("Delete")
                 t4v.setTextSize(10F)
                 t4v.setTextColor(Color.BLACK)
@@ -347,12 +164,12 @@ class EditMonthlyDialog(
 
 //                    stk.removeView(stk.getChildAt(t4v.getTag() as Int))
                     stk.removeView(stk.getChildAt(tbrow.getTag() as Int))
-                    totalCostDobule -= weeklyList!!.get(t4v.getTag() as Int).totalCost
+                    totalCostDobule -= monthlyList!!.get(t4v.getTag() as Int).totalCost
                     totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
                     totalCost.setText(totalCostDobule.toString())
-                    weeklyList!!.removeAt(t4v.getTag() as Int)
-                    weeklyIdsArrlist.removeAt(t4v.getTag() as Int)
-                    Log.v("Elad1", "Daily days after del" + weeklyDayss)
+                    monthlyList!!.removeAt(t4v.getTag() as Int)
+                    monthlyIdsArrlist.removeAt(t4v.getTag() as Int)
+                    // Log.v("Elad1", "Daily days after del" + monthlyDayss)
                     // CONTINUE HERE
                     //  dailyDayss.remove()
                     tablePosition--
@@ -379,7 +196,7 @@ class EditMonthlyDialog(
 
 
                 var t3v: Button = Button(context)
-                t3v.setTag(weeklyPos++)
+                t3v.setTag(monthlyPos++)
                 t3v.setText("Info")
                 t3v.setTextSize(10F)
                 t3v.setTextColor(Color.BLACK)
@@ -389,22 +206,23 @@ class EditMonthlyDialog(
                 t3v.setOnClickListener {
                     //NEED TO CHECK HERE WHATS WRONG with info button!!!!!
                     // getting this weekly recipes
-                    var dailyList: ArrayList<DailySchedule> = ArrayList()
-                    var ids = weeklyList.get(t3v.getTag() as Int).dailyIds.splitIgnoreEmpty(" ")
+                    var weekList: ArrayList<WeeklySchedule> = ArrayList()
+                    var ids = monthlyList.get(t3v.getTag() as Int).weeklyIds.splitIgnoreEmpty(" ")
 
-                    var m =0
+
                     //going through the list and get each recipe by its id
                     for (i in ids) {
-                        dailyList.add(UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(i)!!)
+                        weekList.add(
+                            UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!.get(i)!!
+                        )
 
                     }
 
 
-
-                    var dialog = WeeklyDialogInfo(
-                        dailyList,
-                        i.numOfDay,
-                        i.dailyIds,
+                    var dialog = MonthlyDialogInfo(
+                        weekList,
+                        i.numOfWeek,
+                        i.weeklyIds,
                         i.totalCost,
                         t3v.getTag() as Int + 1,
 
@@ -430,7 +248,7 @@ class EditMonthlyDialog(
 
         totalCostDobule = (DecimalFormat("##.####").format(totalCostDobule)).toDouble()
         totalCost.setText(totalCostDobule.toString())
-        savedSize = weeklyList.size
+        savedSize = monthlyList.size
 
     }
 
@@ -440,14 +258,14 @@ class EditMonthlyDialog(
         var tbrow0: TableRow = TableRow(context)
 
         var tv0: TextView = TextView(context)
-        tv0.setText(" Week ")
+        tv0.setText(" Month ")
         tv0.setTextColor(Color.BLACK)
         tv0.gravity = Gravity.CENTER
         //  tv0.setBackgroundResource(R.drawable.spinner_shape)
         tbrow0.addView(tv0)
 
         var tv1: TextView = TextView(context)
-        tv1.setText(" WeeklyId ")
+        tv1.setText(" MonthlyId ")
         tv1.setTextColor(Color.BLACK)
         tv1.gravity = Gravity.CENTER
         // tv1.setBackgroundResource(R.drawable.spinner_shape)
@@ -478,41 +296,222 @@ class EditMonthlyDialog(
 
     }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        // super.onDismiss(dialog)
+        if (flag) {
+            monthlyPos = savedSize
+            val parentFragment: Fragment? = parentFragment
+            if (parentFragment is DialogInterface.OnDismissListener) {
+                (parentFragment as DialogInterface.OnDismissListener?)!!.onDismiss(dialog)
+            }
+
+
+            for (i in monthlyID!!.list!!) {
+
+
+                var monthly =
+                    UserPropertiesSingelton.getInstance()!!.getUserMonthly()!!.get(i.toString())
+                monthlyList.add(monthly!!)
+                //   numOfDayArrlist.add(0)
+
+
+            }
+
+
+            var j = savedSize
+
+            for (i in j..monthlyList.size - 1) {
+//
+//                if (j >= numOfDayArrlist.size) {
+//                    break
+
+//                }
+
+
+                var tbrow: TableRow = TableRow(this.context)
+                tbrow.setTag(tablePosition++)
+
+
+                var t1v: Spinner = Spinner(context)
+                monthlyIdsArrlist.add(monthlyList.get(i).monthlyId)
+                t1v.setTag(tablePosition - 1)
+
+
+                ArrayAdapter.createFromResource(
+                    this.requireContext(),
+                    R.array.months,
+                    android.R.layout.simple_spinner_item
+                ).also { adapter ->
+                    // Specify the layout to use when the list of choices appears
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    // Apply the adapter to the spinner
+                    t1v.adapter = adapter
+                }
+
+                if (j > 0) {
+                    var o = stk.get(stk.size - 1)
+                    var y = o as TableRow
+                    var s: Spinner = y.getChildAt(0) as Spinner
+                    var value = s.selectedItem
+
+                    when (value) {
+                        "Month 1" -> value = 0
+                        "Month 2" -> value = 1
+                        "Month 3" -> value = 2
+                        "Month 4" -> value = 3
+
+                    }
+                    var k = value as Int
+                    t1v.setSelection(k + 1)
+                } else {
+                    t1v.setSelection(0)
+                }
+
+
+                tbrow.addView(t1v)
+
+
+                var t2v: TextView = TextView(context)
+
+
+                t2v.setText(" " + (monthlyList.get(i).monthlyId))
+                t2v.setTextColor(Color.BLACK)
+                t2v.gravity = Gravity.CENTER
+
+                tbrow.addView(t2v)
+
+                var t4v: Button = Button(context)
+                t4v.setTag(monthlyPos)
+                t4v.setText("Delete")
+                t4v.setTextSize(8F)
+                t4v.setTextColor(Color.BLACK)
+                t4v.gravity = Gravity.CENTER
+                tbrow.addView(t4v)
+
+                t4v.setOnClickListener {
+
+                    var i = t4v.getTag() as Int
+
+
+                    stk.removeView(stk.getChildAt(tbrow.getTag() as Int))
+                    totalCostDobule -= monthlyList!!.get(t4v.getTag() as Int).totalCost
+                    totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
+                    totalCost.setText(totalCostDobule.toString())
+                    monthlyList!!.removeAt(t4v.getTag() as Int)
+                    monthlyIdsArrlist.removeAt(t4v.getTag() as Int)
+
+                    tablePosition--
+
+
+                    for (x in stk) {
+                        if (x.getTag() as Int == 0)
+                            continue
+                        if (x.getTag() as Int > i) {
+                            x.setTag(x.getTag() as Int - 1)
+                            var y = x as TableRow
+                            //changing info delete tag
+                            y.get(2).setTag(y.get(2).getTag() as Int - 1)
+                            //changing infp button tag
+                            y.get(3).setTag(y.get(3).getTag() as Int - 1)
+
+                        }
+
+                    }
+
+                    stk.setColumnShrinkable(3, false)
+                    stk.setColumnStretchable(3, false)
+                }
+
+
+                var t3v: Button = Button(context)
+                t3v.setTag(monthlyPos++)
+                t3v.setText("Info")
+                t3v.setTextSize(10F)
+                t3v.setTextColor(Color.BLACK)
+                t3v.gravity = Gravity.CENTER
+
+                //t5v.setBackgroundResource(R.drawable.spinner_shape)
+                t3v.setOnClickListener {
+                    //NEED TO CHECK HERE WHATS WRONG with info button!!!!!
+                    // getting this daily recipes
+                    var weeklyList: ArrayList<WeeklySchedule> = ArrayList()
+                    var ids = monthlyList.get(t3v.getTag() as Int).weeklyIds.splitIgnoreEmpty(" ")
+
+                    //going through the list and get each recipe by its id
+                    for (i in ids) {
+                        weeklyList.add(
+                            UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!.get(i)!!
+                        )
+
+                    }
+
+                    var dialog = MonthlyDialogInfo(
+                        weeklyList,
+                        monthlyList.get(i).numOfWeek,
+                        monthlyList.get(i).weeklyIds,
+                        monthlyList.get(i).totalCost,
+                        t3v.getTag() as Int + 1
+
+                    )
+
+
+                    dialog!!.show(childFragmentManager, "MonthlyDialogInfo")
+                }
+                tbrow.addView(t3v)
+
+
+
+                stk.setBackgroundResource(R.drawable.spinner_shape)
+                tbrow.setBackgroundResource(R.drawable.spinner_shape)
+                stk.addView(tbrow)
+                j++
+                totalCostDobule += monthlyList.get(i).totalCost
+
+
+            }
+
+            monthlyPos++
+
+            totalCostDobule = (DecimalFormat("##.####").format(totalCostDobule)).toDouble()
+            totalCost.setText(totalCostDobule.toString())
+            savedSize = monthlyList.size
+
+
+        }
+    }
+
     fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
         return this.split(*delimiters).filter {
             it.isNotEmpty()
         }
     }
 
-
-
-
     override fun onClick(p0: View?) {
         if (p0 == chooseBtn) {
             flag = true
-            weeklyID!!.list!!.clear()
-            savedSize = weeklyList.size
+            monthlyID!!.list!!.clear()
+            savedSize = monthlyList.size
 
-            var dialog = Weekly_Schedule_Choose_Dialog(
-                UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!,
+            var dialog = Monthly_Schedule_Choose_Dialog(
+                UserPropertiesSingelton.getInstance()!!.getUserMonthly()!!,
 //                UserPropertiesSingelton.getInstance()!!.getUserDaily()!!,
 //                UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!,
-                weeklyID!!
+                monthlyID!!
             )
             dialog.show(childFragmentManager, "DailySchudleChooseDialog")
         } else if (p0 == saveBtn) {
-            if (weeklyIdsArrlist.isNotEmpty()) {
+            if (monthlyIdsArrlist.isNotEmpty()) {
 
-                weeklyDayss.clear()
+                monthlyDayss.clear()
                 flag = true
-                numOfWeek = ""
-                weeklyIds = ""
+                numOfMonth = ""
+                monthlyIds = ""
 
                 val arr = IntArray(7)
 
                 // getting these weeks id's
-                for (i in weeklyIdsArrlist) {
-                    weeklyIds += "" + i + " "
+                for (i in monthlyIdsArrlist) {
+                    monthlyIds += "" + i + " "
                 }
 
                 for (x in stk) {
@@ -523,13 +522,13 @@ class EditMonthlyDialog(
                     var value = s.selectedItem
 
                     when (value) {
-                        "Week 1" -> value = 0
-                        "Week 2" -> value = 1
-                        "Week 3" -> value = 2
-                        "Week 4" -> value = 3
+                        "Month 1" -> value = 0
+                        "Month 2" -> value = 1
+                        "Month 3" -> value = 2
+                        "Month 4" -> value = 3
 
                     }
-                    weeklyDayss.add(value as Int)
+                    monthlyDayss.add(value as Int)
                     Log.v("Elad1", "YOSIII " + value)
 
 
@@ -537,12 +536,12 @@ class EditMonthlyDialog(
 
 
                 // getting number of weeks , checking duplicate
-                for (i in weeklyDayss) {
+                for (i in monthlyDayss) {
                     if (arr[i] != 0) {
                         val builder: AlertDialog.Builder = AlertDialog.Builder(context)
 
                         builder.setTitle("Edit Weekly")
-                        builder.setMessage("You cannot have a duplicate of the same week.")
+                        builder.setMessage("You cannot have a duplicate of the same Month.")
 
                         builder.setPositiveButton(
                             "OK",
@@ -558,7 +557,7 @@ class EditMonthlyDialog(
                         break
                     } else {
                         arr[i] += 1
-                        numOfWeek += "" + i + " "
+                        numOfMonth += "" + i + " "
                     }
 
                 }
@@ -566,11 +565,11 @@ class EditMonthlyDialog(
 
 
                 if (flag) {
-                    var weekly = MonthlySchedule(
-                        monthlyId,
+                    var weekly = YearlySchedule(
+                        yearlyId,
                         UserInterFace.userID,
-                        numOfWeek,
-                        weeklyIds,
+                        numOfMonth,
+                        monthlyIds,
                         totalCostDobule,
                         true
                     )
@@ -578,8 +577,8 @@ class EditMonthlyDialog(
                     var s = AsynTaskNew(weekly, childFragmentManager)
                     s.execute()
 
-                    numOfWeek = ""
-                    weeklyIds = ""
+                    numOfMonth = ""
+                    monthlyIds = ""
 
                 }
 
@@ -593,4 +592,5 @@ class EditMonthlyDialog(
             dismiss()
         }
     }
+
 }
