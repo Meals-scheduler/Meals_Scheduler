@@ -21,14 +21,15 @@ import kotlin.collections.HashMap
 class My_Monthly_RecylerViewAdapter(
 
     monthlyValues: TreeMap<String, MonthlySchedule>,
-   // weeklyValues: HashMap<String, WeeklySchedule>,
+    // weeklyValues: HashMap<String, WeeklySchedule>,
     childFragmentManager: FragmentManager,
     context: Context?,
 
     ) : RecyclerView.Adapter<My_Monthly_RecylerViewAdapter.ViewHolder>() {
 
     private var monthlyValues: TreeMap<String, MonthlySchedule> = monthlyValues
-   // private var weeklyValues: HashMap<String, WeeklySchedule> = weeklyValues
+
+    // private var weeklyValues: HashMap<String, WeeklySchedule> = weeklyValues
     private var monthlyWeekly: HashMap<String, ArrayList<WeeklySchedule>> = HashMap()
 
     private var childFragmentManager = childFragmentManager
@@ -100,20 +101,17 @@ class My_Monthly_RecylerViewAdapter(
         }
 
         holder.delete.setOnClickListener {
-            // deleteing this weekly from the map that holds for every weekly its daily list
-//            monthlyWeekly.remove(item.weeklyId.toString())!!
-//
-//            var dialog =
-//                DeleteAlertDialog(
-//                    "",
-//                    null,
-//                    monthlyValues.get(position).monthlyId,
-//                    false,
-//                    false,
-//                    false,
-//                    true
-//                )
-//            dialog.show(childFragmentManager, "DeleteMonthly")
+            // deleteing this monthly from the map that holds for every monthly its weekly list
+            monthlyWeekly.remove(item.monthlyId.toString())!!
+
+            var dialog =
+                DeleteAlertDialog(
+                    "",
+                    null,
+                    monthlyValues.get(item.monthlyId.toString())!!.monthlyId,
+                    "Monthly"
+                )
+            dialog.show(childFragmentManager, "DeleteMonthly")
 
         }
 

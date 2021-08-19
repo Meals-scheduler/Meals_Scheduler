@@ -113,9 +113,7 @@ class My_Daily_RecylerViewAdapter(
                 "",
                 null,
                 mValues.get(item.dailyId.toString())!!.dailyId,
-                false,
-                true,
-                false
+                "Daily"
             )
             dialog.show(childFragmentManager, "DeleteDaily")
 

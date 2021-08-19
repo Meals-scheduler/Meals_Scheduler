@@ -61,7 +61,7 @@ class My_Yearly_RecylerViewAdapter(
         holder.numOfYearly.setText(numOfYearly++.toString())
 
         holder.edit.setOnClickListener {
-           // Log.v("Elad1", "FF1" + item.monthlyId.toString())
+            // Log.v("Elad1", "FF1" + item.monthlyId.toString())
             // copying the list not to override it in the edit .
             var tmpList: ArrayList<MonthlySchedule> = ArrayList()
             for (i in yearlyMonthly.get(item.yearlyId.toString())!!) {
@@ -98,20 +98,17 @@ class My_Yearly_RecylerViewAdapter(
         }
 
         holder.delete.setOnClickListener {
-            // deleteing this weekly from the map that holds for every weekly its daily list
-//            monthlyWeekly.remove(item.weeklyId.toString())!!
-//
-//            var dialog =
-//                DeleteAlertDialog(
-//                    "",
-//                    null,
-//                    monthlyValues.get(position).monthlyId,
-//                    false,
-//                    false,
-//                    false,
-//                    true
-//                )
-//            dialog.show(childFragmentManager, "DeleteMonthly")
+            // deleteing this yearly from the map that holds for every yearly its monthly list
+            yearlyMonthly.remove(item.yearlyId.toString())!!
+
+            var dialog =
+                DeleteAlertDialog(
+                    "",
+                    null,
+                    yearlyValues.get(item.yearlyId.toString())!!.yearlyId,
+                    "Yearly"
+                )
+            dialog.show(childFragmentManager, "DeleteMonthly")
 
         }
 

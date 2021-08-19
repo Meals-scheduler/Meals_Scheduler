@@ -53,22 +53,21 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
             if (MyRecipeFragment.getInstance1().isAdded)
                 MyRecipeFragment.getInstance1().startTask()
         } else if (action is DeleteAlertDialog) {
-            if ((action as DeleteAlertDialog).isRecipe == true) {
-                MyRecipeFragment.getInstance1().startTask()
-            } else if ((action as DeleteAlertDialog).isDaily == true) {
-                MyDailyScheduleFragment.getInstance1().startTask()
-            } else if (((action as DeleteAlertDialog).isWeekly == true)) {
-                MyWeeklyScheduleFragment.getInstance1().startTask()
-            } else {
-                MyingredientFragment1.getInstance1().startTask()
+
+            when ((action as DeleteAlertDialog).type) {
+                "Ingredient" -> MyingredientFragment1.getInstance1().startTask()
+                "Recipe" -> MyRecipeFragment.getInstance1().startTask()
+                "Daily" -> MyDailyScheduleFragment.getInstance1().startTask()
+                "Weekly" -> MyWeeklyScheduleFragment.getInstance1().startTask()
+                "Monthly" -> MyMonthlyScheudleFragment.getInstance1().startTask()
+                "Yearly" -> MyYearlyScheudleFragment.getInstance1().startTask()
             }
+
+
         } else if (action is DailySchedule) {
             // if (MyDailyScheduleFragment.getInstance1().isAdded)
             MyDailyScheduleFragment.getInstance1().startTask()
         }
-//        else if(action is My_Daily_RecylerViewAdapter){
-//            MyDailyScheduleFragment.getInstance1().startTask()
-//        }
         else if (action is WeeklySchedule) {
             MyWeeklyScheduleFragment.getInstance1().startTask()
         } else if (action is MonthlySchedule) {

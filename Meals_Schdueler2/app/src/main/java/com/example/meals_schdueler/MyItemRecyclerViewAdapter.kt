@@ -58,9 +58,7 @@ class MyItemRecyclerViewAdapter(
                 item.ingridentName,
                 item.pictureBitMap,
                 item.ingredientID,
-                false,
-                false,
-                false
+                "Ingredient"
             )
             dialog.show(childFragmentManager, "DeleteAlertDialog")
         }

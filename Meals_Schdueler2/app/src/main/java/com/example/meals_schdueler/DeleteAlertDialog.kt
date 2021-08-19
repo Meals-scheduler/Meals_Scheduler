@@ -22,9 +22,7 @@ class DeleteAlertDialog(
     ingridentName: String,
     pictureBitMap: Bitmap?,
     ingredientID: Int,
-    isRecipe: Boolean,
-    isDaily: Boolean,
-    isWeekly: Boolean
+    type : String
 ) :
     DialogFragment(), View.OnClickListener, GetAndPost {
 
@@ -36,9 +34,7 @@ class DeleteAlertDialog(
     var ingridentName = ingridentName
     var pictureBitMap = pictureBitMap
     var ingredientID = ingredientID
-    var isRecipe = isRecipe
-    var isDaily = isDaily
-    var isWeekly = isWeekly
+    var type = type
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,15 +74,18 @@ class DeleteAlertDialog(
     }
 
     override fun DoNetWorkOpreation(): String {
-        var link = "https://elad1.000webhostapp.com/delIngredient.php?ingredientID=" + ingredientID
 
-        if (isRecipe) {
-            link = "https://elad1.000webhostapp.com/deleteRecipe.php?RecipeID=" + ingredientID
-        } else if (isDaily) {
-            link = "https://elad1.000webhostapp.com/delDaily.php?DailyID=" + ingredientID
-        } else if (isWeekly){
-            link = "https://elad1.000webhostapp.com/delWeekly.php?WeeklyID=" + ingredientID
+        var link = ""
+
+        when(type){
+            "Ingredient" ->  link = "https://elad1.000webhostapp.com/delIngredient.php?ingredientID=" + ingredientID
+            "Recipe" ->  link = "https://elad1.000webhostapp.com/deleteRecipe.php?RecipeID=" + ingredientID
+            "Daily" -> link = "https://elad1.000webhostapp.com/delDaily.php?DailyID=" + ingredientID
+            "Weekly" -> link = "https://elad1.000webhostapp.com/delWeekly.php?WeeklyID=" + ingredientID
+            "Monthly" -> link = "https://elad1.000webhostapp.com/delMonthly.php?MonthlyID=" + ingredientID
+            "Yearly" -> link = "https://elad1.000webhostapp.com/delYearly.php?YearlyID=" + ingredientID
         }
+
 
 
         val sb = StringBuilder()

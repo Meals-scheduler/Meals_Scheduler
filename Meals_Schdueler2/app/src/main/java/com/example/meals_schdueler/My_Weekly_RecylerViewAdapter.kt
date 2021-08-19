@@ -106,9 +106,7 @@ class My_Weekly_RecylerViewAdapter(
                     "",
                     null,
                     weeklyValues.get(item.weeklyId.toString())!!.weeklyId,
-                    false,
-                    false,
-                    true
+                   "Weekly"
                 )
             dialog.show(childFragmentManager, "DeleteWeekly")
 
