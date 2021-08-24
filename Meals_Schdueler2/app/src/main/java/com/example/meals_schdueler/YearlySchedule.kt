@@ -35,7 +35,7 @@ class YearlySchedule(
             yearlyId = getYearly().toInt() + 1 // getting current RecipeID first
 
         }
-
+       // yearlyId = 1
 
         if (yearlyId != -1)
             input = postData() // now we upload the current ingredient details.
