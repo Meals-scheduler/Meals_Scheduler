@@ -62,6 +62,10 @@ class MyRecipeRecyclerViewAdapter(
 
     fun setmValues(mValues: HashMap<String,Recipe>) {
         this.mValues = mValues
+        RecipeList.clear()
+        for (i in mValues) {
+            RecipeList.add(i.value)
+        }
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
 

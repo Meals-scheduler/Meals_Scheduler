@@ -11,12 +11,14 @@ import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class Recipe_Ingredients_Choose_Dialog(
     recipeIngredients: Recipe_Ingredients_List,
-    userIngredientss: ArrayList<Ingredient>,
+    userIngredientss: TreeMap<String,Ingredient>,
     costList : ArrayList<Int>
 ) :
     DialogFragment() {
@@ -27,7 +29,7 @@ class Recipe_Ingredients_Choose_Dialog(
 
     var l: Recipe_Ingredients_List = recipeIngredients
    // private var isFirstTime = isFirstTime
-    private var ingredientList: ArrayList<Ingredient>? = userIngredientss
+    private var ingredientList: TreeMap<String,Ingredient>? = userIngredientss
     private var costList : ArrayList<Int> = costList
     private var ingredietnsChoosenRecyclerViewAdapter: Recipe_Ingredients_Choose_RecyclerViewAdapter? =
         null

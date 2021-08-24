@@ -41,13 +41,17 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
+
         if (result != null) {
             action.getData(result)
         }
         // if we upload a new ingredient we want to refresh the MyIngredients tab so that the user will be able to see the new uploaded ingredient.
         if (action is Ingredient) {
-            if (MyingredientFragment1.getInstance1().isAdded)
+            if (MyingredientFragment1.getInstance1().isAdded){
                 MyingredientFragment1.getInstance1().startTask()
+                Log.v("Elad1","HERE YA")
+
+            }
 
         } else if (action is Recipe) {
             if (MyRecipeFragment.getInstance1().isAdded)

@@ -144,62 +144,67 @@ class MyRecipeFragment : Fragment(), GetAndPost {
             val recipesAndIngredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
             var recipesAndIngredients2 = recipesAndIngredients[0].splitIgnoreEmpty("*")
             // first recipe id
+
+//            for(i in recipesAndIngredients.indices){
+//                var tmp = recipesAndIngredients[i]
+//                Log.v("Elad1","recipe name is or id " + tmp [0] )
+//            }
             var currentID = recipesAndIngredients2[0].toInt()
 
             // saving all the ingredietns and quantities of each Recipe in map.
             // first we extract the ids and quantity into map.
             // then we use another map to convert all ids to real ingredients.
 
-            var hashMap: HashMap<Int, Pair<java.util.ArrayList<String>, java.util.ArrayList<String>>> =
+            var hashMap: HashMap<Int, Pair<ArrayList<String>, ArrayList<Int>>> =
                 HashMap()
 
-            var map: HashMap<Int, java.util.ArrayList<Ingredient>> = HashMap()
+            var map: HashMap<Int, ArrayList<Ingredient>> = HashMap()
 
-            var ingredientList: java.util.ArrayList<Ingredient> = java.util.ArrayList()
-
-            // first extracting all ingredients ids and make them Ingredients.
-            var currentIngId = -1
-            for (i in recipesAndIngredients.indices) {
-
-                var recipesAndIngredients2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
-                //if its ingredients details
-                if (recipesAndIngredients2.size == 15 && recipesAndIngredients2[0].toInt() != currentIngId) {
-                    ingredientList?.add(
-                        Ingredient(
-                            recipesAndIngredients2[0].toInt(),
-                            recipesAndIngredients2[1].toInt(),
-                            recipesAndIngredients2[2],
-                            ImageConvert.StringToBitMap(recipesAndIngredients2[3].toString())!!,
-                            recipesAndIngredients2[4],
-                            recipesAndIngredients2[5],
-                            recipesAndIngredients2[6],
-                            recipesAndIngredients2[7].toBoolean(),
-                            recipesAndIngredients2[8].toBoolean(),
-                            recipesAndIngredients2[9].toFloat(),
-                            recipesAndIngredients2[10].toFloat(),
-                            recipesAndIngredients2[11].toFloat(),
-                            recipesAndIngredients2[12],
-                            recipesAndIngredients2[13],
-                            false
-
-                        )
-                    )
-
-                    currentIngId = recipesAndIngredients2[0].toInt()
-
-                }
-            }
-
-            var fromListToMap: HashMap<String, Ingredient> = HashMap()
-
-            for (i in ingredientList) {
-                fromListToMap.put(i.ingredientID.toString(), i)
-            }
-            var quantities: ArrayList<String> = ArrayList()
+//            var ingredientList: ArrayList<Ingredient> = ArrayList()
+//
+//            // first extracting all ingredients ids and make them Ingredients.
+//            var currentIngId = -1
+//            for (i in recipesAndIngredients.indices) {
+//
+//                var recipesAndIngredients2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
+//                //if its ingredients details
+//                if (recipesAndIngredients2.size == 15 && recipesAndIngredients2[0].toInt() != currentIngId) {
+//                    ingredientList?.add(
+//                        Ingredient(
+//                            recipesAndIngredients2[0].toInt(),
+//                            recipesAndIngredients2[1].toInt(),
+//                            recipesAndIngredients2[2],
+//                            ImageConvert.StringToBitMap(recipesAndIngredients2[3].toString())!!,
+//                            recipesAndIngredients2[4],
+//                            recipesAndIngredients2[5],
+//                            recipesAndIngredients2[6],
+//                            recipesAndIngredients2[7].toBoolean(),
+//                            recipesAndIngredients2[8].toBoolean(),
+//                            recipesAndIngredients2[9].toFloat(),
+//                            recipesAndIngredients2[10].toFloat(),
+//                            recipesAndIngredients2[11].toFloat(),
+//                            recipesAndIngredients2[12],
+//                            recipesAndIngredients2[13],
+//                            false
+//
+//                        )
+//                    )
+//
+//                    currentIngId = recipesAndIngredients2[0].toInt()
+//
+//                }
+//            }
+//
+//            var fromListToMap: HashMap<String, Ingredient> = HashMap()
+//
+//            for (i in ingredientList) {
+//                fromListToMap.put(i.ingredientID.toString(), i)
+//            }
+            var quantities: ArrayList<Int> = ArrayList()
             var ids: ArrayList<String> = ArrayList()
             var ingredientList2: ArrayList<Ingredient> = ArrayList()
             //  var quantities: ArrayList<String> = ArrayList()
-
+            var ingID = "-1"
             for (i in recipesAndIngredients.indices) {
                 var recipesAndIngredients2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
 
@@ -224,15 +229,20 @@ class MyRecipeFragment : Fragment(), GetAndPost {
 
 
                         // clear all lists for the next recipe lists
-                      // ingredientList2.clear()
-                       // ids.clear()
-                       // quantities.clear()
+                        // ingredientList2.clear()
+                        // ids.clear()
+                        // quantities.clear()
                     }
-
-                    ids.add(recipesAndIngredients2[9])
-                    quantities.add(recipesAndIngredients2[10])
-                    // getting the specific ingredient by its ID
-                    ingredientList2.add(fromListToMap.get(recipesAndIngredients2[9])!!)
+                    if (ingID != recipesAndIngredients2[9]) {
+                        ids.add(recipesAndIngredients2[9])
+                        quantities.add(recipesAndIngredients2[10].toInt())
+                        // getting the specific ingredient by its ID
+                        ingredientList2.add(
+                            UserPropertiesSingelton.getInstance()!!.getUserIngredientss()
+                                ?.get(recipesAndIngredients2[9])!!
+                        )
+                        ingID = recipesAndIngredients2[9]
+                    }
 
 
                 } else {
@@ -267,7 +277,7 @@ class MyRecipeFragment : Fragment(), GetAndPost {
                                 recipe2[7].toBoolean(),
                                 recipe2[8].toBoolean(),
                                 map.get(recipe2[0].toInt())!!,
-                                convertToInt(hashMap.get(recipe2[0].toInt())!!.second)
+                                hashMap.get(recipe2[0].toInt())!!.second
 
                             )
                         )
@@ -292,31 +302,31 @@ class MyRecipeFragment : Fragment(), GetAndPost {
 
     }
 
-    fun convertToInt(quantities: ArrayList<String>): ArrayList<Int> {
-        var quantity = ArrayList<Int>()
-        for (i in quantities)
-            quantity.add(i.toInt())
+//    fun convertToInt(quantities: ArrayList<String>): ArrayList<Int> {
+//        var quantity = ArrayList<Int>()
+//        for (i in quantities)
+//            quantity.add(i.toInt())
+//
+//        return quantity
+//    }
 
-        return quantity
-    }
-
-    private fun deepCopyIng(ingredientList: ArrayList<Ingredient>): ArrayList<Ingredient> {
-        var s: ArrayList<Ingredient> = ArrayList()
-        for (i in ingredientList) {
-            s.add(i)
-        }
-        return s
-    }
-
-
-    fun deepCopy(arrToCopy: ArrayList<String>): ArrayList<String> {
-        var s: ArrayList<String> = ArrayList()
-
-        for (i in arrToCopy) {
-            s.add(i)
-        }
-        return s
-    }
+//    private fun deepCopyIng(ingredientList: ArrayList<Ingredient>): ArrayList<Ingredient> {
+//        var s: ArrayList<Ingredient> = ArrayList()
+//        for (i in ingredientList) {
+//            s.add(i)
+//        }
+//        return s
+//    }
+//
+//
+//    fun deepCopy(arrToCopy: ArrayList<String>): ArrayList<String> {
+//        var s: ArrayList<String> = ArrayList()
+//
+//        for (i in arrToCopy) {
+//            s.add(i)
+//        }
+//        return s
+//    }
 
     fun startTask() {
 

@@ -1,85 +1,88 @@
 package com.example.meals_schdueler
 
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.meals_schdueler.dummy.DailySchedule
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.*
 
-
-/**
- * A fragment representing a list of Items.
- */
-class MyingredientFragment1 : Fragment(), GetAndPost {
+class AllIngredientsFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScrollChangeListener {
 
     private var columnCount = 1
-    private var ingredientList: HashMap<String, Ingredient>? = null // list of ingredietns
-    private var ingredientRecyclerViewAdapter: MyItemRecyclerViewAdapter? =
+    private var ingredientList: ArrayList<Ingredient>? = null
+    private lateinit var nestedScroll: NestedScrollView // list of ingredietns
+    private var progressBar: ProgressBar? = null
+    private var AllIngredientRecyclerViewAdapter: All_IIngredients_RecyclerViewAdapter? =
         null // adapter for the list.
-    private var sorted: TreeMap<String, Ingredient>? = null
 
+    // private lateinit var adapter : Recipe
+    private var page = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sorted = TreeMap()
-        ingredientList = HashMap()
-        ingredientRecyclerViewAdapter =
-            MyItemRecyclerViewAdapter(sorted!!, childFragmentManager)
+        ingredientList = ArrayList()
 
+        AllIngredientRecyclerViewAdapter =
+            All_IIngredients_RecyclerViewAdapter(ingredientList!!, childFragmentManager)
         arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
+            columnCount = it.getInt(AllRecipesFragmentTest.ARG_COLUMN_COUNT)
         }
+
+
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_myingredient1_list, container, false)
-        val recyclerView = view.findViewById<View>(R.id.list) as RecyclerView
+        val view = inflater.inflate(R.layout.fragment_allingredients1_list, container, false)
+        val recyclerView = view.findViewById<View>(R.id.recycler_view) as RecyclerView
+        nestedScroll = view.findViewById(R.id.scroll_view)
+        progressBar = view.findViewById(R.id.progress_bar)
+        nestedScroll.setOnScrollChangeListener(this)
 
-        val context = view.context
-        instance = this
 
         // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                recyclerView.adapter = ingredientRecyclerViewAdapter
+        val context = view.context
+        // to avoid constant loading of AllIngredients Data , we want to load only once. - to ask Harel
 
-            }
-        }
+        instance = this
+
+
+
+
+        recyclerView.layoutManager = LinearLayoutManager(this.context)
+        recyclerView.adapter = AllIngredientRecyclerViewAdapter
 
         startTask()
-//        var s = AsynTaskNew(this)
-//        s.execute()
+
+
+
         return view
+    }
+
+    fun startTask() {
+        var s = AsynTaskNew(this, childFragmentManager)
+        s.execute()
     }
 
     companion object {
 
-        var instance: MyingredientFragment1? = null
 
-        fun getInstance1(): MyingredientFragment1 {
-            return instance!!
-        }
+        var instance: AllIngredientsFragmentTest? = null
+
 
         // TODO: Customize parameter argument names
         const val ARG_COLUMN_COUNT = "column-count"
@@ -87,18 +90,19 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
         // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
-            MyingredientFragment1().apply {
+            AllIngredientsFragmentTest().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_COLUMN_COUNT, columnCount)
-
                 }
             }
     }
 
-    /// if WEBHOST doesnt work - this query doesnt excuted and the program falls - need to be fixed!!!!!!
+
     override fun DoNetWorkOpreation(): String {
-        val link =
-            "https://elad1.000webhostapp.com/getIngredient.php?ownerID=" + UserInterFace.userID;
+        var string = UserInterFace.userID.toString() + " " + page
+
+        var link =
+            "https://elad1.000webhostapp.com/getSharedIngredients.php?ownerIDAndPage=" + string
 
 
         val sb = StringBuilder()
@@ -125,8 +129,6 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
         return sb.toString()
     }
 
-
-    // to avoid empty string cells .split function returns.
     fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
         return this.split(*delimiters).filter {
             it.isNotEmpty()
@@ -134,19 +136,17 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
     }
 
     override fun getData(str: String) {
-        ingredientList!!.clear()
+
+       // ingredientList!!.clear()
         // fixed a default .split spaces , and fixed spaces in howToStore.
         // when we add an ingredient it doesnt update in real time. we have to re compile!!!
 
         val ingredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
         for (i in ingredients.indices) {
-
+            Log.v("Elad1", ingredients.indices.toString())
             var ingredient2 = ingredients[i].splitIgnoreEmpty("*")
-
-
-
-            ingredientList?.put(ingredient2[0],
+            ingredientList?.add(
                 Ingredient(
                     ingredient2[0].toInt(),
                     ingredient2[1].toInt(),
@@ -166,50 +166,24 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
 
                 )
             )
-
-//
-//            ingredientList?.add(
-//                Ingredient(
-//                    ingredient2[0].toInt(),
-//                    ingredient2[1].toInt(),
-//                    ingredient2[2],
-//                    // ImageConvert.StringToBitMap(ingredient2[3].toString())!!,
-//                    ImageConvert.StringToBitMap(tmp)!!,
-//                    ingredient2[4],
-//                    ingredient2[5],
-//                    ingredient2[6],
-//                    ingredient2[7].toBoolean(),
-//                    ingredient2[8].toBoolean(),
-//                    ingredient2[9].toFloat(),
-//                    ingredient2[10].toFloat(),
-//                    ingredient2[11].toFloat(),
-//                    ingredient2[12],
-//                    ingredient2[13],
-//                    false
-//
-//                )
-//            )
-
         }
 
-        sorted!!.clear()
-        sorted!!.putAll(ingredientList!!)
 
-
-        // initializing the singelton with the user's ingredients list to keep it here on code.
-        // should do it on another place !!!
-        UserPropertiesSingelton.getInstance()!!.setUserIngredientss(sorted)
-        // sending the last to the adapter.
-        ingredientRecyclerViewAdapter!!.setmValues(sorted!!)
-
-
-
+        AllIngredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
+        progressBar!!.visibility = View.INVISIBLE
     }
 
-    fun startTask() {
-        var s = AsynTaskNew(this, childFragmentManager)
-        s.execute()
+    override fun onScrollChange(
+        v: NestedScrollView?,
+        scrollX: Int,
+        scrollY: Int,
+        oldScrollX: Int,
+        oldScrollY: Int
+    ) {
+        if (scrollY == v!!.getChildAt(0).measuredHeight - v.measuredHeight) {
+            page = page + 4
+            progressBar!!.visibility = View.VISIBLE
+            startTask()
+        }
     }
-
-
 }

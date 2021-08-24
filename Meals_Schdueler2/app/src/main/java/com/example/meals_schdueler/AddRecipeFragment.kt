@@ -281,10 +281,10 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
         // on dissmiss event , when we dissmiss the ingrdeitns selcection dialog we want to update the list with
         // the chosen ingredients.
         for (i in listItems!!.list!!) {
-            var ing = UserPropertiesSingelton.getInstance()!!.getUserIngredientss()!!.get(i)
+            var ing = UserPropertiesSingelton.getInstance()!!.getUserIngredientss()!!.get(i.toString())
             if (!ingredientList!!.contains(ing))
                 ingredientList!!.add(
-                    ing
+                    ing!!
 
                 )
         }

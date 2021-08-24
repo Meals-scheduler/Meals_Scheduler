@@ -67,11 +67,13 @@ class Ingredient(
 
 
         var input = ""
-       // if (pictureBitMap != null)
-         //   encodePicture()
+        if (pictureBitMap != null)
+            encodePicture()
         // if we insert a new ingredient and not updating
         if (!isUpdate) {
             ingredientID = getIngredientID().toInt() + 1 // getting current IngredientID first
+            UserPropertiesSingelton.getInstance()!!.getUserIngredientss()
+                ?.put(ingredientID.toString(), this)
         }
 
         // ingredientID = 1
@@ -108,7 +110,7 @@ class Ingredient(
         }
 
 
-       // Log.v("Elad1", "Id came is" + sb.toString())
+        // Log.v("Elad1", "Id came is" + sb.toString())
         return sb.toString()
     }
 

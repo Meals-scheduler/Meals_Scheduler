@@ -25,7 +25,7 @@ class UserPropertiesSingelton {
 
     }
 
-    var userIngredients: ArrayList<Ingredient>? = null
+    var userIngredients: TreeMap<String,Ingredient>? = null
     var userRecipes: HashMap<String, Recipe>? = null
     var dailySchedule: TreeMap<String, DailySchedule>? = null
     var weeklyScheudle: TreeMap<String, WeeklySchedule>? = null
@@ -58,12 +58,12 @@ class UserPropertiesSingelton {
         this.userMapRecipes = userMapRecipe
     }
 
-    fun getUserIngredientss(): ArrayList<Ingredient>? {
-        if (userIngredients == null) userIngredients = ArrayList<Ingredient>()
+    fun getUserIngredientss(): TreeMap<String,Ingredient>? {
+        if (userIngredients == null) userIngredients = TreeMap<String,Ingredient>()
         return userIngredients
     }
 
-    fun setUserIngredientss(userIngredients: ArrayList<Ingredient>?) {
+    fun setUserIngredientss(userIngredients: TreeMap<String,Ingredient>?) {
         this.userIngredients = userIngredients
     }
 

@@ -47,7 +47,7 @@ class AllRecipesFragment : Fragment(), GetAndPost {
         val context = view.context
         // to avoid constant loading of AllIngredients Data , we want to load only once. - to ask Harel
         if (instance == null) {
-            startTask()
+           // startTask()
 
         } else {
 
@@ -66,7 +66,7 @@ class AllRecipesFragment : Fragment(), GetAndPost {
         }
 
 
-        // startTask()
+         startTask()
         return view
     }
 
@@ -115,7 +115,7 @@ class AllRecipesFragment : Fragment(), GetAndPost {
         }
 
 
-      //  Log.v("Elad1", "Id came is" + sb.toString())
+        //  Log.v("Elad1", "Id came is" + sb.toString())
         return sb.toString()
     }
 
@@ -139,15 +139,14 @@ class AllRecipesFragment : Fragment(), GetAndPost {
 
             var recipesAndIngredients2 = recipesAndIngredients[0].splitIgnoreEmpty("*")
             // first recipe id
-            var currentID = recipesAndIngredients2[0].toInt() - 48
-
+            var currentID = recipesAndIngredients2[0].toInt()
 
 
             // saving all the ingredietns and quantities of each Recipe in map.
             // first we extract the ids and quantity into map.
             // then we use another map to convert all ids to real ingredients.
 
-            var hashMap: HashMap<Int, Pair<ArrayList<String>, ArrayList<String>>> =
+            var hashMap: HashMap<Int, Pair<ArrayList<String>, ArrayList<Int>>> =
                 HashMap()
 
             var map: HashMap<Int, ArrayList<Ingredient>> = HashMap()
@@ -189,43 +188,49 @@ class AllRecipesFragment : Fragment(), GetAndPost {
             for (i in ingredientList) {
                 fromListToMap.put(i.ingredientID.toString(), i)
             }
-            var quantities: ArrayList<String> = ArrayList()
+            var quantities: ArrayList<Int> = ArrayList()
             var ids: ArrayList<String> = ArrayList()
             var ingredientList2: ArrayList<Ingredient> = ArrayList()
             //  var quantities: ArrayList<String> = ArrayList()
             for (i in recipesAndIngredients.indices) {
                 var recipesAndIngredients2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
-                var id = recipesAndIngredients2[0].toInt()
+              //  var id = recipesAndIngredients2[0].toInt()
                 if (recipesAndIngredients2.size == 11) {
-                    if (id != currentID) {
+                    if (recipesAndIngredients2[0].toInt()  != currentID) {
 
                         // copying the lists of the ids and aquantities
-                        var tmpIds = deepCopy(ids)
-                        var tmpQuantities = deepCopy(quantities)
+                        // var tmpIds = deepCopy(ids)
+                        //  var tmpQuantities = deepCopy(quantities)
                         // put it into the map with the Key of the RecipeID
-                        hashMap.put(currentID, Pair(tmpIds, tmpQuantities))
+                        hashMap.put(currentID, Pair(ids, quantities))
+                        quantities = ArrayList()
+                        ids = ArrayList()
 
                         // copy the ingredietns lists to map with key of RecipieID
-                        var tmplist = deepCopyIng(ingredientList2)
-                        map.put(currentID, tmplist)
-
+                        //var tmplist = deepCopyIng(ingredientList2)
+                        map.put(currentID, ingredientList2)
+                        ingredientList2 = ArrayList()
                         // switching to next recipe id
                         currentID = recipesAndIngredients2[0].toInt()
 
                         // clear all lists for the next recipe lists
-                        ingredientList2.clear()
-                        ids.clear()
-                        quantities.clear()
+//                        ingredientList2.clear()
+//                        ids.clear()
+//                        quantities.clear()
                     }
 
                     ids.add(recipesAndIngredients2[9])
-                    quantities.add(recipesAndIngredients2[10])
+                    quantities.add(recipesAndIngredients2[10].toInt())
                     // getting the specific ingredient by its ID
-                    ingredientList2.add(fromListToMap.get(recipesAndIngredients2[9])!!)
 
 
-                }
-                else {
+                    /// doesnt work cause its not mine!!!!!!
+                    ingredientList2.add(
+                        fromListToMap.get(recipesAndIngredients2[9])!!
+                    )
+
+
+                } else {
                     break
                 }
             }
@@ -252,7 +257,7 @@ class AllRecipesFragment : Fragment(), GetAndPost {
                                 recipe2[7].toBoolean(),
                                 recipe2[8].toBoolean(),
                                 map.get(recipe2[0].toInt())!!,
-                                convertToInt(hashMap.get(recipe2[0].toInt())!!.second)
+                                hashMap.get(recipe2[0].toInt())!!.second
 
                             )
                         )
@@ -267,31 +272,31 @@ class AllRecipesFragment : Fragment(), GetAndPost {
 
     }
 
-    fun convertToInt(quantities: ArrayList<String>): ArrayList<Int> {
-        var quantity = ArrayList<Int>()
-        for (i in quantities)
-            quantity.add(i.toInt())
-
-        return quantity
-    }
-
-    private fun deepCopyIng(ingredientList: ArrayList<Ingredient>): ArrayList<Ingredient> {
-        var s: ArrayList<Ingredient> = ArrayList()
-        for (i in ingredientList) {
-            s.add(i)
-        }
-        return s
-    }
-
-
-    fun deepCopy(arrToCopy: ArrayList<String>): ArrayList<String> {
-        var s: ArrayList<String> = ArrayList()
-
-        for (i in arrToCopy) {
-            s.add(i)
-        }
-        return s
-    }
+//    fun convertToInt(quantities: ArrayList<String>): ArrayList<Int> {
+//        var quantity = ArrayList<Int>()
+//        for (i in quantities)
+//            quantity.add(i.toInt())
+//
+//        return quantity
+//    }
+//
+//    private fun deepCopyIng(ingredientList: ArrayList<Ingredient>): ArrayList<Ingredient> {
+//        var s: ArrayList<Ingredient> = ArrayList()
+//        for (i in ingredientList) {
+//            s.add(i)
+//        }
+//        return s
+//    }
+//
+//
+//    fun deepCopy(arrToCopy: ArrayList<String>): ArrayList<String> {
+//        var s: ArrayList<String> = ArrayList()
+//
+//        for (i in arrToCopy) {
+//            s.add(i)
+//        }
+//        return s
+//    }
 
     fun startTask() {
         var s = AsynTaskNew(this, childFragmentManager)

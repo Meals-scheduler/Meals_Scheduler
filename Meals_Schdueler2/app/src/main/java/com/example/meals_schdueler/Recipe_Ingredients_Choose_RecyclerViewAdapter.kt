@@ -12,6 +12,8 @@ import android.widget.*
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meals_schdueler.dummy.DummyContent.DummyItem
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -19,27 +21,32 @@ import com.example.meals_schdueler.dummy.DummyContent.DummyItem
  * TODO: Replace the implementation with code for your data type.
  */
 class Recipe_Ingredients_Choose_RecyclerViewAdapter(
-    private var values: ArrayList<Ingredient>,
+    private var values: TreeMap<String,Ingredient>,
     private var intValues: ArrayList<Int>,
     childFragmentManager: FragmentManager,
     costList: ArrayList<Int>
 ) :  RecyclerView.Adapter<Recipe_Ingredients_Choose_RecyclerViewAdapter.ViewHolder>() {
 
-    private var mValues: ArrayList<Ingredient> = values
+    private var mValues: TreeMap<String,Ingredient> = values
     private var mIntValues: ArrayList<Int> = intValues
     private var childFragmentManager = childFragmentManager
     private var costList: ArrayList<Int> = costList
+    private var ingredientList: ArrayList<Ingredient> = ArrayList()
 
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.recipe_ingredients_choose, parent, false)
+
+        for(i in mValues){
+            ingredientList.add(i.value)
+        }
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var item: Ingredient = mValues[position] // each item postion
+        var item: Ingredient = ingredientList[position] // each item postion
         holder.mItem = item
         holder.ingredientName.setText(item.ingridentName)
         //var bitmap2 = ImageConvert.StringToBitMap(item.picture)
@@ -59,7 +66,7 @@ class Recipe_Ingredients_Choose_RecyclerViewAdapter(
 
 
             if (holder.choose.isChecked == true && !(mIntValues.contains(position))) {
-                mIntValues.add(position)
+                mIntValues.add(item.ingredientID)
                 holder.arr[position] = true
 
 
@@ -85,7 +92,7 @@ class Recipe_Ingredients_Choose_RecyclerViewAdapter(
 
 
 
-    fun setmValues(mValues: ArrayList<Ingredient>) {
+    fun setmValues(mValues:  TreeMap<String,Ingredient>) {
         this.mValues = mValues
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
