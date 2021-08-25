@@ -3,10 +3,10 @@ package com.example.meals_schdueler
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ProgressBar
+import android.widget.SearchView
+import android.widget.TextView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,12 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.*
+
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
-class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScrollChangeListener {
+class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScrollChangeListener,
+    SearchView.OnQueryTextListener {
     //var builder: java.lang.StringBuilder? = null
     private var columnCount = 1
     private var recipeList: ArrayList<Recipe>? = null
@@ -27,9 +28,13 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
     private var progressBar: ProgressBar? = null
     private var AllRecipeRecyclerViewAdapter: All_Recipes_RecyclerViewAdapter? =
         null // adapter for the list.
+    private lateinit var searchView: SearchView
+    private lateinit var noResultsTextView: TextView
 
     // private lateinit var adapter : Recipe
     private var page = 0
+    private var isSearch = false
+    private var recipeToSearch = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +49,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
 
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,7 +59,9 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
         nestedScroll = view.findViewById(R.id.scroll_view)
         progressBar = view.findViewById(R.id.progress_bar)
         nestedScroll.setOnScrollChangeListener(this)
-
+        searchView = view.findViewById(R.id.search_bar)
+        searchView.setOnQueryTextListener(this)
+        noResultsTextView = view.findViewById(R.id.tv_emptyTextView)
 
         // Set the adapter
         val context = view.context
@@ -73,6 +81,17 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
 
         return view
     }
+
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        super.onCreateOptionsMenu(menu, inflater)
+//        inflater.inflate(R.menu.search_drawer, menu)
+//        val search: MenuItem? = menu.findItem(R.id.nav_search)
+//        val searchView: SearchView = search!!.actionView as SearchView
+//        searchView.queryHint = "Search Something..."
+//        searchView.setOnQueryTextListener(this)
+//
+//
+//    }
 
 
     fun startTask() {
@@ -105,7 +124,11 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
 
         var link =
             "https://elad1.000webhostapp.com/getSharedRecipes.php?ownerIDAndPage=" + string
-
+        if (isSearch) {
+            string = UserInterFace.userID.toString() + " " + recipeToSearch
+            link =
+                "https://elad1.000webhostapp.com/getSpecificSharedRecipes.php?nameAndRecipe=" + string
+        }
 
         val sb = StringBuilder()
 
@@ -143,9 +166,14 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
         //recipe size 11
         // ingredient size 15
         if (!str.equals("")) {
+
+            var start = 4
             //  recipeList!!.clear()
             val recipesAndIngredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+            if (isSearch) {
+                recipeList!!.clear()
 
+            }
             // first recipe id
 
             var recipesAndIngredients2 = recipesAndIngredients[0].splitIgnoreEmpty("*")
@@ -160,10 +188,24 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
 //
             var recipeIngredientMap: HashMap<Int, ArrayList<Ingredient>> = HashMap()
 
+            if (isSearch) {
+                var count = 0
+                for (j in recipesAndIngredients.indices) {
+                    var recipesAndIngredients2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
+                    if (recipesAndIngredients2.size == 9) {
+                        recipeIds.add(recipesAndIngredients2[0].toInt())
+                        count++
+                    } else {
+                        start = count
+                        break
+                    }
 
-            for (j in 0..3) {
-                var recipesAndIngredients2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
-                recipeIds.add(recipesAndIngredients2[0].toInt())
+                }
+            } else {
+                for (j in 0..3) {
+                    var recipesAndIngredients2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
+                    recipeIds.add(recipesAndIngredients2[0].toInt())
+                }
             }
 
             //var isFirst = true
@@ -188,7 +230,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
             var ids: HashMap<Int, ArrayList<Int>> = HashMap()
 
             // first extracting all ingredients ids and make them Ingredients.
-            for (i in 4..recipesAndIngredients.size - 1) {
+            for (i in start..recipesAndIngredients.size - 1) {
 
                 var recipesAndIngredients2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
                 currentIngId = recipesAndIngredients2[15].toInt()
@@ -216,8 +258,8 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
 
                     if (!recipeIngredientMap.containsKey(currentIngId)) {
                         var recipeIngredients: ArrayList<Ingredient> = ArrayList()
-                        var quantitiy :ArrayList<Int> = ArrayList()
-                        var idss :ArrayList<Int> = ArrayList()
+                        var quantitiy: ArrayList<Int> = ArrayList()
+                        var idss: ArrayList<Int> = ArrayList()
                         recipeIngredientMap.put(currentIngId, recipeIngredients)
                         recipeIngredientMap.get(currentIngId)!!.add(ing)
                         quantities.put(currentIngId, quantitiy)
@@ -261,8 +303,8 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
                         //  var tmpQuantities = deepCopy(quantities)
                         // put it into the map with the Key of the RecipeID
                         //hashMap.put(currentID, Pair(ids2, quantities2))
-                       // quantities2 = ArrayList()
-                      //  ids2 = ArrayList()
+                        // quantities2 = ArrayList()
+                        //  ids2 = ArrayList()
 
                         // copy the ingredietns lists to map with key of RecipieID
                         //var tmplist = deepCopyIng(ingredientList2)
@@ -278,8 +320,8 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
                     }
 
                     // ids2.add(ids.get(j))
-                  //  ids2= ids.get(currentID)!!
-                  //  quantities2 = quantities.get(currentID)!!
+                    //  ids2= ids.get(currentID)!!
+                    //  quantities2 = quantities.get(currentID)!!
                     //   quantities2.add(quantities.get(j))
                     // getting the specific ingredient by its ID
 
@@ -293,7 +335,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
                     break
                 }
             }
-           // hashMap.put(currentID, Pair(ids, quantities))
+            // hashMap.put(currentID, Pair(ids, quantities))
             map.put(currentID, ingredientList2)
 
 
@@ -317,7 +359,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
                                 recipe2[8].toBoolean(),
                                 map.get(recipe2[0].toInt())!!,
                                 quantities.get(s)!!
-                               // hashMap.get(recipe2[0].toInt())!!.second
+                                // hashMap.get(recipe2[0].toInt())!!.second
 
                             )
                         )
@@ -329,6 +371,13 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
 
             AllRecipeRecyclerViewAdapter!!.setmValues(recipeList!!)
             progressBar!!.visibility = View.INVISIBLE
+        } else {
+            if (isSearch)
+            {
+                recipeList!!.clear()
+                noResultsTextView.visibility = View.VISIBLE
+                AllRecipeRecyclerViewAdapter!!.setmValues(recipeList!!)
+            }
         }
 
     }
@@ -343,10 +392,32 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
     ) {
         Log.v("Elad1", "NESTEDDDDDDDD")
         if (scrollY == v!!.getChildAt(0).measuredHeight - v.measuredHeight) {
-            page = page + 4
-            progressBar!!.visibility = View.VISIBLE
+            if (!isSearch) {
+                page = page + 4
+                progressBar!!.visibility = View.VISIBLE
+                startTask()
+            }
+        }
+    }
+
+    override fun onQueryTextSubmit(p0: String?): Boolean {
+        return false
+    }
+
+    override fun onQueryTextChange(p0: String?): Boolean {
+        Log.v("Elad1", "YESSFSS" + p0)
+        if (p0 != "") {
+            noResultsTextView.visibility = View.INVISIBLE
+            isSearch = true
+            recipeToSearch = p0!!
+            startTask()
+        } else {
+            isSearch = false
+            recipeList!!.clear()
             startTask()
         }
+
+        return true
     }
 
 
