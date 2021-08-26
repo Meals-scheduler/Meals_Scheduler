@@ -1,99 +1,80 @@
 package com.example.meals_schdueler
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import com.example.meals_schdueler.dummy.DailySchedule
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.*
+import kotlin.collections.HashMap
 
 
-class MyRecipeFragment : Fragment(), GetAndPost {
+class LoadingData : AppCompatActivity(), GetAndPost {
 
-    private var columnCount = 1
-    private var recipeList: HashMap<String, Recipe>? = null // list of ingredietns
-    private var recipeRecyclerViewAdapter: MyRecipeRecyclerViewAdapter? =
-        null // adapter for the list.
+    private var ingredientList: HashMap<String, Ingredient>? = null
+    private var recipeList: HashMap<String, Recipe>? = null
+    private var dailyList: HashMap<String, DailySchedule>? = null
+    private var weeklyList: HashMap<String, WeeklySchedule>? = null
+    private var monthlyList: HashMap<String, MonthlySchedule>? = null
+    private var yearlyList: HashMap<String, YearlySchedule>? = null
+
+
+    private var sortedIngredient: TreeMap<String, Ingredient>? = null
+    private var sortedRecipe: TreeMap<String, Recipe>? = null
+    private var sortedDaily: TreeMap<String, DailySchedule>? = null
+    private var sortedWeekly: TreeMap<String, WeeklySchedule>? = null
+    private var sortedMonthly: TreeMap<String, MonthlySchedule>? = null
+    private var sortedYearly: TreeMap<String, YearlySchedule>? = null
+    var j = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
         recipeList = HashMap()
-        recipeRecyclerViewAdapter = MyRecipeRecyclerViewAdapter(recipeList!!, childFragmentManager)
-        arguments?.let {
-            columnCount = it.getInt(MyingredientFragment1.ARG_COLUMN_COUNT)
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_myrecipe_list, container, false)
-        val recyclerView = view.findViewById<View>(R.id.list) as RecyclerView
-
-
-        val context = view.context
-        instance = this
-
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                recyclerView.adapter = recipeRecyclerViewAdapter
-
-            }
-        }
-
+        ingredientList = HashMap()
+        dailyList = HashMap()
+        weeklyList = HashMap()
+        monthlyList = HashMap()
+        yearlyList = HashMap()
 
 
 
         startTask()
-
-        return view
     }
 
-    companion object {
-
-        var instance: MyRecipeFragment? = null
-
-        fun getInstance1(): MyRecipeFragment {
-            return instance!!
+    fun startTask() {
+        for (i in 0..2) {
+            var s = AsynTaskNew(this, supportFragmentManager)
+            s.execute()
         }
 
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            MyRecipeFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-
-                }
-            }
     }
 
-
     override fun DoNetWorkOpreation(): String {
+        var link = ""
+        when (j) {
+            0 -> link =
+                "https://elad1.000webhostapp.com/getIngredient.php?ownerID=" + UserInterFace.userID
+            1 -> link =
+                "https://elad1.000webhostapp.com/getRecipe.php?ownerID=" + UserInterFace.userID;
+            2 -> link =
+                "https://elad1.000webhostapp.com/getDaily.php?ownerID=" + UserInterFace.userID;
+            3 -> link =
+                "https://elad1.000webhostapp.com/getWeekly.php?ownerID=" + UserInterFace.userID;
+            4 -> link =
+                "https://elad1.000webhostapp.com/getMonthly.php?ownerID=" + UserInterFace.userID;
+            5 -> link =
+                "https://elad1.000webhostapp.com/getYearly.php?ownerID=" + UserInterFace.userID;
 
-
-        var link = "https://elad1.000webhostapp.com/getRecipe.php?ownerID=" + UserInterFace.userID;
-
+        }
+        j += 1
 
         val sb = StringBuilder()
 
@@ -117,30 +98,70 @@ class MyRecipeFragment : Fragment(), GetAndPost {
 
         //Log.v("Elad1", "Id came is" + sb.toString())
         return sb.toString()
-    }
 
-    // to avoid empty string cells .split function returns.
-    fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
-        return this.split(*delimiters).filter {
-            it.isNotEmpty()
-        }
-    }
 
+    }
 
     override fun getData(str: String) {
 
-        //recipe size 11
-        // ingredient size 15
         if (!str.equals("")) {
+
+            if (j == 0) { // loading ingredients.
+                ingredientList!!.clear()
+                // fixed a default .split spaces , and fixed spaces in howToStore.
+                // when we add an ingredient it doesnt update in real time. we have to re compile!!!
+
+                val ingredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+
+                for (i in ingredients.indices) {
+
+                    var ingredient2 = ingredients[i].splitIgnoreEmpty("*")
+
+
+
+                    ingredientList?.put(
+                        ingredient2[0],
+                        Ingredient(
+                            ingredient2[0].toInt(),
+                            ingredient2[1].toInt(),
+                            ingredient2[2],
+                            ImageConvert.StringToBitMap(ingredient2[3].toString())!!,
+                            ingredient2[4],
+                            ingredient2[5],
+                            ingredient2[6],
+                            ingredient2[7].toBoolean(),
+                            ingredient2[8].toBoolean(),
+                            ingredient2[9].toFloat(),
+                            ingredient2[10].toFloat(),
+                            ingredient2[11].toFloat(),
+                            ingredient2[12],
+                            ingredient2[13],
+                            false
+
+                        )
+                    )
+
+
+                }
+                sortedIngredient!!.clear()
+                sortedIngredient!!.putAll(ingredientList!!)
+
+
+                // initializing the singelton with the user's ingredients list to keep it here on code.
+                // should do it on another place !!!
+                UserPropertiesSingelton.getInstance()!!.setUserIngredientss(sortedIngredient)
+
+
+            }
+
+
+        } else if (j == 1) {
+
             recipeList!!.clear()
             val recipesAndIngredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
             var recipesAndIngredients2 = recipesAndIngredients[0].splitIgnoreEmpty("*")
-            // first recipe id
 
-//            for(i in recipesAndIngredients.indices){
-//                var tmp = recipesAndIngredients[i]
-//                Log.v("Elad1","recipe name is or id " + tmp [0] )
-//            }
+
             var currentID = recipesAndIngredients2[0].toInt()
 
             // saving all the ingredietns and quantities of each Recipe in map.
@@ -248,17 +269,17 @@ class MyRecipeFragment : Fragment(), GetAndPost {
             // should do it on another place !!!
             UserPropertiesSingelton.getInstance()!!.setUserRecipess(recipeList)
             UserPropertiesSingelton.getInstance()!!.setUserMapRecipe(recipeMap)
-            recipeRecyclerViewAdapter!!.setmValues(recipeList!!)
 
-            // need to fix getRecipe.php!!!!!!!!!!!!!!!!!!!!
+
+
         }
+
 
     }
 
-
-    fun startTask() {
-
-        var s = AsynTaskNew(this, childFragmentManager)
-        s.execute()
+    fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
+        return this.split(*delimiters).filter {
+            it.isNotEmpty()
+        }
     }
 }

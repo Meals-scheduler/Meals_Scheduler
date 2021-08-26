@@ -280,63 +280,8 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
                 }
             }
 
-//            var fromListToMap: HashMap<String, Ingredient> = HashMap()
-//
-//            for (i in ingredientList) {
-//                fromListToMap.put(i.ingredientID.toString(), i)
-//            }
 
 
-            var quantities2: ArrayList<Int> = ArrayList()
-            var ids2: ArrayList<Int> = ArrayList()
-            var j = 0
-            var ingredientList2: ArrayList<Ingredient> = ArrayList()
-            //  var quantities: ArrayList<String> = ArrayList()
-            for (i in recipesAndIngredients.indices) {
-                var recipesAndIngredients2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
-                //  var id = recipesAndIngredients2[0].toInt()
-                if (recipesAndIngredients2.size == 9) {
-                    if (recipesAndIngredients2[0].toInt() != currentID) {
-
-                        // copying the lists of the ids and aquantities
-                        // var tmpIds = deepCopy(ids)
-                        //  var tmpQuantities = deepCopy(quantities)
-                        // put it into the map with the Key of the RecipeID
-                        //hashMap.put(currentID, Pair(ids2, quantities2))
-                        // quantities2 = ArrayList()
-                        //  ids2 = ArrayList()
-
-                        // copy the ingredietns lists to map with key of RecipieID
-                        //var tmplist = deepCopyIng(ingredientList2)
-                        map.put(currentID, ingredientList2)
-                        //  ingredientList2 = ArrayList()
-                        // switching to next recipe id
-                        currentID = recipesAndIngredients2[0].toInt()
-
-                        // clear all lists for the next recipe lists
-//                        ingredientList2.clear()
-//                        ids.clear()
-//                        quantities.clear()
-                    }
-
-                    // ids2.add(ids.get(j))
-                    //  ids2= ids.get(currentID)!!
-                    //  quantities2 = quantities.get(currentID)!!
-                    //   quantities2.add(quantities.get(j))
-                    // getting the specific ingredient by its ID
-
-
-                    /// doesnt work cause its not mine!!!!!!
-                    // ingredientList2.add(fromListToMap.get(ids.get(j++)!!)!!)
-                    ingredientList2 = recipeIngredientMap.get(currentID)!!
-
-
-                } else {
-                    break
-                }
-            }
-            // hashMap.put(currentID, Pair(ids, quantities))
-            map.put(currentID, ingredientList2)
 
 
             currentID = -1
@@ -357,7 +302,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
                                 recipe2[6].toDouble(),
                                 recipe2[7].toBoolean(),
                                 recipe2[8].toBoolean(),
-                                map.get(recipe2[0].toInt())!!,
+                                recipeIngredientMap.get(recipe2[0].toInt())!!,
                                 quantities.get(s)!!
                                 // hashMap.get(recipe2[0].toInt())!!.second
 
@@ -414,6 +359,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
         } else {
             isSearch = false
             recipeList!!.clear()
+            noResultsTextView.visibility = View.INVISIBLE
             startTask()
         }
 

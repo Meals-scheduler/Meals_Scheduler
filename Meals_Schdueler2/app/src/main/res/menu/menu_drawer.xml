@@ -13,21 +13,21 @@
         android:title="Recipes" />
     <item
         android:id="@+id/nav_item_daily_schedule"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/daily_icon2"
         android:title="Daily Schedule" />
     <item
         android:id="@+id/nav_item_weekly_schedule"
-        android:icon="@drawable/logout"
+        android:icon="@drawable/weekly_icon"
         android:title="Weekly Scheudle" />
 
     <item
         android:id="@+id/nav_item_monthly_schedule"
-        android:icon="@drawable/logout"
+        android:icon="@drawable/monthly_icon"
         android:title="Monthly Scheudle" />
 
     <item
         android:id="@+id/nav_item_yearly_schedule"
-        android:icon="@drawable/logout"
+        android:icon="@drawable/yearly_icon"
         android:title="Yearly Scheudle" />
 
 

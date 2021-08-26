@@ -93,38 +93,37 @@ class MyItemRecyclerViewAdapter(
 //            }
 
 
-            //holder.idView.text = item.id
-            // holder.contentView.text = item.content
-        }
-
-        fun setmValues(mValues: TreeMap<String, Ingredient>) {
-
-            this.mValues = mValues
-            ingredientList.clear()
-            for (i in mValues) {
-                ingredientList.add(i.value)
-            }
-            notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
-        }
-
-        override fun getItemCount(): Int = values.size
-
-        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            // val idView: TextView = view.findViewById(R.id.item_number)
-            //val contentView: TextView = view.findViewById(R.id.content)
-            var ingredientImage: ImageView = view.findViewById(R.id.imageViewPicIngr)
-            var ingredientCart: ImageView = view.findViewById(R.id.imageViewCart)
-            var ingredientName: Button = view.findViewById(R.id.buttonIngredientName)
-            var ingredientInfo: ImageView = view.findViewById(R.id.imageViewInfo)
-            var deleteIngredient: ImageView = view.findViewById(R.id.imageViewDel)
-            lateinit var mItem: Ingredient
-
-
-            override fun toString(): String {
-                return super.toString()
-            }
-        }
-
-
+        //holder.idView.text = item.id
+        // holder.contentView.text = item.content
     }
 
+    fun setmValues(mValues: TreeMap<String, Ingredient>) {
+
+        this.mValues = mValues
+        ingredientList.clear()
+        for (i in mValues) {
+            ingredientList.add(i.value)
+        }
+        notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
+    }
+
+    override fun getItemCount(): Int = values.size
+
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        // val idView: TextView = view.findViewById(R.id.item_number)
+        //val contentView: TextView = view.findViewById(R.id.content)
+        var ingredientImage: ImageView = view.findViewById(R.id.imageViewPicIngr)
+        var ingredientCart: ImageView = view.findViewById(R.id.imageViewCart)
+        var ingredientName: Button = view.findViewById(R.id.buttonIngredientName)
+        var ingredientInfo: ImageView = view.findViewById(R.id.imageViewInfo)
+        var deleteIngredient: ImageView = view.findViewById(R.id.imageViewDel)
+        lateinit var mItem: Ingredient
+
+
+        override fun toString(): String {
+            return super.toString()
+        }
+    }
+
+
+}

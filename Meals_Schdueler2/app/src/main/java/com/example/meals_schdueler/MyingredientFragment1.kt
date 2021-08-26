@@ -167,28 +167,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost {
                 )
             )
 
-//
-//            ingredientList?.add(
-//                Ingredient(
-//                    ingredient2[0].toInt(),
-//                    ingredient2[1].toInt(),
-//                    ingredient2[2],
-//                    // ImageConvert.StringToBitMap(ingredient2[3].toString())!!,
-//                    ImageConvert.StringToBitMap(tmp)!!,
-//                    ingredient2[4],
-//                    ingredient2[5],
-//                    ingredient2[6],
-//                    ingredient2[7].toBoolean(),
-//                    ingredient2[8].toBoolean(),
-//                    ingredient2[9].toFloat(),
-//                    ingredient2[10].toFloat(),
-//                    ingredient2[11].toFloat(),
-//                    ingredient2[12],
-//                    ingredient2[13],
-//                    false
-//
-//                )
-//            )
+
 
         }
 

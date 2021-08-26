@@ -2,7 +2,6 @@ package com.example.meals_schdueler.dummy
 
 import android.util.Log
 import com.example.meals_schdueler.GetAndPost
-import com.example.meals_schdueler.UserInterFace
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL

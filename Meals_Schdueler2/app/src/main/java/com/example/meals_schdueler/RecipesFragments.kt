@@ -23,6 +23,9 @@ class RecipesFragments : Fragment() {
 
         viewPager.adapter = myAdapter(childFragmentManager)
         tabLayout.post{ tabLayout.setupWithViewPager(viewPager)}
+
+
+
         return x
     }
 
