@@ -27,7 +27,6 @@ import kotlin.collections.HashMap
 
 class My_Daily_RecylerViewAdapter(
 
-    // values: ArrayList<DailySchedule>,
     values: TreeMap<String, DailySchedule>,
     childFragmentManager: FragmentManager,
     context: Context?,

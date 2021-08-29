@@ -30,6 +30,11 @@
         android:icon="@drawable/yearly_icon"
         android:title="Yearly Scheudle" />
 
+    <item
+        android:id="@+id/nav_item_events"
+        android:icon="@drawable/yearly_icon"
+        android:title="Events" />
+
 
 
     <item

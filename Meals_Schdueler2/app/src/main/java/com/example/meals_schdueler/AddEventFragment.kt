@@ -1,71 +1,66 @@
 package com.example.meals_schdueler
 
-
+import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.Color.RED
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.*
-import android.widget.TableRow
 import androidx.core.view.get
 import androidx.core.view.iterator
-import androidx.core.view.size
 import androidx.fragment.app.Fragment
-import com.example.meals_schdueler.R.layout
+import androidx.fragment.app.FragmentManager
 import com.example.meals_schdueler.dummy.DailySchedule
 import java.text.DecimalFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
-
-/// need to do :
-// fix the image scale
-
-
-class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
+class AddEventFragment : Fragment(), View.OnClickListener,
     DialogInterface.OnDismissListener {
 
-    var builder: java.lang.StringBuilder? = null
+
     private var listItemsChoosen: ArrayList<Int>? = null
     private var recipeQuantitiy: ArrayList<Int>? = null
     private var listItems: Recipe_Ingredients_List? = null
     private lateinit var stk: TableLayout
     private lateinit var recipeList: ArrayList<Recipe>
-    private lateinit var recipeChoosenNumOfMeal: ArrayList<Int>
     private lateinit var recipesID: ArrayList<Int>
     private var recipesQuantities: Recipe_Ingredients_List? = null
+    private var dateClass: DateClass? = null
 
-    //lateinit var stam : TextView
     private var columnCount = 1
-    private lateinit var breakfastBtn: Button
-    private lateinit var lunchBtn: Button
-    private lateinit var dinnerBtn: Button
+    private lateinit var chooseBtn: Button
     private lateinit var saveBtn: Button
-    private var mealChoosen: String = ""
-    private var recipeNumbers: String = ""
+    private lateinit var dateBtn: Button
     private var recipeIds: String = ""
     private var quantities = ""
+    private var eventName = ""
+    private var date = ""
+    private lateinit var eventNameEditText: EditText
+    private lateinit var dateEditText: EditText
     private lateinit var totalCost: EditText
     private var totalCostDobule: Double = 0.0
 
     private var tablePosition = 1
     private var savedSize = 0
     var j = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
+            columnCount = it.getInt(AddDailyScheduleFragment.ARG_COLUMN_COUNT)
         }
         listItemsChoosen = ArrayList()
         listItems = Recipe_Ingredients_List(listItemsChoosen)
         recipeList = ArrayList()
-        recipeChoosenNumOfMeal = ArrayList()
         recipesID = ArrayList()
+        dateClass = DateClass(date)
         recipeQuantitiy = ArrayList()
         recipesQuantities = Recipe_Ingredients_List(recipeQuantitiy)
     }
@@ -73,13 +68,6 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
     private fun addTable() {
 
         var tbrow0: TableRow = TableRow(context)
-
-        var tv0: TextView = TextView(context)
-        tv0.setText(" Category ")
-        tv0.setTextColor(Color.BLACK)
-        tv0.gravity = Gravity.CENTER
-        //  tv0.setBackgroundResource(R.drawable.spinner_shape)
-        tbrow0.addView(tv0)
 
         var tv1: TextView = TextView(context)
         tv1.setText(" Picture ")
@@ -94,7 +82,6 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
         tv3.gravity = Gravity.CENTER
         // tv3.setBackgroundResource(R.drawable.spinner_shape)
         tbrow0.addView(tv3)
-
 
 
         var tv5: TextView = TextView(context)
@@ -137,7 +124,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
         // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
-            AddDailyScheduleFragment().apply {
+            AddEventFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_COLUMN_COUNT, columnCount)
 
@@ -145,27 +132,26 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
             }
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val x = inflater.inflate(layout.add_daily_schedule, null)
+        val x = inflater.inflate(R.layout.add_event, null)
 
         //stam = x.findViewById(R.id.elad)
         stk = x.findViewById(R.id.tableLayout)
-        breakfastBtn = x.findViewById(R.id.breakfastBtn)
-        lunchBtn = x.findViewById(R.id.lunchBtn)
-        dinnerBtn = x.findViewById(R.id.dinnerBtn)
+        chooseBtn = x.findViewById(R.id.chooseBtn)
         totalCost = x.findViewById(R.id.editTextTotalCost)
+        eventNameEditText = x.findViewById(R.id.editTextEventName)
         saveBtn = x.findViewById(R.id.saveBtn)
-
-
-
+        dateBtn = x.findViewById(R.id.dateBtn)
+        dateEditText = x.findViewById(R.id.editTextDate)
+        dateBtn.setOnClickListener(this)
         saveBtn.setOnClickListener(this)
-        breakfastBtn.setOnClickListener(this)
-        lunchBtn.setOnClickListener(this)
-        dinnerBtn.setOnClickListener(this)
+        chooseBtn.setOnClickListener(this)
+
 
         //val view = inflater.inflate(com.example.meals_schdueler.R.layout.add_daily_schedule, container, false)
 
@@ -173,55 +159,25 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
         return x
     }
 
-    override fun onClick(p0: View?) {
-        if (p0 == breakfastBtn) {
-            //    Log.v("Elad1","RecipeQuantity Size breakfast: " + recipesQuantities!!.list!!.size)
 
+    override fun onClick(p0: View?) {
+        if (p0 == chooseBtn) {
+            //    Log.v("Elad1","RecipeQuantity Size breakfast: " + recipesQuantities!!.list!!.size)
             listItems!!.list!!.clear()
             savedSize = recipeList.size
             //   recipeList.clear()
-            mealChoosen = "Breakfast"
-            var dialog = Recipe_Schedule_Choose_Dialog(
-                listItems!!,
-                UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!,
-                recipesQuantities!!,
-                mealChoosen
-            )
-            dialog.show(childFragmentManager, "Recipe_Schuedle_Choose")
-
-        } else if (p0 == lunchBtn) {
-            //     Log.v("Elad1","RecipeQuantity Size lunch: " + recipesQuantities!!.list!!.size)
-
-            listItems!!.list!!.clear()
-            savedSize = recipeList.size
-            // recipeList.clear()
-            mealChoosen = "Lunch"
 
             var dialog = Recipe_Schedule_Choose_Dialog(
                 listItems!!,
                 UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!,
                 recipesQuantities!!,
-                mealChoosen
+                "Event"
+
             )
             dialog.show(childFragmentManager, "Recipe_Schuedle_Choose")
-
-        } else if (p0 == dinnerBtn) {
-            //  Log.v("Elad1","RecipeQuantity Size dinner: " + recipesQuantities!!.list!!.size)
-
-            listItems!!.list!!.clear()
-            // recipeList.clear()
-            savedSize = recipeList.size
-            mealChoosen = "Dinner"
-
-            var dialog = Recipe_Schedule_Choose_Dialog(
-                listItems!!,
-                UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!,
-                recipesQuantities!!,
-                mealChoosen
-            )
-            dialog.show(childFragmentManager, "Recipe_Schuedle_Choose")
-
         } else if (p0 == saveBtn) {
+
+            eventName = eventNameEditText.text.toString()
 
             for (i in recipesID) {
                 recipeIds += "" + i + " "
@@ -230,34 +186,82 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
             for (i in recipesQuantities!!.list!!) {
                 quantities += "" + i + " "
             }
-            for (i in recipeChoosenNumOfMeal) {
-                recipeNumbers += "" + i + " "
 
-            }
-            recipeChoosenNumOfMeal.clear()
+
             recipesID.clear()
             recipesQuantities!!.list!!.clear()
 
 
-            var daily = DailySchedule(
+            var event = Event(
                 1,
                 UserInterFace.userID,
-                recipeNumbers,
+                eventName,
                 quantities,
+                dateClass!!.date,
                 recipeIds,
                 totalCostDobule,
                 false
             )
 
-            var s = AsynTaskNew(daily, childFragmentManager)
+            var s = AsynTaskNew(event, childFragmentManager)
             s.execute()
 
             recipeIds = ""
             quantities = ""
-            recipeNumbers = ""
             clearTable()
-        }
 
+        } else if (p0 == dateBtn) {
+            val cal = Calendar.getInstance()
+            // to open the calender with the current date of this moment.
+            val currentYear = cal[Calendar.YEAR]
+            val currentMonth = cal[Calendar.MONTH]
+            val currentDay = cal[Calendar.DAY_OF_MONTH]
+            var dialog = DatePickerDialog(
+                requireContext(),
+                android.R.style.Theme_Holo_Light,
+                calenderListener(
+                    1,
+                    dateClass!!,
+                    childFragmentManager,
+                    dateEditText
+                ),
+                currentYear,
+                currentMonth,
+                currentDay
+            )
+            dialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.show()
+        }
+    }
+
+    class calenderListener(
+        eventToSchedule: Int,
+        date: DateClass,
+        childFragmentManager: FragmentManager,
+        editText: EditText,
+    ) : DatePickerDialog.OnDateSetListener {
+        var eventToSchedule = eventToSchedule
+        var dateClass = date
+        var editTextDate = editText
+        var childFragmentManager = childFragmentManager
+        override fun onDateSet(view: DatePicker, year: Int, month: Int, dayOfMonth: Int) {
+
+            dateClass.date =
+                year.toString() + "-" + (month + 1).toString() + "-" + dayOfMonth.toString()
+            editTextDate.setText(dateClass.date)
+
+//            var upcoming = UpComingScheudule(
+//                -1,
+//                date,
+//                eventToSchedule
+//            )
+
+
+//            var s = AsynTaskNew(upcoming, childFragmentManager)
+//            s.execute()
+
+
+        }
     }
 
     private fun clearTable() {
@@ -277,16 +281,17 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
     }
 
-
     override fun onDismiss(p0: DialogInterface?) {
         // on dissmiss event , when we dissmiss the ingrdeitns selcection dialog we want to update the list with
         // the chosen ingredients.
-
+//        if (!dateClass!!.date.equals(""))
+//            dateEditText.setText(dateClass!!.date)
 
         for (i in listItems!!.list!!) {
 
 
-            var recipe = UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(i.toString())
+            var recipe =
+                UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(i.toString())
             recipeList.add(recipe!!)
 
 
@@ -306,27 +311,12 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
             // saved size to know the size of list before we change  so we wont override all the list.
             if (j > savedSize - 1) {
 
-                when (mealChoosen) {
-                    "Breakfast" -> recipeChoosenNumOfMeal.add(0)
-                    "Lunch" -> recipeChoosenNumOfMeal.add(1)
-                    "Dinner" -> recipeChoosenNumOfMeal.add(2)
-                }
-
 
                 var tbrow: TableRow = TableRow(this.context)
 
                 tbrow.setTag(tablePosition)
                 totalCostDobule += i.totalCost * recipesQuantities!!.list!!.get(tbrow.getTag() as Int - 1)
                 recipesID.add(i.recipeId)
-
-                var t1v: TextView = TextView(context)
-
-                // t1v.setBackgroundResource(R.drawable.border)
-                t1v.setText(" " + (mealChoosen))
-                t1v.setTextColor(Color.BLACK)
-                t1v.gravity = Gravity.CENTER
-                //  t1v.setBackgroundResource(R.drawable.spinner_shape)
-                tbrow.addView(t1v)
 
 
                 var t2v: ImageView = ImageView(context)
@@ -354,15 +344,6 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
                 t3v.gravity = Gravity.CENTER
                 //    t3v.setBackgroundResource(R.drawable.spinner_shape)
                 tbrow.addView(t3v)
-
-//                var t4v: TextView = TextView(context)
-//                // t4v.setBackgroundResource(R.drawable.border)
-//                totalCostDobule = (DecimalFormat("##.##").format(i.totalCost)).toDouble()
-//                t4v.setText(totalCostDobule.toString())
-//                t4v.setTextColor(Color.BLACK)
-//                t4v.gravity = Gravity.CENTER
-//                //t4v.setBackgroundResource(R.drawable.spinner_shape)
-//                tbrow.addView(t4v)
 
 
                 var t5v: TextView = TextView(context)
@@ -394,7 +375,6 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
                     recipesID.removeAt(t6v.getTag() as Int - 1)
                     recipesQuantities!!.list!!.removeAt(t6v.getTag() as Int - 1)
-                    recipeChoosenNumOfMeal.removeAt(t6v.getTag() as Int - 1)
                     recipeList.removeAt(t6v.getTag() as Int - 1)
                     tablePosition--
 
@@ -406,7 +386,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
                             x.setTag(x.getTag() as Int - 1)
                             var y = x as TableRow
                             //changing info delete tag
-                            y.get(5).setTag(y.get(5).getTag() as Int - 1)
+                            y.get(3).setTag(y.get(3).getTag() as Int - 1)
                             //changing infp button tag
                             y.get(4).setTag(y.get(4).getTag() as Int - 1)
 
@@ -460,8 +440,4 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
         totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
         totalCost.setText(totalCostDobule.toString())
     }
-
-
 }
-
-
