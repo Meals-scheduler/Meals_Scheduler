@@ -36,7 +36,7 @@ class EventFragments : Fragment() {
         override fun getItem(position: Int): Fragment {
             when(position){
                 0-> return AddEventFragment()
-                1-> return AddEventFragment()
+                1-> return MyEventScheduleFragment()
 
             }
             return AddEventFragment()

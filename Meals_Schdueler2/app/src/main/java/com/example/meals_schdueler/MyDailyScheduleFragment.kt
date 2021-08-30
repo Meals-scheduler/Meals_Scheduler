@@ -257,14 +257,14 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
 //
 //                        )
 
-                        for (y in UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!) {
-                            Log.v("Elad1", y.key)
-                        }
+//                        for (y in UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!) {
+//                            Log.v("Elad1", y.key)
+//                        }
 
-                        var recipe = deepCopyRecipe(
+                        var recipe =
                             UserPropertiesSingelton.getInstance()!!
                                 .getUserRecipess()!!.get(k)!!
-                        )
+
                         if (!recipeList!!.contains(recipe))
                             recipeList!!.add(recipe)
 
@@ -290,43 +290,43 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
             //dailyRecyclerViewAdapter!!.setmValues(recipeList!!)
         }
     }
-
-    private fun deepCopyRecipe(recipe: Recipe): Recipe {
-
-        var listOfIngredients = ArrayList<Ingredient>()
-        var listOfQuantities = ArrayList<Int>()
-
-        for (i in recipe.listOfIngredients) {
-            listOfIngredients.add(i)
-        }
-        for (i in recipe.quantityList) {
-            listOfQuantities.add(i)
-        }
-        var copiedRecipe = Recipe(
-            recipe.recipeId,
-            recipe.ownerId,
-            recipe.recipeName,
-            recipe.pictureBitMap,
-            recipe.typeOfMeal,
-            recipe.numOfPortions,
-            recipe.totalCost,
-            recipe.shareRecipe,
-            recipe.shareInfo,
-            listOfIngredients,
-            listOfQuantities
-        )
-
-        return copiedRecipe
-    }
-
-
-    fun deepCopy(arrToCopy: ArrayList<String>): ArrayList<String> {
-        var s: ArrayList<String> = ArrayList()
-
-        for (i in arrToCopy) {
-            s.add(i)
-        }
-        return s
-    }
+//
+//    private fun deepCopyRecipe(recipe: Recipe): Recipe {
+//
+//        var listOfIngredients = ArrayList<Ingredient>()
+//        var listOfQuantities = ArrayList<Int>()
+//
+//        for (i in recipe.listOfIngredients) {
+//            listOfIngredients.add(i)
+//        }
+//        for (i in recipe.quantityList) {
+//            listOfQuantities.add(i)
+//        }
+//        var copiedRecipe = Recipe(
+//            recipe.recipeId,
+//            recipe.ownerId,
+//            recipe.recipeName,
+//            recipe.pictureBitMap,
+//            recipe.typeOfMeal,
+//            recipe.numOfPortions,
+//            recipe.totalCost,
+//            recipe.shareRecipe,
+//            recipe.shareInfo,
+//            listOfIngredients,
+//            listOfQuantities
+//        )
+//
+//        return copiedRecipe
+//    }
+//
+//
+//    fun deepCopy(arrToCopy: ArrayList<String>): ArrayList<String> {
+//        var s: ArrayList<String> = ArrayList()
+//
+//        for (i in arrToCopy) {
+//            s.add(i)
+//        }
+//        return s
+//    }
 
 }

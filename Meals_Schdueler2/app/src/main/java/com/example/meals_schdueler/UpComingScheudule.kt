@@ -71,6 +71,8 @@ class UpComingScheudule (
         builder!!.append(line)
         break
       }
+//      Log.v("Elad1", "Schedule id" +   scheduleId)
+//      Log.v("Elad1", "Uplodaed  : " +   builder.toString())
       builder.toString()
 
     } catch (e: Exception) {
@@ -104,7 +106,7 @@ class UpComingScheudule (
     }
 
 
-   // Log.v("Elad1", "Id came is" + sb.toString())
+    Log.v("Elad1", "Id came is" + sb.toString())
     return sb.toString()
 
   }

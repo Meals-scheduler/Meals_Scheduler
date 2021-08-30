@@ -32,7 +32,7 @@ class My_Daily_RecylerViewAdapter(
     context: Context?,
 ) : RecyclerView.Adapter<My_Daily_RecylerViewAdapter.ViewHolder>() {
 
-    var builder: java.lang.StringBuilder? = null
+    //var builder: java.lang.StringBuilder? = null
 
     // private var mValues: ArrayList<DailySchedule> = values
     private var mValues: TreeMap<String, DailySchedule> = values
@@ -88,11 +88,11 @@ class My_Daily_RecylerViewAdapter(
 
 
         holder.info.setOnClickListener {
-            Log.v("Elad1", "OKKK1")
-            Log.v("Elad1", "ID" + item.dailyId.toString())
-            Log.v("Elad1", "Quantities " + mValues.get(item.dailyId.toString())!!.quantities)
-            Log.v("Elad1", "num of meals " + mValues.get(item.dailyId.toString())!!.numOfMeals)
-            Log.v("Elad1", "recipe ids " + mValues.get(item.dailyId.toString())!!.recipeIds)
+//            Log.v("Elad1", "OKKK1")
+//            Log.v("Elad1", "ID" + item.dailyId.toString())
+//            Log.v("Elad1", "Quantities " + mValues.get(item.dailyId.toString())!!.quantities)
+//            Log.v("Elad1", "num of meals " + mValues.get(item.dailyId.toString())!!.numOfMeals)
+//            Log.v("Elad1", "recipe ids " + mValues.get(item.dailyId.toString())!!.recipeIds)
             var dialog = DailyDialogInfo(
                 recipeList!!,
                 mValues.get(item.dailyId.toString())!!.quantities,

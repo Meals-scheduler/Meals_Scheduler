@@ -4,26 +4,22 @@ import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.view.get
-import androidx.core.view.iterator
-import androidx.core.view.size
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import java.text.DecimalFormat
 
-class DailyDialogInfo(
+class EventDialogInfo(
     recipeList: ArrayList<Recipe>,
     quantities: String,
-    numOfMeals: String,
     recipeIds: String,
     pos: Int,
-    dailyId: Int,
+    eventId: Int,
+    eventName: String,
+    date: String
 ) : DialogFragment(), View.OnClickListener,
     DialogInterface.OnDismissListener {
 
@@ -32,23 +28,20 @@ class DailyDialogInfo(
     private lateinit var totalCost: EditText
     private lateinit var exit: ImageView
     private lateinit var title: TextView
-   // private var recipesQuantities: Recipe_Ingredients_List? = null
-   // private var recipeQuantitiy: ArrayList<Int>? = null
-    private lateinit var recipeChoosenNumOfMeal: ArrayList<Int>
     private lateinit var quanArrList: ArrayList<Int>
     private lateinit var recipesID: ArrayList<Int>
+    private lateinit var dateTextView : TextView
 
-    private var dailyId = dailyId
-
+    private var eventId = eventId
     private var recipeIds = recipeIds
-    private var numOfMeals = numOfMeals
     private var quantities = quantities
     private var recipeList = recipeList
     private var tablePosition = 1
     private var totalCostDobule: Double = 0.0
     private var position = pos
-    private var mealChoosen = ""
     private var recipePos = 0
+    private var eventName = eventName
+    private var date = date
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,25 +49,24 @@ class DailyDialogInfo(
         savedInstanceState: Bundle?
     ): View? {
 
-        var x: View = inflater.inflate(R.layout.daily_info, container, false)
-        stk = x.findViewById(R.id.tableLayout)
-        totalCost = x.findViewById(R.id.editTextTotalCost)
-        title = x.findViewById(R.id.dailyInfo)
-        title.setText("Daily No. " + position)
-        recipeChoosenNumOfMeal = ArrayList()
+        var view: View = inflater.inflate(R.layout.daily_info, container, false)
+        stk = view.findViewById(R.id.tableLayout)
+        totalCost = view.findViewById(R.id.editTextTotalCost)
+        dateTextView = view.findViewById(R.id.editTextDate)
+        title = view.findViewById(R.id.dailyInfo)
+        title.setText("Event No. " + position)
         quanArrList = ArrayList()
         recipesID = ArrayList()
-      //  recipeQuantitiy = ArrayList()
-       // recipesQuantities = Recipe_Ingredients_List(recipeQuantitiy)
+        //  recipeQuantitiy = ArrayList()
+        // recipesQuantities = Recipe_Ingredients_List(recipeQuantitiy)
+        dateTextView.setText(date)
 
-
-
-        exit = x.findViewById(R.id.imageViewX)
+        exit = view.findViewById(R.id.imageViewX)
         exit.setOnClickListener(this)
 
         addTable()
-        initDaily()
-        return x
+        initEvent()
+        return view
 
 
     }
@@ -85,12 +77,14 @@ class DailyDialogInfo(
         }
     }
 
-    private fun initDaily() {
+    private fun initEvent() {
         var j = 0
-
+        stk.setColumnShrinkable(4, true)
+        stk.setColumnStretchable(4, true)
+//        stk.setColumnShrinkable(0 ,true)
+//        stk.setColumnStretchable(0, true)
 
         // converting the strings into arr's
-        var numOfMealsArr = numOfMeals.splitIgnoreEmpty(" ")
         var quantitiesArr = quantities.splitIgnoreEmpty(" ")
         var recipeIdsArr = recipeIds.splitIgnoreEmpty(" ")
 
@@ -99,10 +93,6 @@ class DailyDialogInfo(
 
         for (i in recipeIdsArr) {
             recipesID.add(i.toInt())
-        }
-
-        for (i in numOfMealsArr) {
-            recipeChoosenNumOfMeal.add(i.toInt())
         }
 
         for (i in quantitiesArr) {
@@ -121,13 +111,6 @@ class DailyDialogInfo(
             if (recipesID.contains(i.recipeId)) {
 
 
-
-                when (numOfMealsArr[j]) {
-                    "0" -> mealChoosen = "Breakfast"
-                    "1" -> mealChoosen = "Lunch"
-                    "2" -> mealChoosen = "Dinner"
-                }
-
                 var tbrow: TableRow = TableRow(this.context)
                 tbrow.setTag(tablePosition++)
                 totalCostDobule += i.totalCost * quantitiesArr[j].toInt()
@@ -137,7 +120,7 @@ class DailyDialogInfo(
                 var t1v: TextView = TextView(context)
 
                 // t1v.setBackgroundResource(R.drawable.border)
-                t1v.setText(" " + (mealChoosen))
+                t1v.setText(" " + (eventName))
                 t1v.setTextColor(Color.BLACK)
                 t1v.gravity = Gravity.CENTER
                 //  t1v.setBackgroundResource(R.drawable.spinner_shape)
@@ -170,14 +153,6 @@ class DailyDialogInfo(
                 t3v.gravity = Gravity.CENTER
                 //    t3v.setBackgroundResource(R.drawable.spinner_shape)
                 tbrow.addView(t3v)
-//
-//                var t4v: TextView = TextView(context)
-//                // t4v.setBackgroundResource(R.drawable.border)
-//                t4v.setText(i.totalCost.toString())
-//                t4v.setTextColor(Color.BLACK)
-//                t4v.gravity = Gravity.CENTER
-//                //t4v.setBackgroundResource(R.drawable.spinner_shape)
-//                tbrow.addView(t4v)
 
 
                 var t5v: TextView = TextView(context)
@@ -225,12 +200,13 @@ class DailyDialogInfo(
 
     }
 
+
     private fun addTable() {
 
         var tbrow0: TableRow = TableRow(context)
 
         var tv0: TextView = TextView(context)
-        tv0.setText(" Category ")
+        tv0.setText(" Event Name ")
         tv0.setTextColor(Color.BLACK)
         tv0.gravity = Gravity.CENTER
         //  tv0.setBackgroundResource(R.drawable.spinner_shape)
@@ -250,12 +226,6 @@ class DailyDialogInfo(
         // tv3.setBackgroundResource(R.drawable.spinner_shape)
         tbrow0.addView(tv3)
 
-//        var tv4: TextView = TextView(context)
-//        tv4.setText(" Price ")
-//        tv4.setTextColor(Color.BLACK)
-//        tv4.gravity = Gravity.CENTER
-//        // tv4.setBackgroundResource(R.drawable.spinner_shape)
-//        tbrow0.addView(tv4)
 
         var tv5: TextView = TextView(context)
         tv5.setText(" Quantity ")
@@ -280,24 +250,11 @@ class DailyDialogInfo(
 
 
     }
-//
-//    override fun onDismiss(dialog: DialogInterface) {
-//        super.onDismiss(dialog)
-//
-//        val parentFragment: Fragment? = parentFragment
-//        if (parentFragment is DialogInterface.OnDismissListener) {
-//            (parentFragment as DialogInterface.OnDismissListener?)!!.onDismiss(dialog)
-//        }
-//
-//
-//
-//    }
+
 
     override fun onClick(p0: View?) {
         if (p0 == exit) {
             dismiss()
         }
     }
-
-
 }
