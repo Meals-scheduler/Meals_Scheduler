@@ -47,9 +47,14 @@ class Upcoming_RecyclerViewAdapter(
 
 
         holder.delete.setOnClickListener {
-//
-//            var dialog = DeleteAlertDialog("", null, mValues.get(position).dailyId, false, true)
-//            dialog.show(childFragmentManager, "DeleteDaily")
+
+            var dialog = DeleteAlertDialog(
+                "",
+                null,
+                mValues.get(position)!!.scheduleId,
+                "Upcoming"
+            )
+            dialog.show(childFragmentManager, "DeleteDaily")
 
 
         }

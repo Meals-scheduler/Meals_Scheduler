@@ -65,6 +65,8 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
                 "Weekly" -> MyWeeklyScheduleFragment.getInstance1().startTask()
                 "Monthly" -> MyMonthlyScheudleFragment.getInstance1().startTask()
                 "Yearly" -> MyYearlyScheudleFragment.getInstance1().startTask()
+                "Event" -> MyEventScheduleFragment.getInstance1().startTask()
+                "Upcoming" -> UpcomingScheduleFragment.getInstance1().startTask()
             }
 
 
@@ -78,6 +80,9 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
             MyMonthlyScheudleFragment.getInstance1().startTask()
         } else if (action is YearlySchedule) {
             MyYearlyScheudleFragment.getInstance1().startTask()
+        }
+        else if( action is Event){
+            MyEventScheduleFragment.getInstance1().startTask()
         }
         if (!(action is DeleteAlertDialog)) {
             pbDialog.dismiss()

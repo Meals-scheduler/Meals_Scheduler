@@ -11,7 +11,6 @@ class Event(
     ownerId: Int,
     eventName: String,
     quantities: String,
-    date: String,
     recipeIds: String,
     totalCost: Double,
     isUpdate: Boolean
@@ -27,7 +26,6 @@ class Event(
     var isUpdate = isUpdate
     var totalCost = totalCost
     var eventName = eventName
-    var date = date
 
 
     override fun DoNetWorkOpreation(): String {
@@ -62,7 +60,6 @@ class Event(
             }
 
 
-
             // print here ingredient elemtnes
 
             var data = URLEncoder.encode("EventID", "UTF-8") + "=" +
@@ -71,8 +68,7 @@ class Event(
                     URLEncoder.encode(recipeIds, "UTF-8")
             data += "&" + URLEncoder.encode("eventName", "UTF-8") + "=" +
                     URLEncoder.encode(eventName, "UTF-8")
-            data += "&" + URLEncoder.encode("date", "UTF-8") + "=" +
-                    URLEncoder.encode(date, "UTF-8")
+
 
             data += "&" + URLEncoder.encode("quantities", "UTF-8") + "=" +
                     URLEncoder.encode(quantities, "UTF-8")

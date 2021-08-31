@@ -457,6 +457,14 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
             j++
         }
 
+        if (tablePosition == 1) {
+            stk.setColumnShrinkable(4, false)
+            stk.setColumnShrinkable(5, false)
+            stk.setColumnStretchable(5, false)
+            stk.setColumnStretchable(4, false)
+        }
+
+
         totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
         totalCost.setText(totalCostDobule.toString())
     }

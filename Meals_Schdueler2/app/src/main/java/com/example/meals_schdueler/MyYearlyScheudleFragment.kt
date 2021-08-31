@@ -44,7 +44,8 @@ class MyYearlyScheudleFragment : Fragment(), GetAndPost {
         yearlyRecyclerViewAdapter = My_Yearly_RecylerViewAdapter(
             sorted!!,
             childFragmentManager,
-            this.context
+            this.context,
+            requireActivity()
         )
 
         // to know how many objects from the wanted type will be in a line

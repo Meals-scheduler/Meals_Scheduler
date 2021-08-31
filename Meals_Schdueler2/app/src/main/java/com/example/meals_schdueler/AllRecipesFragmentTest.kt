@@ -82,16 +82,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
         return view
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        super.onCreateOptionsMenu(menu, inflater)
-//        inflater.inflate(R.menu.search_drawer, menu)
-//        val search: MenuItem? = menu.findItem(R.id.nav_search)
-//        val searchView: SearchView = search!!.actionView as SearchView
-//        searchView.queryHint = "Search Something..."
-//        searchView.setOnQueryTextListener(this)
-//
-//
-//    }
+
 
 
     fun startTask() {

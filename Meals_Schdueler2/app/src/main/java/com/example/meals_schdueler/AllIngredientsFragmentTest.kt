@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.SearchView
+import android.widget.TextView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +19,8 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
-class AllIngredientsFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScrollChangeListener {
+class AllIngredientsFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScrollChangeListener,
+    SearchView.OnQueryTextListener {
 
     private var columnCount = 1
     private var ingredientList: ArrayList<Ingredient>? = null
@@ -25,9 +28,13 @@ class AllIngredientsFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnSc
     private var progressBar: ProgressBar? = null
     private var AllIngredientRecyclerViewAdapter: All_IIngredients_RecyclerViewAdapter? =
         null // adapter for the list.
+    private lateinit var searchView: SearchView
+    private lateinit var noResultsTextView: TextView
 
     // private lateinit var adapter : Recipe
     private var page = 0
+    private var isSearch = false
+    private var ingredientToSearch = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +59,9 @@ class AllIngredientsFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnSc
         nestedScroll = view.findViewById(R.id.scroll_view)
         progressBar = view.findViewById(R.id.progress_bar)
         nestedScroll.setOnScrollChangeListener(this)
+        searchView = view.findViewById(R.id.search_bar)
+        searchView.setOnQueryTextListener(this)
+        noResultsTextView = view.findViewById(R.id.tv_emptyTextView)
 
 
         // Set the adapter
@@ -103,7 +113,12 @@ class AllIngredientsFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnSc
 
         var link =
             "https://elad1.000webhostapp.com/getSharedIngredients.php?ownerIDAndPage=" + string
-
+        if (isSearch) {
+            Log.v("Elad1", "search")
+            string = UserInterFace.userID.toString() + " " + ingredientToSearch
+            link =
+                "https://elad1.000webhostapp.com/getSpecificSharedIngredients.php?nameAndIngredient=" + string
+        }
 
         val sb = StringBuilder()
 
@@ -137,40 +152,53 @@ class AllIngredientsFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnSc
 
     override fun getData(str: String) {
 
-       // ingredientList!!.clear()
+        // ingredientList!!.clear()
         // fixed a default .split spaces , and fixed spaces in howToStore.
         // when we add an ingredient it doesnt update in real time. we have to re compile!!!
+        if (!str.equals("")) {
+            if (isSearch) {
+                ingredientList!!.clear()
 
-        val ingredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+            }
 
-        for (i in ingredients.indices) {
-            Log.v("Elad1", ingredients.indices.toString())
-            var ingredient2 = ingredients[i].splitIgnoreEmpty("*")
-            ingredientList?.add(
-                Ingredient(
-                    ingredient2[0].toInt(),
-                    ingredient2[1].toInt(),
-                    ingredient2[2],
-                    ImageConvert.StringToBitMap(ingredient2[3].toString())!!,
-                    ingredient2[4],
-                    ingredient2[5],
-                    ingredient2[6],
-                    ingredient2[7].toBoolean(),
-                    ingredient2[8].toBoolean(),
-                    ingredient2[9].toFloat(),
-                    ingredient2[10].toFloat(),
-                    ingredient2[11].toFloat(),
-                    ingredient2[12],
-                    ingredient2[13],
-                    false
 
+            val ingredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+
+            for (i in ingredients.indices) {
+                Log.v("Elad1", ingredients.indices.toString())
+                var ingredient2 = ingredients[i].splitIgnoreEmpty("*")
+                ingredientList?.add(
+                    Ingredient(
+                        ingredient2[0].toInt(),
+                        ingredient2[1].toInt(),
+                        ingredient2[2],
+                        ImageConvert.StringToBitMap(ingredient2[3].toString())!!,
+                        ingredient2[4],
+                        ingredient2[5],
+                        ingredient2[6],
+                        ingredient2[7].toBoolean(),
+                        ingredient2[8].toBoolean(),
+                        ingredient2[9].toFloat(),
+                        ingredient2[10].toFloat(),
+                        ingredient2[11].toFloat(),
+                        ingredient2[12],
+                        ingredient2[13],
+                        false
+
+                    )
                 )
-            )
+            }
+
+
+            AllIngredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
+            progressBar!!.visibility = View.INVISIBLE
+        } else {
+            if (isSearch) {
+                ingredientList!!.clear()
+                noResultsTextView.visibility = View.VISIBLE
+                AllIngredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
+            }
         }
-
-
-        AllIngredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
-        progressBar!!.visibility = View.INVISIBLE
     }
 
     override fun onScrollChange(
@@ -185,5 +213,26 @@ class AllIngredientsFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnSc
             progressBar!!.visibility = View.VISIBLE
             startTask()
         }
+    }
+
+    override fun onQueryTextSubmit(p0: String?): Boolean {
+        return false
+    }
+
+    override fun onQueryTextChange(p0: String?): Boolean {
+        if (p0 != "") {
+            Log.v("Elad1", "wanna search")
+            noResultsTextView.visibility = View.INVISIBLE
+            isSearch = true
+            ingredientToSearch = p0!!
+            startTask()
+        } else {
+            isSearch = false
+            ingredientList!!.clear()
+            noResultsTextView.visibility = View.INVISIBLE
+            startTask()
+        }
+
+        return true
     }
 }

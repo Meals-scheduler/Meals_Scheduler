@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +27,6 @@ class EditEventDailog(
     myEventRecylerviewadapter: My_Event_RecylerViewAdapter,
     eventId: Int,
     eventName: String,
-    date : String
 ) : DialogFragment(), View.OnClickListener,
     DialogInterface.OnDismissListener {
 
@@ -36,6 +36,8 @@ class EditEventDailog(
     private lateinit var exit: ImageView
     private lateinit var title: TextView
     private lateinit var chooseBtn: Button
+    private lateinit var changeNameBtn: Button
+    private lateinit var eventNameEdit: EditText
     private lateinit var saveBtn: Button
     private var listItemsChoosen: ArrayList<Int>? = null
     private var recipeQuantitiy: ArrayList<Int>? = null
@@ -47,7 +49,6 @@ class EditEventDailog(
     private var myEventRecylerviewadapter = myEventRecylerviewadapter
     private var eventId = eventId
     private var eventName = eventName
-    private var date = date
 
 
     var recipeIds = recipeIds
@@ -74,9 +75,14 @@ class EditEventDailog(
         title.setText("Edit Event No. " + position)
         chooseBtn = x.findViewById(R.id.chooseBtn)
         saveBtn = x.findViewById(R.id.saveBtn)
+        changeNameBtn = x.findViewById(R.id.buttonChangeName)
+        eventNameEdit = x.findViewById(R.id.editTextName)
+
+        eventNameEdit.setText(eventName)
 
         chooseBtn.setOnClickListener(this)
         saveBtn.setOnClickListener(this)
+        changeNameBtn.setOnClickListener(this)
 
         exit = x.findViewById(R.id.imageViewX)
         exit.setOnClickListener(this)
@@ -367,7 +373,9 @@ class EditEventDailog(
 
         } else if (p0 == saveBtn) {
 
-
+            Log.v("Elad1","event name be4" + eventName)
+            eventName = eventNameEdit.text.toString()
+            Log.v("Elad1","event name after" + eventName)
             if (recipesID.isNotEmpty()) {
                 recipeIds = ""
                 quantities = ""
@@ -391,7 +399,6 @@ class EditEventDailog(
                     UserInterFace.userID,
                     eventName,
                     quantities,
-                    date,
                     recipeIds,
                     totalCostDobule,
                     true
@@ -422,6 +429,10 @@ class EditEventDailog(
                 val alert: AlertDialog = builder.create()
                 alert.show()
             }
+        }
+
+        else if(p0 == changeNameBtn){
+            eventNameEdit.isEnabled = true
         }
     }
 

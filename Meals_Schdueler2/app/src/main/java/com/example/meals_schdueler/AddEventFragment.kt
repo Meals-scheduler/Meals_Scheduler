@@ -23,7 +23,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-
 class AddEventFragment : Fragment(), View.OnClickListener,
     DialogInterface.OnDismissListener {
 
@@ -40,19 +39,12 @@ class AddEventFragment : Fragment(), View.OnClickListener,
     private var columnCount = 1
     private lateinit var chooseBtn: Button
     private lateinit var saveBtn: Button
-    private lateinit var dateBtn: Button
     private var recipeIds: String = ""
     private var quantities = ""
     private var eventName = ""
     private lateinit var eventNameEditText: EditText
-    private lateinit var dateEditText: TextView
     private lateinit var totalCost: EditText
     private var totalCostDobule: Double = 0.0
-
-    private var date = ""
-    private lateinit var cal: Calendar
-    private lateinit var tpd: TimePickerDialog
-    private lateinit var dpd: DatePickerDialog
 
 
     private var tablePosition = 1
@@ -153,9 +145,6 @@ class AddEventFragment : Fragment(), View.OnClickListener,
         totalCost = x.findViewById(R.id.editTextTotalCost)
         eventNameEditText = x.findViewById(R.id.editTextEventName)
         saveBtn = x.findViewById(R.id.saveBtn)
-        dateBtn = x.findViewById(R.id.dateBtn)
-        dateEditText = x.findViewById(R.id.editTextDate)
-        dateBtn.setOnClickListener(this)
         saveBtn.setOnClickListener(this)
         chooseBtn.setOnClickListener(this)
 
@@ -184,155 +173,59 @@ class AddEventFragment : Fragment(), View.OnClickListener,
             dialog.show(childFragmentManager, "Recipe_Schuedle_Choose")
         } else if (p0 == saveBtn) {
 
-            if (date != "") {
-                val dialogClickListener =
-                    DialogInterface.OnClickListener { dialog, which ->
-                        when (which) {
-                            DialogInterface.BUTTON_POSITIVE -> {
-                                val notifyMe: NotifyMe =
-                                    NotifyMe.Builder(context).title("Meals-Scheudler")
-                                        .content("Hey, Event is coming").color(255, 0, 0, 255)
-                                        .led_color(255, 255, 255, 255).time(cal)
-                                        .addAction(Intent(), "Snooze", false)
-                                        .key("test").addAction(Intent(), "Dismiss", true, false)
-                                        .large_icon(R.mipmap.ic_launcher_round).build()
 
-                                Log.v("Elad1","clicked yes")
+            recipeIds = ""
+            quantities = ""
 
-                            }
-                            DialogInterface.BUTTON_NEGATIVE -> {
+            eventName = eventNameEditText.text.toString()
 
-                                Log.v("Elad1","clicked no")
-                            }
-                        }
-                    }
-
-                val builder = AlertDialog.Builder(context)
-                builder.setMessage("Would you like to get notification on the specific day?").setPositiveButton("Yes", dialogClickListener)
-                    .setNegativeButton("No", dialogClickListener).show()
-
-
-                recipeIds = ""
-                quantities = ""
-
-                eventName = eventNameEditText.text.toString()
-
-                for (i in recipesID) {
-                    recipeIds += "" + i + " "
-                }
-
-                for (i in recipesQuantities!!.list!!) {
-                    quantities += "" + i + " "
-                }
-
-
-                recipesID.clear()
-                recipesQuantities!!.list!!.clear()
-
-                var upcoming = UpComingScheudule(
-                    -1,
-                    date,
-                    11
-                )
-
-
-                var s = AsynTaskNew(upcoming, childFragmentManager)
-                s.execute()
-
-                Log.v("Elad1", "event name " + eventName)
-                Log.v("Elad1", "quantities " + quantities)
-                Log.v("Elad1", "date " + date)
-                Log.v("Elad1", "ids  " + recipeIds)
-                Log.v("Elad1", "cost  " + totalCostDobule)
-
-                var event = Event(
-                    1,
-                    UserInterFace.userID,
-                    eventName,
-                    quantities,
-                    date,
-                    recipeIds,
-                    totalCostDobule,
-                    false
-                )
-
-                s = AsynTaskNew(event, childFragmentManager)
-                s.execute()
-
-                recipeIds = ""
-                quantities = ""
-                clearTable()
-            } else {
-                val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-
-                builder.setTitle("Adding Event")
-                builder.setMessage("You must choose date!")
-
-                builder.setPositiveButton(
-                    "OK",
-                    DialogInterface.OnClickListener { dialog, which -> // Do nothing but close the dialog
-
-                        dialog.dismiss()
-                    })
-                val alert: AlertDialog = builder.create()
-                alert.show()
+            for (i in recipesID) {
+                recipeIds += "" + i + " "
             }
 
-        } else if (p0 == dateBtn) {
-            cal = Calendar.getInstance()
-            val currentYear = cal[Calendar.YEAR]
-            val currentMonth = cal[Calendar.MONTH]
-            val currentDay = cal[Calendar.DAY_OF_MONTH]
-
-            dpd = DatePickerDialog(
-                requireActivity(),
-                DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-
-                    cal.set(Calendar.YEAR, year)
-                    cal.set(Calendar.MONTH, monthOfYear)
-                    cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    tpd.show()
+            for (i in recipesQuantities!!.list!!) {
+                quantities += "" + i + " "
+            }
 
 
-//                    Log.v("Elad1", year.toString())
-//                    Log.v("Elad1", monthOfYear.toString())
-//                    Log.v("Elad1", dayOfMonth.toString())
-
-                },
-                currentYear,
-                currentMonth,
-                currentDay
-            )
-
-            dpd.show()
-
-            val hour = cal[Calendar.HOUR]
-            val min = cal[Calendar.MINUTE]
-            //val second = cal[Calendar.SECOND]
-
-            tpd = TimePickerDialog(
-                requireActivity(),
-                TimePickerDialog.OnTimeSetListener { view, hour, minute ->
-
-                    cal.set(Calendar.HOUR_OF_DAY, hour)
-                    cal.set(Calendar.MINUTE, minute)
-                    var month = cal.get(Calendar.MONTH) + 1
-                    date = cal.get(Calendar.YEAR).toString() + "-" + month
-                        .toString() + "-" + cal.get(Calendar.DAY_OF_MONTH).toString()
-
-                    dateEditText.setText(date)
-//
-//                    Log.v("Elad1", hour.toString())
-//                    Log.v("Elad1", minute.toString())
+            recipesID.clear()
+            recipesQuantities!!.list!!.clear()
 
 
-                },
-                hour,
-                min,
+
+            var event = Event(
+                1,
+                UserInterFace.userID,
+                eventName,
+                quantities,
+                recipeIds,
+                totalCostDobule,
                 false
             )
 
+            var s = AsynTaskNew(event, childFragmentManager)
+            s.execute()
+
+            recipeIds = ""
+            quantities = ""
+            clearTable()
+        } else {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+
+            builder.setTitle("Adding Event")
+            builder.setMessage("You must choose date!")
+
+            builder.setPositiveButton(
+                "OK",
+                DialogInterface.OnClickListener { dialog, which -> // Do nothing but close the dialog
+
+                    dialog.dismiss()
+                })
+            val alert: AlertDialog = builder.create()
+            alert.show()
         }
+
+
     }
 
 
@@ -372,9 +265,9 @@ class AddEventFragment : Fragment(), View.OnClickListener,
 
         // for buttons to shirnk them
 
-        stk.setColumnShrinkable(5, true)
+        stk.setColumnShrinkable(3, true)
         stk.setColumnShrinkable(4, true)
-        stk.setColumnStretchable(5, true)
+        stk.setColumnStretchable(3, true)
         stk.setColumnStretchable(4, true)
 
         var j = 0
@@ -468,8 +361,8 @@ class AddEventFragment : Fragment(), View.OnClickListener,
 
                     if (tablePosition == 1) {
                         stk.setColumnShrinkable(4, false)
-                        stk.setColumnShrinkable(5, false)
-                        stk.setColumnStretchable(5, false)
+                        stk.setColumnShrinkable(3, false)
+                        stk.setColumnStretchable(3, false)
                         stk.setColumnStretchable(4, false)
                     }
 
@@ -507,6 +400,13 @@ class AddEventFragment : Fragment(), View.OnClickListener,
 
             }
             j++
+        }
+
+        if (tablePosition == 1) {
+            stk.setColumnShrinkable(4, false)
+            stk.setColumnShrinkable(3, false)
+            stk.setColumnStretchable(3, false)
+            stk.setColumnStretchable(4, false)
         }
 
         totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()

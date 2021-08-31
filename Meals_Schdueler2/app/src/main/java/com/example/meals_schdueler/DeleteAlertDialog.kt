@@ -84,6 +84,8 @@ class DeleteAlertDialog(
             "Weekly" -> link = "https://elad1.000webhostapp.com/delWeekly.php?WeeklyID=" + ingredientID
             "Monthly" -> link = "https://elad1.000webhostapp.com/delMonthly.php?MonthlyID=" + ingredientID
             "Yearly" -> link = "https://elad1.000webhostapp.com/delYearly.php?YearlyID=" + ingredientID
+            "Event" ->  link = "https://elad1.000webhostapp.com/delEvent.php?EventID=" + ingredientID
+            "Upcoming"  ->  link = "https://elad1.000webhostapp.com/delSchedule.php?ScheduleID=" + ingredientID
         }
 
 

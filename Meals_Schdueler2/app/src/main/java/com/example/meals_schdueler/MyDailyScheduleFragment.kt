@@ -52,7 +52,8 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
         dailyRecyclerViewAdapter = My_Daily_RecylerViewAdapter(
             sorted!!,
             childFragmentManager,
-            this.context
+            this.context,
+            requireActivity()
         )
 
         // to know how many objects from the wanted type will be in a line
@@ -265,7 +266,7 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
                             UserPropertiesSingelton.getInstance()!!
                                 .getUserRecipess()!!.get(k)!!
 
-                        if (!recipeList!!.contains(recipe))
+
                             recipeList!!.add(recipe)
 
 

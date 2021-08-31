@@ -40,7 +40,8 @@ class MyEventScheduleFragment : Fragment(), GetAndPost {
         eventRecyclerViewAdapter = My_Event_RecylerViewAdapter(
             eventList!!,
             childFragmentManager,
-            this.context
+            this.context,
+            requireActivity()
         )
 
         // to know how many objects from the wanted type will be in a line
@@ -179,10 +180,10 @@ class MyEventScheduleFragment : Fragment(), GetAndPost {
                     quantities = ""
                     recipeIds = ""
                 }
-                quantities += "" + eventInfo2[6] + " "
-                recipeIds += "" + eventInfo2[5] + " "
+                quantities += "" + eventInfo2[5] + " "
+                recipeIds += "" + eventInfo2[4] + " "
                 // saving the last total cost
-                totalcost = eventInfo2[4].toDouble()
+                totalcost = eventInfo2[3].toDouble()
             }
 
             if (!quantities.equals("")) {
@@ -205,7 +206,6 @@ class MyEventScheduleFragment : Fragment(), GetAndPost {
                             eventinfo2[1].toInt(),
                             eventinfo2[2],
                             map.get(eventinfo2[0])!!.get(0),
-                            eventinfo2[3],
                             map.get(eventinfo2[0])!!.get(1),
                             mapTotalCost.get(eventinfo2[0])!!,
                             false
@@ -229,7 +229,7 @@ class MyEventScheduleFragment : Fragment(), GetAndPost {
                             UserPropertiesSingelton.getInstance()!!
                                 .getUserRecipess()!!.get(k)!!
 
-                        if (!recipeList!!.contains(recipe))
+
                             recipeList!!.add(recipe)
 
 

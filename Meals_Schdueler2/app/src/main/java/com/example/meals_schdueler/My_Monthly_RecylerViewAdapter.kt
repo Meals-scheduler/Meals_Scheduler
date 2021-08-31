@@ -1,7 +1,12 @@
 package com.example.meals_schdueler
 
+import android.app.Activity
+import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
@@ -14,6 +19,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import com.allyants.notifyme.NotifyMe
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -24,6 +30,7 @@ class My_Monthly_RecylerViewAdapter(
     // weeklyValues: HashMap<String, WeeklySchedule>,
     childFragmentManager: FragmentManager,
     context: Context?,
+    acticity : Activity
 
     ) : RecyclerView.Adapter<My_Monthly_RecylerViewAdapter.ViewHolder>() {
 
@@ -37,8 +44,13 @@ class My_Monthly_RecylerViewAdapter(
     // private lateinit var recipeList: ArrayList<Recipe>
     private var numOfMonthly = 1
     private var context = context
-    private var monthlyToSchedule = -1
-    var date = ""
+    private var activity = acticity
+
+    private var date = ""
+    private lateinit var cal: Calendar
+    private lateinit var tpd: TimePickerDialog
+    private lateinit var dpd: DatePickerDialog
+
 
     private var monthlyList: ArrayList<MonthlySchedule> = ArrayList()
 
@@ -116,27 +128,87 @@ class My_Monthly_RecylerViewAdapter(
         }
 
         holder.date.setOnClickListener {
-            monthlyToSchedule = monthlyValues.get(item.monthlyId.toString())!!.monthlyId
 
-            val cal = Calendar.getInstance()
-            // to open the calender with the current date of this moment.
+            cal = Calendar.getInstance()
             val currentYear = cal[Calendar.YEAR]
             val currentMonth = cal[Calendar.MONTH]
             val currentDay = cal[Calendar.DAY_OF_MONTH]
-            var dialog = DatePickerDialog(
-                context!!,
-                android.R.style.Theme_Holo_Light,
-                calenderListener(
-                    monthlyToSchedule,
-                    date,
-                    childFragmentManager
-                ),
+
+            dpd = DatePickerDialog(
+                activity,
+                DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+
+                    cal.set(Calendar.YEAR, year)
+                    cal.set(Calendar.MONTH, monthOfYear)
+                    cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    tpd.show()
+
+
+                },
                 currentYear,
                 currentMonth,
                 currentDay
             )
-            dialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialog.show()
+
+            dpd.show()
+
+            val hour = cal[Calendar.HOUR]
+            val min = cal[Calendar.MINUTE]
+            //val second = cal[Calendar.SECOND]
+
+            tpd = TimePickerDialog(
+                activity,
+                TimePickerDialog.OnTimeSetListener { view, hour, minute ->
+
+                    cal.set(Calendar.HOUR_OF_DAY, hour)
+                    cal.set(Calendar.MINUTE, minute)
+                    var month = cal.get(Calendar.MONTH) + 1
+                    date = cal.get(Calendar.YEAR).toString() + "-" + month
+                        .toString() + "-" + cal.get(Calendar.DAY_OF_MONTH).toString()
+
+
+                    val dialogClickListener =
+                        DialogInterface.OnClickListener { dialog, which ->
+                            when (which) {
+                                DialogInterface.BUTTON_POSITIVE -> {
+                                    val notifyMe: NotifyMe =
+                                        NotifyMe.Builder(context).title("Meals-Scheudler")
+                                            .content("Hey, Event is coming").color(255, 0, 0, 255)
+                                            .led_color(255, 255, 255, 255).time(cal)
+                                            .addAction(Intent(), "Snooze", false)
+                                            .key("test").addAction(Intent(), "Dismiss", true, false)
+                                            .large_icon(R.mipmap.ic_launcher_round).build()
+
+                                    Log.v("Elad1","clicked yes")
+
+                                }
+                                DialogInterface.BUTTON_NEGATIVE -> {
+
+                                    Log.v("Elad1","clicked no")
+                                }
+                            }
+                        }
+
+                    val builder = AlertDialog.Builder(context)
+                    builder.setMessage("Would you like to get notification on the specific day?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show()
+
+                    var upcoming = UpComingScheudule(
+                        -1,
+                        date,
+                        11
+                    )
+
+
+                    var s = AsynTaskNew(upcoming, childFragmentManager)
+                    s.execute()
+
+
+                },
+                hour,
+                min,
+                false
+            )
         }
     }
 
@@ -177,30 +249,7 @@ class My_Monthly_RecylerViewAdapter(
     }
 
 
-    internal class calenderListener(
-        dailyToSchedule: Int, date: String, childFragmentManager: FragmentManager,
-    ) : DatePickerDialog.OnDateSetListener {
-        var dailyToSchedule = dailyToSchedule
-        var date = date
-        var childFragmentManager = childFragmentManager
-        override fun onDateSet(view: DatePicker, year: Int, month: Int, dayOfMonth: Int) {
 
-            date += year.toString() + "-" + (month + 1).toString() + "-" + dayOfMonth.toString()
-
-
-            var upcoming = UpComingScheudule(
-                -1,
-                date,
-                dailyToSchedule
-            )
-
-
-            var s = AsynTaskNew(upcoming, childFragmentManager)
-            s.execute()
-
-
-        }
-    }
 
 
 }

@@ -19,7 +19,6 @@ class EventDialogInfo(
     pos: Int,
     eventId: Int,
     eventName: String,
-    date: String
 ) : DialogFragment(), View.OnClickListener,
     DialogInterface.OnDismissListener {
 
@@ -30,7 +29,7 @@ class EventDialogInfo(
     private lateinit var title: TextView
     private lateinit var quanArrList: ArrayList<Int>
     private lateinit var recipesID: ArrayList<Int>
-    private lateinit var dateTextView : TextView
+
 
     private var eventId = eventId
     private var recipeIds = recipeIds
@@ -41,7 +40,7 @@ class EventDialogInfo(
     private var position = pos
     private var recipePos = 0
     private var eventName = eventName
-    private var date = date
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,14 +51,14 @@ class EventDialogInfo(
         var view: View = inflater.inflate(R.layout.daily_info, container, false)
         stk = view.findViewById(R.id.tableLayout)
         totalCost = view.findViewById(R.id.editTextTotalCost)
-        dateTextView = view.findViewById(R.id.editTextDate)
+
         title = view.findViewById(R.id.dailyInfo)
         title.setText("Event No. " + position)
         quanArrList = ArrayList()
         recipesID = ArrayList()
         //  recipeQuantitiy = ArrayList()
         // recipesQuantities = Recipe_Ingredients_List(recipeQuantitiy)
-        dateTextView.setText(date)
+
 
         exit = view.findViewById(R.id.imageViewX)
         exit.setOnClickListener(this)
