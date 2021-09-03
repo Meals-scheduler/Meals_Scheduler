@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,31 +28,34 @@ import kotlin.collections.iterator
 import kotlin.collections.toTypedArray
 
 
-class MyDailyScheduleFragment : Fragment(), GetAndPost {
+class MyDailyScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChangeListener {
 
 
     private var columnCount = 1
 
     //private var dailyList: ArrayList<DailySchedule>? = null
-    private var dailyList: HashMap<String, DailySchedule>? = null
+    private var dailyList: ArrayList<DailySchedule>? = null
     private var recipeList: ArrayList<Recipe>? = null
     private var dailyRecyclerViewAdapter: My_Daily_RecylerViewAdapter? = null
-    private var sorted: TreeMap<String, DailySchedule>? = null
+    private lateinit var nestedScroll: NestedScrollView // list of ingredietns
+    private var progressBar: ProgressBar? = null
+    private var page = 0
+    private var isScorlled = false
+
 
     private var quantities: String = ""
     private var numOfMeal: String = ""
     private var recipeIds: String = ""
-    private var totalcost = 0.0
+    private var totalcost = 0.011
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         recipeList = ArrayList()
-        sorted = TreeMap()
         // dailyList = ArrayList()
-        dailyList = HashMap()
+        dailyList = ArrayList()
         dailyRecyclerViewAdapter = My_Daily_RecylerViewAdapter(
-            sorted!!,
+            dailyList!!,
             childFragmentManager,
             this.context,
             requireActivity()
@@ -92,26 +97,29 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val x = inflater.inflate(R.layout.my_daily_schedule_list, null)
-        val recyclerView = x.findViewById<View>(R.id.list) as RecyclerView
-
+        val view = inflater.inflate(R.layout.my_daily_schedule_list, null)
+        val recyclerView = view.findViewById<View>(R.id.recycler_view) as RecyclerView
+        nestedScroll = view!!.findViewById(R.id.scroll_view)
+        progressBar = view!!.findViewById(R.id.progress_bar)
+        nestedScroll.setOnScrollChangeListener(this)
 
         instance = this
 
-        if (x is RecyclerView) {
-            with(x) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                recyclerView.adapter = dailyRecyclerViewAdapter
-
-            }
-        }
-
+//        if (x is RecyclerView) {
+//            with(x) {
+//                layoutManager = when {
+//                    columnCount <= 1 -> LinearLayoutManager(context)
+//                    else -> GridLayoutManager(context, columnCount)
+//                }
+//
+//
+//            }
+//        }
+        recyclerView.layoutManager = LinearLayoutManager(this.context)
+        recyclerView.adapter = dailyRecyclerViewAdapter
         startTask()
 
-        return x
+        return view
     }
 
     fun startTask() {
@@ -120,8 +128,12 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
     }
 
     override fun DoNetWorkOpreation(): String {
+        if(!isScorlled){
+            page =0
+        }
+        var string = UserInterFace.userID.toString() + " " + page
 
-        var link = "https://elad1.000webhostapp.com/getDaily.php?ownerID=" + UserInterFace.userID;
+        var link = "https://elad1.000webhostapp.com/getDaily.php?ownerIDAndPage=" + string
 
 
         val sb = StringBuilder()
@@ -155,13 +167,16 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
     }
 
     override fun getData(str: String) {
-
+        Log.v("Elad1", "Page is " + page)
+        progressBar!!.visibility = View.INVISIBLE
         if (!str.equals("")) {
+            if (!isScorlled)
+                dailyList!!.clear()
+
             quantities = ""
             numOfMeal = ""
             recipeIds = ""
-            recipeList!!.clear()
-            dailyList!!.clear()
+
 
             val dailyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
@@ -214,8 +229,7 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
             for (i in dailyInfo.indices) {
                 var dailyInfo2 = dailyInfo[i].splitIgnoreEmpty("*")
                 if (dailyInfo2[0].toInt() != currentDailyID) {
-                    dailyList!!.put(
-                        dailyInfo2[0],
+                    dailyList!!.add(
                         DailySchedule(
                             dailyInfo2[0].toInt(),
                             dailyInfo2[1].toInt(),
@@ -239,48 +253,19 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
             // Copy all data from hashMap into TreeMap
 
             // Copy all data from hashMap into TreeMap
-            sorted!!.clear()
-            sorted!!.putAll(dailyList!!)
 
 
             // now getting the recipes for each daily
 
 
             currentDailyID = -1
-            for (i in sorted!!) {
-                //taking all the recipes for this daily
-                if (currentDailyID != i.key.toInt() && dailyList!!.containsKey(i.key)) {
-                    var ids = i.value.recipeIds.splitIgnoreEmpty(" ")
-                    for (k in ids) {
-//                        var recipe = deepCopyRecipe(
-//                            UserPropertiesSingelton.getInstance()!!.getUserMapRecipe()!!
-//                                .get(ids[j++].toInt())!!
-//
-//                        )
-
-//                        for (y in UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!) {
-//                            Log.v("Elad1", y.key)
-//                        }
-
-                        var recipe =
-                            UserPropertiesSingelton.getInstance()!!
-                                .getUserRecipess()!!.get(k)!!
 
 
-                            recipeList!!.add(recipe)
-
-
-                        //recipeList!!.add(recipe)
-                    }
-
-                    currentDailyID = i.value.dailyId
-                }
-
-            }
-
-            UserPropertiesSingelton.getInstance()!!.setUserDaily(sorted)
-            dailyRecyclerViewAdapter!!.setmValues(sorted!!)
+            //UserPropertiesSingelton.getInstance()!!.setUserDaily(sorted)
+            dailyRecyclerViewAdapter!!.setmValues(dailyList!!)
             dailyRecyclerViewAdapter!!.setRecipeList(recipeList!!)
+            progressBar!!.visibility = View.INVISIBLE
+
 
 //            dailyList!!.clear()
 //            recipeList!!.clear()
@@ -289,45 +274,27 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost {
             //save it also in singleton
             //  UserPropertiesSingelton.getInstance()!!.setUserRecipess(recipeList)
             //dailyRecyclerViewAdapter!!.setmValues(recipeList!!)
+            isScorlled = false
+        }
+        isScorlled = false
+    }
+
+    override fun onScrollChange(
+        v: NestedScrollView?,
+        scrollX: Int,
+        scrollY: Int,
+        oldScrollX: Int,
+        oldScrollY: Int
+    ) {
+        if (scrollY == v!!.getChildAt(0).measuredHeight - v.measuredHeight) {
+
+            page = page + 4
+            progressBar!!.visibility = View.VISIBLE
+            isScorlled = true
+            startTask()
+
         }
     }
-//
-//    private fun deepCopyRecipe(recipe: Recipe): Recipe {
-//
-//        var listOfIngredients = ArrayList<Ingredient>()
-//        var listOfQuantities = ArrayList<Int>()
-//
-//        for (i in recipe.listOfIngredients) {
-//            listOfIngredients.add(i)
-//        }
-//        for (i in recipe.quantityList) {
-//            listOfQuantities.add(i)
-//        }
-//        var copiedRecipe = Recipe(
-//            recipe.recipeId,
-//            recipe.ownerId,
-//            recipe.recipeName,
-//            recipe.pictureBitMap,
-//            recipe.typeOfMeal,
-//            recipe.numOfPortions,
-//            recipe.totalCost,
-//            recipe.shareRecipe,
-//            recipe.shareInfo,
-//            listOfIngredients,
-//            listOfQuantities
-//        )
-//
-//        return copiedRecipe
-//    }
-//
-//
-//    fun deepCopy(arrToCopy: ArrayList<String>): ArrayList<String> {
-//        var s: ArrayList<String> = ArrayList()
-//
-//        for (i in arrToCopy) {
-//            s.add(i)
-//        }
-//        return s
-//    }
+
 
 }

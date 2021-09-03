@@ -45,6 +45,7 @@ class EditEventDailog(
     private var recipesQuantities: Recipe_Ingredients_List? = null
     private lateinit var quanArrList: ArrayList<Int>
     private lateinit var recipesID: ArrayList<Int>
+    var recipeListChoose: ArrayList<Recipe> = ArrayList()
 
     private var myEventRecylerviewadapter = myEventRecylerviewadapter
     private var eventId = eventId
@@ -359,12 +360,12 @@ class EditEventDailog(
 
 
             listItems!!.list!!.clear()
-            savedSize = recipeList.size
-            //   recipeList.clear()
+            savedSize = recipeListChoose.size
+            recipeList.clear()
 
             var dialog = Recipe_Schedule_Choose_Dialog(
                 listItems!!,
-                UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!,
+                recipeList,
                 recipesQuantities!!,
                 ""
             )
@@ -373,9 +374,9 @@ class EditEventDailog(
 
         } else if (p0 == saveBtn) {
 
-            Log.v("Elad1","event name be4" + eventName)
+            Log.v("Elad1", "event name be4" + eventName)
             eventName = eventNameEdit.text.toString()
-            Log.v("Elad1","event name after" + eventName)
+            Log.v("Elad1", "event name after" + eventName)
             if (recipesID.isNotEmpty()) {
                 recipeIds = ""
                 quantities = ""
@@ -429,14 +430,10 @@ class EditEventDailog(
                 val alert: AlertDialog = builder.create()
                 alert.show()
             }
-        }
-
-        else if(p0 == changeNameBtn){
+        } else if (p0 == changeNameBtn) {
             eventNameEdit.isEnabled = true
         }
     }
-
-
 
 
     override fun onDismiss(dialog: DialogInterface) {
@@ -447,24 +444,25 @@ class EditEventDailog(
                 (parentFragment as DialogInterface.OnDismissListener?)!!.onDismiss(dialog)
             }
 
+
             for (i in listItems!!.list!!) {
 
 
-                var recipe = UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(i.toString())
-                recipeList.add(recipe!!)
+                var recipe = recipeList.get(i)
+                recipeListChoose.add(recipe!!)
 
 
             }
 
             var j = 0
-            for (i in recipeList) {
+            for (i in recipeListChoose) {
                 if (j > savedSize - 1) {
 
 
                     var tbrow: TableRow = TableRow(this.context)
                     tbrow.setTag(tablePosition++)
 
-                    totalCostDobule += i.totalCost * recipesQuantities!!.list!!.get(tbrow.getTag() as Int -1 )
+                    totalCostDobule += i.totalCost * recipesQuantities!!.list!!.get(tbrow.getTag() as Int - 1)
                     recipesID.add(i.recipeId)
 
                     var t1v: TextView = TextView(context)
@@ -504,8 +502,6 @@ class EditEventDailog(
                     tbrow.addView(t3v)
 
 
-
-
                     var t5v: TextView = TextView(context)
                     // t4v.setBackgroundResource(R.drawable.border)
                     t5v.setText(
@@ -531,7 +527,7 @@ class EditEventDailog(
 
 
                         stk.removeView(stk.getChildAt(tbrow.getTag() as Int))
-                        totalCostDobule -= recipeList.get(t6v.getTag() as Int).totalCost * recipesQuantities!!.list!!.get(
+                        totalCostDobule -= recipeListChoose.get(t6v.getTag() as Int).totalCost * recipesQuantities!!.list!!.get(
                             tbrow.getTag() as Int - 1
                         ).toInt()
 
@@ -540,7 +536,7 @@ class EditEventDailog(
                         totalCost.setText(totalCostDobule.toString())
                         recipesQuantities!!.list!!.removeAt(tbrow.getTag() as Int - 1)
 
-                        recipeList.removeAt(t6v.getTag() as Int)
+                        recipeListChoose.removeAt(t6v.getTag() as Int)
                         recipesID.removeAt(tbrow.getTag() as Int - 1)
                         tablePosition--
 
@@ -571,12 +567,12 @@ class EditEventDailog(
 
                     t7v.setOnClickListener {
                         var dialog = MyRecipeIngredietns(
-                            recipeList.get(t7v.getTag() as Int).listOfIngredients,
-                            recipeList.get(t7v.getTag() as Int).recipeName,
-                            recipeList.get(t7v.getTag() as Int).pictureBitMap,
-                            recipeList.get(t7v.getTag() as Int).numOfPortions,
-                            recipeList.get(t7v.getTag() as Int).quantityList,
-                            recipeList.get(t7v.getTag() as Int).totalCost
+                            recipeListChoose.get(t7v.getTag() as Int).listOfIngredients,
+                            recipeListChoose.get(t7v.getTag() as Int).recipeName,
+                            recipeListChoose.get(t7v.getTag() as Int).pictureBitMap,
+                            recipeListChoose.get(t7v.getTag() as Int).numOfPortions,
+                            recipeListChoose.get(t7v.getTag() as Int).quantityList,
+                            recipeListChoose.get(t7v.getTag() as Int).totalCost
                         )
                         dialog.show(childFragmentManager, "MyRecipeIngredients")
                     }

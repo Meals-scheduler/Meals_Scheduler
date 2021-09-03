@@ -21,6 +21,7 @@ import com.allyants.notifyme.NotifyMe
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class AddEventFragment : Fragment(), View.OnClickListener,
@@ -45,6 +46,7 @@ class AddEventFragment : Fragment(), View.OnClickListener,
     private lateinit var eventNameEditText: EditText
     private lateinit var totalCost: EditText
     private var totalCostDobule: Double = 0.0
+    var recipeListChoose: ArrayList<Recipe> = ArrayList()
 
 
     private var tablePosition = 1
@@ -160,12 +162,12 @@ class AddEventFragment : Fragment(), View.OnClickListener,
         if (p0 == chooseBtn) {
             //    Log.v("Elad1","RecipeQuantity Size breakfast: " + recipesQuantities!!.list!!.size)
             listItems!!.list!!.clear()
-            savedSize = recipeList.size
-            //   recipeList.clear()
+            savedSize = recipeListChoose.size
+               recipeList.clear()
 
             var dialog = Recipe_Schedule_Choose_Dialog(
                 listItems!!,
-                UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!,
+                recipeList,
                 recipesQuantities!!,
                 "Event"
 
@@ -255,9 +257,9 @@ class AddEventFragment : Fragment(), View.OnClickListener,
         for (i in listItems!!.list!!) {
 
 
-            var recipe =
-                UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(i.toString())
-            recipeList.add(recipe!!)
+            var recipe = recipeList.get(i)
+            recipeListChoose.add(recipe!!)
+
 
 
         }
@@ -271,7 +273,7 @@ class AddEventFragment : Fragment(), View.OnClickListener,
         stk.setColumnStretchable(4, true)
 
         var j = 0
-        for (i in recipeList) {
+        for (i in recipeListChoose) {
 
             // saved size to know the size of list before we change  so we wont override all the list.
             if (j > savedSize - 1) {
@@ -331,7 +333,7 @@ class AddEventFragment : Fragment(), View.OnClickListener,
                     var i = t6v.getTag() as Int
 
                     stk.removeView(stk.getChildAt(t6v.getTag() as Int))
-                    totalCostDobule -= recipeList.get(t6v.getTag() as Int - 1).totalCost * recipesQuantities!!.list!!.get(
+                    totalCostDobule -= recipeListChoose.get(t6v.getTag() as Int - 1).totalCost * recipesQuantities!!.list!!.get(
                         t6v.getTag() as Int - 1
                     )
                     totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
@@ -340,7 +342,7 @@ class AddEventFragment : Fragment(), View.OnClickListener,
 
                     recipesID.removeAt(t6v.getTag() as Int - 1)
                     recipesQuantities!!.list!!.removeAt(t6v.getTag() as Int - 1)
-                    recipeList.removeAt(t6v.getTag() as Int - 1)
+                    recipeListChoose.removeAt(t6v.getTag() as Int - 1)
                     tablePosition--
 
 
@@ -381,12 +383,12 @@ class AddEventFragment : Fragment(), View.OnClickListener,
                 //t5v.setBackgroundResource(R.drawable.spinner_shape)
                 t7v.setOnClickListener {
                     var dialog = MyRecipeIngredietns(
-                        recipeList.get(t7v.getTag() as Int - 1).listOfIngredients,
-                        recipeList.get(t7v.getTag() as Int - 1).recipeName,
-                        recipeList.get(t7v.getTag() as Int - 1).pictureBitMap,
-                        recipeList.get(t7v.getTag() as Int - 1).numOfPortions,
-                        recipeList.get(t7v.getTag() as Int - 1).quantityList,
-                        recipeList.get(t7v.getTag() as Int - 1).totalCost
+                        recipeListChoose.get(t7v.getTag() as Int - 1).listOfIngredients,
+                        recipeListChoose.get(t7v.getTag() as Int - 1).recipeName,
+                        recipeListChoose.get(t7v.getTag() as Int - 1).pictureBitMap,
+                        recipeListChoose.get(t7v.getTag() as Int - 1).numOfPortions,
+                        recipeListChoose.get(t7v.getTag() as Int - 1).quantityList,
+                        recipeListChoose.get(t7v.getTag() as Int - 1).totalCost
                     )
                     dialog.show(childFragmentManager, "MyRecipeIngredients")
                 }

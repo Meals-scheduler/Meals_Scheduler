@@ -18,6 +18,12 @@ import androidx.core.view.size
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.meals_schdueler.dummy.DailySchedule
+import java.io.BufferedInputStream
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 import java.text.DecimalFormat
 
 
@@ -28,7 +34,7 @@ class EditWeeklyDialog(
     pos: Int,
     weeklyId: Int,
 
-    ) : DialogFragment(), DialogInterface.OnDismissListener, View.OnClickListener {
+    ) : DialogFragment(), DialogInterface.OnDismissListener, View.OnClickListener, GetAndPost {
 
 
     private lateinit var stk: TableLayout
@@ -42,7 +48,8 @@ class EditWeeklyDialog(
     private lateinit var dailyDayss: ArrayList<Int>
     private var dailyID: Recipe_Ingredients_List? = null
     private var listDailyIdChoosen: ArrayList<Int>? = null
-
+    private var recipeList: ArrayList<Recipe>? = null
+    private var dailyListChoose: ArrayList<DailySchedule> = ArrayList()
 
 
     // private var myWeeklyRecylerviewadapter = myWeeklyRecylerviewadapter
@@ -56,7 +63,11 @@ class EditWeeklyDialog(
     private var dailyPos = 0
     private var savedSize = 0
     private var flag = true // this flag is for the duplicated days check.
-
+    private var dailyId = -1
+    private var quantitiesStr = ""
+    private var numOfMeals = ""
+    private var recipeIdsStr = ""
+    private var pos = -1
 
 
     override fun onCreateView(
@@ -72,6 +83,7 @@ class EditWeeklyDialog(
         title.setText("Edit Weekly No. " + position)
         dailyIdsArrlist = ArrayList()
         numOfDayArrlist = ArrayList()
+        recipeList = ArrayList()
         dailyDayss = ArrayList()
         listDailyIdChoosen = ArrayList()
         dailyID = Recipe_Ingredients_List(listDailyIdChoosen)
@@ -105,178 +117,169 @@ class EditWeeklyDialog(
             for (i in dailyID!!.list!!) {
 
 
-                var daily = UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(i.toString())
-                dailyList.add(daily!!)
-
+                var daily = dailyList!!.get(i)
+                dailyListChoose.add(daily!!)
 
 
             }
 
 
-            var j = savedSize
+            var j = 0
 
-            for (i in j..dailyList.size - 1) {
+            for (i in dailyListChoose) {
+                if (j > savedSize - 1) {
 
-                var t1v: Spinner = Spinner(context)
-                dailyIdsArrlist.add(dailyList.get(i).dailyId)
-                //dailyDayss.add(0)
-                t1v.setTag(tablePosition - 1)
+                    var t1v: Spinner = Spinner(context)
+                    dailyIdsArrlist.add(i.dailyId)
+                    //dailyDayss.add(0)
+                    t1v.setTag(tablePosition - 1)
 
-                var tbrow: TableRow = TableRow(this.context)
-                //t1v.setTag(tablePosition)
-                tbrow.setTag(tablePosition++)
-
-
-
+                    var tbrow: TableRow = TableRow(this.context)
+                    //t1v.setTag(tablePosition)
+                    tbrow.setTag(tablePosition++)
 
 
-                ArrayAdapter.createFromResource(
-                    this.requireContext(),
-                    R.array.days,
-                    android.R.layout.simple_spinner_item
-                ).also { adapter ->
-                    // Specify the layout to use when the list of choices appears
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    // Apply the adapter to the spinner
-                    t1v.adapter = adapter
-                }
 
-               /// t1v.onItemSelectedListener = SpinnerActivity(t1v.getTag() as Int)
 
-                /// if we have sunday - the next one will be monday..
-                if (j > 0) {
-                    var o = stk.get(stk.size-1)
-                    var y = o as TableRow
-                    var s: Spinner = y.getChildAt(0) as Spinner
-                    var value = s.selectedItem
 
-                    when (value) {
-                        "Sunday" -> value = 0
-                        "Monday" -> value = 1
-                        "Tuesday" -> value = 2
-                        "Wednesday" -> value = 3
-                        "Thursday" -> value = 4
-                        "Friday" -> value = 5
-                        "Saturday" -> value = 6
-
+                    ArrayAdapter.createFromResource(
+                        this.requireContext(),
+                        R.array.days,
+                        android.R.layout.simple_spinner_item
+                    ).also { adapter ->
+                        // Specify the layout to use when the list of choices appears
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        // Apply the adapter to the spinner
+                        t1v.adapter = adapter
                     }
-                    var k = value as Int
-                    t1v.setSelection(k + 1)
-                } else {
-                    t1v.setSelection(0)
-                }
+
+                    /// t1v.onItemSelectedListener = SpinnerActivity(t1v.getTag() as Int)
+
+                    /// if we have sunday - the next one will be monday..
+                    if (j >= 0) {
+                        var o = stk.get(stk.size - 1)
+                        var y = o as TableRow
+                        var s: Spinner = y.getChildAt(0) as Spinner
+                        var value = s.selectedItem
+
+                        when (value) {
+                            "Sunday" -> value = 0
+                            "Monday" -> value = 1
+                            "Tuesday" -> value = 2
+                            "Wednesday" -> value = 3
+                            "Thursday" -> value = 4
+                            "Friday" -> value = 5
+                            "Saturday" -> value = 6
+
+                        }
+                        var k = value as Int
+                        t1v.setSelection(k + 1)
+                    } else {
+                        t1v.setSelection(0)
+                    }
 
 
 
-                tbrow.addView(t1v)
+                    tbrow.addView(t1v)
 
 
-                var t2v: TextView = TextView(context)
+                    var t2v: TextView = TextView(context)
 
 
-                t2v.setText(" " + (dailyList.get(i).dailyId))
-                t2v.setTextColor(Color.BLACK)
-                t2v.gravity = Gravity.CENTER
+                    t2v.setText(" " + (i.dailyId))
+                    t2v.setTextColor(Color.BLACK)
+                    t2v.gravity = Gravity.CENTER
 
-                tbrow.addView(t2v)
+                    tbrow.addView(t2v)
 
-                var t4v: Button = Button(context)
-                t4v.setTag(dailyPos)
-                t4v.setText("Delete")
-                t4v.setTextSize(8F)
-                t4v.setTextColor(Color.BLACK)
-                t4v.gravity = Gravity.CENTER
-                tbrow.addView(t4v)
+                    var t4v: Button = Button(context)
+                    t4v.setTag(dailyPos)
+                    t4v.setText("Delete")
+                    t4v.setTextSize(8F)
+                    t4v.setTextColor(Color.BLACK)
+                    t4v.gravity = Gravity.CENTER
+                    tbrow.addView(t4v)
 
-                t4v.setOnClickListener {
+                    t4v.setOnClickListener {
 
-                    var i = t4v.getTag() as Int
+                        var i = t4v.getTag() as Int
 
 //                    stk.removeView(stk.getChildAt(t4v.getTag() as Int))
-                    stk.removeView(stk.getChildAt(tbrow.getTag() as Int))
-                    totalCostDobule -= dailyList!!.get(t4v.getTag() as Int).totalCost
-                    totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
-                    totalCost.setText(totalCostDobule.toString())
-                    dailyList!!.removeAt(t4v.getTag() as Int)
-                    dailyIdsArrlist.removeAt(t4v.getTag() as Int)
-                  //  dailyDayss.removeAt(t4v.getTag() as Int)
+                        stk.removeView(stk.getChildAt(tbrow.getTag() as Int))
+                        totalCostDobule -= dailyListChoose!!.get(t4v.getTag() as Int).totalCost
+                        totalCostDobule =
+                            (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
+                        totalCost.setText(totalCostDobule.toString())
+                        dailyListChoose!!.removeAt(t4v.getTag() as Int)
+                        dailyIdsArrlist.removeAt(t4v.getTag() as Int)
+                        //  dailyDayss.removeAt(t4v.getTag() as Int)
 
 
+                        // CONTINUE HERE
+                        //  dailyDayss.remove()
+                        tablePosition--
 
-                    // CONTINUE HERE
-                    //  dailyDayss.remove()
-                    tablePosition--
 
+                        for (x in stk) {
+                            if (x.getTag() as Int == 0)
+                                continue
+                            if (x.getTag() as Int > i) {
+                                x.setTag(x.getTag() as Int - 1)
+                                var y = x as TableRow
+                                //changing info delete tag
+                                y.get(2).setTag(y.get(2).getTag() as Int - 1)
+                                //changing infp button tag
+                                y.get(3).setTag(y.get(3).getTag() as Int - 1)
 
-                    for (x in stk) {
-                        if (x.getTag() as Int == 0)
-                            continue
-                        if (x.getTag() as Int > i) {
-                            x.setTag(x.getTag() as Int - 1)
-                            var y = x as TableRow
-                            //changing info delete tag
-                            y.get(2).setTag(y.get(2).getTag() as Int - 1)
-                            //changing infp button tag
-                            y.get(3).setTag(y.get(3).getTag() as Int - 1)
+                            }
 
                         }
 
+                        stk.setColumnShrinkable(3, false)
+                        stk.setColumnStretchable(3, false)
                     }
 
-                    stk.setColumnShrinkable(3, false)
-                    stk.setColumnStretchable(3, false)
-                }
+
+                    var t3v: Button = Button(context)
+                    t3v.setTag(dailyPos++)
+                    t3v.setText("Info")
+                    t3v.setTextSize(10F)
+                    t3v.setTextColor(Color.BLACK)
+                    t3v.gravity = Gravity.CENTER
+
+                    //t5v.setBackgroundResource(R.drawable.spinner_shape)
+                    t3v.setOnClickListener {
+
+                        dailyId = i.dailyId
+                        quantitiesStr = i.quantities
+                        numOfMeals = i.numOfMeals
+                        recipeIdsStr = i.recipeIds
+                        pos = t3v.getTag() as Int + 1
 
 
-                var t3v: Button = Button(context)
-                t3v.setTag(dailyPos++)
-                t3v.setText("Info")
-                t3v.setTextSize(10F)
-                t3v.setTextColor(Color.BLACK)
-                t3v.gravity = Gravity.CENTER
-
-                //t5v.setBackgroundResource(R.drawable.spinner_shape)
-                t3v.setOnClickListener {
-                    //NEED TO CHECK HERE WHATS WRONG with info button!!!!!
-                    // getting this daily recipes
-                    var recipeList: ArrayList<Recipe> = ArrayList()
-                    var ids = dailyList.get(t3v.getTag() as Int).recipeIds.splitIgnoreEmpty(" ")
-
-                    for (i in ids) {
-                        recipeList.add(UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(i)!!)
+                        var s = AsynTaskNew(this, childFragmentManager)
+                        s.execute()
 
                     }
-                    var dialog = DailyDialogInfo(
-                        recipeList,
-                        dailyList.get(i).quantities,
-                        dailyList.get(i).numOfMeals,
-                        dailyList.get(i).recipeIds,
-                        t3v.getTag() as Int + 1,
-                        dailyList.get(i).dailyId
-                    )
+                    tbrow.addView(t3v)
 
 
-                    dialog!!.show(childFragmentManager, "DailyDialogInfo")
+
+                    stk.setBackgroundResource(R.drawable.spinner_shape)
+                    tbrow.setBackgroundResource(R.drawable.spinner_shape)
+                    stk.addView(tbrow)
+                    j++
+                    totalCostDobule += i.totalCost
+
+
                 }
-                tbrow.addView(t3v)
-
-
-
-                stk.setBackgroundResource(R.drawable.spinner_shape)
-                tbrow.setBackgroundResource(R.drawable.spinner_shape)
-                stk.addView(tbrow)
                 j++
-                totalCostDobule += dailyList.get(i).totalCost
+                dailyPos++
 
-
+                totalCostDobule = (DecimalFormat("##.####").format(totalCostDobule)).toDouble()
+                totalCost.setText(totalCostDobule.toString())
+                savedSize = dailyListChoose.size
             }
-
-            dailyPos++
-
-            totalCostDobule = (DecimalFormat("##.####").format(totalCostDobule)).toDouble()
-            totalCost.setText(totalCostDobule.toString())
-            savedSize = dailyList.size
-
 
         }
     }
@@ -332,7 +335,7 @@ class EditWeeklyDialog(
                     t1v.adapter = adapter
                 }
 
-               // t1v.onItemSelectedListener = SpinnerActivity(t1v.getTag() as Int)
+                // t1v.onItemSelectedListener = SpinnerActivity(t1v.getTag() as Int)
 
                 t1v.setSelection(numOfDayArr[k++].toInt())
 
@@ -368,7 +371,7 @@ class EditWeeklyDialog(
                     totalCost.setText(totalCostDobule.toString())
                     dailyList!!.removeAt(t4v.getTag() as Int)
                     dailyIdsArrlist.removeAt(t4v.getTag() as Int)
-                   // dailyDayss.removeAt(t4v.getTag() as Int)
+                    // dailyDayss.removeAt(t4v.getTag() as Int)
                     savedSize = dailyList.size
 
                     tablePosition--
@@ -407,30 +410,16 @@ class EditWeeklyDialog(
 
                 //t5v.setBackgroundResource(R.drawable.spinner_shape)
                 t3v.setOnClickListener {
-                    //NEED TO CHECK HERE WHATS WRONG with info button!!!!!
-                    // getting this daily recipes
-                    var recipeList: ArrayList<Recipe> = ArrayList()
-                    var ids = dailyList.get(t3v.getTag() as Int).recipeIds.splitIgnoreEmpty(" ")
+
+                    dailyId = i.dailyId
+                    quantitiesStr = i.quantities
+                    numOfMeals = i.numOfMeals
+                    recipeIdsStr = i.recipeIds
+                    pos = t3v.getTag() as Int + 1
 
 
-                    //going through the list and get each recipe by its id
-                    for (i in ids) {
-                        recipeList.add(UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(i)!!)
-
-                    }
-
-
-                    var dialog = DailyDialogInfo(
-                        recipeList,
-                        i.quantities,
-                        i.numOfMeals,
-                        i.recipeIds,
-                        t3v.getTag() as Int + 1,
-                        i.dailyId
-                    )
-
-
-                    dialog!!.show(childFragmentManager, "DailyDialogInfo")
+                    var s = AsynTaskNew(this, childFragmentManager)
+                    s.execute()
                 }
                 tbrow.addView(t3v)
 
@@ -501,11 +490,12 @@ class EditWeeklyDialog(
 
         if (p0 == chooseBtn) {
             dailyID!!.list!!.clear()
-            savedSize = dailyList.size
+            savedSize = dailyListChoose.size
+            dailyList.clear()
 
             var dialog = Daily_Schedule_Choose_Dialog(
-                UserPropertiesSingelton.getInstance()!!.getUserDaily()!!,
-                UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!,
+                dailyList!!,
+                recipeList!!,
                 dailyID!!
             )
             dialog.show(childFragmentManager, "DailySchudleChooseDialog")
@@ -608,6 +598,201 @@ class EditWeeklyDialog(
 
     }
 
+    override fun DoNetWorkOpreation(): String {
+        var string = UserInterFace.userID.toString() + " " + dailyID
+
+        var link = "https://elad1.000webhostapp.com/getRecipeForDaily.php?ownerIDAndDaily=" + string
+
+
+        val sb = StringBuilder()
+
+        val url = URL(link)
+        val urlConnection = url.openConnection() as HttpURLConnection
+        try {
+            val `in`: InputStream = BufferedInputStream(urlConnection.inputStream)
+            val bin = BufferedReader(InputStreamReader(`in`))
+            // temporary string to hold each line read from the reader.
+            var inputLine: String?
+
+            while (bin.readLine().also { inputLine = it } != null) {
+                sb.append(inputLine)
+
+            }
+        } finally {
+            // regardless of success or failure, we will disconnect from the URLConnection.
+            urlConnection.disconnect()
+        }
+
+
+        //Log.v("Elad1", "Id came is" + sb.toString())
+        return sb.toString()
+    }
+
+    override fun getData(str: String) {
+        var start = 0
+        // recipeList!!.clear()
+        //recipe size 11
+        // ingredient size 15
+        if (!str.equals("")) {
+
+
+            //  recipeList!!.clear()
+            val recipesAndIngredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+
+            // first recipe id
+
+            var recipesAndIngredients2 = recipesAndIngredients[0].splitIgnoreEmpty("*")
+            // first recipe id
+            var currentID = recipesAndIngredients2[0].toInt()
+            var currentIngId = -1
+            // taking 4 Recipe ids to classifiy the ingredients to them.
+
+            var recipeIds: ArrayList<Int> = ArrayList()
+
+
+//
+            var recipeIngredientMap: HashMap<Int, ArrayList<Ingredient>> = HashMap()
+
+
+            var j = 0
+            while (true) {
+
+                var recipesAndIngredients2 = recipesAndIngredients[j++].splitIgnoreEmpty("*")
+                if (recipesAndIngredients2.size != 9) {
+                    break
+                }
+                start++
+                recipeIds.add(recipesAndIngredients2[0].toInt())
+            }
+
+
+            //var isFirst = true
+
+            // saving all the ingredietns and quantities of each Recipe in map.
+            // first we extract the ids and quantity into map.
+            // then we use another map to convert all ids to real ingredients.
+
+//            var hashMap: HashMap<Int, Pair<ArrayList<String>, ArrayList<Int>>> =
+//                HashMap()
+
+            var map: HashMap<Int, ArrayList<Ingredient>> = HashMap()
+
+//            var ingredientList: ArrayList<Ingredient> = ArrayList()
+//
+//            var quantities: ArrayList<Int> = ArrayList()
+
+            var ingredientList: ArrayList<Ingredient> = ArrayList()
+
+            var quantities: HashMap<Int, ArrayList<Int>> = HashMap()
+
+            var ids: HashMap<Int, ArrayList<Int>> = HashMap()
+
+            // first extracting all ingredients ids and make them Ingredients.
+            for (i in start..recipesAndIngredients.size - 1) {
+
+                var recipesAndIngredients2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
+                currentIngId = recipesAndIngredients2[15].toInt()
+
+                //if its ingredients details
+                if (recipesAndIngredients2.size == 16 && recipeIds.contains(recipesAndIngredients2[15].toInt())) {
+
+                    var ing = Ingredient(
+                        recipesAndIngredients2[0].toInt(),
+                        recipesAndIngredients2[1].toInt(),
+                        recipesAndIngredients2[2],
+                        ImageConvert.StringToBitMap(recipesAndIngredients2[3].toString())!!,
+                        recipesAndIngredients2[4],
+                        recipesAndIngredients2[5],
+                        recipesAndIngredients2[6],
+                        recipesAndIngredients2[7].toBoolean(),
+                        recipesAndIngredients2[8].toBoolean(),
+                        recipesAndIngredients2[9].toFloat(),
+                        recipesAndIngredients2[10].toFloat(),
+                        recipesAndIngredients2[11].toFloat(),
+                        recipesAndIngredients2[12],
+                        recipesAndIngredients2[13],
+                        false
+
+                    )
+                    ingredientList?.add(ing)
+
+                    if (!recipeIngredientMap.containsKey(currentIngId)) {
+                        var recipeIngredients: ArrayList<Ingredient> = ArrayList()
+                        var quantitiy: ArrayList<Int> = ArrayList()
+                        var idss: ArrayList<Int> = ArrayList()
+                        recipeIngredientMap.put(currentIngId, recipeIngredients)
+                        recipeIngredientMap.get(currentIngId)!!.add(ing)
+                        quantities.put(currentIngId, quantitiy)
+                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toInt())
+                        ids.put(currentIngId, idss)
+                        ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
+
+                    } else {
+                        recipeIngredientMap.get(currentIngId)!!.add(ing)
+                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toInt())
+                        ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
+                    }
+
+
+                    //quantities.add(recipesAndIngredients2[14].toInt())
+                    //ids.add(recipesAndIngredients2[0])
+
+                }
+            }
+
+
+
+
+
+            currentID = -1
+            for (i in recipesAndIngredients.indices) {
+
+                var recipe2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
+                if (recipe2.size == 9) {
+                    var s = recipe2[0].toInt()
+                    if (s != currentID)
+                        recipeList?.add(
+                            Recipe(
+                                recipe2[0].toInt(),
+                                recipe2[1].toInt(),
+                                recipe2[2],
+                                ImageConvert.StringToBitMap(recipe2[3].toString())!!,
+                                recipe2[4],
+                                recipe2[5],
+                                recipe2[6].toDouble(),
+                                recipe2[7].toBoolean(),
+                                recipe2[8].toBoolean(),
+                                recipeIngredientMap.get(recipe2[0].toInt())!!,
+                                quantities.get(s)!!
+                                // hashMap.get(recipe2[0].toInt())!!.second
+
+                            )
+                        )
+
+                    currentID = recipe2[0].toInt()
+
+                } else {
+                    break
+                }
+            }
+
+
+            var dialog = DailyDialogInfo(
+                recipeList!!,
+                quantitiesStr,
+                numOfMeals,
+                recipeIdsStr,
+                pos,
+                dailyId
+
+            )
+            dialog.show(childFragmentManager, "DailyDialogInfo")
+
+
+        }
+    }
+}
+
 
 //    inner class SpinnerActivity() : Activity(),
 //        AdapterView.OnItemSelectedListener {
@@ -675,4 +860,4 @@ class EditWeeklyDialog(
 //        }
 //    }
 
-}
+

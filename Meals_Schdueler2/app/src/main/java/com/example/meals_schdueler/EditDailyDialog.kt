@@ -47,8 +47,10 @@ class EditDailyDialog(
     private lateinit var recipeChoosenNumOfMeal: ArrayList<Int>
     private lateinit var quanArrList: ArrayList<Int>
     private lateinit var recipesID: ArrayList<Int>
+    var recipeListChoose: ArrayList<Recipe> = ArrayList()
     private var myDailyRecylerviewadapter = myDailyRecylerviewadapter
     private var dailyId = dailyId
+
 
     var recipeIds = recipeIds
     var numOfMeals = numOfMeals
@@ -149,7 +151,6 @@ class EditDailyDialog(
                 break
             }
             if (i.recipeId == recipeIdsArr[j].toInt()) {
-
 
 
                 when (numOfMealsArr[j]) {
@@ -379,18 +380,18 @@ class EditDailyDialog(
 
     override fun onClick(p0: View?) {
         if (p0 == exit) {
-            flag=false
+            flag = false
             dismiss()
         } else if (p0 == breakFastBtn) {
 
 
             listItems!!.list!!.clear()
-            savedSize = recipeList.size
-            //   recipeList.clear()
+            savedSize = recipeListChoose.size
+            recipeList.clear()
             mealChoosen = "Breakfast"
             var dialog = Recipe_Schedule_Choose_Dialog(
                 listItems!!,
-                UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!,
+                recipeList,
                 recipesQuantities!!,
                 mealChoosen
             )
@@ -400,14 +401,14 @@ class EditDailyDialog(
 
 
             listItems!!.list!!.clear()
-            savedSize = recipeList.size
+            savedSize = recipeListChoose.size
 
-            // recipeList.clear()
+            recipeList.clear()
             mealChoosen = "Lunch"
 
             var dialog = Recipe_Schedule_Choose_Dialog(
                 listItems!!,
-                UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!,
+                recipeList,
                 recipesQuantities!!,
                 mealChoosen
             )
@@ -417,13 +418,13 @@ class EditDailyDialog(
 
 
             listItems!!.list!!.clear()
-            // recipeList.clear()
-            savedSize = recipeList.size
+            recipeList.clear()
+            savedSize = recipeListChoose.size
             mealChoosen = "Dinner"
 
             var dialog = Recipe_Schedule_Choose_Dialog(
                 listItems!!,
-                UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!,
+                recipeList,
                 recipesQuantities!!,
                 mealChoosen
             )
@@ -475,8 +476,7 @@ class EditDailyDialog(
                 flag = false
 
 
-            }
-            else {
+            } else {
                 val builder: AlertDialog.Builder = AlertDialog.Builder(context)
 
                 builder.setTitle("Delete Recipe")
@@ -505,15 +505,14 @@ class EditDailyDialog(
 
             for (i in listItems!!.list!!) {
 
-
-                var recipe = UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(i.toString())
-                recipeList.add(recipe!!)
+                var recipe = recipeList.get(i)
+                recipeListChoose.add(recipe!!)
 
 
             }
 
             var j = 0
-            for (i in recipeList) {
+            for (i in recipeListChoose) {
                 if (j > savedSize - 1) {
                     when (mealChoosen) {
                         "Breakfast" -> recipeChoosenNumOfMeal.add(0)
@@ -525,7 +524,7 @@ class EditDailyDialog(
                     var tbrow: TableRow = TableRow(this.context)
                     tbrow.setTag(tablePosition++)
 
-                    totalCostDobule += i.totalCost * recipesQuantities!!.list!!.get(tbrow.getTag() as Int -1 )
+                    totalCostDobule += i.totalCost * recipesQuantities!!.list!!.get(tbrow.getTag() as Int - 1)
                     recipesID.add(i.recipeId)
 
                     var t1v: TextView = TextView(context)
@@ -598,7 +597,7 @@ class EditDailyDialog(
 
 
                         stk.removeView(stk.getChildAt(tbrow.getTag() as Int))
-                        totalCostDobule -= recipeList.get(t6v.getTag() as Int).totalCost * recipesQuantities!!.list!!.get(
+                        totalCostDobule -= recipeListChoose.get(t6v.getTag() as Int).totalCost * recipesQuantities!!.list!!.get(
                             tbrow.getTag() as Int - 1
                         ).toInt()
 
@@ -607,7 +606,7 @@ class EditDailyDialog(
                         totalCost.setText(totalCostDobule.toString())
                         recipesQuantities!!.list!!.removeAt(tbrow.getTag() as Int - 1)
 
-                        recipeList.removeAt(t6v.getTag() as Int)
+                        recipeListChoose.removeAt(t6v.getTag() as Int)
                         recipesID.removeAt(tbrow.getTag() as Int - 1)
                         recipeChoosenNumOfMeal.removeAt(tbrow.getTag() as Int - 1)
                         tablePosition--
@@ -639,12 +638,12 @@ class EditDailyDialog(
 
                     t7v.setOnClickListener {
                         var dialog = MyRecipeIngredietns(
-                            recipeList.get(t7v.getTag() as Int).listOfIngredients,
-                            recipeList.get(t7v.getTag() as Int).recipeName,
-                            recipeList.get(t7v.getTag() as Int).pictureBitMap,
-                            recipeList.get(t7v.getTag() as Int).numOfPortions,
-                            recipeList.get(t7v.getTag() as Int).quantityList,
-                            recipeList.get(t7v.getTag() as Int).totalCost
+                            recipeListChoose.get(t7v.getTag() as Int).listOfIngredients,
+                            recipeListChoose.get(t7v.getTag() as Int).recipeName,
+                            recipeListChoose.get(t7v.getTag() as Int).pictureBitMap,
+                            recipeListChoose.get(t7v.getTag() as Int).numOfPortions,
+                            recipeListChoose.get(t7v.getTag() as Int).quantityList,
+                            recipeListChoose.get(t7v.getTag() as Int).totalCost
                         )
                         dialog.show(childFragmentManager, "MyRecipeIngredients")
                     }

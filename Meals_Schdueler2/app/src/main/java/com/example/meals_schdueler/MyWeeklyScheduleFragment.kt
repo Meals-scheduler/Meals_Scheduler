@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,23 +22,18 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
+class MyWeeklyScheduleFragment : Fragment(), GetAndPost,NestedScrollView.OnScrollChangeListener {
 
     private var columnCount = 1
 
     //private var weeklyList: ArrayList<WeeklySchedule>? = null
-    private var weeklyList: HashMap<String, WeeklySchedule>? = null
-    private var dailyTmp: ArrayList<DailySchedule>? = null
-
-    // private var dailyList: HashMap<String,DailySchedule>? = null
-    private var sorted: TreeMap<String, WeeklySchedule>? = null
-
-    // each weeklyid will hold all its daily
-    private var weekly_daily_map: HashMap<String, ArrayList<DailySchedule>>? = null
-    private var recipeList: ArrayList<Recipe>? = null
+    private var weeklyList: ArrayList<WeeklySchedule>? = null
+    private var dailyList: ArrayList<DailySchedule>? = null
     private var weeklyRecyclerViewAdapter: My_Weekly_RecylerViewAdapter? = null
-
-
+    private lateinit var nestedScroll: NestedScrollView // list of ingredietns
+    private var progressBar: ProgressBar? = null
+    private var page = 0
+    private var isScorlled = false
     var numOfDay: String = ""
     var dailyIds: String = ""
     private var totalcost = 0.0
@@ -48,10 +45,10 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
         // recipeList = ArrayList()
         //  weeklyList = ArrayList()
 
-        weeklyList = HashMap()
-        sorted = TreeMap()
+        weeklyList = ArrayList()
+        dailyList = ArrayList()
         weeklyRecyclerViewAdapter = My_Weekly_RecylerViewAdapter(
-            sorted!!,
+            weeklyList!!,
             childFragmentManager,
             this.context,
             requireActivity()
@@ -93,26 +90,30 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val x = inflater.inflate(R.layout.my_weekly_schedule_list, null)
-        val recyclerView = x.findViewById<View>(R.id.list) as RecyclerView
+        val view = inflater.inflate(R.layout.my_weekly_schedule_list, null)
+        val recyclerView = view.findViewById<View>(R.id.recycler_view) as RecyclerView
+        nestedScroll = view!!.findViewById(R.id.scroll_view)
+        progressBar = view!!.findViewById(R.id.progress_bar)
+        nestedScroll.setOnScrollChangeListener(this)
 
 
         instance = this
 
-        if (x is RecyclerView) {
-            with(x) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                recyclerView.adapter = weeklyRecyclerViewAdapter
-
-            }
-        }
-
+//        if (x is RecyclerView) {
+//            with(x) {
+//                layoutManager = when {
+//                    columnCount <= 1 -> LinearLayoutManager(context)
+//                    else -> GridLayoutManager(context, columnCount)
+//                }
+//
+//
+//            }
+//        }
+        recyclerView.layoutManager = LinearLayoutManager(this.context)
+        recyclerView.adapter = weeklyRecyclerViewAdapter
         startTask()
 
-        return x
+        return view
     }
 
     fun startTask() {
@@ -122,8 +123,13 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
 
 
     override fun DoNetWorkOpreation(): String {
+        if(!isScorlled){
+            page =0
+        }
+        var string = UserInterFace.userID.toString() + " " + page
 
-        var link = "https://elad1.000webhostapp.com/getWeekly.php?ownerID=" + UserInterFace.userID;
+
+        var link = "https://elad1.000webhostapp.com/getWeekly.php?ownerIDAndPage=" + string
 
 
         val sb = StringBuilder()
@@ -158,13 +164,17 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
     }
 
     override fun getData(str: String) {
+        progressBar!!.visibility = View.INVISIBLE
         if (!str.equals("")) {
+            if (!isScorlled)
+                weeklyList!!.clear()
+
 
             numOfDay = ""
             dailyIds = ""
             // recipeList!!.clear()
 
-            weeklyList!!.clear()
+           // weeklyList!!.clear()
 
             val weeklyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
@@ -221,14 +231,12 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
             }
 
             // making WeeklyScheudle objects
-            weekly_daily_map = HashMap()
+
             currentWeeklyID = -1
             for (i in weeklyInfo.indices) {
                 var dailyInfo2 = weeklyInfo[i].splitIgnoreEmpty("*")
                 if (dailyInfo2[0].toInt() != currentWeeklyID) {
-                    dailyTmp = ArrayList()
-                    weeklyList!!.put(
-                        dailyInfo2[0],
+                    weeklyList!!.add(
                         WeeklySchedule(
                             dailyInfo2[0].toInt(),
                             dailyInfo2[1].toInt(),
@@ -239,35 +247,37 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost {
 
                         )
                     )
-                    //making DailyScheule objects in a map with WeeklyID
-                    var dailyIds = map.get(dailyInfo2[0])!!.get(1).splitIgnoreEmpty(" ")
-
-                    for (o in UserPropertiesSingelton.getInstance()!!.getUserDaily()!!) {
-                        Log.v("Elad1", "Daily id " + o.key)
-                    }
-
-                    for (i in dailyIds) {
-
-                        dailyTmp!!.add(
-                            UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(i)!!
-                        )
-                    }
-
-                    weekly_daily_map!!.put(dailyInfo2[0].toInt().toString(), dailyTmp!!)
                     currentWeeklyID = dailyInfo2[0].toInt()
                 }
 
 
             }
 
-            sorted!!.clear()
-            sorted!!.putAll(weeklyList!!)
 
 
-            weeklyRecyclerViewAdapter!!.setWeeklyValues(sorted!!)
-            weeklyRecyclerViewAdapter!!.setDailyValues(weekly_daily_map!!)
-            UserPropertiesSingelton.getInstance()!!.setUserWeekly(sorted)
+            weeklyRecyclerViewAdapter!!.setWeeklyValues(weeklyList!!)
+            weeklyRecyclerViewAdapter!!.setDailyValues(dailyList!!)
+            progressBar!!.visibility = View.INVISIBLE
+           // UserPropertiesSingelton.getInstance()!!.setUserWeekly(sorted)
+            isScorlled = false
 
+        }
+        isScorlled = false
+    }
+
+    override fun onScrollChange(
+        v: NestedScrollView?,
+        scrollX: Int,
+        scrollY: Int,
+        oldScrollX: Int,
+        oldScrollY: Int
+    ) {
+        if (scrollY == v!!.getChildAt(0).measuredHeight - v.measuredHeight) {
+
+            page = page + 4
+            progressBar!!.visibility = View.VISIBLE
+            isScorlled = true
+            startTask()
 
         }
     }

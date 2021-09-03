@@ -10,6 +10,12 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.DialogFragment
 import com.example.meals_schdueler.dummy.DailySchedule
+import java.io.BufferedInputStream
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 import java.text.DecimalFormat
 
 class WeeklyDialogInfo(
@@ -23,7 +29,7 @@ class WeeklyDialogInfo(
     // weeklyId: Int,
 
 ) : DialogFragment(), View.OnClickListener,
-    DialogInterface.OnDismissListener {
+    DialogInterface.OnDismissListener, GetAndPost {
 
 
     private lateinit var stk: TableLayout
@@ -44,6 +50,12 @@ class WeeklyDialogInfo(
     private var totalCostDobule: Double = 0.0
     private var position = pos
     private var dailyPos = 0
+    private var dailyID = -1
+    var recipeList: ArrayList<Recipe> = ArrayList()
+    private var quantitiesStr = ""
+    private var numOfMeals = ""
+    private var recipeIdsStr= ""
+    private var pos = -1
 
 
     override fun onCreateView(
@@ -99,7 +111,7 @@ class WeeklyDialogInfo(
 
             // t1v.setBackgroundResource(R.drawable.border)
             var dayChoosen = ""
-            when (numOfDayArr[j++]) {
+            when (numOfDayArr[j]) {
                 "0" -> dayChoosen = "Sunday"
                 "1" -> dayChoosen = "Monday"
                 "2" -> dayChoosen = "Tuesday"
@@ -136,26 +148,21 @@ class WeeklyDialogInfo(
 
             //t5v.setBackgroundResource(R.drawable.spinner_shape)
             t3v.setOnClickListener {
-              //NEED TO CHECK HERE WHATS WRONG with info button!!!!!
+                //NEED TO CHECK HERE WHATS WRONG with info button!!!!!
                 // getting this daily recipes
-                var k =0
-                var recipeList: ArrayList<Recipe> = ArrayList()
-                var ids = dailyList.get(t3v.getTag() as Int).recipeIds.splitIgnoreEmpty(" ")
-                for (i in ids) {
-                    recipeList.add(UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!.get(i)!!)
 
-                }
-                var dialog = DailyDialogInfo(
-                    recipeList,
-                    i.quantities,
-                    i.numOfMeals,
-                    i.recipeIds,
-                    t3v.getTag() as Int +1,
-                    i.dailyId
-                )
+                dailyID = i.dailyId
+                quantitiesStr = i.quantities
+                numOfMeals = i.numOfMeals
+                recipeIdsStr = i.recipeIds
+                pos = t3v.getTag() as Int + 1
 
 
-                dialog!!.show(childFragmentManager, "DailyDialogInfo")
+                var s = AsynTaskNew(this, childFragmentManager)
+                s.execute()
+
+
+
             }
             tbrow.addView(t3v)
 
@@ -164,6 +171,7 @@ class WeeklyDialogInfo(
             stk.setBackgroundResource(R.drawable.spinner_shape)
             tbrow.setBackgroundResource(R.drawable.spinner_shape)
             stk.addView(tbrow)
+            j++
 
 
         }
@@ -210,4 +218,203 @@ class WeeklyDialogInfo(
             dismiss()
         }
     }
+
+    override fun DoNetWorkOpreation(): String {
+        var string = UserInterFace.userID.toString() + " " + dailyID
+
+        var link = "https://elad1.000webhostapp.com/getRecipeForDaily.php?ownerIDAndDaily=" + string
+
+
+        val sb = StringBuilder()
+
+        val url = URL(link)
+        val urlConnection = url.openConnection() as HttpURLConnection
+        try {
+            val `in`: InputStream = BufferedInputStream(urlConnection.inputStream)
+            val bin = BufferedReader(InputStreamReader(`in`))
+            // temporary string to hold each line read from the reader.
+            var inputLine: String?
+
+            while (bin.readLine().also { inputLine = it } != null) {
+                sb.append(inputLine)
+
+            }
+        } finally {
+            // regardless of success or failure, we will disconnect from the URLConnection.
+            urlConnection.disconnect()
+        }
+
+
+        //Log.v("Elad1", "Id came is" + sb.toString())
+        return sb.toString()
+    }
+
+
+    override fun getData(str: String) {
+        var start = 0
+        // recipeList!!.clear()
+        //recipe size 11
+        // ingredient size 15
+        if (!str.equals("")) {
+
+
+            //  recipeList!!.clear()
+            val recipesAndIngredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+
+            // first recipe id
+
+            var recipesAndIngredients2 = recipesAndIngredients[0].splitIgnoreEmpty("*")
+            // first recipe id
+            var currentID = recipesAndIngredients2[0].toInt()
+            var currentIngId = -1
+            // taking 4 Recipe ids to classifiy the ingredients to them.
+
+            var recipeIds: ArrayList<Int> = ArrayList()
+
+
+//
+            var recipeIngredientMap: HashMap<Int, ArrayList<Ingredient>> = HashMap()
+
+
+            var j = 0
+            while (true) {
+
+                var recipesAndIngredients2 = recipesAndIngredients[j++].splitIgnoreEmpty("*")
+                if (recipesAndIngredients2.size != 9) {
+                    break
+                }
+                start++
+                recipeIds.add(recipesAndIngredients2[0].toInt())
+            }
+
+
+            //var isFirst = true
+
+            // saving all the ingredietns and quantities of each Recipe in map.
+            // first we extract the ids and quantity into map.
+            // then we use another map to convert all ids to real ingredients.
+
+//            var hashMap: HashMap<Int, Pair<ArrayList<String>, ArrayList<Int>>> =
+//                HashMap()
+
+            var map: HashMap<Int, ArrayList<Ingredient>> = HashMap()
+
+//            var ingredientList: ArrayList<Ingredient> = ArrayList()
+//
+//            var quantities: ArrayList<Int> = ArrayList()
+
+            var ingredientList: ArrayList<Ingredient> = ArrayList()
+
+            var quantities: HashMap<Int, ArrayList<Int>> = HashMap()
+
+            var ids: HashMap<Int, ArrayList<Int>> = HashMap()
+
+            // first extracting all ingredients ids and make them Ingredients.
+            for (i in start..recipesAndIngredients.size - 1) {
+
+                var recipesAndIngredients2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
+                currentIngId = recipesAndIngredients2[15].toInt()
+
+                //if its ingredients details
+                if (recipesAndIngredients2.size == 16 && recipeIds.contains(recipesAndIngredients2[15].toInt())) {
+
+                    var ing = Ingredient(
+                        recipesAndIngredients2[0].toInt(),
+                        recipesAndIngredients2[1].toInt(),
+                        recipesAndIngredients2[2],
+                        ImageConvert.StringToBitMap(recipesAndIngredients2[3].toString())!!,
+                        recipesAndIngredients2[4],
+                        recipesAndIngredients2[5],
+                        recipesAndIngredients2[6],
+                        recipesAndIngredients2[7].toBoolean(),
+                        recipesAndIngredients2[8].toBoolean(),
+                        recipesAndIngredients2[9].toFloat(),
+                        recipesAndIngredients2[10].toFloat(),
+                        recipesAndIngredients2[11].toFloat(),
+                        recipesAndIngredients2[12],
+                        recipesAndIngredients2[13],
+                        false
+
+                    )
+                    ingredientList?.add(ing)
+
+                    if (!recipeIngredientMap.containsKey(currentIngId)) {
+                        var recipeIngredients: ArrayList<Ingredient> = ArrayList()
+                        var quantitiy: ArrayList<Int> = ArrayList()
+                        var idss: ArrayList<Int> = ArrayList()
+                        recipeIngredientMap.put(currentIngId, recipeIngredients)
+                        recipeIngredientMap.get(currentIngId)!!.add(ing)
+                        quantities.put(currentIngId, quantitiy)
+                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toInt())
+                        ids.put(currentIngId, idss)
+                        ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
+
+                    } else {
+                        recipeIngredientMap.get(currentIngId)!!.add(ing)
+                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toInt())
+                        ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
+                    }
+
+
+                    //quantities.add(recipesAndIngredients2[14].toInt())
+                    //ids.add(recipesAndIngredients2[0])
+
+                }
+            }
+
+
+
+
+
+            currentID = -1
+            for (i in recipesAndIngredients.indices) {
+
+                var recipe2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
+                if (recipe2.size == 9) {
+                    var s = recipe2[0].toInt()
+                    if (s != currentID)
+                        recipeList?.add(
+                            Recipe(
+                                recipe2[0].toInt(),
+                                recipe2[1].toInt(),
+                                recipe2[2],
+                                ImageConvert.StringToBitMap(recipe2[3].toString())!!,
+                                recipe2[4],
+                                recipe2[5],
+                                recipe2[6].toDouble(),
+                                recipe2[7].toBoolean(),
+                                recipe2[8].toBoolean(),
+                                recipeIngredientMap.get(recipe2[0].toInt())!!,
+                                quantities.get(s)!!
+                                // hashMap.get(recipe2[0].toInt())!!.second
+
+                            )
+                        )
+
+                    currentID = recipe2[0].toInt()
+
+                } else {
+                    break
+                }
+            }
+
+
+
+
+
+            var dialog = DailyDialogInfo(
+                recipeList!!,
+                quantitiesStr ,
+                numOfMeals,
+                recipeIdsStr,
+                pos,
+                dailyID
+
+            )
+            dialog.show(childFragmentManager, "DailyDialogInfo")
+
+
+        }
+    }
+
 }

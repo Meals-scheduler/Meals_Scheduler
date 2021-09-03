@@ -26,30 +26,24 @@ import com.example.meals_schdueler.MyingredientFragment1 as MyingredientFragment
  * TODO: Replace the implementation with code for your data type.
  */
 class MyItemRecyclerViewAdapter(
-    private var values: TreeMap<String, Ingredient>,
+    private var values: ArrayList<Ingredient>,
     childFragmentManager: FragmentManager
 ) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
 
-    private var mValues:TreeMap<String, Ingredient> = values
+    private var mValues:ArrayList<Ingredient> = values
     private var childFragmentManager = childFragmentManager
-    private var pos = 0
-    private var imgId = 0
-    private var isFinished = false
-    private var imagesArr: ArrayList<Bitmap> = ArrayList()
-    private var ingredientList :ArrayList<Ingredient> = ArrayList()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_myingredient1, parent, false)
 
-        for (i in mValues){
-            ingredientList.add(i.value)
-        }
+
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var item: Ingredient = ingredientList[position] // each item postion
+        var item: Ingredient = mValues[position] // each item postion
         holder.mItem = item
         holder.ingredientName.setText(item.ingridentName)
         //var bitmap2 = ImageConvert.StringToBitMap(item.picture)
@@ -97,13 +91,10 @@ class MyItemRecyclerViewAdapter(
         // holder.contentView.text = item.content
     }
 
-    fun setmValues(mValues: TreeMap<String, Ingredient>) {
+    fun setmValues(mValues: ArrayList<Ingredient>) {
 
         this.mValues = mValues
-        ingredientList.clear()
-        for (i in mValues) {
-            ingredientList.add(i.value)
-        }
+
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
 

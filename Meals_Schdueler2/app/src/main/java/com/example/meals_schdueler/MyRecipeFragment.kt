@@ -6,6 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ProgressBar
+import android.widget.SearchView
+import android.widget.TextView
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,17 +22,25 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 
-class MyRecipeFragment : Fragment(), GetAndPost {
+class MyRecipeFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChangeListener,
+    SearchView.OnQueryTextListener {
 
     private var columnCount = 1
-    private var recipeList: HashMap<String, Recipe>? = null // list of ingredietns
+    private var recipeList: ArrayList<Recipe>? = null // list of ingredietns
     private var recipeRecyclerViewAdapter: MyRecipeRecyclerViewAdapter? =
         null // adapter for the list.
-
+    private lateinit var nestedScroll: NestedScrollView // list of ingredietns
+    private var progressBar: ProgressBar? = null
+    private lateinit var searchView: SearchView
+    private lateinit var noResultsTextView: TextView
+    private var isScorlled = false
+    private var page = 0
+    private var isSearch = false
+    private var recipeToSearch = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        recipeList = HashMap()
+        recipeList = ArrayList()
         recipeRecyclerViewAdapter = MyRecipeRecyclerViewAdapter(recipeList!!, childFragmentManager)
         arguments?.let {
             columnCount = it.getInt(MyingredientFragment1.ARG_COLUMN_COUNT)
@@ -40,26 +52,32 @@ class MyRecipeFragment : Fragment(), GetAndPost {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_myrecipe_list, container, false)
-        val recyclerView = view.findViewById<View>(R.id.list) as RecyclerView
+        val recyclerView = view.findViewById<View>(R.id.recycler_view) as RecyclerView
+        nestedScroll = view.findViewById(R.id.scroll_view)
+        progressBar = view.findViewById(R.id.progress_bar)
+        nestedScroll.setOnScrollChangeListener(this)
+        searchView = view.findViewById(R.id.search_bar)
+        searchView.setOnQueryTextListener(this)
+        noResultsTextView = view.findViewById(R.id.tv_emptyTextView)
 
 
         val context = view.context
         instance = this
 
         // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                recyclerView.adapter = recipeRecyclerViewAdapter
+//        if (view is RecyclerView) {
+//            with(view) {
+//                layoutManager = when {
+//                    columnCount <= 1 -> LinearLayoutManager(context)
+//                    else -> GridLayoutManager(context, columnCount)
+//                }
+//
+//
+//            }
+//        }
 
-            }
-        }
-
-
-
+        recyclerView.layoutManager = LinearLayoutManager(this.context)
+        recyclerView.adapter = recipeRecyclerViewAdapter
 
         startTask()
 
@@ -90,10 +108,17 @@ class MyRecipeFragment : Fragment(), GetAndPost {
 
 
     override fun DoNetWorkOpreation(): String {
+        if(!isScorlled){
+            page =0
+        }
+        var string = UserInterFace.userID.toString() + " " + page
 
-
-        var link = "https://elad1.000webhostapp.com/getRecipe.php?ownerID=" + UserInterFace.userID;
-
+        var link = "https://elad1.000webhostapp.com/getRecipe.php?ownerIDAndPage=" + string
+        if (isSearch) {
+            string = UserInterFace.userID.toString() + " " + recipeToSearch
+            link =
+                "https://elad1.000webhostapp.com/getSpecificMyRecipes.php?nameAndRecipe=" + string
+        }
 
         val sb = StringBuilder()
 
@@ -126,99 +151,146 @@ class MyRecipeFragment : Fragment(), GetAndPost {
         }
     }
 
-
     override fun getData(str: String) {
-
+        var start = 0
         //recipe size 11
         // ingredient size 15
         if (!str.equals("")) {
-            recipeList!!.clear()
+            if (!isScorlled)
+                recipeList!!.clear()
+
+            //  recipeList!!.clear()
             val recipesAndIngredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
-            var recipesAndIngredients2 = recipesAndIngredients[0].splitIgnoreEmpty("*")
+            if (isSearch) {
+                recipeList!!.clear()
+
+            }
             // first recipe id
 
-//            for(i in recipesAndIngredients.indices){
-//                var tmp = recipesAndIngredients[i]
-//                Log.v("Elad1","recipe name is or id " + tmp [0] )
-//            }
+            var recipesAndIngredients2 = recipesAndIngredients[0].splitIgnoreEmpty("*")
+            // first recipe id
             var currentID = recipesAndIngredients2[0].toInt()
+            var currentIngId = -1
+            // taking 4 Recipe ids to classifiy the ingredients to them.
+
+            var recipeIds: ArrayList<Int> = ArrayList()
+
+
+//
+            var recipeIngredientMap: HashMap<Int, ArrayList<Ingredient>> = HashMap()
+
+            if (isSearch) {
+
+                for (j in recipesAndIngredients.indices) {
+                    var recipesAndIngredients2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
+                    if (recipesAndIngredients2.size == 9) {
+                        recipeIds.add(recipesAndIngredients2[0].toInt())
+                        start++
+                    } else {
+
+                        break
+                    }
+
+                }
+            } else {
+                var j = 0
+                while (true) {
+
+                    var recipesAndIngredients2 = recipesAndIngredients[j++].splitIgnoreEmpty("*")
+                    if (recipesAndIngredients2.size != 9) {
+                        break
+                    }
+                    start++
+                    recipeIds.add(recipesAndIngredients2[0].toInt())
+                }
+            }
+
+            //var isFirst = true
 
             // saving all the ingredietns and quantities of each Recipe in map.
             // first we extract the ids and quantity into map.
             // then we use another map to convert all ids to real ingredients.
 
-            var hashMap: HashMap<Int, Pair<ArrayList<String>, ArrayList<Int>>> =
-                HashMap()
+//            var hashMap: HashMap<Int, Pair<ArrayList<String>, ArrayList<Int>>> =
+//                HashMap()
 
             var map: HashMap<Int, ArrayList<Ingredient>> = HashMap()
 
+//            var ingredientList: ArrayList<Ingredient> = ArrayList()
+//
+//            var quantities: ArrayList<Int> = ArrayList()
 
-            var quantities: ArrayList<Int> = ArrayList()
-            var ids: ArrayList<String> = ArrayList()
-            var ingredientList2: ArrayList<Ingredient> = ArrayList()
-            //  var quantities: ArrayList<String> = ArrayList()
-            var ingID = "-1"
-            for (i in recipesAndIngredients.indices) {
+            var ingredientList: ArrayList<Ingredient> = ArrayList()
+
+            var quantities: HashMap<Int, ArrayList<Int>> = HashMap()
+
+            var ids: HashMap<Int, ArrayList<Int>> = HashMap()
+
+            // first extracting all ingredients ids and make them Ingredients.
+            for (i in start..recipesAndIngredients.size - 1) {
+
                 var recipesAndIngredients2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
+                currentIngId = recipesAndIngredients2[15].toInt()
 
-                if (recipesAndIngredients2.size == 11) {
+                //if its ingredients details
+                if (recipesAndIngredients2.size == 16 && recipeIds.contains(recipesAndIngredients2[15].toInt())) {
 
-                    if (recipesAndIngredients2[0].toInt() != currentID) {
+                    var ing = Ingredient(
+                        recipesAndIngredients2[0].toInt(),
+                        recipesAndIngredients2[1].toInt(),
+                        recipesAndIngredients2[2],
+                        ImageConvert.StringToBitMap(recipesAndIngredients2[3].toString())!!,
+                        recipesAndIngredients2[4],
+                        recipesAndIngredients2[5],
+                        recipesAndIngredients2[6],
+                        recipesAndIngredients2[7].toBoolean(),
+                        recipesAndIngredients2[8].toBoolean(),
+                        recipesAndIngredients2[9].toFloat(),
+                        recipesAndIngredients2[10].toFloat(),
+                        recipesAndIngredients2[11].toFloat(),
+                        recipesAndIngredients2[12],
+                        recipesAndIngredients2[13],
+                        false
 
-                        // copying the lists of the ids and aquantities
-                        // var tmpIds = deepCopy(ids)
-                        //var tmpQuantities = deepCopy(quantities)
-                        // put it into the map with the Key of the RecipeID
-                        hashMap.put(currentID, Pair(ids, quantities))
-                        quantities = ArrayList()
-                        ids = ArrayList()
+                    )
+                    ingredientList?.add(ing)
 
-                        // copy the ingredietns lists to map with key of RecipieID
-                        // var tmplist = deepCopyIng(ingredientList2)
-                        map.put(currentID, ingredientList2)
-                        ingredientList2 = ArrayList()
-                        // switching to next recipe id
-                        currentID = recipesAndIngredients2[0].toInt()
+                    if (!recipeIngredientMap.containsKey(currentIngId)) {
+                        var recipeIngredients: ArrayList<Ingredient> = ArrayList()
+                        var quantitiy: ArrayList<Int> = ArrayList()
+                        var idss: ArrayList<Int> = ArrayList()
+                        recipeIngredientMap.put(currentIngId, recipeIngredients)
+                        recipeIngredientMap.get(currentIngId)!!.add(ing)
+                        quantities.put(currentIngId, quantitiy)
+                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toInt())
+                        ids.put(currentIngId, idss)
+                        ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
 
-
-                        // clear all lists for the next recipe lists
-                        // ingredientList2.clear()
-                        // ids.clear()
-                        // quantities.clear()
+                    } else {
+                        recipeIngredientMap.get(currentIngId)!!.add(ing)
+                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toInt())
+                        ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
                     }
-                    if (ingID != recipesAndIngredients2[9]) {
-                        ids.add(recipesAndIngredients2[9])
-                        quantities.add(recipesAndIngredients2[10].toInt())
-                        // getting the specific ingredient by its ID
-                        ingredientList2.add(
-                            UserPropertiesSingelton.getInstance()!!.getUserIngredientss()
-                                ?.get(recipesAndIngredients2[9])!!
-                        )
-                        ingID = recipesAndIngredients2[9]
-                    }
 
 
-                } else {
-                    break
+                    //quantities.add(recipesAndIngredients2[14].toInt())
+                    //ids.add(recipesAndIngredients2[0])
+
                 }
             }
-            hashMap.put(currentID, Pair(ids, quantities))
-            map.put(currentID, ingredientList2)
+
+
+
 
 
             currentID = -1
-//            recipesAndIngredients2 = recipesAndIngredients[0].splitIgnoreEmpty("*")
-//            currentID = recipesAndIngredients2[0].toInt()
-            var recipeMap = HashMap<Int, Recipe>()
-            var j = 0
             for (i in recipesAndIngredients.indices) {
 
                 var recipe2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
-                if (recipe2.size == 11) {
+                if (recipe2.size == 9) {
                     var s = recipe2[0].toInt()
-                    if (s != currentID) {
-                        recipeList?.put(
-                            recipe2[0],
+                    if (s != currentID)
+                        recipeList?.add(
                             Recipe(
                                 recipe2[0].toInt(),
                                 recipe2[1].toInt(),
@@ -229,29 +301,33 @@ class MyRecipeFragment : Fragment(), GetAndPost {
                                 recipe2[6].toDouble(),
                                 recipe2[7].toBoolean(),
                                 recipe2[8].toBoolean(),
-                                map.get(recipe2[0].toInt())!!,
-                                hashMap.get(recipe2[0].toInt())!!.second
+                                recipeIngredientMap.get(recipe2[0].toInt())!!,
+                                quantities.get(s)!!
+                                // hashMap.get(recipe2[0].toInt())!!.second
 
                             )
                         )
-                        recipeMap.put(recipe2[0].toInt(), recipeList!!.get(recipe2[0])!!)
-                        currentID = recipe2[0].toInt()
 
-                    }
-                    // a map to save each recipe by its ID
+                    currentID = recipe2[0].toInt()
 
+                } else {
+                    break
                 }
             }
 
-
-            // initializing the singelton with the user's Recipes list to keep it here on code.
-            // should do it on another place !!!
-            UserPropertiesSingelton.getInstance()!!.setUserRecipess(recipeList)
-            UserPropertiesSingelton.getInstance()!!.setUserMapRecipe(recipeMap)
             recipeRecyclerViewAdapter!!.setmValues(recipeList!!)
-
-            // need to fix getRecipe.php!!!!!!!!!!!!!!!!!!!!
+            progressBar!!.visibility = View.INVISIBLE
+            isScorlled = false
+        } else {
+            if (isSearch) {
+                recipeList!!.clear()
+                noResultsTextView.visibility = View.VISIBLE
+                recipeRecyclerViewAdapter!!.setmValues(recipeList!!)
+            }
         }
+        progressBar!!.visibility = View.INVISIBLE
+        isScorlled= false
+
 
     }
 
@@ -260,5 +336,41 @@ class MyRecipeFragment : Fragment(), GetAndPost {
 
         var s = AsynTaskNew(this, childFragmentManager)
         s.execute()
+    }
+
+    override fun onScrollChange(
+        v: NestedScrollView?,
+        scrollX: Int,
+        scrollY: Int,
+        oldScrollX: Int,
+        oldScrollY: Int
+    ) {
+        if (scrollY == v!!.getChildAt(0).measuredHeight - v.measuredHeight) {
+            if (!isSearch) {
+                page = page + 4
+                progressBar!!.visibility = View.VISIBLE
+                isScorlled = true
+                startTask()
+            }
+        }
+    }
+
+    override fun onQueryTextSubmit(p0: String?): Boolean {
+        return false
+    }
+
+    override fun onQueryTextChange(p0: String?): Boolean {
+        if (p0 != "") {
+            noResultsTextView.visibility = View.INVISIBLE
+            isSearch = true
+            recipeToSearch = p0!!
+            startTask()
+        } else {
+            isSearch = false
+            recipeList!!.clear()
+            noResultsTextView.visibility = View.INVISIBLE
+            startTask()
+        }
+        return true
     }
 }
