@@ -3,6 +3,7 @@ package com.example.meals_schdueler
 import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,12 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.DialogFragment
 import com.example.meals_schdueler.dummy.DailySchedule
+import java.io.BufferedInputStream
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 import java.text.DecimalFormat
 
 
@@ -20,7 +27,7 @@ class MonthlyDialogInfo(
     weeklyIds: String,
     totalCost: Double,
     pos: Int,
-) : DialogFragment(), View.OnClickListener, DialogInterface.OnDismissListener {
+) : DialogFragment(), View.OnClickListener, DialogInterface.OnDismissListener, GetAndPost {
 
     private lateinit var stk: TableLayout
     private lateinit var totalCost: EditText
@@ -28,6 +35,7 @@ class MonthlyDialogInfo(
     private lateinit var title: TextView
 
     private var weeklyList = weeklyList
+    private var dailyList: ArrayList<DailySchedule>? = null
 
     //  private var weeklyList = weeklyList
     // private var weeklyId = weeklyId
@@ -40,6 +48,12 @@ class MonthlyDialogInfo(
     private var totalCostDobule: Double = 0.0
     private var position = pos
     private var weeklyPos = 0
+
+    private var weeklyID = -1
+    private var numOfDays = ""
+    private var dailyIds = ""
+    private var pos = -1
+    private var totalCostWeekly = 0.0
 
 
     override fun onCreateView(
@@ -96,7 +110,7 @@ class MonthlyDialogInfo(
 
             // t1v.setBackgroundResource(R.drawable.border)
             var weekChoosen = ""
-            when (numOfWeekArr[j++]) {
+            when (numOfWeekArr[j]) {
                 "0" -> weekChoosen = "Week 1"
                 "1" -> weekChoosen = "Week 2"
                 "2" -> weekChoosen = "Week 3"
@@ -131,28 +145,18 @@ class MonthlyDialogInfo(
 
             //t5v.setBackgroundResource(R.drawable.spinner_shape)
             t3v.setOnClickListener {
-                //NEED TO CHECK HERE WHATS WRONG with info button!!!!!
-                // getting this daily recipes
-                var dailyList: ArrayList<DailySchedule> = ArrayList()
-                var ids = weeklyList.get(t3v.getTag() as Int).dailyIds.splitIgnoreEmpty(" ")
-                var m =0
-                //going through the list and get each recipe by its id
-                for (i in ids) {
-                    dailyList.add(UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(i)!!)
+                dailyList = ArrayList()
 
-                }
+                weeklyID = i.weeklyId
 
-                var dialog = WeeklyDialogInfo(
-                    dailyList,
-                    i.numOfDay,
-                    i.dailyIds,
-                    i.totalCost,
-                    t3v.getTag() as Int + 1
-                )
+                numOfDays = i.numOfDay
+                dailyIds = i.dailyIds
+                pos = t3v.getTag() as Int + 1
+                totalCostWeekly = i.totalCost
 
 
-
-                dialog!!.show(childFragmentManager, "WeeklyDialogInfo")
+                var s = AsynTaskNew(this, childFragmentManager)
+                s.execute()
             }
             tbrow.addView(t3v)
 
@@ -161,6 +165,7 @@ class MonthlyDialogInfo(
             stk.setBackgroundResource(R.drawable.spinner_shape)
             tbrow.setBackgroundResource(R.drawable.spinner_shape)
             stk.addView(tbrow)
+            j++
 
 
         }
@@ -206,4 +211,137 @@ class MonthlyDialogInfo(
             dismiss()
         }
     }
+
+    override fun DoNetWorkOpreation(): String {
+        var string = UserInterFace.userID.toString() + " " + weeklyID
+
+        var link =
+            "https://elad1.000webhostapp.com/getDailyForWeekly.php?ownerIDAndWeekly=" + string
+
+
+        val sb = StringBuilder()
+
+        val url = URL(link)
+        val urlConnection = url.openConnection() as HttpURLConnection
+        try {
+            val `in`: InputStream = BufferedInputStream(urlConnection.inputStream)
+            val bin = BufferedReader(InputStreamReader(`in`))
+            // temporary string to hold each line read from the reader.
+            var inputLine: String?
+
+            while (bin.readLine().also { inputLine = it } != null) {
+                sb.append(inputLine)
+
+            }
+        } finally {
+            // regardless of success or failure, we will disconnect from the URLConnection.
+            urlConnection.disconnect()
+        }
+
+
+        //Log.v("Elad1", "Id came is" + sb.toString())
+        return sb.toString()
+    }
+
+    override fun getData(str: String) {
+        dailyList!!.clear()
+        if (!str.equals("")) {
+            var quantities = ""
+            var numOfMeal = ""
+            var recipeIds = ""
+            var totalcost = 0.011
+
+
+            val dailyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+
+            // map to map each DailyID with a key as ID and contains all 3
+            // array lists (e.g - quantities,recipeIds,numOfMeals)
+            var map: HashMap<String, ArrayList<String>> = HashMap()
+            var mapTotalCost: HashMap<String, Double> = HashMap()
+            // first attach each meal to its dailyID.
+            var dailyInfo2 = dailyInfo[0].splitIgnoreEmpty("*")
+            var currentDailyID = dailyInfo2[0].toInt()
+            for (i in dailyInfo.indices) {
+                dailyInfo2 = dailyInfo[i].splitIgnoreEmpty("*")
+                //means we switch to the next DailyID
+                if (dailyInfo2[0].toInt() != currentDailyID) {
+                    var totalLists: ArrayList<String> = ArrayList()
+                    totalLists.add(quantities)
+                    totalLists.add(numOfMeal)
+                    totalLists.add(recipeIds)
+
+                    // gathering all quantities , numOfMeal and recipeIds under
+                    // the key of that DailyID
+                    map.put(currentDailyID.toString(), totalLists)
+                    mapTotalCost.put(currentDailyID.toString(), totalcost)
+                    //switching to the next DailyID
+                    currentDailyID = dailyInfo2[0].toInt()
+
+                    // clearing the variables for next DailyID
+                    quantities = ""
+                    numOfMeal = ""
+                    recipeIds = ""
+                }
+                quantities += "" + dailyInfo2[5] + " "
+                numOfMeal += "" + dailyInfo2[3] + " "
+                recipeIds += "" + dailyInfo2[4] + " "
+                // saving the last total cost
+                totalcost = dailyInfo2[2].toDouble()
+            }
+            if (!quantities.equals("")) {
+                var totalLists: ArrayList<String> = ArrayList()
+                totalLists.add(quantities)
+                totalLists.add(numOfMeal)
+                totalLists.add(recipeIds)
+                map.put(currentDailyID.toString(), totalLists)
+                mapTotalCost.put(currentDailyID.toString(), totalcost)
+            }
+
+            //  recipeNumbers += "" + i + " "
+            // making DailyScheudle objects
+            currentDailyID = -1
+
+            var dailyIdsArr = dailyIds.splitIgnoreEmpty(" ")
+
+            for (i in dailyIdsArr) {
+
+                for (j in dailyInfo.indices) {
+                    var dailyInfo2 = dailyInfo[j].splitIgnoreEmpty("*")
+                    if (currentDailyID != dailyInfo2[0].toInt() && i.toInt() == dailyInfo2[0].toInt()) {
+                        dailyList!!.add(
+                            DailySchedule(
+                                dailyInfo2[0].toInt(),
+                                dailyInfo2[1].toInt(),
+                                map.get(dailyInfo2[0])!!.get(1),
+                                map.get(dailyInfo2[0])!!.get(0),
+                                map.get(dailyInfo2[0])!!.get(2),
+                                mapTotalCost.get(dailyInfo2[0])!!,
+                                false
+
+                            )
+                        )
+                        currentDailyID = dailyInfo2[0].toInt()
+                    }
+                }
+            }
+
+
+            var dialog = WeeklyDialogInfo(
+
+                dailyList!!,
+                numOfDays,
+                dailyIds,
+                totalCostWeekly,
+                pos
+            )
+
+
+            dialog.show(childFragmentManager, "WeeklyDialogInfo")
+
+
+        }
+
+
+    }
 }
+

@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,16 +21,16 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
+class MyMonthlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChangeListener {
 
     private var columnCount = 1
-    private var monthlyList: HashMap<String, MonthlySchedule>? = null
-    private var weeklyTmp: ArrayList<WeeklySchedule>? = null
-
-    // each monthlyid will hold all its weekly
-    private var monthly_weekly_map: HashMap<String, ArrayList<WeeklySchedule>>? = null
-    private var sorted: TreeMap<String, MonthlySchedule>? = null
+    private var monthlyList: ArrayList<MonthlySchedule>? = null
+    private var weeklyList: ArrayList<WeeklySchedule>? = null
     private var monthlyRecyclerViewAdapter: My_Monthly_RecylerViewAdapter? = null
+    private lateinit var nestedScroll: NestedScrollView // list of ingredietns
+    private var progressBar: ProgressBar? = null
+    private var page = 0
+    private var isScorlled = false
 
 
     var numOfWeek: String = ""
@@ -39,11 +41,10 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
         super.onCreate(savedInstanceState)
 
 
-        monthlyList = HashMap()
-        weeklyTmp = ArrayList()
-        sorted = TreeMap()
+        monthlyList = ArrayList()
+        weeklyList = ArrayList()
         monthlyRecyclerViewAdapter = My_Monthly_RecylerViewAdapter(
-            sorted!!,
+            monthlyList!!,
             childFragmentManager,
             this.context,
             requireActivity()
@@ -85,26 +86,32 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val x = inflater.inflate(R.layout.my_monthly_schedule_list, null)
-        val recyclerView = x.findViewById<View>(R.id.list) as RecyclerView
+        val view = inflater.inflate(R.layout.my_monthly_schedule_list, null)
+        val recyclerView = view.findViewById<View>(R.id.recycler_view) as RecyclerView
+        nestedScroll = view!!.findViewById(R.id.scroll_view)
+        progressBar = view!!.findViewById(R.id.progress_bar)
+        nestedScroll.setOnScrollChangeListener(this)
+
 
 
         instance = this
 
-        if (x is RecyclerView) {
-            with(x) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                recyclerView.adapter = monthlyRecyclerViewAdapter
+//        if (x is RecyclerView) {
+//            with(x) {
+//                layoutManager = when {
+//                    columnCount <= 1 -> LinearLayoutManager(context)
+//                    else -> GridLayoutManager(context, columnCount)
+//                }
+//                recyclerView.adapter = monthlyRecyclerViewAdapter
+//
+//            }
+//        }
 
-            }
-        }
-
+        recyclerView.layoutManager = LinearLayoutManager(this.context)
+        recyclerView.adapter = monthlyRecyclerViewAdapter
         startTask()
 
-        return x
+        return view
     }
 
     fun startTask() {
@@ -115,7 +122,13 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
 
     override fun DoNetWorkOpreation(): String {
 
-        var link = "https://elad1.000webhostapp.com/getMonthly.php?ownerID=" + UserInterFace.userID;
+        if (!isScorlled) {
+            page = 0
+        }
+        var string = UserInterFace.userID.toString() + " " + page
+
+
+        var link = "https://elad1.000webhostapp.com/getMonthly.php?ownerIDAndPage=" + string
 
 
         val sb = StringBuilder()
@@ -150,12 +163,15 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
     }
 
     override fun getData(str: String) {
+        progressBar!!.visibility = View.INVISIBLE
         if (!str.equals("")) {
+            if (!isScorlled)
+                monthlyList!!.clear()
 
             numOfWeek = ""
             weeklyIds = ""
             // recipeList!!.clear()
-            monthlyList!!.clear()
+            // monthlyList!!.clear()
 
 
             val monthlyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
@@ -170,12 +186,13 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
             var monthlyInfo2 = monthlyInfo[0].splitIgnoreEmpty("*")
             var currentMonthlyID = monthlyInfo2[0].toInt()
 
+
             for (i in monthlyInfo.indices) {
 
                 monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
 
                 //means we switch to the next WeeklyID
-                if (monthlyInfo2[0].toInt() != currentMonthlyID) {
+                if (monthlyInfo2[0].toInt() != currentMonthlyID ) {
 
                     // to keep each Weekly its dailys ids and its num of day.(days in a week)
                     var totalLists: ArrayList<String> = ArrayList()
@@ -214,14 +231,12 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
             }
 
             // making MonthlyScheudle objects
-            monthly_weekly_map = HashMap()
+
             currentMonthlyID = -1
             for (i in monthlyInfo.indices) {
                 var monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
                 if (monthlyInfo2[0].toInt() != currentMonthlyID) {
-                  weeklyTmp = ArrayList()
-                    monthlyList!!.put(
-                        monthlyInfo2[0],
+                    monthlyList!!.add(
                         MonthlySchedule(
                             monthlyInfo2[0].toInt(),
                             monthlyInfo2[1].toInt(),
@@ -232,33 +247,38 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost {
 
                         )
                     )
-                    //making DailyScheule objects in a map with WeeklyID
-                    var weeklyIds = map.get(monthlyInfo2[0])!!.get(1).splitIgnoreEmpty(" ")
 
-                    for (i in weeklyIds) {
-
-                        weeklyTmp!!.add(UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!.get(i)!!)
-                    }
-
-
-
-                    }
-                    monthly_weekly_map!!.put(monthlyInfo2[0].toInt().toString(), weeklyTmp!!)
                     currentMonthlyID = monthlyInfo2[0].toInt()
                 }
+            }
 
 
-            sorted!!.clear()
-            sorted!!.putAll(monthlyList!!)
 
-            monthlyRecyclerViewAdapter!!.setMonthlyValues(sorted!!)!!
-            monthlyRecyclerViewAdapter!!.setWeeklyValues(monthly_weekly_map!!)
-            UserPropertiesSingelton.getInstance()!!.setUserMonthly(sorted)
+            monthlyRecyclerViewAdapter!!.setMonthlyValues(monthlyList!!)!!
+            monthlyRecyclerViewAdapter!!.setWeeklyValues(weeklyList!!)
+            progressBar!!.visibility = View.INVISIBLE
+            isScorlled = false
 
         }
+        isScorlled = false
 
 
+    }
 
+    override fun onScrollChange(
+        v: NestedScrollView?,
+        scrollX: Int,
+        scrollY: Int,
+        oldScrollX: Int,
+        oldScrollY: Int
+    ) {
+        if (scrollY == v!!.getChildAt(0).measuredHeight - v.measuredHeight) {
+
+            page = page + 4
+            progressBar!!.visibility = View.VISIBLE
+            isScorlled = true
+            startTask()
 
         }
     }
+}

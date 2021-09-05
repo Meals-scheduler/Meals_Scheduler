@@ -599,7 +599,7 @@ class EditWeeklyDialog(
     }
 
     override fun DoNetWorkOpreation(): String {
-        var string = UserInterFace.userID.toString() + " " + dailyID
+        var string = UserInterFace.userID.toString() + " " + dailyId
 
         var link = "https://elad1.000webhostapp.com/getRecipeForDaily.php?ownerIDAndDaily=" + string
 

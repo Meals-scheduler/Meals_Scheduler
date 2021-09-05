@@ -448,58 +448,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
     }
 
 
-//    inner class SpinnerActivity(positionInTable: Int) : Activity(),
-//        AdapterView.OnItemSelectedListener {
-//        var positionInTable = positionInTable
-//
-//
-//        override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-//            Log.v("Elad1", "position in table " + positionInTable)
-//            // An item was selected. You can retrieve the selected item using
-//            // parent.getItemAtPosition(pos)
-//            Log.v("Elad1", "Daily days " + dailyDayss)
-//            var tmp = 0
-//            when (parent.getItemAtPosition(pos)) {
-//                "Sunday" -> tmp = 0
-//                "Monday" -> tmp = 1
-//                "Tuesday" -> tmp = 2
-//                "Wednesday" -> tmp = 3
-//                "Thursday" -> tmp = 4
-//                "Friday" -> tmp = 5
-//                "Saturday" -> tmp = 6
-//            }
-//            // dailyDays!!.add(parent.getItemAtPosition(pos).toString())
-////            if (!(dailyDayss!!.contains(tmp))) {
-////                dailyDayss!!.add(pos)
-////
-////
-////            }
-//            Log.v("Elad1", "Dup" + duplicateDay)
-//            if ((dailyDayss!!.contains(duplicateDay)) && !flag) {
-//                dailyDayss!!.remove(duplicateDay)
-//
-//            }
-//            Log.v("Elad1", "Tmp is " + tmp)
-//            dailyDayss!!.add(tmp)
-//            flag = true
-//
-//            // to delete unexpected daily days
-//            if (dailyDayss!!.size == tablePosition) {
-//                dailyDayss!!.removeAt(dailyDayss!!.size - 1)
-//                dailyDayss!!.add(positionInTable, tmp)
-//                dailyDayss!!.removeAt(positionInTable + 1)
-//            }
-//
-//            Log.v("Elad1", "Daily days 2" + dailyDayss)
-//
-//        }
-//
-//        override fun onNothingSelected(parent: AdapterView<*>) {
-//            // Another interface callback
-//
-//
-//        }
-//    }
+
 
     fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
         return this.split(*delimiters).filter {

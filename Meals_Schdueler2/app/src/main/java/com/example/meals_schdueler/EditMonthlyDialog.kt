@@ -17,6 +17,12 @@ import androidx.core.view.size
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.meals_schdueler.dummy.DailySchedule
+import java.io.BufferedInputStream
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 import java.text.DecimalFormat
 
 
@@ -26,7 +32,7 @@ class EditMonthlyDialog(
     weeklyIds: String,
     pos: Int,
     monthlyId: Int,
-) : DialogFragment(), DialogInterface.OnDismissListener, View.OnClickListener {
+) : DialogFragment(), DialogInterface.OnDismissListener, View.OnClickListener, GetAndPost {
 
 
     private lateinit var stk: TableLayout
@@ -40,7 +46,8 @@ class EditMonthlyDialog(
     private lateinit var weeklyDayss: ArrayList<Int>
     private var weeklyID: Recipe_Ingredients_List? = null
     private var listWeeklyIdChoosen: ArrayList<Int>? = null
-
+    private var weeklyListChoose: ArrayList<WeeklySchedule>? = null
+    private var dailyList: ArrayList<DailySchedule>? = null
 
     private var monthlyId = monthlyId
     private var numOfWeek = numOfWeek
@@ -53,6 +60,11 @@ class EditMonthlyDialog(
     private var savedSize = 0
     private var flag = true // this flag is for the duplicated weeks check
 
+    private var weeklyId = -1
+    private var numOfDays = ""
+    private var dailyIds = ""
+    private var pos = -1
+    private var totalCostWeekly = 0.0
 
 
     override fun onCreateView(
@@ -69,6 +81,7 @@ class EditMonthlyDialog(
         weeklyIdsArrlist = ArrayList()
         numOfWeekArrlist = ArrayList()
         weeklyDayss = ArrayList()
+        weeklyListChoose = ArrayList()
         listWeeklyIdChoosen = ArrayList()
         weeklyID = Recipe_Ingredients_List(listWeeklyIdChoosen)
         chooseBtn = x.findViewById(R.id.chooseBtn)
@@ -101,170 +114,158 @@ class EditMonthlyDialog(
             for (i in weeklyID!!.list!!) {
 
 
-                var weekly = UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!.get(i.toString())
-                weeklyList.add(weekly!!)
-                //   numOfDayArrlist.add(0)
+                var weekly = weeklyList!!.get(i)
+                weeklyListChoose!!.add(weekly!!)
 
 
             }
 
 
-            var j = savedSize
+            var j = 0
 
-            for (i in j..weeklyList.size - 1) {
-//
-//                if (j >= numOfDayArrlist.size) {
-//                    break
+            for (i in weeklyListChoose!!) {
+                if (j > savedSize - 1) {
 
-//                }
-
-
-                var tbrow: TableRow = TableRow(this.context)
-                tbrow.setTag(tablePosition++)
+                    var tbrow: TableRow = TableRow(this.context)
+                    tbrow.setTag(tablePosition++)
 
 
-                var t1v: Spinner = Spinner(context)
-                weeklyIdsArrlist.add(weeklyList.get(i).weeklyId)
-                t1v.setTag(tablePosition - 1)
+                    var t1v: Spinner = Spinner(context)
+                    weeklyIdsArrlist.add(i.weeklyId)
+                    t1v.setTag(tablePosition - 1)
 
 
-                ArrayAdapter.createFromResource(
-                    this.requireContext(),
-                    R.array.weeks,
-                    android.R.layout.simple_spinner_item
-                ).also { adapter ->
-                    // Specify the layout to use when the list of choices appears
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    // Apply the adapter to the spinner
-                    t1v.adapter = adapter
-                }
-
-                if (j > 0) {
-                    var o = stk.get(stk.size-1)
-                    var y = o as TableRow
-                    var s: Spinner = y.getChildAt(0) as Spinner
-                    var value = s.selectedItem
-
-                    when (value) {
-                        "Week 1" -> value = 0
-                        "Week 2" -> value = 1
-                        "Week 3" -> value = 2
-                        "Week 4" -> value = 3
-
+                    ArrayAdapter.createFromResource(
+                        this.requireContext(),
+                        R.array.weeks,
+                        android.R.layout.simple_spinner_item
+                    ).also { adapter ->
+                        // Specify the layout to use when the list of choices appears
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        // Apply the adapter to the spinner
+                        t1v.adapter = adapter
                     }
-                    var k = value as Int
-                    t1v.setSelection(k + 1)
-                } else {
-                    t1v.setSelection(0)
-                }
+
+                    if (j >=0) {
+                        var o = stk.get(stk.size - 1)
+                        var y = o as TableRow
+                        var s: Spinner = y.getChildAt(0) as Spinner
+                        var value = s.selectedItem
+
+                        when (value) {
+                            "Week 1" -> value = 0
+                            "Week 2" -> value = 1
+                            "Week 3" -> value = 2
+                            "Week 4" -> value = 3
+
+                        }
+                        var k = value as Int
+                        t1v.setSelection(k + 1)
+                    } else {
+                        t1v.setSelection(0)
+                    }
 
 
-                tbrow.addView(t1v)
+                    tbrow.addView(t1v)
 
 
-                var t2v: TextView = TextView(context)
+                    var t2v: TextView = TextView(context)
 
 
-                t2v.setText(" " + (weeklyList.get(i).weeklyId))
-                t2v.setTextColor(Color.BLACK)
-                t2v.gravity = Gravity.CENTER
+                    t2v.setText(" " + (i.weeklyId))
+                    t2v.setTextColor(Color.BLACK)
+                    t2v.gravity = Gravity.CENTER
 
-                tbrow.addView(t2v)
+                    tbrow.addView(t2v)
 
-                var t4v: Button = Button(context)
-                t4v.setTag(weeklyPos)
-                t4v.setText("Delete")
-                t4v.setTextSize(8F)
-                t4v.setTextColor(Color.BLACK)
-                t4v.gravity = Gravity.CENTER
-                tbrow.addView(t4v)
+                    var t4v: Button = Button(context)
+                    t4v.setTag(weeklyPos)
+                    t4v.setText("Delete")
+                    t4v.setTextSize(8F)
+                    t4v.setTextColor(Color.BLACK)
+                    t4v.gravity = Gravity.CENTER
+                    tbrow.addView(t4v)
 
-                t4v.setOnClickListener {
+                    t4v.setOnClickListener {
 
-                    var i = t4v.getTag() as Int
-
-
-                    stk.removeView(stk.getChildAt(tbrow.getTag() as Int))
-                    totalCostDobule -= weeklyList!!.get(t4v.getTag() as Int).totalCost
-                    totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
-                    totalCost.setText(totalCostDobule.toString())
-                    weeklyList!!.removeAt(t4v.getTag() as Int)
-                    weeklyIdsArrlist.removeAt(t4v.getTag() as Int)
-
-                    tablePosition--
+                        var i = t4v.getTag() as Int
 
 
-                    for (x in stk) {
-                        if (x.getTag() as Int == 0)
-                            continue
-                        if (x.getTag() as Int > i) {
-                            x.setTag(x.getTag() as Int - 1)
-                            var y = x as TableRow
-                            //changing info delete tag
-                            y.get(2).setTag(y.get(2).getTag() as Int - 1)
-                            //changing infp button tag
-                            y.get(3).setTag(y.get(3).getTag() as Int - 1)
+                        stk.removeView(stk.getChildAt(tbrow.getTag() as Int))
+                        totalCostDobule -= weeklyListChoose!!.get(t4v.getTag() as Int).totalCost
+                        totalCostDobule =
+                            (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
+                        totalCost.setText(totalCostDobule.toString())
+                        weeklyListChoose!!.removeAt(t4v.getTag() as Int)
+                        weeklyIdsArrlist.removeAt(t4v.getTag() as Int)
+
+                        tablePosition--
+
+
+                        for (x in stk) {
+                            if (x.getTag() as Int == 0)
+                                continue
+                            if (x.getTag() as Int > i) {
+                                x.setTag(x.getTag() as Int - 1)
+                                var y = x as TableRow
+                                //changing info delete tag
+                                y.get(2).setTag(y.get(2).getTag() as Int - 1)
+                                //changing infp button tag
+                                y.get(3).setTag(y.get(3).getTag() as Int - 1)
+
+                            }
 
                         }
 
+                        stk.setColumnShrinkable(3, false)
+                        stk.setColumnStretchable(3, false)
                     }
 
-                    stk.setColumnShrinkable(3, false)
-                    stk.setColumnStretchable(3, false)
-                }
+
+                    var t3v: Button = Button(context)
+                    t3v.setTag(weeklyPos++)
+                    t3v.setText("Info")
+                    t3v.setTextSize(10F)
+                    t3v.setTextColor(Color.BLACK)
+                    t3v.gravity = Gravity.CENTER
+
+                    //t5v.setBackgroundResource(R.drawable.spinner_shape)
+                    t3v.setOnClickListener {
+                        //NEED TO CHECK HERE WHATS WRONG with info button!!!!!
+                        // getting this daily recipes
+                        dailyList = ArrayList()
+
+                        weeklyId = i.weeklyId
+
+                        numOfDays = i.numOfDay
+                        dailyIds = i.dailyIds
+                        pos = t3v.getTag() as Int + 1
+                        totalCostWeekly = i.totalCost
 
 
-                var t3v: Button = Button(context)
-                t3v.setTag(weeklyPos++)
-                t3v.setText("Info")
-                t3v.setTextSize(10F)
-                t3v.setTextColor(Color.BLACK)
-                t3v.gravity = Gravity.CENTER
-
-                //t5v.setBackgroundResource(R.drawable.spinner_shape)
-                t3v.setOnClickListener {
-                    //NEED TO CHECK HERE WHATS WRONG with info button!!!!!
-                    // getting this daily recipes
-                    var dailyList: ArrayList<DailySchedule> = ArrayList()
-                    var ids = weeklyList.get(t3v.getTag() as Int).dailyIds.splitIgnoreEmpty(" ")
-
-                    //going through the list and get each recipe by its id
-                    for (i in ids) {
-                        dailyList.add(UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(i)!!)
-
+                        var s = AsynTaskNew(this, childFragmentManager)
+                        s.execute()
                     }
-
-                    var dialog = WeeklyDialogInfo(
-                        dailyList,
-                        weeklyList.get(i).numOfDay,
-                        weeklyList.get(i).dailyIds,
-                        weeklyList.get(i).totalCost,
-                        t3v.getTag() as Int + 1
-
-                    )
+                    tbrow.addView(t3v)
 
 
-                    dialog!!.show(childFragmentManager, "WeeklyDialogInfo")
+
+                    stk.setBackgroundResource(R.drawable.spinner_shape)
+                    tbrow.setBackgroundResource(R.drawable.spinner_shape)
+                    stk.addView(tbrow)
+                    j++
+                    totalCostDobule += i.totalCost
+
+
                 }
-                tbrow.addView(t3v)
 
-
-
-                stk.setBackgroundResource(R.drawable.spinner_shape)
-                tbrow.setBackgroundResource(R.drawable.spinner_shape)
-                stk.addView(tbrow)
+                weeklyPos++
                 j++
-                totalCostDobule += weeklyList.get(i).totalCost
-
+                totalCostDobule = (DecimalFormat("##.####").format(totalCostDobule)).toDouble()
+                totalCost.setText(totalCostDobule.toString())
+                savedSize = weeklyListChoose!!.size
 
             }
-
-            weeklyPos++
-
-            totalCostDobule = (DecimalFormat("##.####").format(totalCostDobule)).toDouble()
-            totalCost.setText(totalCostDobule.toString())
-            savedSize = weeklyList.size
-
 
         }
     }
@@ -389,29 +390,19 @@ class EditMonthlyDialog(
                 t3v.setOnClickListener {
                     //NEED TO CHECK HERE WHATS WRONG with info button!!!!!
                     // getting this weekly recipes
-                    var dailyList: ArrayList<DailySchedule> = ArrayList()
-                    var ids = weeklyList.get(t3v.getTag() as Int).dailyIds.splitIgnoreEmpty(" ")
+                    // getting this daily recipes
+                    dailyList = ArrayList()
 
-                    var m =0
-                    //going through the list and get each recipe by its id
-                    for (i in ids) {
-                        dailyList.add(UserPropertiesSingelton.getInstance()!!.getUserDaily()!!.get(i)!!)
+                    weeklyId = i.weeklyId
 
-                    }
-
-
-
-                    var dialog = WeeklyDialogInfo(
-                        dailyList,
-                        i.numOfDay,
-                        i.dailyIds,
-                        i.totalCost,
-                        t3v.getTag() as Int + 1,
-
-                        )
+                    numOfDays = i.numOfDay
+                    dailyIds = i.dailyIds
+                    pos = t3v.getTag() as Int + 1
+                    totalCostWeekly = i.totalCost
 
 
-                    dialog!!.show(childFragmentManager, "DailyDialogInfo")
+                    var s = AsynTaskNew(this, childFragmentManager)
+                    s.execute()
                 }
                 tbrow.addView(t3v)
 
@@ -485,18 +476,15 @@ class EditMonthlyDialog(
     }
 
 
-
-
     override fun onClick(p0: View?) {
         if (p0 == chooseBtn) {
             flag = true
             weeklyID!!.list!!.clear()
-            savedSize = weeklyList.size
+            savedSize = weeklyListChoose!!.size
+            weeklyList.clear()
 
             var dialog = Weekly_Schedule_Choose_Dialog(
-                UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!,
-//                UserPropertiesSingelton.getInstance()!!.getUserDaily()!!,
-//                UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!,
+                weeklyList,
                 weeklyID!!
             )
             dialog.show(childFragmentManager, "DailySchudleChooseDialog")
@@ -508,7 +496,7 @@ class EditMonthlyDialog(
                 numOfWeek = ""
                 weeklyIds = ""
 
-                val arr = IntArray(7)
+                val arr = IntArray(4)
 
                 // getting these weeks id's
                 for (i in weeklyIdsArrlist) {
@@ -592,5 +580,137 @@ class EditMonthlyDialog(
         } else if (p0 == exit) {
             dismiss()
         }
+    }
+
+    override fun DoNetWorkOpreation(): String {
+        var string = UserInterFace.userID.toString() + " " + weeklyID
+
+        var link =
+            "https://elad1.000webhostapp.com/getDailyForWeekly.php?ownerIDAndWeekly=" + string
+
+
+        val sb = StringBuilder()
+
+        val url = URL(link)
+        val urlConnection = url.openConnection() as HttpURLConnection
+        try {
+            val `in`: InputStream = BufferedInputStream(urlConnection.inputStream)
+            val bin = BufferedReader(InputStreamReader(`in`))
+            // temporary string to hold each line read from the reader.
+            var inputLine: String?
+
+            while (bin.readLine().also { inputLine = it } != null) {
+                sb.append(inputLine)
+
+            }
+        } finally {
+            // regardless of success or failure, we will disconnect from the URLConnection.
+            urlConnection.disconnect()
+        }
+
+
+        //Log.v("Elad1", "Id came is" + sb.toString())
+        return sb.toString()
+    }
+
+    override fun getData(str: String) {
+        dailyList!!.clear()
+        if (!str.equals("")) {
+            var quantities = ""
+            var numOfMeal = ""
+            var recipeIds = ""
+            var totalcost = 0.011
+
+
+            val dailyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+
+            // map to map each DailyID with a key as ID and contains all 3
+            // array lists (e.g - quantities,recipeIds,numOfMeals)
+            var map: HashMap<String, ArrayList<String>> = HashMap()
+            var mapTotalCost: HashMap<String, Double> = HashMap()
+            // first attach each meal to its dailyID.
+            var dailyInfo2 = dailyInfo[0].splitIgnoreEmpty("*")
+            var currentDailyID = dailyInfo2[0].toInt()
+            for (i in dailyInfo.indices) {
+                dailyInfo2 = dailyInfo[i].splitIgnoreEmpty("*")
+                //means we switch to the next DailyID
+                if (dailyInfo2[0].toInt() != currentDailyID) {
+                    var totalLists: ArrayList<String> = ArrayList()
+                    totalLists.add(quantities)
+                    totalLists.add(numOfMeal)
+                    totalLists.add(recipeIds)
+
+                    // gathering all quantities , numOfMeal and recipeIds under
+                    // the key of that DailyID
+                    map.put(currentDailyID.toString(), totalLists)
+                    mapTotalCost.put(currentDailyID.toString(), totalcost)
+                    //switching to the next DailyID
+                    currentDailyID = dailyInfo2[0].toInt()
+
+                    // clearing the variables for next DailyID
+                    quantities = ""
+                    numOfMeal = ""
+                    recipeIds = ""
+                }
+                quantities += "" + dailyInfo2[5] + " "
+                numOfMeal += "" + dailyInfo2[3] + " "
+                recipeIds += "" + dailyInfo2[4] + " "
+                // saving the last total cost
+                totalcost = dailyInfo2[2].toDouble()
+            }
+            if (!quantities.equals("")) {
+                var totalLists: ArrayList<String> = ArrayList()
+                totalLists.add(quantities)
+                totalLists.add(numOfMeal)
+                totalLists.add(recipeIds)
+                map.put(currentDailyID.toString(), totalLists)
+                mapTotalCost.put(currentDailyID.toString(), totalcost)
+            }
+
+            //  recipeNumbers += "" + i + " "
+            // making DailyScheudle objects
+            currentDailyID = -1
+
+            var dailyIdsArr = dailyIds.splitIgnoreEmpty(" ")
+
+            for (i in dailyIdsArr) {
+
+                for (j in dailyInfo.indices) {
+                    var dailyInfo2 = dailyInfo[j].splitIgnoreEmpty("*")
+                    if (currentDailyID != dailyInfo2[0].toInt() && i.toInt() == dailyInfo2[0].toInt()) {
+                        dailyList!!.add(
+                            DailySchedule(
+                                dailyInfo2[0].toInt(),
+                                dailyInfo2[1].toInt(),
+                                map.get(dailyInfo2[0])!!.get(1),
+                                map.get(dailyInfo2[0])!!.get(0),
+                                map.get(dailyInfo2[0])!!.get(2),
+                                mapTotalCost.get(dailyInfo2[0])!!,
+                                false
+
+                            )
+                        )
+                        currentDailyID = dailyInfo2[0].toInt()
+                    }
+                }
+            }
+
+
+            var dialog = WeeklyDialogInfo(
+
+                dailyList!!,
+                numOfDays,
+                dailyIds,
+                totalCostWeekly,
+                pos
+            )
+
+
+            dialog.show(childFragmentManager, "WeeklyDialogInfo")
+
+
+        }
+
+
     }
 }

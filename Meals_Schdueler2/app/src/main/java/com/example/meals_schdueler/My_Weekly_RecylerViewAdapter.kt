@@ -46,7 +46,7 @@ class My_Weekly_RecylerViewAdapter(
     private var dailyValues: ArrayList<DailySchedule> = ArrayList()
 
     private var childFragmentManager = childFragmentManager
-    private lateinit var recipeList: ArrayList<Recipe>
+  //  private lateinit var recipeList: ArrayList<Recipe>
 
     private var context = context
     private var activity = activity
@@ -108,10 +108,6 @@ class My_Weekly_RecylerViewAdapter(
             pos = position + 1
             totalCost = weeklyValues.get(position)!!.totalCost.toDouble()
 
-            Log.v("Elad1","weekly id  " +weeklyID )
-            Log.v("Elad1","numOfDay " +numOfDay )
-            Log.v("Elad1","dailyIds " +dailyIds )
-            Log.v("Elad1","totalCost " +totalCost )
 
 
 
