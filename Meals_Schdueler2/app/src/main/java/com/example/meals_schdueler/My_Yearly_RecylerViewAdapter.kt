@@ -81,22 +81,16 @@ class My_Yearly_RecylerViewAdapter(
         holder.numOfYearly.setText(position.toString())
 
         holder.edit.setOnClickListener {
-            // Log.v("Elad1", "FF1" + item.monthlyId.toString())
-            // copying the list not to override it in the edit .
-//            var tmpList: ArrayList<MonthlySchedule> = ArrayList()
-//            for (i in yearlyMonthly.get(item.yearlyId.toString())!!) {
-//                tmpList.add(i)
-//            }
-//
-//            var dialog = EditYearlyDialog(
-//                tmpList,
-//                item.numOfMonth,
-//                item.monthlyIds,
-//                position + 1,
-//                item.yearlyId
-//
-//            )
-//            dialog.show(childFragmentManager, "yearlyEdit")
+            queryToExcute = "edit"
+            yearlyID = yearlyValues.get(position)!!.yearlyId
+            monthlyIds = yearlyValues.get(position)!!.monthlyIds
+            numOfMonth = yearlyValues.get(position)!!.numOfMonth
+            pos = position + 1
+            totalCost = yearlyValues.get(position).totalCost
+
+
+            var s = AsynTaskNew(this, childFragmentManager)
+            s.execute()
         }
 
 
@@ -409,8 +403,8 @@ class My_Yearly_RecylerViewAdapter(
 
                 var dialog = EditYearlyDialog(
                     tmpList,
-                    numOfWeek,
-                    weeklyIds,
+                    numOfMonth,
+                    monthlyIds,
                     pos,
                     yearlyID
 

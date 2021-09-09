@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,12 +21,17 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class MyEventScheduleFragment : Fragment(), GetAndPost {
+class MyEventScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChangeListener {
 
     private var columnCount = 1
     private var recipeList: ArrayList<Recipe>? = null
     private var eventList: ArrayList<Event>? = null
     private var eventRecyclerViewAdapter: My_Event_RecylerViewAdapter? = null
+    private lateinit var nestedScroll: NestedScrollView // list of ingredietns
+    private var progressBar: ProgressBar? = null
+    private var page = 0
+    private var isScorlled = false
+
 
     private var quantities: String = ""
     private var recipeIds: String = ""
@@ -81,22 +88,26 @@ class MyEventScheduleFragment : Fragment(), GetAndPost {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.my_event_schedule_list, null)
-        val recyclerView = view.findViewById<View>(R.id.list) as RecyclerView
+        val recyclerView = view.findViewById<View>(R.id.recycler_view) as RecyclerView
+        nestedScroll = view!!.findViewById(R.id.scroll_view)
+        progressBar = view!!.findViewById(R.id.progress_bar)
+        nestedScroll.setOnScrollChangeListener(this)
 
 
         instance = this
-
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                recyclerView.adapter = eventRecyclerViewAdapter
-
-            }
-        }
-
+//
+//        if (view is RecyclerView) {
+//            with(view) {
+//                layoutManager = when {
+//                    columnCount <= 1 -> LinearLayoutManager(context)
+//                    else -> GridLayoutManager(context, columnCount)
+//                }
+//                recyclerView.adapter = eventRecyclerViewAdapter
+//
+//            }
+//        }
+        recyclerView.layoutManager = LinearLayoutManager(this.context)
+        recyclerView.adapter = eventRecyclerViewAdapter
         startTask()
 
         return view
@@ -110,7 +121,12 @@ class MyEventScheduleFragment : Fragment(), GetAndPost {
 
     override fun DoNetWorkOpreation(): String {
 
-        var link = "https://elad1.000webhostapp.com/getEvent.php?ownerID=" + UserInterFace.userID;
+        if (!isScorlled) {
+            page = 0
+        }
+        var string = UserInterFace.userID.toString() + " " + page
+
+        var link = "https://elad1.000webhostapp.com/getEvent.php?ownerIDAndPage=" + string
 
 
         val sb = StringBuilder()
@@ -145,11 +161,15 @@ class MyEventScheduleFragment : Fragment(), GetAndPost {
 
 
     override fun getData(str: String) {
+        progressBar!!.visibility = View.INVISIBLE
         if (!str.equals("")) {
+            if (!isScorlled)
+                eventList!!.clear()
+
             quantities = ""
             recipeIds = ""
-            recipeList!!.clear()
-            eventList!!.clear()
+          //  recipeList!!.clear()
+
 
             // extracting dividing the data
 
@@ -217,32 +237,31 @@ class MyEventScheduleFragment : Fragment(), GetAndPost {
             }
 
 
-            currentEventID = -1
-            for (i in eventList!!) {
-                //taking all the recipes for this daily
-                if (currentEventID != i.eventId) {
-                    var ids = i.recipeIds.splitIgnoreEmpty(" ")
-                    for (k in ids) {
-
-
-                        var recipe =
-                            UserPropertiesSingelton.getInstance()!!
-                                .getUserRecipess()!!.get(k)!!
-
-
-                            recipeList!!.add(recipe)
-
-
-                        //recipeList!!.add(recipe)
-                    }
-
-                    currentEventID = i.eventId
-
-                }
-            }
 
             eventRecyclerViewAdapter!!.setmValues(eventList!!)
             eventRecyclerViewAdapter!!.setRecipeList(recipeList!!)
+            progressBar!!.visibility = View.INVISIBLE
+
+            isScorlled = false
+        }
+
+        isScorlled = false
+    }
+
+    override fun onScrollChange(
+        v: NestedScrollView?,
+        scrollX: Int,
+        scrollY: Int,
+        oldScrollX: Int,
+        oldScrollY: Int
+    ) {
+        if (scrollY == v!!.getChildAt(0).measuredHeight - v.measuredHeight) {
+
+            page = page + 4
+            progressBar!!.visibility = View.VISIBLE
+            isScorlled = true
+            startTask()
+
         }
     }
 }
