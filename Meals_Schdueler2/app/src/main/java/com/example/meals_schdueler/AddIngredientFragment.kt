@@ -21,7 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import java.io.*
 
-open class AddIngredientFragment : Fragment(), View.OnClickListener , CameraInterface{
+open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInterface {
 
 
     lateinit var ingredientName: EditText
@@ -29,6 +29,7 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener , CameraInte
     lateinit var typeOfMeal: Spinner
     lateinit var typeOfSeason: Spinner
     lateinit var nutritiousBtn: Button
+    lateinit var buttonApi: Button
     lateinit var saveBtn: Button
     lateinit var howToStoreBtn: Button
     lateinit var shareIngredient: CheckBox
@@ -40,7 +41,6 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener , CameraInte
     private var imageUri: Uri? = null
     var notritousValue: NutritousValues? = null
     var howToStoreValue: HowToStroreValue? = null
-
 
 
     //for camera intent
@@ -78,15 +78,15 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener , CameraInte
         shareIngredient = x.findViewById(R.id.checkBoxShareIngredient)
         ingredientImage = x.findViewById(R.id.imageViewPic)
         costPerGram = x.findViewById(R.id.editTextCost)
+        buttonApi = x.findViewById(R.id.buttonApi)
 
         notritousValue = NutritousValues("", 0F, 0F, 0F)
-        howToStoreValue =  HowToStroreValue("")
-       //ingredientImageInit = initImage(ingredientImage)
+        howToStoreValue = HowToStroreValue("")
+        //ingredientImageInit = initImage(ingredientImage)
+        buttonApi.setOnClickListener(this)
 
 
-
-
-       // Log.v("Elad1","USER IDDDDDDDD" + UserInterFace.userID.toString())
+        // Log.v("Elad1","USER IDDDDDDDD" + UserInterFace.userID.toString())
 
 
         saveBtn.setOnClickListener(this)
@@ -129,7 +129,6 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener , CameraInte
     override fun onClick(p0: View?) {
 
 
-
         if (p0 == nutritiousBtn) {
             var dialog = NutritiousDialog(
                 notritousValue!!,
@@ -167,7 +166,7 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener , CameraInte
             ) // owenerId will be changed and will be determined from the user Table in the future.
 //            pbDialog = ProgressBarDialog()
 //            pbDialog.show(childFragmentManager, "ProgressBarDialog")
-            var s = AsynTaskNew(ingredient,childFragmentManager)
+            var s = AsynTaskNew(ingredient, childFragmentManager)
             s.execute()
             //pbDialog.dismiss()
 
@@ -177,6 +176,12 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener , CameraInte
             c.OnUploadOrCaptureClick()
 
 
+        } else if (p0 == buttonApi) {
+            val i = Intent(
+                context,
+                ApiFood::class.java
+            )
+            startActivity(i)
         }
     }
     // for camera
@@ -235,11 +240,11 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener , CameraInte
     }
 
     override fun getActivityy(): Activity? {
-       return activity
+        return activity
     }
 
     override fun getContextt(): Context? {
-       return context
+        return context
     }
 
 

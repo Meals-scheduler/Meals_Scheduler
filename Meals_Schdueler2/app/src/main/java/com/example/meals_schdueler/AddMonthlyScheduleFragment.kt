@@ -211,7 +211,7 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
                 if (arr[i] != 0) {
                     val builder: AlertDialog.Builder = AlertDialog.Builder(context)
 
-                    builder.setTitle("Adding Weekly")
+                    builder.setTitle("Adding Monthly")
                     builder.setMessage("You cannot have a duplicate of the same week.")
 
                     builder.setPositiveButton(

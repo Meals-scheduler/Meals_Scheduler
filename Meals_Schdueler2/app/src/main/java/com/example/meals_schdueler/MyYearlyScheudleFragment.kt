@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,30 +21,30 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
-class MyYearlyScheudleFragment : Fragment(), GetAndPost {
+class MyYearlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChangeListener {
 
     private var columnCount = 1
-    private var yearlyList: HashMap<String, YearlySchedule>? = null
-    private var monthlyTmp: ArrayList<MonthlySchedule>? = null
-
-    // each yearid will hold all its monthly
-    private var yearly_monthly_map: HashMap<String, ArrayList<MonthlySchedule>>? = null
-    private var sorted: TreeMap<String, YearlySchedule>? = null
+    private var yearlyList: ArrayList<YearlySchedule>? = null
+    private var monthlyList: ArrayList<MonthlySchedule>? = null
     private var yearlyRecyclerViewAdapter: My_Yearly_RecylerViewAdapter? = null
+    private lateinit var nestedScroll: NestedScrollView // list of ingredietns
+    private var progressBar: ProgressBar? = null
+    private var page = 0
+    private var isScorlled = false
 
-    var numOfMonth: String = ""
-    var monthlyIds: String = ""
+
+    private var numOfMonth: String = ""
+    private var monthlyIds: String = ""
     private var totalcost = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
 
-        yearlyList = HashMap()
-        monthlyTmp = ArrayList()
-        sorted = TreeMap()
+        yearlyList = ArrayList()
+        monthlyList = ArrayList()
         yearlyRecyclerViewAdapter = My_Yearly_RecylerViewAdapter(
-            sorted!!,
+            yearlyList!!,
             childFragmentManager,
             this.context,
             requireActivity()
@@ -85,26 +87,30 @@ class MyYearlyScheudleFragment : Fragment(), GetAndPost {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val x = inflater.inflate(R.layout.my_yearly_schedule_list, null)
-        val recyclerView = x.findViewById<View>(R.id.list) as RecyclerView
+        val view = inflater.inflate(R.layout.my_yearly_schedule_list, null)
+        val recyclerView = view.findViewById<View>(R.id.recycler_view) as RecyclerView
+        nestedScroll = view!!.findViewById(R.id.scroll_view)
+        progressBar = view!!.findViewById(R.id.progress_bar)
+        nestedScroll.setOnScrollChangeListener(this)
 
 
         instance = this
 
-        if (x is RecyclerView) {
-            with(x) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                recyclerView.adapter = yearlyRecyclerViewAdapter
-
-            }
-        }
-
+//        if (x is RecyclerView) {
+//            with(x) {
+//                layoutManager = when {
+//                    columnCount <= 1 -> LinearLayoutManager(context)
+//                    else -> GridLayoutManager(context, columnCount)
+//                }
+//                recyclerView.adapter = yearlyRecyclerViewAdapter
+//
+//            }
+//        }
+        recyclerView.layoutManager = LinearLayoutManager(this.context)
+        recyclerView.adapter = yearlyRecyclerViewAdapter
         startTask()
 
-        return x
+        return view
     }
 
     fun startTask() {
@@ -115,7 +121,13 @@ class MyYearlyScheudleFragment : Fragment(), GetAndPost {
 
     override fun DoNetWorkOpreation(): String {
 
-        var link = "https://elad1.000webhostapp.com/getYearly.php?ownerID=" + UserInterFace.userID;
+        if (!isScorlled) {
+            page = 0
+        }
+        var string = UserInterFace.userID.toString() + " " + page
+
+
+        var link = "https://elad1.000webhostapp.com/getYearly.php?ownerIDAndPage=" + string
 
 
         val sb = StringBuilder()
@@ -150,12 +162,14 @@ class MyYearlyScheudleFragment : Fragment(), GetAndPost {
     }
 
     override fun getData(str: String) {
+        progressBar!!.visibility = View.INVISIBLE
         if (!str.equals("")) {
+            if (!isScorlled)
+                yearlyList!!.clear()
 
             numOfMonth = ""
             monthlyIds = ""
             // recipeList!!.clear()
-            yearlyList!!.clear()
 
 
             val yearlyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
@@ -214,14 +228,13 @@ class MyYearlyScheudleFragment : Fragment(), GetAndPost {
             }
 
             // making MonthlyScheudle objects
-            yearly_monthly_map = HashMap()
+
             currentYearlyID = -1
             for (i in yearlyInfo.indices) {
                 var yearlyInfo2 = yearlyInfo[i].splitIgnoreEmpty("*")
                 if (yearlyInfo2[0].toInt() != currentYearlyID) {
-                    monthlyTmp = ArrayList()
-                    yearlyList!!.put(
-                        yearlyInfo2[0],
+
+                    yearlyList!!.add(
                         YearlySchedule(
                             yearlyInfo2[0].toInt(),
                             yearlyInfo2[1].toInt(),
@@ -232,32 +245,38 @@ class MyYearlyScheudleFragment : Fragment(), GetAndPost {
 
                         )
                     )
-                    //making DailyScheule objects in a map with WeeklyID
-                    var monthlyIds = map.get(yearlyInfo2[0])!!.get(1).splitIgnoreEmpty(" ")
-
-                    for (i in monthlyIds) {
-
-                        monthlyTmp!!.add(
-                            UserPropertiesSingelton.getInstance()!!.getUserMonthly()!!.get(i)!!
-                        )
-                    }
-
+                    currentYearlyID = yearlyInfo2[0].toInt()
 
                 }
-                yearly_monthly_map!!.put(yearlyInfo2[0].toInt().toString(), monthlyTmp!!)
-                currentYearlyID = yearlyInfo2[0].toInt()
             }
 
 
-            sorted!!.clear()
-            sorted!!.putAll(yearlyList!!)
 
-            yearlyRecyclerViewAdapter!!.setYearlyValues(sorted!!)!!
-            yearlyRecyclerViewAdapter!!.setMonthlyValues(yearly_monthly_map!!)
-            UserPropertiesSingelton.getInstance()!!.setUserYearly(sorted!!)!!
+            yearlyRecyclerViewAdapter!!.setYearlyValues(yearlyList!!)!!
+            yearlyRecyclerViewAdapter!!.setMonthlyValues(monthlyList!!)
+            progressBar!!.visibility = View.INVISIBLE
+            isScorlled = false
 
         }
 
+        isScorlled = false
+    }
 
+
+    override fun onScrollChange(
+        v: NestedScrollView?,
+        scrollX: Int,
+        scrollY: Int,
+        oldScrollX: Int,
+        oldScrollY: Int
+    ) {
+        if (scrollY == v!!.getChildAt(0).measuredHeight - v.measuredHeight) {
+
+            page = page + 4
+            progressBar!!.visibility = View.VISIBLE
+            isScorlled = true
+            startTask()
+
+        }
     }
 }

@@ -99,7 +99,7 @@ class Weekly_Schedule_Choose_Dialog(
         startTask()
         return view
 
-        return view
+
 
     }
 

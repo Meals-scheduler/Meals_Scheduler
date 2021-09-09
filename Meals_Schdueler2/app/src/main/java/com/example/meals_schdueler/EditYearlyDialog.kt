@@ -493,7 +493,7 @@ class EditYearlyDialog(
             savedSize = monthlyList.size
 
             var dialog = Monthly_Schedule_Choose_Dialog(
-                UserPropertiesSingelton.getInstance()!!.getUserMonthly()!!,
+                monthlyList,
 //                UserPropertiesSingelton.getInstance()!!.getUserDaily()!!,
 //                UserPropertiesSingelton.getInstance()!!.getUserRecipess()!!,
                 monthlyID!!

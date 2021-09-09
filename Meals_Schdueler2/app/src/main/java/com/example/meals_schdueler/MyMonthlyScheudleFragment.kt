@@ -33,8 +33,8 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScr
     private var isScorlled = false
 
 
-    var numOfWeek: String = ""
-    var weeklyIds: String = ""
+    private var numOfWeek: String = ""
+    private var weeklyIds: String = ""
     private var totalcost = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -192,7 +192,7 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScr
                 monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
 
                 //means we switch to the next WeeklyID
-                if (monthlyInfo2[0].toInt() != currentMonthlyID ) {
+                if (monthlyInfo2[0].toInt() != currentMonthlyID) {
 
                     // to keep each Weekly its dailys ids and its num of day.(days in a week)
                     var totalLists: ArrayList<String> = ArrayList()

@@ -30,7 +30,10 @@
 
         </receiver>
 
-        
+        <activity
+            android:name=".ApiFood"
+            android:label="@string/title_activity_user_inter_face"
+            android:theme="@style/Theme.Meals_Schdueler.NoActionBar"></activity>
         
         <activity
             android:name=".UserInterFace"

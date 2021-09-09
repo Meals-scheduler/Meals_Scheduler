@@ -20,26 +20,32 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.allyants.notifyme.NotifyMe
+import java.io.BufferedInputStream
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.*
+import kotlin.collections.ArrayList
 
 class My_Yearly_RecylerViewAdapter(
-    yearlyValues: TreeMap<String, YearlySchedule>,
+    yearlyValues: ArrayList<YearlySchedule>,
     childFragmentManager: FragmentManager,
     context: Context?,
-    activity : Activity
+    activity: Activity
 
-    ) : RecyclerView.Adapter<My_Yearly_RecylerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<My_Yearly_RecylerViewAdapter.ViewHolder>(), GetAndPost {
 
 
-    private var yearlyValues: TreeMap<String, YearlySchedule> = yearlyValues
+    private var yearlyValues: ArrayList<YearlySchedule> = yearlyValues
 
     // private var weeklyValues: HashMap<String, WeeklySchedule> = weeklyValues
-    private var yearlyMonthly: HashMap<String, ArrayList<MonthlySchedule>> = HashMap()
+    private var monthlyValues: ArrayList<MonthlySchedule> = ArrayList()
 
     private var childFragmentManager = childFragmentManager
 
     // private lateinit var recipeList: ArrayList<Recipe>
-    private var numOfYearly = 1
     private var context = context
     private var activity = activity
 
@@ -47,7 +53,13 @@ class My_Yearly_RecylerViewAdapter(
     private lateinit var cal: Calendar
     private lateinit var tpd: TimePickerDialog
     private lateinit var dpd: DatePickerDialog
-    private var yearlyList: ArrayList<YearlySchedule> = ArrayList()
+
+    private var queryToExcute = ""
+    private var yearlyID = -1
+    private var numOfMonth = ""
+    private var monthlyIds = ""
+    private var pos = -1
+    private var totalCost = 0.0
 
 
     override fun onCreateViewHolder(
@@ -57,65 +69,63 @@ class My_Yearly_RecylerViewAdapter(
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.my_yearly_schedule, parent, false)
 
-        for (i in yearlyValues) {
-            yearlyList.add(i.value)
-        }
+
         return ViewHolder(view)
     }
 
 
     override fun onBindViewHolder(holder: My_Yearly_RecylerViewAdapter.ViewHolder, position: Int) {
-        var item: YearlySchedule = yearlyList[position]!! // each item postion
+        var item: YearlySchedule = yearlyValues[position]!! // each item postion
         holder.mItem = item
 
-        holder.numOfYearly.setText(numOfYearly++.toString())
+        holder.numOfYearly.setText(position.toString())
 
         holder.edit.setOnClickListener {
             // Log.v("Elad1", "FF1" + item.monthlyId.toString())
             // copying the list not to override it in the edit .
-            var tmpList: ArrayList<MonthlySchedule> = ArrayList()
-            for (i in yearlyMonthly.get(item.yearlyId.toString())!!) {
-                tmpList.add(i)
-            }
-
-            var dialog = EditYearlyDialog(
-                tmpList,
-                item.numOfMonth,
-                item.monthlyIds,
-                position + 1,
-                item.yearlyId
-
-            )
-            dialog.show(childFragmentManager, "yearlyEdit")
+//            var tmpList: ArrayList<MonthlySchedule> = ArrayList()
+//            for (i in yearlyMonthly.get(item.yearlyId.toString())!!) {
+//                tmpList.add(i)
+//            }
+//
+//            var dialog = EditYearlyDialog(
+//                tmpList,
+//                item.numOfMonth,
+//                item.monthlyIds,
+//                position + 1,
+//                item.yearlyId
+//
+//            )
+//            dialog.show(childFragmentManager, "yearlyEdit")
         }
 
 
 
         holder.info.setOnClickListener {
 
-            var dialog = YearlyDialogInfo(
-                yearlyMonthly.get(item.yearlyId.toString())!!,
-                item.numOfMonth,
-                item.monthlyIds,
-                item.totalCost,
-                (position + 1)
-            )
+            queryToExcute = "info"
+            yearlyID = yearlyValues.get(position)!!.yearlyId
+            monthlyIds = yearlyValues.get(position)!!.monthlyIds
+            numOfMonth = yearlyValues.get(position)!!.numOfMonth
+            pos = position + 1
+            totalCost = yearlyValues.get(position).totalCost
 
 
-            dialog.show(childFragmentManager, "WeeklyDialogInfo")
+            var s = AsynTaskNew(this, childFragmentManager)
+            s.execute()
 
 
         }
 
         holder.delete.setOnClickListener {
             // deleteing this yearly from the map that holds for every yearly its monthly list
-            yearlyMonthly.remove(item.yearlyId.toString())!!
+
 
             var dialog =
                 DeleteAlertDialog(
                     "",
                     null,
-                    yearlyValues.get(item.yearlyId.toString())!!.yearlyId,
+                    yearlyValues.get(position)!!.yearlyId,
                     "Yearly"
                 )
             dialog.show(childFragmentManager, "DeleteMonthly")
@@ -174,18 +184,19 @@ class My_Yearly_RecylerViewAdapter(
                                             .key("test").addAction(Intent(), "Dismiss", true, false)
                                             .large_icon(R.mipmap.ic_launcher_round).build()
 
-                                    Log.v("Elad1","clicked yes")
+                                    Log.v("Elad1", "clicked yes")
 
                                 }
                                 DialogInterface.BUTTON_NEGATIVE -> {
 
-                                    Log.v("Elad1","clicked no")
+                                    Log.v("Elad1", "clicked no")
                                 }
                             }
                         }
 
                     val builder = AlertDialog.Builder(context)
-                    builder.setMessage("Would you like to get notification on the specific day?").setPositiveButton("Yes", dialogClickListener)
+                    builder.setMessage("Would you like to get notification on the specific day?")
+                        .setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show()
 
                     var upcoming = UpComingScheudule(
@@ -207,19 +218,16 @@ class My_Yearly_RecylerViewAdapter(
         }
     }
 
-    fun setYearlyValues(mValues: TreeMap<String, YearlySchedule>) {
+    fun setYearlyValues(mValues: ArrayList<YearlySchedule>) {
         //numOfMonthly = 1
         this.yearlyValues = mValues
-        yearlyList.clear()
-        for (i in mValues) {
-            yearlyList.add(i.value)
-        }
+
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
 
-    fun setMonthlyValues(mValues: HashMap<String, ArrayList<MonthlySchedule>>) {
+    fun setMonthlyValues(mValues: ArrayList<MonthlySchedule>) {
         //numOfMonthly = 1
-        this.yearlyMonthly = mValues
+        this.monthlyValues = mValues
 
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
@@ -243,7 +251,177 @@ class My_Yearly_RecylerViewAdapter(
         }
     }
 
+    override fun DoNetWorkOpreation(): String {
+        var string = UserInterFace.userID.toString() + " " + yearlyID
 
+        var link =
+            "https://elad1.000webhostapp.com/getMonthlyForYearly.php?ownerIDAndYearly=" + string
+
+
+        val sb = StringBuilder()
+
+        val url = URL(link)
+        val urlConnection = url.openConnection() as HttpURLConnection
+        try {
+            val `in`: InputStream = BufferedInputStream(urlConnection.inputStream)
+            val bin = BufferedReader(InputStreamReader(`in`))
+            // temporary string to hold each line read from the reader.
+            var inputLine: String?
+
+            while (bin.readLine().also { inputLine = it } != null) {
+                sb.append(inputLine)
+
+            }
+        } finally {
+            // regardless of success or failure, we will disconnect from the URLConnection.
+            urlConnection.disconnect()
+        }
+
+
+        //Log.v("Elad1", "Id came is" + sb.toString())
+        return sb.toString()
+    }
+
+    fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
+        return this.split(*delimiters).filter {
+            it.isNotEmpty()
+        }
+    }
+
+    override fun getData(str: String) {
+        monthlyValues.clear()
+        if (!str.equals("")) {
+
+
+            var numOfWeek = ""
+            var weeklyIds = ""
+            var totalcost = 0.011
+            // recipeList!!.clear()
+            // monthlyList!!.clear()
+
+
+            val monthlyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+
+
+            // map to map each MonthlyID with a key as ID and contains all 2
+            // array lists (e.g - numOfDay,dailyIds)
+            var map: HashMap<String, ArrayList<String>> = HashMap()
+            var mapTotalCost: HashMap<String, Double> = HashMap()
+
+
+            var monthlyInfo2 = monthlyInfo[0].splitIgnoreEmpty("*")
+            var currentMonthlyID = monthlyInfo2[0].toInt()
+
+
+            for (i in monthlyInfo.indices) {
+
+                monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
+
+                //means we switch to the next WeeklyID
+                if (monthlyInfo2[0].toInt() != currentMonthlyID) {
+
+                    // to keep each Weekly its dailys ids and its num of day.(days in a week)
+                    var totalLists: ArrayList<String> = ArrayList()
+                    totalLists.add(numOfWeek)
+                    totalLists.add(weeklyIds)
+                    // saving this weekly daily ids and num of days
+                    map.put(currentMonthlyID.toString(), totalLists)
+                    // saving this weekly total cost
+                    mapTotalCost.put(currentMonthlyID.toString(), totalcost)
+
+                    //switching to the next WeeklyID
+                    currentMonthlyID = monthlyInfo2[0].toInt()
+
+                    // clearing the variables for next WeeeklyID
+                    numOfWeek = ""
+                    weeklyIds = ""
+
+                }
+
+                numOfWeek += "" + monthlyInfo2[3] + " "
+                weeklyIds += "" + monthlyInfo2[4] + " "
+                // saving the last total cost
+                totalcost = monthlyInfo2[2].toDouble()
+
+
+            }
+
+            // not to skip on the last Weeekly
+
+            if (!numOfWeek.equals("")) {
+                var totalLists: ArrayList<String> = ArrayList()
+                totalLists.add(numOfWeek)
+                totalLists.add(weeklyIds)
+                map.put(currentMonthlyID.toString(), totalLists)
+                mapTotalCost.put(currentMonthlyID.toString(), totalcost)
+            }
+
+            // making MonthlyScheudle objects
+            var monthlyIdsArr = monthlyIds.splitIgnoreEmpty(" ")
+            currentMonthlyID = -1
+
+            for (i in monthlyIdsArr) {
+
+                for (j in monthlyInfo.indices) {
+                    var monthlyInfo2 = monthlyInfo[j].splitIgnoreEmpty("*")
+                    if (monthlyInfo2[0].toInt() != currentMonthlyID && i.toInt() == monthlyInfo2[0].toInt()) {
+                        monthlyValues!!.add(
+                            MonthlySchedule(
+                                monthlyInfo2[0].toInt(),
+                                monthlyInfo2[1].toInt(),
+                                map.get(monthlyInfo2[0])!!.get(0),
+                                map.get(monthlyInfo2[0])!!.get(1),
+                                mapTotalCost.get(monthlyInfo2[0])!!,
+                                false
+
+                            )
+                        )
+
+                        currentMonthlyID = monthlyInfo2[0].toInt()
+                    }
+                }
+            }
+
+
+            this.setMonthlyValues(monthlyValues)
+            if (queryToExcute.equals("info")) {
+
+
+                var dialog = YearlyDialogInfo(
+
+                    monthlyValues,
+                    numOfMonth,
+                    monthlyIds,
+                    totalCost,
+                    pos
+                )
+
+
+                dialog.show(childFragmentManager, "WeeklyDialogInfo")
+
+            } else {
+
+                // copying the list not to override it in the edit .
+                var tmpList: ArrayList<MonthlySchedule> = ArrayList()
+                for (i in monthlyValues) {
+                    tmpList.add(i)
+                }
+
+                var dialog = EditYearlyDialog(
+                    tmpList,
+                    numOfWeek,
+                    weeklyIds,
+                    pos,
+                    yearlyID
+
+
+                )
+                dialog.show(childFragmentManager, "weeklyEdit")
+            }
+
+        }
+
+    }
 
 
 }
