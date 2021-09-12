@@ -18,7 +18,7 @@ import kotlin.collections.ArrayList
  */
 class My_Ingredients_Recipe_RecyclerViewAdapter(
     private var values: ArrayList<Ingredient>,
-    quantityList: ArrayList<Int>,
+    quantityList: ArrayList<Float>,
     childFragmentManager: FragmentManager
 ) : RecyclerView.Adapter<My_Ingredients_Recipe_RecyclerViewAdapter.ViewHolder>() {
 

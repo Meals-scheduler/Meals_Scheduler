@@ -18,7 +18,7 @@ class MyRecipeIngredietns(
     recipeName: String,
     pictureBitMap: Bitmap,
     numOfPortions: String,
-    quantityList: ArrayList<Int>,
+    quantityList: ArrayList<Float>,
     totalCost: Double
 ) : DialogFragment() {
 

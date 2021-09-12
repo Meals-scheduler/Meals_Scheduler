@@ -1,14 +1,17 @@
 package com.example.meals_schdueler
 
 
-import android.R.attr.checked
-import android.R.id.checkbox
-import android.graphics.Color
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.ImageView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meals_schdueler.dummy.DummyContent.DummyItem
@@ -21,32 +24,33 @@ import kotlin.collections.ArrayList
  * TODO: Replace the implementation with code for your data type.
  */
 class Recipe_Ingredients_Choose_RecyclerViewAdapter(
-    private var values: TreeMap<String,Ingredient>,
+    private var values: ArrayList<Ingredient>,
     private var intValues: ArrayList<Int>,
     childFragmentManager: FragmentManager,
-    costList: ArrayList<Int>
-) :  RecyclerView.Adapter<Recipe_Ingredients_Choose_RecyclerViewAdapter.ViewHolder>() {
+    costList: ArrayList<Float>,
+    context: Context
+) : RecyclerView.Adapter<Recipe_Ingredients_Choose_RecyclerViewAdapter.ViewHolder>() {
 
-    private var mValues: TreeMap<String,Ingredient> = values
+    private var mValues: ArrayList<Ingredient> = values
     private var mIntValues: ArrayList<Int> = intValues
     private var childFragmentManager = childFragmentManager
-    private var costList: ArrayList<Int> = costList
-    private var ingredientList: ArrayList<Ingredient> = ArrayList()
+    private var costList: ArrayList<Float> = costList
 
-
+    //    private var arr: ArrayList<Boolean> = ArrayList<Boolean>(100)
+//    private var arr2: ArrayList<String> = ArrayList<String>(100)
+    private var context = context
+    private var posTmp = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.recipe_ingredients_choose, parent, false)
 
-        for(i in mValues){
-            ingredientList.add(i.value)
-        }
+
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var item: Ingredient = ingredientList[position] // each item postion
+        var item: Ingredient = mValues[position] // each item postion
         holder.mItem = item
         holder.ingredientName.setText(item.ingridentName)
         //var bitmap2 = ImageConvert.StringToBitMap(item.picture)
@@ -58,21 +62,41 @@ class Recipe_Ingredients_Choose_RecyclerViewAdapter(
         }
 
 
-
         holder.choose.setChecked(holder.arr[position]);
-        holder.cost.setText(holder.arr2[position])
+        holder.cost.setText(holder.arr2.get(position))
+        //  holder.choose.setChecked(holder.arr[position]);
+        // holder.cost.setText(holder.arr2[position])
         holder.choose.setOnClickListener() {
 
 
-
             if (holder.choose.isChecked == true && !(mIntValues.contains(position))) {
-                mIntValues.add(item.ingredientID)
+                mValues.add(item)
+                mIntValues.add(position)
                 holder.arr[position] = true
+                posTmp = position
 
 
                 if ((holder.cost.getText().toString().trim().length > 0)) {
-                    costList.add(holder.cost.text.toString().toInt())
-                    holder.arr2[position]=holder.cost.text.toString()
+                    costList.add(holder.cost.text.toString().toFloat())
+                    holder.arr2[position] = holder.cost.text.toString()
+                } else {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+
+                    builder.setTitle("Adding Ingredient")
+                    builder.setMessage("You must choose amount!!.")
+
+                    builder.setPositiveButton(
+                        "OK",
+                        DialogInterface.OnClickListener { dialog, which -> // Do nothing but close the dialog
+
+                            dialog.dismiss()
+                        })
+                    val alert: AlertDialog = builder.create()
+                    alert.show()
+                    holder.arr[posTmp] = false
+                    mIntValues.remove(posTmp)
+                    mValues.remove(item)
+                    holder.choose.isChecked = false
                 }
 
             } else if (holder.choose.isChecked == false) {
@@ -84,16 +108,24 @@ class Recipe_Ingredients_Choose_RecyclerViewAdapter(
             }
 
 
-      }
-
+        }
 
 
     }
 
 
-
-    fun setmValues(mValues:  TreeMap<String,Ingredient>) {
+    fun setmValues(mValues: ArrayList<Ingredient>) {
         this.mValues = mValues
+        //  Log.v("Elad1","List size " + mValues.size)
+//        if (mValues.size > arr.size) {
+//            for (i in 0..(mValues.size-arr.size)-1) {
+//                arr.add(false)
+//                arr2.add("")
+//            }
+//        }
+
+//        Log.v("Elad1","arr size" + arr.size)
+//        Log.v("Elad1","List sie" + mValues.size.toString())
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
 
@@ -108,11 +140,8 @@ class Recipe_Ingredients_Choose_RecyclerViewAdapter(
         var choose: CheckBox = view.findViewById(R.id.ingCheckBox)
         var cost: EditText = view.findViewById(R.id.editTextCost)
         lateinit var mItem: Ingredient
-        val arr = Array(mValues.size, {i-> false})
-        val arr2 = Array(mValues.size, {i->""})
-
-
-
+        val arr = Array(100, { i -> false })
+        val arr2 = Array(100, { i -> "" })
 
 
         override fun toString(): String {

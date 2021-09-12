@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +37,9 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
     lateinit var shareRecipe: CheckBox
     lateinit var shareInfo: CheckBox
     lateinit var typeOfMeall: String
+    private var ingredientListChoosen : ArrayList<Ingredient>? = null
+    private var savedSize = 0
+    private var totalCostt = 0F
 
     // lateinit var typeSeasson: String
     lateinit var ingredientImage: ImageView
@@ -59,11 +63,12 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
     // arrary list of int to the wrapper object Recipe_ingredients_list that contains a list of choosen items that
     // will be returned here for user choosen ingreidetnts.
     private var listItemsChoosen: ArrayList<Int>? = null
-    var costList: ArrayList<Int>? = null
+    var costList: ArrayList<Float>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         listItemsChoosen = ArrayList<Int>()
+        ingredientListChoosen = ArrayList()
         costList = ArrayList()
         listItems = Recipe_Ingredients_List(listItemsChoosen)
         ingredientList = ArrayList<Ingredient>()
@@ -187,11 +192,11 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
             val c = CameraIntent(this)
             c.OnUploadOrCaptureClick()
         } else if (p0 == addBtn) {
-            //  listItems!!.list!!.clear()
-
+           // listItems!!.list!!.clear()
+            ingredientList!!.clear()
             var dialog = Recipe_Ingredients_Choose_Dialog(
                 listItems!!,
-                UserPropertiesSingelton.getInstance()!!.getUserIngredientss()!!,
+                ingredientList!!,
                 costList!!
             )
             dialog.show(childFragmentManager, "Recipe_Ingredietns_Choose")
@@ -208,7 +213,7 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
                 totalCost.text.toString().toDouble(),
                 shareRecipe.isChecked,
                 shareInfo.isChecked,
-                ingredientList!!,
+                ingredientListChoosen!!,
                 costList!!,
 
                 )
@@ -281,17 +286,28 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
     override fun onDismiss(p0: DialogInterface?) {
         // on dissmiss event , when we dissmiss the ingrdeitns selcection dialog we want to update the list with
         // the chosen ingredients.
-        for (i in listItems!!.list!!) {
-            var ing = UserPropertiesSingelton.getInstance()!!.getUserIngredientss()!!.get(i.toString())
-            if (!ingredientList!!.contains(ing))
-                ingredientList!!.add(
-                    ing!!
 
-                )
+
+        var j = 0
+        for (i in listItems!!.list!!) {
+            if (j >= savedSize) {
+                var ing = ingredientList!!.get(i)
+                if (!ingredientListChoosen!!.contains(ing))
+                    ingredientListChoosen!!.add(
+                        ing!!
+
+                    )
+            }
+            j++
         }
-        ingredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
-        calculateCost()
-        calculateNutritiousValues()
+
+        ingredientRecyclerViewAdapter!!.setmValues(ingredientListChoosen!!)
+       // if(ingredientListChoosen!!.size >= costList!!.size){
+            calculateCost()
+            calculateNutritiousValues()
+
+      //  }
+
 
     }
 
@@ -302,17 +318,24 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
         notritousValue!!.protein = 0F
         notritousValue!!.fats = 0F
 
-        for (i in ingredientList!!) {
+        for (i in ingredientListChoosen!!) {
 
 
             var cur = costList!!.get(j) * i.carbs_.toFloat() / 100
+           // Log.v("Elad1","Carbs " + cur)
             notritousValue!!.carbs += cur
+           // Log.v("Elad1"," total Carbs " +     notritousValue!!.carbs)
             cur = costList!!.get(j) * i.protein_.toFloat() / 100
+          //  Log.v("Elad1","Protein " + cur)
             notritousValue!!.protein += cur
+          //  Log.v("Elad1"," total protein " +     notritousValue!!.protein)
             cur = costList!!.get(j) * i.fat.toFloat() / 100
+           // Log.v("Elad1","Fats " + cur)
             notritousValue!!.fats += cur
+           // Log.v("Elad1"," total fats " +     notritousValue!!.fats)
             j++
         }
+        savedSize = ingredientListChoosen!!.size
 
     }
 
@@ -321,7 +344,7 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
         var calc: Float = 0f
         var j = 0
 
-        for (i in ingredientList!!) {
+        for (i in ingredientListChoosen!!) {
 
 
             var cur = costList!!.get(j) * i.costPerGram.toFloat() / 100
@@ -329,6 +352,8 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
             calc += cur
             j++
         }
+
+
         totalCost.setText(calc.toString())
     }
 

@@ -191,6 +191,8 @@ class Daily_Schedule_Choose_Dialog(
             if (!isScorlled)
                 dailyList!!.clear()
 
+
+
             quantities = ""
             numOfMeal = ""
             recipeIds = ""

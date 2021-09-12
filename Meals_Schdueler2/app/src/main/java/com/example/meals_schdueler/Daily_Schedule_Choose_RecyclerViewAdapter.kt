@@ -208,7 +208,7 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
 
             var ingredientList: ArrayList<Ingredient> = ArrayList()
 
-            var quantities: HashMap<Int, ArrayList<Int>> = HashMap()
+            var quantities: HashMap<Int, ArrayList<Float>> = HashMap()
 
             var ids: HashMap<Int, ArrayList<Int>> = HashMap()
 
@@ -243,18 +243,18 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
 
                     if (!recipeIngredientMap.containsKey(currentIngId)) {
                         var recipeIngredients: ArrayList<Ingredient> = ArrayList()
-                        var quantitiy: ArrayList<Int> = ArrayList()
+                        var quantitiy: ArrayList<Float> = ArrayList()
                         var idss: ArrayList<Int> = ArrayList()
                         recipeIngredientMap.put(currentIngId, recipeIngredients)
                         recipeIngredientMap.get(currentIngId)!!.add(ing)
                         quantities.put(currentIngId, quantitiy)
-                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toInt())
+                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toFloat())
                         ids.put(currentIngId, idss)
                         ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
 
                     } else {
                         recipeIngredientMap.get(currentIngId)!!.add(ing)
-                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toInt())
+                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toFloat())
                         ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
                     }
 
@@ -288,7 +288,7 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
                                 recipe2[7].toBoolean(),
                                 recipe2[8].toBoolean(),
                                 recipeIngredientMap.get(recipe2[0].toInt())!!,
-                                quantities.get(recipe2[0].toInt())!!
+                                quantities.get(recipe2[0].toFloat())!!
                                 // hashMap.get(recipe2[0].toInt())!!.second
 
                             )

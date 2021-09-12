@@ -146,7 +146,7 @@ class AllRecipesFragment : Fragment(), GetAndPost {
             // first we extract the ids and quantity into map.
             // then we use another map to convert all ids to real ingredients.
 
-            var hashMap: HashMap<Int, Pair<ArrayList<String>, ArrayList<Int>>> =
+            var hashMap: HashMap<Int, Pair<ArrayList<String>, ArrayList<Float>>> =
                 HashMap()
 
             var map: HashMap<Int, ArrayList<Ingredient>> = HashMap()
@@ -188,7 +188,7 @@ class AllRecipesFragment : Fragment(), GetAndPost {
             for (i in ingredientList) {
                 fromListToMap.put(i.ingredientID.toString(), i)
             }
-            var quantities: ArrayList<Int> = ArrayList()
+            var quantities: ArrayList<Float> = ArrayList()
             var ids: ArrayList<String> = ArrayList()
             var ingredientList2: ArrayList<Ingredient> = ArrayList()
             //  var quantities: ArrayList<String> = ArrayList()
@@ -220,7 +220,7 @@ class AllRecipesFragment : Fragment(), GetAndPost {
                     }
 
                     ids.add(recipesAndIngredients2[9])
-                    quantities.add(recipesAndIngredients2[10].toInt())
+                    quantities.add(recipesAndIngredients2[10].toFloat())
                     // getting the specific ingredient by its ID
 
 
@@ -257,7 +257,7 @@ class AllRecipesFragment : Fragment(), GetAndPost {
                                 recipe2[7].toBoolean(),
                                 recipe2[8].toBoolean(),
                                 map.get(recipe2[0].toInt())!!,
-                                hashMap.get(recipe2[0].toInt())!!.second
+                                hashMap.get(recipe2[0].toFloat())!!.second
 
                             )
                         )

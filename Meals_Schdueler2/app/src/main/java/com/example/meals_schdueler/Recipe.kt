@@ -21,7 +21,7 @@ class Recipe(
     shareInfo: Boolean,
     // isUpdate: Boolean,
     listOfIngredients: ArrayList<Ingredient>,
-    listOfQuantity: ArrayList<Int>,
+    listOfQuantity: ArrayList<Float>,
 
 
     ) : GetAndPost {
@@ -144,6 +144,7 @@ class Recipe(
                 builder!!.append(line)
                 break
             }
+            Log.v("Sivan","Recipe : " + builder.toString())
             builder.toString()
 
         } catch (e: Exception) {

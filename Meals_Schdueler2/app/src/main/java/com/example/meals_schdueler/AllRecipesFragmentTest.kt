@@ -158,7 +158,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
         // ingredient size 15
         if (!str.equals("")) {
 
-            var start = 4
+            var start = 8
             //  recipeList!!.clear()
             val recipesAndIngredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
             if (isSearch) {
@@ -193,7 +193,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
 
                 }
             } else {
-                for (j in 0..3) {
+                for (j in 0..7) {
                     var recipesAndIngredients2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
                     recipeIds.add(recipesAndIngredients2[0].toInt())
                 }
@@ -216,7 +216,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
 
             var ingredientList: ArrayList<Ingredient> = ArrayList()
 
-            var quantities: HashMap<Int, ArrayList<Int>> = HashMap()
+            var quantities: HashMap<Int, ArrayList<Float>> = HashMap()
 
             var ids: HashMap<Int, ArrayList<Int>> = HashMap()
 
@@ -249,18 +249,18 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
 
                     if (!recipeIngredientMap.containsKey(currentIngId)) {
                         var recipeIngredients: ArrayList<Ingredient> = ArrayList()
-                        var quantitiy: ArrayList<Int> = ArrayList()
+                        var quantitiy: ArrayList<Float> = ArrayList()
                         var idss: ArrayList<Int> = ArrayList()
                         recipeIngredientMap.put(currentIngId, recipeIngredients)
                         recipeIngredientMap.get(currentIngId)!!.add(ing)
                         quantities.put(currentIngId, quantitiy)
-                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toInt())
+                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toFloat())
                         ids.put(currentIngId, idss)
                         ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
 
                     } else {
                         recipeIngredientMap.get(currentIngId)!!.add(ing)
-                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toInt())
+                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toFloat())
                         ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
                     }
 
@@ -329,7 +329,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
         Log.v("Elad1", "NESTEDDDDDDDD")
         if (scrollY == v!!.getChildAt(0).measuredHeight - v.measuredHeight) {
             if (!isSearch) {
-                page = page + 4
+                page = page + 8
                 progressBar!!.visibility = View.VISIBLE
                 startTask()
             }

@@ -297,10 +297,9 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
 
 
 
-        stk.setColumnShrinkable(3, true)
-        stk.setColumnShrinkable(4, true)
-        stk.setColumnStretchable(3, true)
-        stk.setColumnStretchable(4, true)
+        stk.setColumnShrinkable(3, false)
+        stk.setColumnStretchable(3, false)
+
 
         var j = 0
         for (i in dailyListChoose) {
@@ -528,7 +527,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
 
             var ingredientList: ArrayList<Ingredient> = ArrayList()
 
-            var quantities: HashMap<Int, ArrayList<Int>> = HashMap()
+            var quantities: HashMap<Int, ArrayList<Float>> = HashMap()
 
             var ids: HashMap<Int, ArrayList<Int>> = HashMap()
 
@@ -545,6 +544,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                         recipesAndIngredients2[0].toInt(),
                         recipesAndIngredients2[1].toInt(),
                         recipesAndIngredients2[2],
+
                         ImageConvert.StringToBitMap(recipesAndIngredients2[3].toString())!!,
                         recipesAndIngredients2[4],
                         recipesAndIngredients2[5],
@@ -563,18 +563,18 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
 
                     if (!recipeIngredientMap.containsKey(currentIngId)) {
                         var recipeIngredients: ArrayList<Ingredient> = ArrayList()
-                        var quantitiy: ArrayList<Int> = ArrayList()
+                        var quantitiy: ArrayList<Float> = ArrayList()
                         var idss: ArrayList<Int> = ArrayList()
                         recipeIngredientMap.put(currentIngId, recipeIngredients)
                         recipeIngredientMap.get(currentIngId)!!.add(ing)
                         quantities.put(currentIngId, quantitiy)
-                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toInt())
+                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toFloat())
                         ids.put(currentIngId, idss)
                         ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
 
                     } else {
                         recipeIngredientMap.get(currentIngId)!!.add(ing)
-                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toInt())
+                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toFloat())
                         ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
                     }
 
@@ -608,7 +608,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                                 recipe2[7].toBoolean(),
                                 recipe2[8].toBoolean(),
                                 recipeIngredientMap.get(recipe2[0].toInt())!!,
-                                quantities.get(recipe2[0].toInt())!!
+                                quantities.get(recipe2[0].toFloat())!!
                                 // hashMap.get(recipe2[0].toInt())!!.second
 
                             )

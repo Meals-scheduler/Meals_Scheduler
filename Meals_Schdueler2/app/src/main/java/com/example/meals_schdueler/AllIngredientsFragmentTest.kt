@@ -172,7 +172,7 @@ class AllIngredientsFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnSc
                         ingredient2[0].toInt(),
                         ingredient2[1].toInt(),
                         ingredient2[2],
-                        ImageConvert.StringToBitMap(ingredient2[3].toString())!!,
+                       ImageConvert.StringToBitMap(ingredient2[3].toString())!!,
                         ingredient2[4],
                         ingredient2[5],
                         ingredient2[6],
@@ -209,7 +209,7 @@ class AllIngredientsFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnSc
         oldScrollY: Int
     ) {
         if (scrollY == v!!.getChildAt(0).measuredHeight - v.measuredHeight) {
-            page = page + 4
+            page = page + 8
             progressBar!!.visibility = View.VISIBLE
             startTask()
         }

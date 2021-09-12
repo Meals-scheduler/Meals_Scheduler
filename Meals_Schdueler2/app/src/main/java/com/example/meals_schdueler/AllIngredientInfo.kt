@@ -72,7 +72,7 @@ class AllIngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListen
         typeOfMeal.setText(ingredient.typeOfMeal)
         typeOfSeason.setText(ingredient.typeofSeason)
         costPerGram.setText(ingredient.costPerGram)
-        ingredientImage.setImageBitmap(ingredient.pictureBitMap)
+       ingredientImage.setImageBitmap(ingredient.pictureBitMap)
 
 
     }
@@ -90,6 +90,7 @@ class AllIngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListen
                 ingredient.ingredientID,
                 UserInterFace.userID,
                 ingredientName.getText().toString(),
+
                 bitmapImage,
                 ingredient.typeOfMeal,
                 ingredient.typeofSeason,

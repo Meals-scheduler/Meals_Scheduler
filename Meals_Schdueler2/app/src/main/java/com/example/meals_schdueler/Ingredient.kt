@@ -70,11 +70,10 @@ class Ingredient(
         if (pictureBitMap != null)
             encodePicture()
         // if we insert a new ingredient and not updating
-        if (!isUpdate) {
-            ingredientID = getIngredientID().toInt() + 1 // getting current IngredientID first
-            UserPropertiesSingelton.getInstance()!!.getUserIngredientss()
-                ?.put(ingredientID.toString(), this)
-        }
+//        if (!isUpdate) {
+//            ingredientID = getIngredientID().toInt() + 1 // getting current IngredientID first
+//
+//        }
 
         // ingredientID = 1
 
@@ -184,6 +183,7 @@ class Ingredient(
                 builder!!.append(line)
                 break
             }
+            Log.v("Sivan","Ingredient : " + builder.toString())
             builder.toString()
         } catch (e: Exception) {
             Log.v("Elad1", "Failled")
