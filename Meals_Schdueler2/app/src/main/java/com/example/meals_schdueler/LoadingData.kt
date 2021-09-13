@@ -238,6 +238,7 @@ class LoadingData : AppCompatActivity(), GetAndPost {
                 if (recipe2.size == 11) {
                     var s = recipe2[0].toInt()
                     if (s != currentID) {
+                        var instructions = HowToStroreValue(recipe2[9])
                         recipeList?.put(
                             recipe2[0],
                             Recipe(
@@ -251,7 +252,8 @@ class LoadingData : AppCompatActivity(), GetAndPost {
                                 recipe2[7].toBoolean(),
                                 recipe2[8].toBoolean(),
                                 map.get(recipe2[0].toInt())!!,
-                                hashMap.get(recipe2[0].toFloat())!!.second
+                                hashMap.get(recipe2[0].toFloat())!!.second,
+                                instructions
 
                             )
                         )

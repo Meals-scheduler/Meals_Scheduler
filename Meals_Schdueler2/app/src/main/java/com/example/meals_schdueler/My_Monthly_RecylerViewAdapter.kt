@@ -356,28 +356,31 @@ class My_Monthly_RecylerViewAdapter(
 
             // making WeeklyScheudle objects
             var weeklyIdsArr = weeklyIds.splitIgnoreEmpty(" ")
-            currentWeeklyID = -1
+          //  currentWeeklyID = -1
+            var weekid = -1
             for (i in weeklyIdsArr) {
+                if(weekid!=i.toInt()) {
+                    for (j in weeklyInfo.indices) {
+                        var weeklyInfo2 = weeklyInfo[j].splitIgnoreEmpty("*")
+                        if (i.toInt() == weeklyInfo2[0].toInt() && weeklyValues.size < weeklyIdsArr.size) {
+                            weeklyValues!!.add(
+                                WeeklySchedule(
+                                    weeklyInfo2[0].toInt(),
+                                    weeklyInfo2[1].toInt(),
+                                    map.get(weeklyInfo2[0])!!.get(0),
+                                    map.get(weeklyInfo2[0])!!.get(1),
+                                    mapTotalCost.get(weeklyInfo2[0])!!,
+                                    false
 
-                for (j in weeklyInfo.indices) {
-                    var weeklyInfo2 = weeklyInfo[j].splitIgnoreEmpty("*")
-                    if (currentWeeklyID != weeklyInfo2[0].toInt() && i.toInt() == weeklyInfo2[0].toInt()) {
-                        weeklyValues!!.add(
-                            WeeklySchedule(
-                                weeklyInfo2[0].toInt(),
-                                weeklyInfo2[1].toInt(),
-                                map.get(weeklyInfo2[0])!!.get(0),
-                                map.get(weeklyInfo2[0])!!.get(1),
-                                mapTotalCost.get(weeklyInfo2[0])!!,
-                                false
-
+                                )
                             )
-                        )
-                        currentWeeklyID = weeklyInfo2[0].toInt()
+                            // currentWeeklyID = weeklyInfo2[0].toInt()
+                        }
+
+
                     }
-
-
                 }
+                 weekid = weeklyIdsArr[0].toInt()
             }
 
             this.setWeeklyValues(weeklyValues)

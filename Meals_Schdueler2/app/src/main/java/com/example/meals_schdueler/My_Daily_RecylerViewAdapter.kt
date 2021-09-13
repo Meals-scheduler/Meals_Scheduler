@@ -311,7 +311,7 @@ class My_Daily_RecylerViewAdapter(
             while (true) {
 
                 var recipesAndIngredients2 = recipesAndIngredients[j++].splitIgnoreEmpty("*")
-                if (recipesAndIngredients2.size != 9) {
+                if (recipesAndIngredients2.size != 10) {
                     break
                 }
                 start++
@@ -388,10 +388,12 @@ class My_Daily_RecylerViewAdapter(
 
                 for (j in recipesAndIngredients.indices) {
 
+
                     var recipe2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
-                    if (recipe2.size == 9 && i.toInt() == recipe2[0].toInt()) {
+                    if (recipe2.size == 10 && i.toInt() == recipe2[0].toInt()) {
                         //var s = recipe2[0].toInt()
                         //  if (s != currentID)
+                            var instructions = HowToStroreValue(recipe2[9])
                         recipeList?.add(
                             Recipe(
                                 recipe2[0].toInt(),
@@ -404,7 +406,8 @@ class My_Daily_RecylerViewAdapter(
                                 recipe2[7].toBoolean(),
                                 recipe2[8].toBoolean(),
                                 recipeIngredientMap.get(recipe2[0].toInt())!!,
-                                quantities.get(recipe2[0].toInt())!!
+                                quantities.get(recipe2[0].toInt())!!,
+                                instructions
                                 // hashMap.get(recipe2[0].toInt())!!.second
 
                             )

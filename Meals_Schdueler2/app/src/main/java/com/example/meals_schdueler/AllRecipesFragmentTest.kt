@@ -83,8 +83,6 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
     }
 
 
-
-
     fun startTask() {
         var s = AsynTaskNew(this, childFragmentManager)
         s.execute()
@@ -183,7 +181,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
                 var count = 0
                 for (j in recipesAndIngredients.indices) {
                     var recipesAndIngredients2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
-                    if (recipesAndIngredients2.size == 9) {
+                    if (recipesAndIngredients2.size == 10) {
                         recipeIds.add(recipesAndIngredients2[0].toInt())
                         count++
                     } else {
@@ -208,7 +206,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
 //            var hashMap: HashMap<Int, Pair<ArrayList<String>, ArrayList<Int>>> =
 //                HashMap()
 
-            var map: HashMap<Int, ArrayList<Ingredient>> = HashMap()
+          //  var map: HashMap<Int, ArrayList<Ingredient>> = HashMap()
 
 //            var ingredientList: ArrayList<Ingredient> = ArrayList()
 //
@@ -279,8 +277,10 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
             for (i in recipesAndIngredients.indices) {
 
                 var recipe2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
-                if (recipe2.size == 9) {
+                if (recipe2.size == 10) {
                     var s = recipe2[0].toInt()
+                    var instructions =
+                        HowToStroreValue(recipe2[9])
                     if (s != currentID)
                         recipeList?.add(
                             Recipe(
@@ -294,9 +294,9 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
                                 recipe2[7].toBoolean(),
                                 recipe2[8].toBoolean(),
                                 recipeIngredientMap.get(recipe2[0].toInt())!!,
-                                quantities.get(s)!!
+                                quantities.get(s)!!,
                                 // hashMap.get(recipe2[0].toInt())!!.second
-
+                                instructions
                             )
                         )
 
@@ -308,8 +308,8 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
             AllRecipeRecyclerViewAdapter!!.setmValues(recipeList!!)
             progressBar!!.visibility = View.INVISIBLE
         } else {
-            if (isSearch)
-            {
+            progressBar!!.visibility = View.INVISIBLE
+            if (isSearch) {
                 recipeList!!.clear()
                 noResultsTextView.visibility = View.VISIBLE
                 AllRecipeRecyclerViewAdapter!!.setmValues(recipeList!!)

@@ -269,14 +269,17 @@ class EditDailyDialog(
 
                 //t5v.setBackgroundResource(R.drawable.spinner_shape)
                 t7v.setOnClickListener {
-
+                    var instructions =
+                        HowToStroreValue(recipeList.get(t7v.getTag() as Int).instructions.howToStore)
                     var dialog = MyRecipeIngredietns(
                         recipeList.get(t7v.getTag() as Int).listOfIngredients,
                         recipeList.get(t7v.getTag() as Int).recipeName,
                         recipeList.get(t7v.getTag() as Int).pictureBitMap,
                         recipeList.get(t7v.getTag() as Int).numOfPortions,
                         recipeList.get(t7v.getTag() as Int).quantityList,
-                        recipeList.get(t7v.getTag() as Int).totalCost
+                        recipeList.get(t7v.getTag() as Int).totalCost,
+                        recipeList.get(t7v.getTag() as Int).typeOfMeal,
+                        instructions
                     )
                     dialog.show(childFragmentManager, "MyRecipeIngredients")
                 }
@@ -637,13 +640,17 @@ class EditDailyDialog(
                     t7v.gravity = Gravity.CENTER
 
                     t7v.setOnClickListener {
+                        var instructions =
+                            HowToStroreValue(recipeList.get(t7v.getTag() as Int).instructions.howToStore)
                         var dialog = MyRecipeIngredietns(
                             recipeListChoose.get(t7v.getTag() as Int).listOfIngredients,
                             recipeListChoose.get(t7v.getTag() as Int).recipeName,
                             recipeListChoose.get(t7v.getTag() as Int).pictureBitMap,
                             recipeListChoose.get(t7v.getTag() as Int).numOfPortions,
                             recipeListChoose.get(t7v.getTag() as Int).quantityList,
-                            recipeListChoose.get(t7v.getTag() as Int).totalCost
+                            recipeListChoose.get(t7v.getTag() as Int).totalCost,
+                            recipeList.get(t7v.getTag() as Int).typeOfMeal,
+                            instructions
                         )
                         dialog.show(childFragmentManager, "MyRecipeIngredients")
                     }

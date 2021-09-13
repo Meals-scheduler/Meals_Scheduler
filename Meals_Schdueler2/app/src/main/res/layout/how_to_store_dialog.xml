@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@drawable/alert_dialog_shape"
     android:orientation="vertical">
 
 
@@ -14,6 +15,15 @@
         android:scaleType="center"
         android:src="@drawable/nutritious_foods" />
 
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:fontFamily="@font/poppinsbold"
+        android:text="Instructions" />
 
     <EditText
         android:id="@+id/howToStoreDesEditText"
@@ -38,7 +48,8 @@
         android:layout_marginTop="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
-        android:fontFamily="sans-serif"
+        android:background="@drawable/btn1"
+        android:fontFamily="@font/poppinsbold"
         android:inputType="text"
         android:text="Done" />
 

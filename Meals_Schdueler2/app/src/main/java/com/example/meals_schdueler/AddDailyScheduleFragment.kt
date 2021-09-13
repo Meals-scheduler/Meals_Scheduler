@@ -295,7 +295,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
 
         }
-        Log.v("Elad1","Quan" + recipesQuantities!!.list!!.size)
+        Log.v("Elad1", "Quan" + recipesQuantities!!.list!!.size)
         Log.v("Elad1", "RECIPE LIST " + recipeList.size)
         // for buttons to shirnk them
 
@@ -440,13 +440,17 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
                 //t5v.setBackgroundResource(R.drawable.spinner_shape)
                 t7v.setOnClickListener {
+                    var instructions =
+                        HowToStroreValue(recipeListChoose.get(t7v.getTag() as Int - 1).instructions.howToStore)
                     var dialog = MyRecipeIngredietns(
                         recipeListChoose.get(t7v.getTag() as Int - 1).listOfIngredients,
                         recipeListChoose.get(t7v.getTag() as Int - 1).recipeName,
                         recipeListChoose.get(t7v.getTag() as Int - 1).pictureBitMap,
                         recipeListChoose.get(t7v.getTag() as Int - 1).numOfPortions,
                         recipeListChoose.get(t7v.getTag() as Int - 1).quantityList,
-                        recipeListChoose.get(t7v.getTag() as Int - 1).totalCost
+                        recipeListChoose.get(t7v.getTag() as Int - 1).totalCost,
+                        recipeListChoose.get(t7v.getTag() as Int - 1).typeOfMeal,
+                        instructions
                     )
                     dialog.show(childFragmentManager, "MyRecipeIngredients")
                 }

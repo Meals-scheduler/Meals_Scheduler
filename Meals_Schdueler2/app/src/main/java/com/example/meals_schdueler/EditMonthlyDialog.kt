@@ -583,7 +583,8 @@ class EditMonthlyDialog(
     }
 
     override fun DoNetWorkOpreation(): String {
-        var string = UserInterFace.userID.toString() + " " + weeklyID
+
+        var string = UserInterFace.userID.toString() + " " + weeklyId
 
         var link =
             "https://elad1.000webhostapp.com/getDailyForWeekly.php?ownerIDAndWeekly=" + string

@@ -193,6 +193,7 @@ class AllIngredientsFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnSc
             AllIngredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
             progressBar!!.visibility = View.INVISIBLE
         } else {
+            progressBar!!.visibility = View.INVISIBLE
             if (isSearch) {
                 ingredientList!!.clear()
                 noResultsTextView.visibility = View.VISIBLE

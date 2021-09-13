@@ -108,8 +108,8 @@ class MyRecipeFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChange
 
 
     override fun DoNetWorkOpreation(): String {
-        if(!isScorlled){
-            page =0
+        if (!isScorlled) {
+            page = 0
         }
         var string = UserInterFace.userID.toString() + " " + page
 
@@ -183,7 +183,7 @@ class MyRecipeFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChange
 
                 for (j in recipesAndIngredients.indices) {
                     var recipesAndIngredients2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
-                    if (recipesAndIngredients2.size == 9) {
+                    if (recipesAndIngredients2.size == 10) {
                         recipeIds.add(recipesAndIngredients2[0].toInt())
                         start++
                     } else {
@@ -197,7 +197,7 @@ class MyRecipeFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChange
                 while (true) {
 
                     var recipesAndIngredients2 = recipesAndIngredients[j++].splitIgnoreEmpty("*")
-                    if (recipesAndIngredients2.size != 9) {
+                    if (recipesAndIngredients2.size != 10) {
                         break
                     }
                     start++
@@ -287,26 +287,28 @@ class MyRecipeFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChange
             for (i in recipesAndIngredients.indices) {
 
                 var recipe2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
-                if (recipe2.size == 9) {
+                if (recipe2.size == 10) {
                     var s = recipe2[0].toInt()
+                    var instrcutions = HowToStroreValue(recipe2[9])
                     if (s != currentID)
-                        recipeList?.add(
-                            Recipe(
-                                recipe2[0].toInt(),
-                                recipe2[1].toInt(),
-                                recipe2[2],
-                                ImageConvert.StringToBitMap(recipe2[3].toString())!!,
-                                recipe2[4],
-                                recipe2[5],
-                                recipe2[6].toDouble(),
-                                recipe2[7].toBoolean(),
-                                recipe2[8].toBoolean(),
-                                recipeIngredientMap.get(recipe2[0].toInt())!!,
-                                quantities.get(s)!!
-                                // hashMap.get(recipe2[0].toInt())!!.second
+                    recipeList?.add(
+                        Recipe(
+                            recipe2[0].toInt(),
+                            recipe2[1].toInt(),
+                            recipe2[2],
+                            ImageConvert.StringToBitMap(recipe2[3].toString())!!,
+                            recipe2[4],
+                            recipe2[5],
+                            recipe2[6].toDouble(),
+                            recipe2[7].toBoolean(),
+                            recipe2[8].toBoolean(),
+                            recipeIngredientMap.get(recipe2[0].toInt())!!,
+                            quantities.get(s)!!,
+                            instrcutions
+                            // hashMap.get(recipe2[0].toInt())!!.second
 
-                            )
                         )
+                    )
 
                     currentID = recipe2[0].toInt()
 
@@ -326,7 +328,7 @@ class MyRecipeFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChange
             }
         }
         progressBar!!.visibility = View.INVISIBLE
-        isScorlled= false
+        isScorlled = false
 
 
     }

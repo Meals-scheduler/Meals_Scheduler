@@ -47,14 +47,16 @@ class MyRecipeRecyclerViewAdapter(
             for( i in item.listOfIngredients){
                 Log.v("Elad1","List of ing" + i.ingridentName)
             }
-
+            var instructions = HowToStroreValue(item.instructions.howToStore)
             var dialog = MyRecipeIngredietns(
                 item.listOfIngredients,
                 item.recipeName,
                 item.pictureBitMap,
                 item.numOfPortions,
                 item.quantityList,
-                item.totalCost
+                item.totalCost,
+                item.typeOfMeal,
+                instructions
             )
             dialog.show(childFragmentManager, "MyRecipeIngredients")
         }

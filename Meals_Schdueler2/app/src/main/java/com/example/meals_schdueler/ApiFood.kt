@@ -15,12 +15,13 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.*
+import java.lang.Error
 import java.net.HttpURLConnection
 import java.net.URL
 
 
 class ApiFood : AppCompatActivity(), GetAndPost {
-    private var fcid = 49504
+    private var fcid = 54003
     private var isRecipe = true
     private var j = 0
     private var k = 0
@@ -61,17 +62,15 @@ class ApiFood : AppCompatActivity(), GetAndPost {
         var link = ""
         //  Log.v("Elad1", "FCID is " + fcid)
         if (isRecipe) {
-            Log.v("Sivan" ,"here is recipe")
+            Log.v("Sivan", "here is recipe")
             link =
-                " https://api.spoonacular.com/recipes/" + fcid + "/information?apiKey=b25a553bb12141e8840687eeae933fe1&includeNutrition=true"
-           // fcid += 1
-        }
-
-        else {
-            Log.v("Sivan" ,"here is ingredient")
+                " https://api.spoonacular.com/recipes/" + fcid + "/information?apiKey=53c7a22467e04b0494d59b9ebec69d2a&includeNutrition=true"
+            // fcid += 1
+        } else {
+            Log.v("Sivan", "here is ingredient")
             link =
 
-                "https://api.spoonacular.com/food/ingredients/" + ingredientsIds.get(j++) + "/information?amount=1&apiKey=b25a553bb12141e8840687eeae933fe1"
+                "https://api.spoonacular.com/food/ingredients/" + ingredientsIds.get(j++) + "/information?amount=1&apiKey=53c7a22467e04b0494d59b9ebec69d2a"
         }
 
 
@@ -110,7 +109,7 @@ class ApiFood : AppCompatActivity(), GetAndPost {
         Log.v("Elad1", str)
 
         if (isRecipe && !wantToUpload) {
-            Log.v("Sivan" ,"first here talking ing ids")
+            Log.v("Sivan", "first here talking ing ids")
             isRecipe = false
             val jsonObject = JSONObject(str)
             val ingredients = jsonObject.getString("extendedIngredients")
@@ -127,7 +126,8 @@ class ApiFood : AppCompatActivity(), GetAndPost {
                 // name , picture , amount
                 var description = ""
                 var id = jsonSecondary.getString("id")
-                ingredientsIds.add(id)
+                if (!ingredientsIds.contains(id))
+                    ingredientsIds.add(id)
                 k = ingredientsIds.size
 //            description = jsonSecondary.getString("description")
                 Log.v("Elad1", "id " + id)
@@ -138,7 +138,7 @@ class ApiFood : AppCompatActivity(), GetAndPost {
 
             }
             for (i in ingredientsIds) {
-                Log.v("Sivan" ,"second taking ingredients info")
+                Log.v("Sivan", "second taking ingredients info")
                 startTask()
 
             }
@@ -165,16 +165,50 @@ class ApiFood : AppCompatActivity(), GetAndPost {
                 typeOfMeal = "Dairy"
             }
 
-            val ingredients = jsonObject.getString("extendedIngredients")
 
+            val ingredients = jsonObject.getString("extendedIngredients")
+            var instructions = jsonObject.get("summary").toString()
+
+            instructions = instructions.replace('\'', ' ')
 
             val arr = JSONArray(ingredients)
 
             for (i in 0 until arr.length()) {
                 val jsonSecondary = arr.getJSONObject(i)
-
                 var amount = jsonSecondary.getString("amount")
-                ingredientsQuantity.add(amount.toFloat())
+                var unit = ""
+
+
+                try {
+                    unit = jsonSecondary.getString("unit")
+                } catch (e: Error) {
+                    try {
+                        unit = jsonSecondary.getString("unitShort")
+                    } catch (e: Error) {
+                        unit = ""
+                    }
+
+                }
+
+
+                var floatGrams = 1F
+
+                when (unit.toString()) {
+
+                    "cups", "cup" -> floatGrams = (120.0F) * amount.toFloat()
+                    "tsps", "tsp" -> floatGrams = (4.2F) * amount.toFloat()
+                    "ml" -> floatGrams = amount.toFloat()
+                    "Tbsps", "Tbsp", "Tb" -> floatGrams = (14.3F) * amount.toFloat()
+                    "meduim" -> floatGrams = (20.0F) * amount.toFloat()
+                    "small" -> floatGrams = (10.0F) * amount.toFloat()
+                    "large", "serving" -> floatGrams = (30.0F) * amount.toFloat()
+                    "", "stick", "Slice" -> floatGrams = (20.0F) * amount.toFloat()
+
+
+                }
+
+
+                ingredientsQuantity.add(floatGrams)
 
 
             }
@@ -182,14 +216,16 @@ class ApiFood : AppCompatActivity(), GetAndPost {
             lifecycleScope.launch {
                 var bitmap = getBitMap(image)
 
-                Log.v("Sivan" ,"Recipes:::" )
-                Log.v("Sivan" ,fcid.toString())
-                Log.v("Sivan" ,name)
-                Log.v("Sivan" ,typeOfMeal.toString())
-                Log.v("Sivan" ,portions.toString())
-                Log.v("Sivan" ,totalcost.toString())
-                Log.v("Sivan" ,ingredientList.toString())
-                Log.v("Sivan" ,ingredientsQuantity.toString())
+                Log.v("Sivan", "Recipes:::")
+                Log.v("Sivan", fcid.toString())
+                Log.v("Sivan", name)
+                Log.v("Sivan", typeOfMeal.toString())
+                Log.v("Sivan", portions.toString())
+                Log.v("Sivan", totalcost.toString())
+                Log.v("Sivan", ingredientList.toString())
+                Log.v("Sivan", ingredientsQuantity.toString())
+
+                var instructionsValue = HowToStroreValue(instructions)
 
                 var recipe = Recipe(
                     fcid,
@@ -202,7 +238,8 @@ class ApiFood : AppCompatActivity(), GetAndPost {
                     true,
                     true,
                     ingredientList,
-                    ingredientsQuantity
+                    ingredientsQuantity,
+                    instructionsValue
                 )
 
                 var s = AsynTaskNew(recipe, supportFragmentManager)
@@ -268,13 +305,13 @@ class ApiFood : AppCompatActivity(), GetAndPost {
 
 
                 //var imageBitmap = getBitmapFromURL(imageToUpload)
-                Log.v("Sivan" ,"Ingredients:::" )
-                Log.v("Sivan" ,id.toString())
-                Log.v("Sivan" ,name)
-                Log.v("Sivan" ,proteinAmount.toString())
-                Log.v("Sivan" ,carbsAmount.toString())
-                Log.v("Sivan" ,fatAmount.toString())
-                Log.v("Sivan" ,value.toString())
+                Log.v("Sivan", "Ingredients:::")
+                Log.v("Sivan", id.toString())
+                Log.v("Sivan", name)
+                Log.v("Sivan", proteinAmount.toString())
+                Log.v("Sivan", carbsAmount.toString())
+                Log.v("Sivan", fatAmount.toString())
+                Log.v("Sivan", value.toString())
 
                 var ing = Ingredient(
                     id.toInt(),
@@ -299,9 +336,9 @@ class ApiFood : AppCompatActivity(), GetAndPost {
                 var s = AsynTaskNew(ing, supportFragmentManager)
                 s.execute()
 
-                Log.v("Sivan" ,"K Size " + k)
-                if(k == 0 ){
-                    Log.v("Sivan" ,"third trying to upload recipe")
+                Log.v("Sivan", "K Size " + k)
+                if (k == 0) {
+                    Log.v("Sivan", "third trying to upload recipe")
                     uploadRecipe()
                 }
             }

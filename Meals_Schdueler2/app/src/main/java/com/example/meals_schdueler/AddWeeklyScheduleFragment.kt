@@ -594,6 +594,9 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
 
                     var recipe2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
                     if (recipe2.size == 9 && i.toInt() == recipe2[0].toInt()) {
+
+                        var instructions =
+                            HowToStroreValue( recipe2[9])
                         //var s = recipe2[0].toInt()
                         //  if (s != currentID)
                         recipeList?.add(
@@ -608,9 +611,9 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                                 recipe2[7].toBoolean(),
                                 recipe2[8].toBoolean(),
                                 recipeIngredientMap.get(recipe2[0].toInt())!!,
-                                quantities.get(recipe2[0].toFloat())!!
+                                quantities.get(recipe2[0].toFloat())!!,
                                 // hashMap.get(recipe2[0].toInt())!!.second
-
+                                instructions
                             )
                         )
 

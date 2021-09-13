@@ -215,7 +215,7 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
                 shareInfo.isChecked,
                 ingredientListChoosen!!,
                 costList!!,
-
+                instructions!!
                 )
 
             var s = AsynTaskNew(recipe, childFragmentManager)

@@ -35,13 +35,17 @@ class All_Recipes_RecyclerViewAdapter(
 
 
         holder.recipeInfo.setOnClickListener {
+            var instructions =
+                HowToStroreValue(item.instructions.howToStore)
             var dialog = MyRecipeIngredietns(
                 item.listOfIngredients,
                 item.recipeName,
                 item.pictureBitMap,
                 item.numOfPortions,
                 item.quantityList,
-                item.totalCost
+                item.totalCost,
+                item.typeOfMeal,
+                instructions
             )
             dialog.show(childFragmentManager, "MyRecipeIngredients")
         }
@@ -54,7 +58,7 @@ class All_Recipes_RecyclerViewAdapter(
 
         holder.copyImage.setOnClickListener {
 
-           var tmp :  ArrayList<Ingredient> = ArrayList()
+            var tmp: ArrayList<Ingredient> = ArrayList()
             for (i in item.listOfIngredients) {
                 var ingredient = Ingredient(
                     i.ingredientID,
@@ -88,10 +92,8 @@ class All_Recipes_RecyclerViewAdapter(
 
             }
 
-
-
-
-
+            var instructions =
+                HowToStroreValue(item.instructions.howToStore)
             var recipe = Recipe(
                 item.recipeId,
                 UserInterFace.userID,
@@ -103,7 +105,8 @@ class All_Recipes_RecyclerViewAdapter(
                 false,
                 false,
                 tmp,
-                item.quantityList
+                item.quantityList,
+                instructions
             )
 
             var s = AsynTaskNew(recipe, childFragmentManager)

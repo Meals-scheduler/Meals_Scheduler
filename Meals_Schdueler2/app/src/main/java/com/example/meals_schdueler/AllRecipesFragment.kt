@@ -243,6 +243,8 @@ class AllRecipesFragment : Fragment(), GetAndPost {
 
                 var recipe2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
                 if (recipe2.size == 11) {
+                    var instructions =
+                        HowToStroreValue( recipe2[9])
                     var s = recipe2[0].toInt()
                     if (s != currentID)
                         recipeList?.add(
@@ -257,7 +259,8 @@ class AllRecipesFragment : Fragment(), GetAndPost {
                                 recipe2[7].toBoolean(),
                                 recipe2[8].toBoolean(),
                                 map.get(recipe2[0].toInt())!!,
-                                hashMap.get(recipe2[0].toFloat())!!.second
+                                hashMap.get(recipe2[0].toFloat())!!.second,
+                                instructions
 
                             )
                         )

@@ -18,16 +18,16 @@
         android:background="@drawable/list_design"
         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.345"
+        app:layout_constraintHorizontal_bias="0.338"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNumOfPortions"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTypeMeal"
         tools:listitem="@layout/recipe_ingredients_list_info" />
 
     <TextView
         android:id="@+id/textViewRecipeName"
-        android:layout_width="198dp"
+        android:layout_width="309dp"
+        android:layout_height="43dp"
         android:layout_marginStart="5dp"
-        android:layout_height="32dp"
         android:layout_marginTop="48dp"
         android:background="@drawable/spinner_shape"
         android:fontFamily="@font/poppinsbold"
@@ -52,7 +52,7 @@
         android:layout_width="75dp"
         android:layout_height="69dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="60dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/spinner_shape"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -87,6 +87,34 @@
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/textViewNumOfPortions"
         app:layout_constraintTop_toBottomOf="@+id/imageViewRecipe" />
+
+    <TextView
+        android:id="@+id/textViewTypeMeal"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:text="Type Of Meal:"
+        android:layout_width="205dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/spinner_shape"
+        android:fontFamily="@font/poppinsbold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNumOfPortions" />
+
+    <Button
+        android:id="@+id/buttonInstructions"
+        android:layout_width="110dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/btn1"
+        android:fontFamily="@font/poppinsbold"
+        android:gravity="center"
+        android:text="Instructions"
+        android:textColor="@drawable/button_states"
+        app:layout_constraintStart_toEndOf="@+id/textViewTypeMeal"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTotalCost" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -19,7 +20,9 @@ class MyRecipeIngredietns(
     pictureBitMap: Bitmap,
     numOfPortions: String,
     quantityList: ArrayList<Float>,
-    totalCost: Double
+    totalCost: Double,
+    typeOfMeal : String,
+    instructios : HowToStroreValue
 ) : DialogFragment() {
 
     private var columnCount = 1
@@ -36,6 +39,10 @@ class MyRecipeIngredietns(
     private lateinit var imageViewX: ImageView
     private var totalCost = totalCost
     private lateinit var totalCostEditText : TextView
+    private lateinit var typeMeal : TextView
+    private var typeOfMeal = typeOfMeal
+    private lateinit var btnInstructions : Button
+    private var instructions = instructios
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,11 +60,18 @@ class MyRecipeIngredietns(
         imageViewX.setOnClickListener {
             dismiss()
         }
+        btnInstructions = x.findViewById(R.id.buttonInstructions)
+        btnInstructions.setOnClickListener{
+            var dialog = HowToStoreDialog(instructions!!, false)
+            dialog.show(childFragmentManager, "HowToStoreDialog")
+        }
         totalCostEditText = x.findViewById(R.id.textViewTotalCost)
         totalCost = (DecimalFormat("##.##").format(totalCost)).toDouble()
         totalCostEditText.setText("Cost :" + totalCost.toString())
         numOfPortions = x.findViewById(R.id.textViewNumOfPortions)
         numOfPortions.setText("Num of Portions : " + numOfPortionsInt)
+        typeMeal=x.findViewById(R.id.textViewTypeMeal)
+        typeMeal.setText("Type Of Meal : " +typeOfMeal)
         ingredientRecyclerViewAdapter =
             My_Ingredients_Recipe_RecyclerViewAdapter(ingredientList!!,quantityList, childFragmentManager)
         recyclerView.adapter = ingredientRecyclerViewAdapter
@@ -68,26 +82,4 @@ class MyRecipeIngredietns(
 
 
 }
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        val view = inflater.inflate(R.layout.recipe_ingredients_list_info_list, container, false)
-//        val recyclerView = view.findViewById<View>(R.id.list) as RecyclerView
-//
-//
-//        val context = view.context
-//        // Set the adapter
-//        if (view is RecyclerView) {
-//            with(view) {
-//                layoutManager = when {
-//                    columnCount <= 1 -> LinearLayoutManager(context)
-//                    else -> GridLayoutManager(context, columnCount)
-//                }
-//                recyclerView.adapter = ingredientRecyclerViewAdapter
-//
-//            }
-//        }
-//
-//        return view
-//    }
+

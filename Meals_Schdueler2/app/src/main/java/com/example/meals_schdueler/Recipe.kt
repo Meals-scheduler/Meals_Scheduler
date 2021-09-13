@@ -22,6 +22,7 @@ class Recipe(
     // isUpdate: Boolean,
     listOfIngredients: ArrayList<Ingredient>,
     listOfQuantity: ArrayList<Float>,
+    instructions : HowToStroreValue
 
 
     ) : GetAndPost {
@@ -44,6 +45,7 @@ class Recipe(
     var quantityList = listOfQuantity
     var ingredietnsID: String = ""
     var ingredietnsQuantity: String = ""
+     var instructions = instructions
 
 
     fun encodePicture() {
@@ -124,6 +126,8 @@ class Recipe(
                     URLEncoder.encode(ingredietnsID, "UTF-8")
             data += "&" + URLEncoder.encode("QuantityList", "UTF-8") + "=" +
                     URLEncoder.encode(ingredietnsQuantity, "UTF-8")
+            data += "&" + URLEncoder.encode("instructions", "UTF-8") + "=" +
+                    URLEncoder.encode(instructions.howToStore, "UTF-8")
 
 
 

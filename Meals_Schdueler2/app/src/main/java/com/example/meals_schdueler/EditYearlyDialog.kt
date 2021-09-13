@@ -222,30 +222,19 @@ class EditYearlyDialog(
                 t3v.setOnClickListener {
                     //NEED TO CHECK HERE WHATS WRONG with info button!!!!!
                     // getting this weekly recipes
-                    var weekList: ArrayList<WeeklySchedule> = ArrayList()
-                    var ids = monthlyList.get(t3v.getTag() as Int).weeklyIds.splitIgnoreEmpty(" ")
+                    weeklyList = ArrayList()
 
 
-                    //going through the list and get each recipe by its id
-                    for (i in ids) {
-                        weekList.add(
-                            UserPropertiesSingelton.getInstance()!!.getUserWeekly()!!.get(i)!!
-                        )
+                    monthlyId = i.monthlyId
 
-                    }
-
-
-                    var dialog = MonthlyDialogInfo(
-                        weekList,
-                        i.numOfWeek,
-                        i.weeklyIds,
-                        i.totalCost,
-                        t3v.getTag() as Int + 1,
-
-                        )
+                    numOfWeek = i.numOfWeek
+                    weeklyIds = i.weeklyIds
+                    pos = t3v.getTag() as Int + 1
+                    totalCostMonthly = i.totalCost
 
 
-                    dialog!!.show(childFragmentManager, "DailyDialogInfo")
+                    var s = AsynTaskNew(this, childFragmentManager)
+                    s.execute()
                 }
                 tbrow.addView(t3v)
 
@@ -611,7 +600,7 @@ class EditYearlyDialog(
     }
 
     override fun DoNetWorkOpreation(): String {
-        var string = UserInterFace.userID.toString() + " " + monthlyID
+        var string = UserInterFace.userID.toString() + " " + monthlyId
 
         var link =
             "https://elad1.000webhostapp.com/getWeeklyForMonthly.php?ownerIDAndMonthly=" + string

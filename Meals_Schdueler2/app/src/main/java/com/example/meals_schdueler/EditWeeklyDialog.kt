@@ -658,7 +658,7 @@ class EditWeeklyDialog(
             while (true) {
 
                 var recipesAndIngredients2 = recipesAndIngredients[j++].splitIgnoreEmpty("*")
-                if (recipesAndIngredients2.size != 9) {
+                if (recipesAndIngredients2.size != 10) {
                     break
                 }
                 start++
@@ -748,8 +748,9 @@ class EditWeeklyDialog(
             for (i in recipesAndIngredients.indices) {
 
                 var recipe2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
-                if (recipe2.size == 9) {
+                if (recipe2.size == 10) {
                     var s = recipe2[0].toInt()
+                    var instructions = HowToStroreValue(recipe2[9])
                     if (s != currentID)
                         recipeList?.add(
                             Recipe(
@@ -764,6 +765,7 @@ class EditWeeklyDialog(
                                 recipe2[8].toBoolean(),
                                 recipeIngredientMap.get(recipe2[0].toInt())!!,
                                 quantities.get(s)!!
+                                ,instructions
                                 // hashMap.get(recipe2[0].toInt())!!.second
 
                             )

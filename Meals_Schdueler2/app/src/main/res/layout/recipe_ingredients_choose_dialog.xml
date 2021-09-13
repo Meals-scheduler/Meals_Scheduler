@@ -19,6 +19,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list"
+            android:fillViewport="true"
             android:layout_width="348dp"
             android:layout_height="414dp"
             android:layout_marginTop="4dp"
