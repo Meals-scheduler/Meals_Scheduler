@@ -184,8 +184,8 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
 //            startActivity(i)
 
             var arr: ArrayList<Int> = ArrayList()
-            var id = 55017
-            for (i in 1..3) {
+            var id = 55020
+            for (i in 1..2) {
                 arr.add(id)
                 id += 1
             }

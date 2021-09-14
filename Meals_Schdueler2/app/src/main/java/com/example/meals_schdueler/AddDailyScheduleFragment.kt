@@ -304,6 +304,8 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
         stk.setColumnShrinkable(4, true)
         stk.setColumnStretchable(5, true)
         stk.setColumnStretchable(4, true)
+        stk.setColumnShrinkable(2, true)
+        stk.setColumnStretchable(2, true)
 
         var j = 0
         for (i in recipeListChoose) {

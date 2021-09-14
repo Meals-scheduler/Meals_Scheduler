@@ -94,6 +94,9 @@ class Recipe(
 //
 //            }
 
+            if(instructions.howToStore.equals("")){
+                instructions.howToStore = "no data"
+            }
             // print here ingredient elemtnes
             var data = URLEncoder.encode("RecipeID", "UTF-8") + "=" +
                     URLEncoder.encode(recipeId.toString(), "UTF-8")

@@ -111,6 +111,7 @@
         android:background="@drawable/btn1"
         android:fontFamily="@font/poppinsbold"
         android:gravity="center"
+        android:textSize="13dp"
         android:text="Instructions"
         android:textColor="@drawable/button_states"
         app:layout_constraintStart_toEndOf="@+id/textViewTypeMeal"

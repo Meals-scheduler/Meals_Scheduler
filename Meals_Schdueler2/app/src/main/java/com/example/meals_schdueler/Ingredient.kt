@@ -138,7 +138,12 @@ class Ingredient(
             Log.v("Omer","protein_ " + protein_.toString())
             Log.v("Omer","nutritiousDes " + nutritiousDes.toString())
 
-
+            if(nutritiousDes.equals("")){
+                nutritiousDes = "no data"
+            }
+            if(howToStore.equals("")){
+                howToStore = "no data"
+            }
             // print here ingredient elemtnes
             var data = URLEncoder.encode("IngredientID", "UTF-8") + "=" +
                     URLEncoder.encode(ingredientID.toString(), "UTF-8")

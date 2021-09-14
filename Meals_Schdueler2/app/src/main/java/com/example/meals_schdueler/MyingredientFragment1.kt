@@ -185,7 +185,9 @@ class MyingredientFragment1 : Fragment(), GetAndPost,NestedScrollView.OnScrollCh
             val ingredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
             for (i in ingredients.indices) {
+                if(i == 17){
 
+                }
                 var ingredient2 = ingredients[i].splitIgnoreEmpty("*")
 
 
