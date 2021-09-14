@@ -248,7 +248,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost,NestedScrollView.OnScrollCh
         oldScrollY: Int
     ) {
         if (scrollY == v!!.getChildAt(0).measuredHeight - v.measuredHeight) {
-            page = page + 4
+            page = page + 8
             progressBar!!.visibility = View.VISIBLE
             isScorlled = true
             startTask()

@@ -40,64 +40,61 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.065" />
 
+
         <TextView
             android:id="@+id/nameOfIngredient"
             android:layout_width="178dp"
             android:layout_height="45dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppinsbold"
             android:gravity="center"
             android:text="Ingredient  Name:"
-            android:fontFamily="@font/poppinsbold"
             android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.429"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
 
-
         <EditText
             android:id="@+id/editTextIngredientName"
-            android:layout_width="150dp"
-            android:layout_height="43dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="51dp"
             android:background="@drawable/edit_text_shape"
             android:ems="10"
             android:inputType="textPersonName"
             android:textAlignment="center"
+            android:textSize="15dp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.277"
-            app:layout_constraintStart_toEndOf="@+id/nameOfIngredient"
-            app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/nameOfIngredient"
+            tools:layout_editor_absoluteX="0dp" />
 
         <Spinner
             android:id="@+id/typeOfMealSpinner"
             android:layout_width="108dp"
             android:layout_height="42dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="10dp"
             android:entries="@array/Type"
-            android:src="@drawable/dropdown"
-            android:gravity="center"
             android:fontFamily="@font/poppinsbold"
+            android:gravity="center"
+            android:src="@drawable/dropdown"
             android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nameOfIngredient" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextIngredientName" />
 
         <Spinner
             android:id="@+id/typeOfSeassonSpinner"
             android:layout_width="127dp"
             android:layout_height="42dp"
-            android:layout_marginStart="58dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginStart="68dp"
+            android:layout_marginTop="10dp"
             android:clickable="false"
-            android:src="@drawable/dropdown"
             android:entries="@array/TypeSeasson"
             android:fontFamily="@font/poppinsbold"
             android:gravity="center"
+            android:src="@drawable/dropdown"
             android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/typeOfMealSpinner"
@@ -181,14 +178,14 @@
             android:id="@+id/howToStoreBtn"
             android:layout_width="158dp"
             android:layout_height="55dp"
-            android:layout_marginTop="34dp"
+            android:layout_marginTop="32dp"
             android:background="@drawable/btn1"
             android:fontFamily="@font/poppinsbold"
             android:text="How to store"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.455"
             app:layout_constraintStart_toEndOf="@+id/buttonNutritious"
-            app:layout_constraintTop_toBottomOf="@+id/editTextCost" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewCost" />
 
         <CheckBox
             android:id="@+id/checkBoxShareIngredient"

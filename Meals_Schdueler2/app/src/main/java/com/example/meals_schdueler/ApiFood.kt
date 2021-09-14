@@ -1,5 +1,6 @@
 package com.example.meals_schdueler
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
@@ -7,6 +8,8 @@ import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import coil.ImageLoader
 import coil.request.ImageRequest
@@ -20,8 +23,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 
-class ApiFood : AppCompatActivity(), GetAndPost {
-    private var fcid = 54003
+class ApiFood (id : Int, childFragmentManager: FragmentManager, context: Context): Fragment(), GetAndPost {
+   // private var fcid = 55005
     private var isRecipe = true
     private var j = 0
     private var k = 0
@@ -29,21 +32,28 @@ class ApiFood : AppCompatActivity(), GetAndPost {
     private var ingredientList: ArrayList<Ingredient> = ArrayList()
     private var ingredientsQuantity: ArrayList<Float> = ArrayList()
     private var wantToUpload = false
+    private var fcid = id
+    private var childFragmentManager2 = childFragmentManager
+    private var context2 = context
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.api_test)
+      //  setContentView(R.layout.api_test)
 
 
-        //  for (i in 1..5) {
-        startTask()
+       // for (i in 1..2) {
+            startTask()
 
 
-        //  }
+       // }
 
 
     }
+
+
+
+
 
     private fun uploadRecipe() {
         wantToUpload = true
@@ -53,7 +63,7 @@ class ApiFood : AppCompatActivity(), GetAndPost {
     }
 
     fun startTask() {
-        var s = AsynTaskNew(this, supportFragmentManager)
+        var s = AsynTaskNew(this, childFragmentManager2)
         s.execute()
     }
 
@@ -64,13 +74,13 @@ class ApiFood : AppCompatActivity(), GetAndPost {
         if (isRecipe) {
             Log.v("Sivan", "here is recipe")
             link =
-                " https://api.spoonacular.com/recipes/" + fcid + "/information?apiKey=53c7a22467e04b0494d59b9ebec69d2a&includeNutrition=true"
+                " https://api.spoonacular.com/recipes/" + fcid + "/information?apiKey=8ec327f4413e489ba67798bb1b6ab085&includeNutrition=true"
             // fcid += 1
         } else {
             Log.v("Sivan", "here is ingredient")
             link =
 
-                "https://api.spoonacular.com/food/ingredients/" + ingredientsIds.get(j++) + "/information?amount=1&apiKey=53c7a22467e04b0494d59b9ebec69d2a"
+                "https://api.spoonacular.com/food/ingredients/" + ingredientsIds.get(j++) + "/information?amount=1&apiKey=8ec327f4413e489ba67798bb1b6ab085"
         }
 
 
@@ -126,7 +136,7 @@ class ApiFood : AppCompatActivity(), GetAndPost {
                 // name , picture , amount
                 var description = ""
                 var id = jsonSecondary.getString("id")
-                if (!ingredientsIds.contains(id))
+                if (!ingredientsIds.contains(id) && !(id.equals("null")))
                     ingredientsIds.add(id)
                 k = ingredientsIds.size
 //            description = jsonSecondary.getString("description")
@@ -149,7 +159,7 @@ class ApiFood : AppCompatActivity(), GetAndPost {
         } else if (isRecipe && wantToUpload) {
 
             val jsonObject = JSONObject(str)
-            val name = jsonObject.getString("title")
+            var name = jsonObject.getString("title")
             val portions = jsonObject.getString("servings")
             val totalcost = jsonObject.getString("pricePerServing")
             val image = jsonObject.getString("image")
@@ -164,6 +174,7 @@ class ApiFood : AppCompatActivity(), GetAndPost {
             } else if (dairyFree.equals("false")) {
                 typeOfMeal = "Dairy"
             }
+            name = name.replace('\'', ' ')
 
 
             val ingredients = jsonObject.getString("extendedIngredients")
@@ -241,8 +252,8 @@ class ApiFood : AppCompatActivity(), GetAndPost {
                     ingredientsQuantity,
                     instructionsValue
                 )
-
-                var s = AsynTaskNew(recipe, supportFragmentManager)
+              //  fcid++
+                var s = AsynTaskNew(recipe, childFragmentManager2)
                 s.execute()
             }
 
@@ -255,7 +266,7 @@ class ApiFood : AppCompatActivity(), GetAndPost {
 
             val jsonObject = JSONObject(str)
             val id = jsonObject.getString("id")
-            val name = jsonObject.getString("original")
+            var name = jsonObject.getString("original")
             Log.v("Elad1", "Ingredient Name " + name)
             val image = jsonObject.getString("image")
             val imageToUpload = "https://spoonacular.com/cdn/ingredients_250x250/" + image
@@ -266,6 +277,7 @@ class ApiFood : AppCompatActivity(), GetAndPost {
             val jsonObjectNut = JSONObject(nutrition)
             val nutrients = jsonObjectNut.getString("nutrients")
             val arr = JSONArray(nutrients)
+            name = name.replace('\'', ' ')
 
 
             for (i in 0 until arr.length()) {
@@ -333,7 +345,7 @@ class ApiFood : AppCompatActivity(), GetAndPost {
                 )
                 ingredientList.add(ing)
                 k--
-                var s = AsynTaskNew(ing, supportFragmentManager)
+                var s = AsynTaskNew(ing, childFragmentManager2)
                 s.execute()
 
                 Log.v("Sivan", "K Size " + k)
@@ -352,8 +364,8 @@ class ApiFood : AppCompatActivity(), GetAndPost {
 
     private suspend fun getBitMap(imageToUpload: String): Bitmap {
 
-        var loading: ImageLoader = ImageLoader(this)
-        var request = ImageRequest.Builder(this)
+        var loading: ImageLoader = ImageLoader(context2)
+        var request = ImageRequest.Builder(context2)
             .data(imageToUpload).build()
 
         var result = (loading.execute(request) as SuccessResult).drawable

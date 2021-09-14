@@ -70,10 +70,10 @@ class Ingredient(
         if (pictureBitMap != null)
             encodePicture()
         // if we insert a new ingredient and not updating
-//        if (!isUpdate) {
-//            ingredientID = getIngredientID().toInt() + 1 // getting current IngredientID first
-//
-//        }
+        if (!isUpdate) {
+            ingredientID = getIngredientID().toInt() + 1 // getting current IngredientID first
+
+        }
 
         // ingredientID = 1
 
@@ -123,6 +123,21 @@ class Ingredient(
                     "https://elad1.000webhostapp.com/updateIngredient.php?ingredientID=" + ingredientID
 
             }
+
+            Log.v("Omer","IngredientID " + ingredientID.toString())
+            Log.v("Omer","OwnerID " + ownerId.toString())
+            Log.v("Omer","IngredientName " + ingridentName.toString())
+            Log.v("Omer","TypeOfMeal " + typeOfMeal.toString())
+            Log.v("Omer","typeofSeason " + typeofSeason.toString())
+            Log.v("Omer","howToStore " + howToStore.toString())
+            Log.v("Omer","ShareInfo " + shareInfo.toString())
+            Log.v("Omer","shareIngredient " + shareIngredient.toString())
+            Log.v("Omer","costPerGram " + costPerGram.toString())
+            Log.v("Omer","Fat " + fat.toString())
+            Log.v("Omer","carbs_ " + carbs_.toString())
+            Log.v("Omer","protein_ " + protein_.toString())
+            Log.v("Omer","nutritiousDes " + nutritiousDes.toString())
+
 
             // print here ingredient elemtnes
             var data = URLEncoder.encode("IngredientID", "UTF-8") + "=" +

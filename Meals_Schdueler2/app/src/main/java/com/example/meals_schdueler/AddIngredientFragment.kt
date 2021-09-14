@@ -177,11 +177,23 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
 
 
         } else if (p0 == buttonApi) {
-            val i = Intent(
-                context,
-                ApiFood::class.java
-            )
-            startActivity(i)
+//            val i = Intent(
+//                context,
+//                ApiFood::class.java
+//            )
+//            startActivity(i)
+
+            var arr: ArrayList<Int> = ArrayList()
+            var id = 55017
+            for (i in 1..3) {
+                arr.add(id)
+                id += 1
+            }
+
+            for (i in arr) {
+                var g = ApiFood(i, childFragmentManager, requireContext());
+                g.startTask()
+            }
         }
     }
     // for camera

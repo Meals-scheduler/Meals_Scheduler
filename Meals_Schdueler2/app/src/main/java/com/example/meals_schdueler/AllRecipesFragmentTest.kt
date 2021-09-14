@@ -257,9 +257,11 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
                         ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
 
                     } else {
-                        recipeIngredientMap.get(currentIngId)!!.add(ing)
-                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toFloat())
-                        ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
+
+                            recipeIngredientMap.get(currentIngId)!!.add(ing)
+                            quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toFloat())
+                            ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
+
                     }
 
 
