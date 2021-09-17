@@ -288,7 +288,7 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
     ) {
         if (scrollY == v!!.getChildAt(0).measuredHeight - v.measuredHeight) {
 
-            page = page + 4
+            page = page + 8
             progressBar!!.visibility = View.VISIBLE
             isScorlled = true
             startTask()

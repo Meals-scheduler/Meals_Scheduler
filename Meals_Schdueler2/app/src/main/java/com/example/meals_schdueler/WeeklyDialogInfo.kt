@@ -54,7 +54,7 @@ class WeeklyDialogInfo(
     var recipeList: ArrayList<Recipe> = ArrayList()
     private var quantitiesStr = ""
     private var numOfMeals = ""
-    private var recipeIdsStr= ""
+    private var recipeIdsStr = ""
     private var pos = -1
 
 
@@ -160,7 +160,6 @@ class WeeklyDialogInfo(
 
                 var s = AsynTaskNew(this, childFragmentManager)
                 s.execute()
-
 
 
             }
@@ -363,7 +362,50 @@ class WeeklyDialogInfo(
             }
 
 
-
+            // making DailyScheudle objects
+//            var recpie = -1
+//            var recipeIdsSTR = recipeIdsStr.splitIgnoreEmpty(" ")
+//            //var dayid = -1
+//            for (i in recipeIdsSTR) {
+//                recpie = -1
+//                // if (dayid != i.toInt()) {
+//
+//                for (j in recipesAndIngredients.indices) {
+//                    var recipe2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
+//                    if (recipe2.size == 10) {
+//                        var s = recipe2[0].toInt()
+//                        var instructions = HowToStroreValue(recipe2[9])
+//
+//                        if (s != currentID && dailyList!!.size < recipeList.size && recpie != recipe2[0].toInt()) {
+//                            recipeList?.add(
+//                                Recipe(
+//                                    recipe2[0].toInt(),
+//                                    recipe2[1].toInt(),
+//                                    recipe2[2],
+//                                    ImageConvert.StringToBitMap(recipe2[3].toString())!!,
+//                                    recipe2[4],
+//                                    recipe2[5],
+//                                    recipe2[6].toDouble(),
+//                                    recipe2[7].toBoolean(),
+//                                    recipe2[8].toBoolean(),
+//                                    recipeIngredientMap.get(recipe2[0].toInt())!!,
+//                                    quantities.get(s)!!,
+//                                    instructions
+//                                    // hashMap.get(recipe2[0].toInt())!!.second
+//
+//                                )
+//                            )
+//
+//                            recpie = recipe2[0].toInt()
+//                        }
+//
+//                    } else {
+//                        break
+//                    }
+//
+//                }
+//
+//            }
 
 
             currentID = -1
@@ -401,12 +443,9 @@ class WeeklyDialogInfo(
             }
 
 
-
-
-
             var dialog = DailyDialogInfo(
                 recipeList!!,
-                quantitiesStr ,
+                quantitiesStr,
                 numOfMeals,
                 recipeIdsStr,
                 pos,

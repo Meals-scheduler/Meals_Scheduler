@@ -32,7 +32,6 @@ class Daily_Schedule_Choose_Dialog(
 ) : DialogFragment() {
 
     lateinit var exit: ImageView
-   // private var recipesList: ArrayList<Recipe>? = null
     private lateinit var btnDone: Button
     private var dailyList = dailyList
     private var recipeList = recipeList
@@ -43,14 +42,6 @@ class Daily_Schedule_Choose_Dialog(
     private lateinit var searchView: SearchView
     private lateinit var noResultsTextView: TextView
 
-    private var page = 0
-    private var isSearch = false
-    private var dailyToSearch = ""
-    private var isScorlled = false
-    private var quantities: String = ""
-    private var numOfMeal: String = ""
-    private var recipeIds: String = ""
-    private var totalcost = 0.011
 
 
     private var dailyChoosenRecyclerViewAdapter: Daily_Schedule_Choose_RecyclerViewAdapter? =

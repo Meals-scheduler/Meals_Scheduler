@@ -354,15 +354,19 @@ class My_Monthly_RecylerViewAdapter(
                 mapTotalCost.put(currentWeeklyID.toString(), totalcost)
             }
 
+
+
+
+
             // making WeeklyScheudle objects
             var weeklyIdsArr = weeklyIds.splitIgnoreEmpty(" ")
           //  currentWeeklyID = -1
-            var weekid = -1
+            var weekly = -1
             for (i in weeklyIdsArr) {
-                if(weekid!=i.toInt()) {
+                weekly= -1
                     for (j in weeklyInfo.indices) {
                         var weeklyInfo2 = weeklyInfo[j].splitIgnoreEmpty("*")
-                        if (i.toInt() == weeklyInfo2[0].toInt() && weeklyValues.size < weeklyIdsArr.size) {
+                        if (i.toInt() == weeklyInfo2[0].toInt() && weeklyValues.size < weeklyIdsArr.size && weekly != weeklyInfo2[0].toInt()) {
                             weeklyValues!!.add(
                                 WeeklySchedule(
                                     weeklyInfo2[0].toInt(),
@@ -374,13 +378,12 @@ class My_Monthly_RecylerViewAdapter(
 
                                 )
                             )
-                            // currentWeeklyID = weeklyInfo2[0].toInt()
+                            weekly = weeklyInfo2[0].toInt()
                         }
 
 
                     }
-                }
-                 weekid = weeklyIdsArr[0].toInt()
+
             }
 
             this.setWeeklyValues(weeklyValues)

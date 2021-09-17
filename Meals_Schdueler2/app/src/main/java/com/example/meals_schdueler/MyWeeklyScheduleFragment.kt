@@ -232,8 +232,13 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost,NestedScrollView.OnScrol
 
             // making WeeklyScheudle objects
 
+
+
+
+
             currentWeeklyID = -1
             for (i in weeklyInfo.indices) {
+
                 var dailyInfo2 = weeklyInfo[i].splitIgnoreEmpty("*")
                 if (dailyInfo2[0].toInt() != currentWeeklyID) {
                     weeklyList!!.add(
@@ -274,7 +279,7 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost,NestedScrollView.OnScrol
     ) {
         if (scrollY == v!!.getChildAt(0).measuredHeight - v.measuredHeight) {
 
-            page = page + 4
+            page = page + 8
             progressBar!!.visibility = View.VISIBLE
             isScorlled = true
             startTask()

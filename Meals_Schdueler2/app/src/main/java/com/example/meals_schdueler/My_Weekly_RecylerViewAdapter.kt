@@ -46,7 +46,7 @@ class My_Weekly_RecylerViewAdapter(
     private var dailyValues: ArrayList<DailySchedule> = ArrayList()
 
     private var childFragmentManager = childFragmentManager
-  //  private lateinit var recipeList: ArrayList<Recipe>
+    //  private lateinit var recipeList: ArrayList<Recipe>
 
     private var context = context
     private var activity = activity
@@ -107,9 +107,6 @@ class My_Weekly_RecylerViewAdapter(
             dailyIds = weeklyValues.get(position)!!.dailyIds
             pos = position + 1
             totalCost = weeklyValues.get(position)!!.totalCost.toDouble()
-
-
-
 
 
             var s = AsynTaskNew(this, childFragmentManager)
@@ -364,38 +361,39 @@ class My_Weekly_RecylerViewAdapter(
                 mapTotalCost.put(currentDailyID.toString(), totalcost)
             }
 
-            //  recipeNumbers += "" + i + " "
-            // making DailyScheudle objects
-            currentDailyID = -1
-
+            var daily = -1
             var dailyIdsArr = dailyIds.splitIgnoreEmpty(" ")
-
+            //var dayid = -1
             for (i in dailyIdsArr) {
+                daily=-1
+               // if (dayid != i.toInt()) {
 
-                for (j in dailyInfo.indices) {
-                    var dailyInfo2 = dailyInfo[j].splitIgnoreEmpty("*")
-                    if (currentDailyID != dailyInfo2[0].toInt() && i.toInt() == dailyInfo2[0].toInt()) {
-                        dailyValues!!.add(
-                            DailySchedule(
-                                dailyInfo2[0].toInt(),
-                                dailyInfo2[1].toInt(),
-                                map.get(dailyInfo2[0])!!.get(1),
-                                map.get(dailyInfo2[0])!!.get(0),
-                                map.get(dailyInfo2[0])!!.get(2),
-                                mapTotalCost.get(dailyInfo2[0])!!,
-                                false
+                    for (j in dailyInfo.indices) {
+                        var dailyInfo2 = dailyInfo[j].splitIgnoreEmpty("*")
+                        if (i.toInt() == dailyInfo2[0].toInt() && dailyValues.size < dailyIdsArr.size && daily != dailyInfo2[0].toInt()) {
+                            dailyValues!!.add(
+                                DailySchedule(
+                                    dailyInfo2[0].toInt(),
+                                    dailyInfo2[1].toInt(),
+                                    map.get(dailyInfo2[0])!!.get(1),
+                                    map.get(dailyInfo2[0])!!.get(0),
+                                    map.get(dailyInfo2[0])!!.get(2),
+                                    mapTotalCost.get(dailyInfo2[0])!!,
+                                    false
 
+                                )
                             )
-                        )
-                        currentDailyID = dailyInfo2[0].toInt()
+                            daily = dailyInfo2[0].toInt()
+                        }
                     }
-                }
+               // }
+               // dayid = dailyInfo2[0].toInt()
             }
 
             this.setDailyValues(dailyValues)
             if (queryToExcute.equals("info")) {
-                Log.v("Elad1","Num of Days " + numOfDay)
-                Log.v("Elad1","dailyIds " + dailyIds)
+                Log.v("Elad1", "Num of Days " + numOfDay)
+                Log.v("Elad1", "dailyIds " + dailyIds)
 
                 var dialog = WeeklyDialogInfo(
 

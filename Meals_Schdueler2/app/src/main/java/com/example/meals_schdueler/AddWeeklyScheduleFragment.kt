@@ -495,7 +495,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
         if (!str.equals("")) {
 
 
-            //  recipeList!!.clear()
+
             val recipesAndIngredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
             // first recipe id
@@ -517,7 +517,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
             while (true) {
 
                 var recipesAndIngredients2 = recipesAndIngredients[j++].splitIgnoreEmpty("*")
-                if (recipesAndIngredients2.size != 9) {
+                if (recipesAndIngredients2.size != 10) {
                     break
                 }
                 start++
@@ -544,7 +544,6 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                         recipesAndIngredients2[0].toInt(),
                         recipesAndIngredients2[1].toInt(),
                         recipesAndIngredients2[2],
-
                         ImageConvert.StringToBitMap(recipesAndIngredients2[3].toString())!!,
                         recipesAndIngredients2[4],
                         recipesAndIngredients2[5],
@@ -586,19 +585,21 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
             }
 
 
+
+
+
             // currentID = -1
             var recipeIdsArr = recipeIDs.splitIgnoreEmpty(" ")
-            for (i in recipeIdsArr) {
+            for(i in recipeIdsArr){
 
                 for (j in recipesAndIngredients.indices) {
 
-                    var recipe2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
-                    if (recipe2.size == 9 && i.toInt() == recipe2[0].toInt()) {
 
-                        var instructions =
-                            HowToStroreValue( recipe2[9])
+                    var recipe2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
+                    if (recipe2.size == 10 && i.toInt() == recipe2[0].toInt()) {
                         //var s = recipe2[0].toInt()
                         //  if (s != currentID)
+                        var instructions = HowToStroreValue(recipe2[9])
                         recipeList?.add(
                             Recipe(
                                 recipe2[0].toInt(),
@@ -611,9 +612,10 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                                 recipe2[7].toBoolean(),
                                 recipe2[8].toBoolean(),
                                 recipeIngredientMap.get(recipe2[0].toInt())!!,
-                                quantities.get(recipe2[0].toFloat())!!,
-                                // hashMap.get(recipe2[0].toInt())!!.second
+                                quantities.get(recipe2[0].toInt())!!,
                                 instructions
+                                // hashMap.get(recipe2[0].toInt())!!.second
+
                             )
                         )
 
@@ -623,8 +625,6 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                 }
 
             }
-
-
             var dialog = DailyDialogInfo(
                 recipeList!!,
                 quantitiesStr,

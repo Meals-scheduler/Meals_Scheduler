@@ -166,7 +166,7 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
     override fun DoNetWorkOpreation(): String {
         var link =""
         if (info) {
-            Log.v("Elad1","GGGGGGGGGG")
+
             var string = UserInterFace.userID.toString() + " " + dailyID
 
              link =
@@ -182,7 +182,7 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
             if (!isScorlled) {
                 page = 0
             }
-            Log.v("Elad1","HHHHHHHHHHHHH")
+
             var string = UserInterFace.userID.toString() + " " + page
 
              link = "https://elad1.000webhostapp.com/getDaily.php?ownerIDAndPage=" + string
@@ -220,9 +220,8 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
         if (!str.equals("")) {
 
             if (info) {
-                //  recipeList!!.clear()
-                val recipesAndIngredients: Array<String> =
-                    str.splitIgnoreEmpty("***").toTypedArray()
+
+                val recipesAndIngredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
                 // first recipe id
 
@@ -243,7 +242,7 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
                 while (true) {
 
                     var recipesAndIngredients2 = recipesAndIngredients[j++].splitIgnoreEmpty("*")
-                    if (recipesAndIngredients2.size != 9) {
+                    if (recipesAndIngredients2.size != 10) {
                         break
                     }
                     start++
@@ -264,10 +263,7 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
                     currentIngId = recipesAndIngredients2[15].toInt()
 
                     //if its ingredients details
-                    if (recipesAndIngredients2.size == 16 && recipeIds.contains(
-                            recipesAndIngredients2[15].toInt()
-                        )
-                    ) {
+                    if (recipesAndIngredients2.size == 16 && recipeIds.contains(recipesAndIngredients2[15].toInt())) {
 
                         var ing = Ingredient(
                             recipesAndIngredients2[0].toInt(),
@@ -314,17 +310,21 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
                 }
 
 
+
+
+
                 // currentID = -1
                 var recipeIdsArr = recipeIDs.splitIgnoreEmpty(" ")
-                for (i in recipeIdsArr) {
+                for(i in recipeIdsArr){
 
                     for (j in recipesAndIngredients.indices) {
 
+
                         var recipe2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
-                        if (recipe2.size == 9 && i.toInt() == recipe2[0].toInt()) {
-                            var instructions = HowToStroreValue(recipe2[9])
+                        if (recipe2.size == 10 && i.toInt() == recipe2[0].toInt()) {
                             //var s = recipe2[0].toInt()
                             //  if (s != currentID)
+                            var instructions = HowToStroreValue(recipe2[9])
                             recipe?.add(
                                 Recipe(
                                     recipe2[0].toInt(),
@@ -337,7 +337,7 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
                                     recipe2[7].toBoolean(),
                                     recipe2[8].toBoolean(),
                                     recipeIngredientMap.get(recipe2[0].toInt())!!,
-                                    quantities.get(recipe2[0].toFloat())!!,
+                                    quantities.get(recipe2[0].toInt())!!,
                                     instructions
                                     // hashMap.get(recipe2[0].toInt())!!.second
 
@@ -350,7 +350,6 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
                     }
 
                 }
-
 
 
 

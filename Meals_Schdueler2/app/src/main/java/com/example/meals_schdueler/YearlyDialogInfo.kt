@@ -309,13 +309,15 @@ class YearlyDialogInfo(
             }
 
             // making WeeklyScheudle objects
+            // making WeeklyScheudle objects
             var weeklyIdsArr = weeklyIds.splitIgnoreEmpty(" ")
-            currentWeeklyID = -1
+            //  currentWeeklyID = -1
+            var weekly = -1
             for (i in weeklyIdsArr) {
-
+                weekly= -1
                 for (j in weeklyInfo.indices) {
                     var weeklyInfo2 = weeklyInfo[j].splitIgnoreEmpty("*")
-                    if (currentWeeklyID != weeklyInfo2[0].toInt() && i.toInt() == weeklyInfo2[0].toInt()) {
+                    if (i.toInt() == weeklyInfo2[0].toInt() && weeklyList!!.size < weeklyIdsArr.size && weekly != weeklyInfo2[0].toInt()) {
                         weeklyList!!.add(
                             WeeklySchedule(
                                 weeklyInfo2[0].toInt(),
@@ -327,11 +329,12 @@ class YearlyDialogInfo(
 
                             )
                         )
-                        currentWeeklyID = weeklyInfo2[0].toInt()
+                        weekly = weeklyInfo2[0].toInt()
                     }
 
 
                 }
+
             }
 
 

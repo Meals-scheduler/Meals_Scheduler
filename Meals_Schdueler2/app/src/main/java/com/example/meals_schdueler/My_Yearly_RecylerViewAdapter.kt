@@ -20,6 +20,7 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.allyants.notifyme.NotifyMe
+import com.example.meals_schdueler.dummy.DailySchedule
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStream
@@ -350,15 +351,18 @@ class My_Yearly_RecylerViewAdapter(
                 mapTotalCost.put(currentMonthlyID.toString(), totalcost)
             }
 
+
+
             // making MonthlyScheudle objects
             var monthlyIdsArr = monthlyIds.splitIgnoreEmpty(" ")
-            currentMonthlyID = -1
+            var month = -1
 
             for (i in monthlyIdsArr) {
+                month = -1
 
                 for (j in monthlyInfo.indices) {
                     var monthlyInfo2 = monthlyInfo[j].splitIgnoreEmpty("*")
-                    if (monthlyInfo2[0].toInt() != currentMonthlyID && i.toInt() == monthlyInfo2[0].toInt()) {
+                    if (i.toInt() == monthlyInfo2[0].toInt() && monthlyValues.size < monthlyIdsArr.size && month != monthlyInfo2[0].toInt()) {
                         monthlyValues!!.add(
                             MonthlySchedule(
                                 monthlyInfo2[0].toInt(),
@@ -371,9 +375,10 @@ class My_Yearly_RecylerViewAdapter(
                             )
                         )
 
-                        currentMonthlyID = monthlyInfo2[0].toInt()
+                        month = monthlyInfo2[0].toInt()
                     }
                 }
+
             }
 
 

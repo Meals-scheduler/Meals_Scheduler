@@ -1,12 +1,10 @@
 package com.example.meals_schdueler
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meals_schdueler.dummy.DailySchedule
@@ -23,9 +21,13 @@ class Monthly_Schedule_Choose_RecyclerViewAdapter(
 
     var monthlyValues: ArrayList<MonthlySchedule>,
     monthlyId: ArrayList<Int>?,
-    childFragmentManager: FragmentManager
+    childFragmentManager: FragmentManager,
+    progressbar: ProgressBar?,
+    searchView: SearchView?,
+    noResult: TextView?
 
-) : RecyclerView.Adapter<Monthly_Schedule_Choose_RecyclerViewAdapter.ViewHolder>(), GetAndPost {
+) : RecyclerView.Adapter<Monthly_Schedule_Choose_RecyclerViewAdapter.ViewHolder>(), GetAndPost,
+    SearchView.OnQueryTextListener {
 
 
     private var mValues: ArrayList<MonthlySchedule> = monthlyValues
@@ -43,6 +45,15 @@ class Monthly_Schedule_Choose_RecyclerViewAdapter(
     private var pos = -1
     private var totalCostDobule = 0.0
 
+    private var page = 0
+    private var isSearch = false
+    private var recipeToSearch = ""
+    private var isScorlled = false
+    private var progressBar = progressbar
+    private var searchView = searchView
+    private var noResultsTextView = noResult
+    private var info = false
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -50,7 +61,7 @@ class Monthly_Schedule_Choose_RecyclerViewAdapter(
     ): Monthly_Schedule_Choose_RecyclerViewAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.monthly_choose, parent, false)
-
+        //  searchView!!.setOnQueryTextListener(this) // if i want to add the search in the future.
         return ViewHolder(view)
     }
 
@@ -58,6 +69,12 @@ class Monthly_Schedule_Choose_RecyclerViewAdapter(
         return this.split(*delimiters).filter {
             it.isNotEmpty()
         }
+    }
+
+    fun startTask() {
+
+        var s = AsynTaskNew(this, childFragmentManager)
+        s.execute()
     }
 
 
@@ -78,11 +95,19 @@ class Monthly_Schedule_Choose_RecyclerViewAdapter(
             numOfWeek = mValues.get(position)!!.numOfWeek
             pos = position + 1
             totalCostDobule = mValues.get(position).totalCost
-
+            info = true
 
             var s = AsynTaskNew(this, childFragmentManager)
             s.execute()
 
+        }
+
+        if (position == getItemCount() - 1 && !isSearch) {
+            Log.v("Elad1", "AAAAAAAAAAAAa")
+            page = page + 8
+            isScorlled = true
+            progressBar!!.visibility = View.VISIBLE
+            startTask()
         }
 
 
@@ -132,7 +157,7 @@ class Monthly_Schedule_Choose_RecyclerViewAdapter(
         var cart: ImageView = view.findViewById(R.id.imageViewCart)
         var numOfMonthly: TextView = view.findViewById(R.id.numOfMonthlyTextView)
         var choose: CheckBox = view.findViewById(R.id.WeeklyCheckBox)
-        val arr = Array(mValues.size, { i -> false })
+        val arr = Array(100, { i -> false })
         lateinit var mItem: MonthlySchedule
 
 
@@ -146,11 +171,24 @@ class Monthly_Schedule_Choose_RecyclerViewAdapter(
     override fun getItemCount(): Int = monthlyValues.size
 
     override fun DoNetWorkOpreation(): String {
-        var string = UserInterFace.userID.toString() + " " + monthlyID
+        var link = ""
+        if (info) {
+            var string = UserInterFace.userID.toString() + " " + monthlyID
 
 
-        var link =
-            "https://elad1.000webhostapp.com/getWeeklyForMonthly.php?ownerIDAndMonthly=" + string
+            link =
+                "https://elad1.000webhostapp.com/getWeeklyForMonthly.php?ownerIDAndMonthly=" + string
+
+        } else {
+            if (!isScorlled) {
+                page = 0
+            }
+            Log.v("Elad1", "HHHHHHHHHHHHH")
+            var string = UserInterFace.userID.toString() + " " + page
+
+            link = "https://elad1.000webhostapp.com/getMonthly.php?ownerIDAndPage=" + string
+
+        }
 
 
         val sb = StringBuilder()
@@ -181,112 +219,233 @@ class Monthly_Schedule_Choose_RecyclerViewAdapter(
         weeklyList.clear()
         if (!str.equals("")) {
 
+            if (info) {
+                var totalcost = 0.011
+                var numOfDay = ""
+                var dailyIds = ""
+                // recipeList!!.clear()
 
-            var totalcost = 0.011
-            var numOfDay = ""
-            var dailyIds = ""
-            // recipeList!!.clear()
+                // weeklyList!!.clear()
 
-            // weeklyList!!.clear()
-
-            val weeklyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+                val weeklyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
 
-            // map to map each WeeklyID with a key as ID and contains all 2
-            // array lists (e.g - numOfDay,dailyIds)
-            var map: HashMap<String, ArrayList<String>> = HashMap()
-            var mapTotalCost: HashMap<String, Double> = HashMap()
+                // map to map each WeeklyID with a key as ID and contains all 2
+                // array lists (e.g - numOfDay,dailyIds)
+                var map: HashMap<String, ArrayList<String>> = HashMap()
+                var mapTotalCost: HashMap<String, Double> = HashMap()
 
-            var weeklyInfo2 = weeklyInfo[0].splitIgnoreEmpty("*")
-            var currentWeeklyID = weeklyInfo2[0].toInt()
+                var weeklyInfo2 = weeklyInfo[0].splitIgnoreEmpty("*")
+                var currentWeeklyID = weeklyInfo2[0].toInt()
 
-            for (i in weeklyInfo.indices) {
+                for (i in weeklyInfo.indices) {
 
-                weeklyInfo2 = weeklyInfo[i].splitIgnoreEmpty("*")
+                    weeklyInfo2 = weeklyInfo[i].splitIgnoreEmpty("*")
 
-                //means we switch to the next WeeklyID
-                if (weeklyInfo2[0].toInt() != currentWeeklyID) {
+                    //means we switch to the next WeeklyID
+                    if (weeklyInfo2[0].toInt() != currentWeeklyID) {
 
-                    // to keep each Weekly its dailys ids and its num of day.(days in a week)
-                    var totalLists: ArrayList<String> = ArrayList()
-                    totalLists.add(numOfDay)
-                    totalLists.add(dailyIds)
-                    // saving this weekly daily ids and num of days
-                    map.put(currentWeeklyID.toString(), totalLists)
-                    // saving this weekly total cost
-                    mapTotalCost.put(currentWeeklyID.toString(), totalcost)
+                        // to keep each Weekly its dailys ids and its num of day.(days in a week)
+                        var totalLists: ArrayList<String> = ArrayList()
+                        totalLists.add(numOfDay)
+                        totalLists.add(dailyIds)
+                        // saving this weekly daily ids and num of days
+                        map.put(currentWeeklyID.toString(), totalLists)
+                        // saving this weekly total cost
+                        mapTotalCost.put(currentWeeklyID.toString(), totalcost)
 
-                    //switching to the next WeeklyID
-                    currentWeeklyID = weeklyInfo2[0].toInt()
+                        //switching to the next WeeklyID
+                        currentWeeklyID = weeklyInfo2[0].toInt()
 
-                    // clearing the variables for next WeeeklyID
-                    numOfDay = ""
-                    dailyIds = ""
+                        // clearing the variables for next WeeeklyID
+                        numOfDay = ""
+                        dailyIds = ""
+
+                    }
+
+                    numOfDay += "" + weeklyInfo2[3] + " "
+                    dailyIds += "" + weeklyInfo2[4] + " "
+                    // saving the last total cost
+                    totalcost = weeklyInfo2[2].toDouble()
+
 
                 }
 
-                numOfDay += "" + weeklyInfo2[3] + " "
-                dailyIds += "" + weeklyInfo2[4] + " "
-                // saving the last total cost
-                totalcost = weeklyInfo2[2].toDouble()
+                // not to skip on the last Weeekly
+
+                if (!numOfDay.equals("")) {
+                    var totalLists: ArrayList<String> = ArrayList()
+                    totalLists.add(numOfDay)
+                    totalLists.add(dailyIds)
+                    map.put(currentWeeklyID.toString(), totalLists)
+                    mapTotalCost.put(currentWeeklyID.toString(), totalcost)
+                }
+
+                // making WeeklyScheudle objects
+                // making WeeklyScheudle objects
+                // making WeeklyScheudle objects
+                var weeklyIdsArr = weeklyIds.splitIgnoreEmpty(" ")
+                //  currentWeeklyID = -1
+                var weekly = -1
+                for (i in weeklyIdsArr) {
+                    weekly= -1
+                    for (j in weeklyInfo.indices) {
+                        var weeklyInfo2 = weeklyInfo[j].splitIgnoreEmpty("*")
+                        if (i.toInt() == weeklyInfo2[0].toInt() && weeklyList.size < weeklyIdsArr.size && weekly != weeklyInfo2[0].toInt()) {
+                            weeklyList!!.add(
+                                WeeklySchedule(
+                                    weeklyInfo2[0].toInt(),
+                                    weeklyInfo2[1].toInt(),
+                                    map.get(weeklyInfo2[0])!!.get(0),
+                                    map.get(weeklyInfo2[0])!!.get(1),
+                                    mapTotalCost.get(weeklyInfo2[0])!!,
+                                    false
+
+                                )
+                            )
+                            weekly = weeklyInfo2[0].toInt()
+                        }
 
 
-            }
+                    }
 
-            // not to skip on the last Weeekly
+                }
 
-            if (!numOfDay.equals("")) {
-                var totalLists: ArrayList<String> = ArrayList()
-                totalLists.add(numOfDay)
-                totalLists.add(dailyIds)
-                map.put(currentWeeklyID.toString(), totalLists)
-                mapTotalCost.put(currentWeeklyID.toString(), totalcost)
-            }
 
-            // making WeeklyScheudle objects
-            var weeklyIdsArr = weeklyIds.splitIgnoreEmpty(" ")
-            currentWeeklyID = -1
-            for (i in weeklyIdsArr) {
 
-                for (j in weeklyInfo.indices) {
-                    var weeklyInfo2 = weeklyInfo[j].splitIgnoreEmpty("*")
-                    if (currentWeeklyID != weeklyInfo2[0].toInt() && i.toInt() == weeklyInfo2[0].toInt()) {
-                        weeklyList!!.add(
-                            WeeklySchedule(
-                                weeklyInfo2[0].toInt(),
-                                weeklyInfo2[1].toInt(),
-                                map.get(weeklyInfo2[0])!!.get(0),
-                                map.get(weeklyInfo2[0])!!.get(1),
-                                mapTotalCost.get(weeklyInfo2[0])!!,
+                var dialog = MonthlyDialogInfo(
+
+                    weeklyList,
+                    numOfWeek,
+                    weeklyIds,
+                    totalCostDobule,
+                    pos
+                )
+
+
+                dialog.show(childFragmentManager, "WeeklyDialogInfo")
+
+                info = false
+            } else if (!info) {
+
+                if (!isScorlled)
+                    mValues!!.clear()
+
+                numOfWeek = ""
+                weeklyIds = ""
+                // recipeList!!.clear()
+                // monthlyList!!.clear()
+
+
+                val monthlyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+
+
+                // map to map each MonthlyID with a key as ID and contains all 2
+                // array lists (e.g - numOfDay,dailyIds)
+                var map: HashMap<String, ArrayList<String>> = HashMap()
+                var mapTotalCost: HashMap<String, Double> = HashMap()
+
+
+                var monthlyInfo2 = monthlyInfo[0].splitIgnoreEmpty("*")
+                var currentMonthlyID = monthlyInfo2[0].toInt()
+
+
+                for (i in monthlyInfo.indices) {
+
+                    monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
+
+                    //means we switch to the next WeeklyID
+                    if (monthlyInfo2[0].toInt() != currentMonthlyID) {
+
+                        // to keep each Weekly its dailys ids and its num of day.(days in a week)
+                        var totalLists: ArrayList<String> = ArrayList()
+                        totalLists.add(numOfWeek)
+                        totalLists.add(weeklyIds)
+                        // saving this weekly daily ids and num of days
+                        map.put(currentMonthlyID.toString(), totalLists)
+                        // saving this weekly total cost
+                        mapTotalCost.put(currentMonthlyID.toString(), totalCostDobule)
+
+                        //switching to the next WeeklyID
+                        currentMonthlyID = monthlyInfo2[0].toInt()
+
+                        // clearing the variables for next WeeeklyID
+                        numOfWeek = ""
+                        weeklyIds = ""
+
+                    }
+
+                    numOfWeek += "" + monthlyInfo2[3] + " "
+                    weeklyIds += "" + monthlyInfo2[4] + " "
+                    // saving the last total cost
+                    totalCostDobule = monthlyInfo2[2].toDouble()
+
+
+                }
+
+                // not to skip on the last Weeekly
+
+                if (!numOfWeek.equals("")) {
+                    var totalLists: ArrayList<String> = ArrayList()
+                    totalLists.add(numOfWeek)
+                    totalLists.add(weeklyIds)
+                    map.put(currentMonthlyID.toString(), totalLists)
+                    mapTotalCost.put(currentMonthlyID.toString(), totalCostDobule)
+                }
+
+                // making MonthlyScheudle objects
+
+                currentMonthlyID = -1
+                for (i in monthlyInfo.indices) {
+                    var monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
+                    if (monthlyInfo2[0].toInt() != currentMonthlyID) {
+                        mValues!!.add(
+                            MonthlySchedule(
+                                monthlyInfo2[0].toInt(),
+                                monthlyInfo2[1].toInt(),
+                                map.get(monthlyInfo2[0])!!.get(0),
+                                map.get(monthlyInfo2[0])!!.get(1),
+                                mapTotalCost.get(monthlyInfo2[0])!!,
                                 false
 
                             )
                         )
-                        currentWeeklyID = weeklyInfo2[0].toInt()
+
+                        currentMonthlyID = monthlyInfo2[0].toInt()
                     }
-
-
                 }
+
+
+
+                this!!.setmValues(mValues!!)
+
+                progressBar!!.visibility = View.INVISIBLE
+                // UserPropertiesSingelton.getInstance()!!.setUserWeekly(sorted)
+                isScorlled = false
             }
-
-            this.setWeeklyList(weeklyList)
-
-
-            var dialog = MonthlyDialogInfo(
-
-                weeklyList,
-                numOfWeek,
-                weeklyIds,
-                totalCostDobule,
-                pos
-            )
-
-
-            dialog.show(childFragmentManager, "WeeklyDialogInfo")
-
+        } else {
+            progressBar!!.visibility = View.INVISIBLE
         }
+    }
 
 
+    override fun onQueryTextSubmit(p0: String?): Boolean {
+        return false
+    }
+
+    override fun onQueryTextChange(p0: String?): Boolean {
+        if (p0 != "") {
+//            noResultsTextView!!.visibility = View.INVISIBLE
+//            isSearch = true
+//            recipeToSearch = p0!!
+//            startTask()
+        } else {
+//            isSearch = false
+//            mValues!!.clear()
+//            noResultsTextView!!.visibility = View.INVISIBLE
+//            startTask()
+        }
+        return true
     }
 
 }

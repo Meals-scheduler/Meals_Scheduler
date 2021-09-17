@@ -165,6 +165,7 @@ class DailyDialogInfo(
                 var t3v: TextView = TextView(context)
                 // t3v.setBackgroundResource(R.drawable.border)
                 t3v.setText(i.recipeName)
+                t3v.setTextSize(10F)
                 t3v.setTextColor(Color.BLACK)
                 t3v.gravity = Gravity.CENTER
                 //    t3v.setBackgroundResource(R.drawable.spinner_shape)
