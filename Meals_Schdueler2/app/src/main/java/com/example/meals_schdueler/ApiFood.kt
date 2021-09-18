@@ -23,8 +23,9 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 
-class ApiFood (id : Int, childFragmentManager: FragmentManager, context: Context): Fragment(), GetAndPost {
-   // private var fcid = 55005
+class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) : Fragment(),
+    GetAndPost {
+    // private var fcid = 55005
     private var isRecipe = true
     private var j = 0
     private var k = 0
@@ -39,20 +40,17 @@ class ApiFood (id : Int, childFragmentManager: FragmentManager, context: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-      //  setContentView(R.layout.api_test)
+        //  setContentView(R.layout.api_test)
 
 
-       // for (i in 1..2) {
-            startTask()
+        // for (i in 1..2) {
+        startTask()
 
 
-       // }
+        // }
 
 
     }
-
-
-
 
 
     private fun uploadRecipe() {
@@ -161,7 +159,7 @@ class ApiFood (id : Int, childFragmentManager: FragmentManager, context: Context
             val jsonObject = JSONObject(str)
             var name = jsonObject.getString("title")
             val portions = jsonObject.getString("servings")
-            val totalcost = jsonObject.getString("pricePerServing")
+           // val totalcost = jsonObject.getString("pricePerServing")
             val image = jsonObject.getString("image")
             val vegetarian = jsonObject.getString("vegetarian")
             val vegan = jsonObject.getString("vegan")
@@ -223,6 +221,8 @@ class ApiFood (id : Int, childFragmentManager: FragmentManager, context: Context
 
 
             }
+
+            var totalcost = calculateCost()
             var bitmap: Bitmap? = null
             lifecycleScope.launch {
                 var bitmap = getBitMap(image)
@@ -252,7 +252,7 @@ class ApiFood (id : Int, childFragmentManager: FragmentManager, context: Context
                     ingredientsQuantity,
                     instructionsValue
                 )
-              //  fcid++
+                //  fcid++
                 var s = AsynTaskNew(recipe, childFragmentManager2)
                 s.execute()
             }
@@ -372,6 +372,22 @@ class ApiFood (id : Int, childFragmentManager: FragmentManager, context: Context
         return (result as BitmapDrawable).bitmap
 
 
+    }
+
+    fun calculateCost(): Float {
+        var calc: Float = 0f
+        var j = 0
+
+        for (i in ingredientList!!) {
+
+
+            var cur = ingredientsQuantity!!.get(j) * i.costPerGram.toFloat() / 100
+
+            calc += cur
+            j++
+        }
+
+        return calc
     }
 
 }

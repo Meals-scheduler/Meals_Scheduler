@@ -126,7 +126,7 @@ class All_Recipes_RecyclerViewAdapter(
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         var recipeImage: ImageView = view.findViewById(R.id.imageViewPicRecipe)
-        var ingredientCart: ImageView = view.findViewById(R.id.imageViewCart)
+//        var ingredientCart: ImageView = view.findViewById(R.id.imageViewCart)
         var recipeName: Button = view.findViewById(R.id.buttonRecipeName)
         var copyImage: ImageView = view.findViewById(R.id.imageViewCopy)
         var recipeInfo: ImageView = view.findViewById(R.id.imageViewInfo)

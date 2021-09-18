@@ -184,11 +184,11 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
 //            startActivity(i)
 
             var arr: ArrayList<Int> = ArrayList()
-            var id = 55020
-            for (i in 1..2) {
+            var id = 55025
+           // for (i in 1..2) {
                 arr.add(id)
                 id += 1
-            }
+          //  }
 
             for (i in arr) {
                 var g = ApiFood(i, childFragmentManager, requireContext());
