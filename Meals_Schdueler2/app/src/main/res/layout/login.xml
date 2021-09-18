@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/untitled_artwork"
     tools:context=".MainActivity">
 
     <TextView
@@ -14,7 +15,7 @@
         android:fontFamily="@font/poppinsbold"
         android:gravity="center"
         android:text="Login"
-        android:textColor="@color/design_default_color_secondary"
+        android:textColor="@color/white"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -44,6 +45,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/username"
+                android:textColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@android:drawable/ic_menu_my_calendar"
@@ -67,6 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppinsmedium"
+                android:textColor="@color/white"
                 android:password="true"
                 tools:targetApi="jelly_bean" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -94,6 +97,7 @@
 
         <TextView
             android:id="@+id/signUpText"
+            android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
@@ -106,12 +110,13 @@
 
         <CheckBox
             android:id="@+id/checkBoxRemember"
-            android:layout_width="125dp"
-            android:layout_height="29dp"
-            android:layout_marginTop="24dp"
+            android:layout_width="135dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="4dp"
             android:text="Remember me"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toStartOf="@+id/buttonLogin"
-            app:layout_constraintHorizontal_bias="0.53"
+            app:layout_constraintHorizontal_bias="0.422"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword" />
 

@@ -27,6 +27,7 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
     GetAndPost {
     // private var fcid = 55005
     private var isRecipe = true
+    private var isIngredient = false
     private var j = 0
     private var k = 0
     private var ingredientsIds: ArrayList<String> = ArrayList()
@@ -36,6 +37,14 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
     private var fcid = id
     private var childFragmentManager2 = childFragmentManager
     private var context2 = context
+    private var reallyWantToUpload = false
+    var totalcost = 0F
+    var instructionsValue: HowToStroreValue? = null
+    var portions = ""
+    var typeOfMeal = ""
+    var name = ""
+    var image = ""
+    //  private var instructiosBool = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,11 +62,17 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
     }
 
 
-    private fun uploadRecipe() {
+    private fun almostUploadRecipe() {
         wantToUpload = true
         isRecipe = true
         startTask()
 
+    }
+
+    private fun uploadRecipe() {
+        reallyWantToUpload = true
+        isRecipe = true
+        startTask()
     }
 
     fun startTask() {
@@ -72,13 +87,17 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
         if (isRecipe) {
             Log.v("Sivan", "here is recipe")
             link =
-                " https://api.spoonacular.com/recipes/" + fcid + "/information?apiKey=bd6b560e6d934e2ebe9cd08f20c7ee42&includeNutrition=true"
+                " https://api.spoonacular.com/recipes/" + fcid + "/information?apiKey=8ec327f4413e489ba67798bb1b6ab085&includeNutrition=true"
             // fcid += 1
-        } else {
+        } else if (isIngredient) {
             Log.v("Sivan", "here is ingredient")
             link =
 
-                "https://api.spoonacular.com/food/ingredients/" + ingredientsIds.get(j++) + "/information?amount=1&apiKey=bd6b560e6d934e2ebe9cd08f20c7ee42"
+                "https://api.spoonacular.com/food/ingredients/" + ingredientsIds.get(j++) + "/information?amount=1&apiKey=8ec327f4413e489ba67798bb1b6ab085"
+        } else {
+            link =
+                "https://api.spoonacular.com/recipes/" + fcid + "/analyzedInstructions?apiKey=8ec327f4413e489ba67798bb1b6ab085"
+
         }
 
 
@@ -145,6 +164,7 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
                 //  Log.v("Elad1","NAME " + name2)
 
             }
+            isIngredient = true
             for (i in ingredientsIds) {
                 Log.v("Sivan", "second taking ingredients info")
                 startTask()
@@ -157,14 +177,14 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
         } else if (isRecipe && wantToUpload) {
 
             val jsonObject = JSONObject(str)
-            var name = jsonObject.getString("title")
-            val portions = jsonObject.getString("servings")
-           // val totalcost = jsonObject.getString("pricePerServing")
-            val image = jsonObject.getString("image")
+            name = jsonObject.getString("title")
+            portions = jsonObject.getString("servings")
+            // val totalcost = jsonObject.getString("pricePerServing")
+             image = jsonObject.getString("image")
             val vegetarian = jsonObject.getString("vegetarian")
             val vegan = jsonObject.getString("vegan")
             val dairyFree = jsonObject.getString("dairyFree")
-            var typeOfMeal = ""
+            typeOfMeal = ""
             if (dairyFree.equals("true") && vegetarian.equals("false")) {
                 typeOfMeal = "Meat"
             } else if (dairyFree.equals("true") && vegan.equals("true")) {
@@ -178,7 +198,7 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
             val ingredients = jsonObject.getString("extendedIngredients")
             var instructions = jsonObject.get("summary").toString()
 
-            instructions = instructions.replace('\'', ' ')
+          //  instructions = instructions.replace('\'', ' ')
 
             val arr = JSONArray(ingredients)
 
@@ -211,7 +231,7 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
                     "meduim" -> floatGrams = (20.0F) * amount.toFloat()
                     "small" -> floatGrams = (10.0F) * amount.toFloat()
                     "large", "serving" -> floatGrams = (30.0F) * amount.toFloat()
-                    "", "stick", "Slice" -> floatGrams = (20.0F) * amount.toFloat()
+                    "", "stick", "Slice","slices","slice" -> floatGrams = (20.0F) * amount.toFloat()
 
 
                 }
@@ -222,42 +242,15 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
 
             }
 
-            var totalcost = calculateCost()
-            var bitmap: Bitmap? = null
-            lifecycleScope.launch {
-                var bitmap = getBitMap(image)
+            totalcost = calculateCost()
 
-                Log.v("Sivan", "Recipes:::")
-                Log.v("Sivan", fcid.toString())
-                Log.v("Sivan", name)
-                Log.v("Sivan", typeOfMeal.toString())
-                Log.v("Sivan", portions.toString())
-                Log.v("Sivan", totalcost.toString())
-                Log.v("Sivan", ingredientList.toString())
-                Log.v("Sivan", ingredientsQuantity.toString())
 
-                var instructionsValue = HowToStroreValue(instructions)
+            isIngredient = false
+            isRecipe = false
+            startTask()
 
-                var recipe = Recipe(
-                    fcid,
-                    -1,
-                    name,
-                    bitmap,
-                    typeOfMeal,
-                    portions,
-                    totalcost.toDouble(),
-                    true,
-                    true,
-                    ingredientList,
-                    ingredientsQuantity,
-                    instructionsValue
-                )
-                //  fcid++
-                var s = AsynTaskNew(recipe, childFragmentManager2)
-                s.execute()
-            }
 
-        } else if (!isRecipe) {
+        } else if (!isRecipe && isIngredient) {
 
             var proteinAmount = 0F
             var carbsAmount = 0F
@@ -351,14 +344,74 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
                 Log.v("Sivan", "K Size " + k)
                 if (k == 0) {
                     Log.v("Sivan", "third trying to upload recipe")
-                    uploadRecipe()
+                    isIngredient = false
+                    almostUploadRecipe()
                 }
             }
 //
 //        Log.v("Elad1","Name of the recipe " + name)
 //        Log.v("Elad1","Ingredients " + ingredient)
 
+        } else {
+            var instructions = ""
+            val arr = JSONArray(str)
+
+
+            for (i in 0 until arr.length()) {
+                val jsonSecondary = arr.getJSONObject(i)
+                var nameOfStep = jsonSecondary.getString("name")
+                if (nameOfStep.equals("")) {
+                    nameOfStep = name
+                }
+                Log.v("Sivan", "Step name " + name)
+                instructions += name + ":\n"
+
+                val arr2 = JSONArray(jsonSecondary.getString("steps"))
+                var stepNum = 1
+                for (j in 0 until arr2.length()) {
+                    val jsonSecondary2 = arr2.getJSONObject(j)
+                    var step = jsonSecondary2.getString("step")
+                    Log.v("Sivan", "Step is " + step)
+                    instructions+= "" + stepNum +") " +step
+                    stepNum++
+                }
+            }
+
+            instructionsValue = HowToStroreValue(instructions)
+            var bitmap: Bitmap? = null
+            lifecycleScope.launch {
+                var bitmap = getBitMap(image)
+
+                Log.v("Sivan", "Recipes:::")
+                Log.v("Sivan", fcid.toString())
+                Log.v("Sivan", name)
+                Log.v("Sivan", typeOfMeal.toString())
+                Log.v("Sivan", portions.toString())
+                Log.v("Sivan", totalcost.toString())
+                Log.v("Sivan", ingredientList.toString())
+                Log.v("Sivan", ingredientsQuantity.toString())
+
+
+                var recipe = Recipe(
+                    fcid,
+                    -1,
+                    name,
+                    bitmap,
+                    typeOfMeal,
+                    portions,
+                    totalcost.toDouble(),
+                    true,
+                    true,
+                    ingredientList,
+                    ingredientsQuantity,
+                    instructionsValue!!
+                )
+                //  fcid++
+                var s = AsynTaskNew(recipe, childFragmentManager2)
+                s.execute()
+            }
         }
+
     }
 
 
