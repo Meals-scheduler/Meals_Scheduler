@@ -408,14 +408,20 @@ class WeeklyDialogInfo(
 //            }
 
 
-            currentID = -1
-            for (i in recipesAndIngredients.indices) {
 
-                var recipe2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
-                if (recipe2.size == 10) {
-                    var s = recipe2[0].toInt()
-                    var instructions = HowToStroreValue(recipe2[9])
-                    if (s != currentID)
+
+            // currentID = -1
+            var recipeIdsArr = recipeIdsStr.splitIgnoreEmpty(" ")
+            for(i in recipeIdsArr){
+
+                for (j in recipesAndIngredients.indices) {
+
+
+                    var recipe2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
+                    if (recipe2.size == 10 && i.toInt() == recipe2[0].toInt()) {
+                        //var s = recipe2[0].toInt()
+                        //  if (s != currentID)
+                        var instructions = HowToStroreValue(recipe2[9])
                         recipeList?.add(
                             Recipe(
                                 recipe2[0].toInt(),
@@ -428,19 +434,56 @@ class WeeklyDialogInfo(
                                 recipe2[7].toBoolean(),
                                 recipe2[8].toBoolean(),
                                 recipeIngredientMap.get(recipe2[0].toInt())!!,
-                                quantities.get(s)!!,
+                                quantities.get(recipe2[0].toInt())!!,
                                 instructions
                                 // hashMap.get(recipe2[0].toInt())!!.second
 
                             )
                         )
 
-                    currentID = recipe2[0].toInt()
+                        //currentID = recipe2[0].toInt()
 
-                } else {
-                    break
+                    }
                 }
+
             }
+
+
+
+
+//            currentID = -1
+//            for (i in recipesAndIngredients.indices) {
+//
+//                var recipe2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
+//                if (recipe2.size == 10) {
+//                    var s = recipe2[0].toInt()
+//                    var instructions = HowToStroreValue(recipe2[9])
+//                    if (s != currentID)
+//                        recipeList?.add(
+//                            Recipe(
+//                                recipe2[0].toInt(),
+//                                recipe2[1].toInt(),
+//                                recipe2[2],
+//                                ImageConvert.StringToBitMap(recipe2[3].toString())!!,
+//                                recipe2[4],
+//                                recipe2[5],
+//                                recipe2[6].toDouble(),
+//                                recipe2[7].toBoolean(),
+//                                recipe2[8].toBoolean(),
+//                                recipeIngredientMap.get(recipe2[0].toInt())!!,
+//                                quantities.get(s)!!,
+//                                instructions
+//                                // hashMap.get(recipe2[0].toInt())!!.second
+//
+//                            )
+//                        )
+//
+//                    currentID = recipe2[0].toInt()
+//
+//                } else {
+//                    break
+//                }
+//            }
 
 
             var dialog = DailyDialogInfo(

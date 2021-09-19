@@ -78,8 +78,8 @@ class EventDialogInfo(
 
     private fun initEvent() {
         var j = 0
-        stk.setColumnShrinkable(4, true)
-        stk.setColumnStretchable(4, true)
+       // stk.setColumnShrinkable(4, true)
+       // stk.setColumnStretchable(4, true)
 //        stk.setColumnShrinkable(0 ,true)
 //        stk.setColumnStretchable(0, true)
 

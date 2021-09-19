@@ -37,13 +37,14 @@
                 android:id="@+id/dailyInfo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="80dp"
                 android:layout_marginTop="32dp"
+                android:background="@drawable/spinner_shape"
                 android:fontFamily="@font/poppinsbold"
                 android:gravity="center"
                 android:text="Daily No.  :"
                 android:textSize="20dp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

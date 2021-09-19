@@ -20,14 +20,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="#3261"
+                android:background="@drawable/instance_shape"
                 android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/imageViewX"
                     android:layout_width="38dp"
                     android:layout_height="34dp"
-                    android:layout_marginStart="36dp"
+                    android:layout_marginStart="4dp"
                     android:src="@drawable/x_icon"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -35,16 +35,17 @@
 
                 <TextView
                     android:id="@+id/editNumberOfDailyTextView"
-                    android:layout_width="224dp"
-                    android:layout_height="37dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="128dp"
+
+                    android:layout_marginTop="16dp"
                     android:background="@drawable/spinner_shape"
                     android:fontFamily="@font/poppinsbold"
                     android:gravity="center"
                     android:text="Edit Daily No.  :"
                     android:textSize="20dp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,7 +53,7 @@
                     android:id="@+id/dinnerBtn"
                     android:layout_width="90dp"
                     android:layout_height="48dp"
-                    android:layout_marginStart="28dp"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="72dp"
                     android:background="@drawable/btn1"
                     android:fontFamily="@font/poppinsbold"
@@ -82,7 +83,7 @@
                     android:id="@+id/breakfastBtn"
                     android:layout_width="90dp"
                     android:layout_height="48dp"
-                    android:layout_marginStart="44dp"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="72dp"
                     android:background="@drawable/btn1"
                     android:fontFamily="@font/poppinsbold"
@@ -102,7 +103,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editNumberOfDailyTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/lunchBtn"
                     app:layout_constraintVertical_bias="0.371">
 
                 </TableLayout>
@@ -111,8 +112,8 @@
                     android:id="@+id/saveBtn"
                     android:layout_width="104dp"
                     android:layout_height="48dp"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="56dp"
-                    android:layout_marginEnd="40dp"
                     android:background="@drawable/btn1"
                     android:fontFamily="@font/poppinsbold"
                     android:gravity="center"
@@ -121,14 +122,14 @@
                     android:text="Save"
                     android:textColor="@drawable/button_states"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/editTextTotalCost"
                     app:layout_constraintTop_toBottomOf="@+id/tableLayout"
                     app:layout_constraintVertical_bias="0.0"></Button>
 
                 <TextView
                     android:id="@+id/totalCostTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="70dp"
                     android:background="@drawable/spinner_shape"
                     android:fontFamily="@font/poppinsbold"
@@ -150,13 +151,10 @@
                     android:layout_height="48dp"
                     android:layout_marginStart="7dp"
                     android:layout_marginTop="56dp"
-                    android:layout_marginEnd="172dp"
                     android:background="@drawable/edit_text_shape"
                     android:ems="10"
                     android:inputType="textPersonName"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.833"
                     app:layout_constraintStart_toEndOf="@+id/totalCostTextView"
                     app:layout_constraintTop_toBottomOf="@+id/tableLayout">
 
