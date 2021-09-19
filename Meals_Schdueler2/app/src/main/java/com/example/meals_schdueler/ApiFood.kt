@@ -230,7 +230,7 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
                     "Tbsps", "Tbsp", "Tb" -> floatGrams = (14.3F) * amount.toFloat()
                     "meduim" -> floatGrams = (20.0F) * amount.toFloat()
                     "small" -> floatGrams = (10.0F) * amount.toFloat()
-                    "large", "serving" -> floatGrams = (30.0F) * amount.toFloat()
+                    "large", "serving" , "servings" -> floatGrams = (30.0F) * amount.toFloat()
                     "", "stick", "Slice","slices","slice" -> floatGrams = (20.0F) * amount.toFloat()
 
 

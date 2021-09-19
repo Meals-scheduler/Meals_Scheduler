@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.FragmentManager
 import java.io.BufferedInputStream
 import java.io.BufferedReader
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GetAndPost,Compo
     var username = ""
     var password = ""
     override fun onCreate(savedInstanceState: Bundle?) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login)
 
