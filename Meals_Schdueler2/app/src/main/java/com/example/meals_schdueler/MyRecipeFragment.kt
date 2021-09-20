@@ -47,6 +47,10 @@ class MyRecipeFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChange
         }
     }
 
+    fun getRecycler() :MyRecipeRecyclerViewAdapter{
+        return recipeRecyclerViewAdapter!!
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

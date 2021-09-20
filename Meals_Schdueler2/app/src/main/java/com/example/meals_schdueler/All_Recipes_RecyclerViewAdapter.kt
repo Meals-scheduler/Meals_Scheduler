@@ -112,6 +112,8 @@ class All_Recipes_RecyclerViewAdapter(
             var s = AsynTaskNew(recipe, childFragmentManager)
             s.execute()
 
+            MyRecipeFragment.instance!!.getRecycler().toCopy(recipe)
+
 
         }
     }

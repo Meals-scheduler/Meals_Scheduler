@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 class MyRecipeRecyclerViewAdapter(
     private var values: ArrayList<Recipe>,
     childFragmentManager: FragmentManager
-) : RecyclerView.Adapter<MyRecipeRecyclerViewAdapter.ViewHolder>() ,deleteInterface {
+) : RecyclerView.Adapter<MyRecipeRecyclerViewAdapter.ViewHolder>(), deleteInterface, toCopyRecipe {
 
     private var mValues: ArrayList<Recipe> = values
     private var childFragmentManager = childFragmentManager
@@ -47,7 +47,7 @@ class MyRecipeRecyclerViewAdapter(
             Log.v("Elad1", recipeToDelete.toString())
             var dialog =
                 DeleteAlertDialog(
-                    item.recipeName, item.pictureBitMap, item.recipeId, "Recipe",this
+                    item.recipeName, item.pictureBitMap, item.recipeId, "Recipe", this
 
                 )
             dialog.show(childFragmentManager, "DeleteAlertDialog")
@@ -99,10 +99,15 @@ class MyRecipeRecyclerViewAdapter(
     }
 
     override fun toDelete(isDelete: Boolean) {
-       if(isDelete){
-           mValues.removeAt(recipeToDelete!!)
-           notifyDataSetChanged()
-       }
+        if (isDelete) {
+            mValues.removeAt(recipeToDelete!!)
+            notifyDataSetChanged()
+        }
+    }
+
+    override fun toCopy(recipe: Recipe) {
+        mValues.add(recipe!!)
+        notifyDataSetChanged()
     }
 
 }
