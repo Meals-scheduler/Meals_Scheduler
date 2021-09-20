@@ -1,5 +1,6 @@
 package com.example.meals_schdueler
 
+import android.content.DialogInterface
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +11,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MyRecipeRecyclerViewAdapter(
-    private var values:ArrayList<Recipe>,
+    private var values: ArrayList<Recipe>,
     childFragmentManager: FragmentManager
-) : RecyclerView.Adapter<MyRecipeRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<MyRecipeRecyclerViewAdapter.ViewHolder>() ,deleteInterface {
 
     private var mValues: ArrayList<Recipe> = values
     private var childFragmentManager = childFragmentManager
+    private var recipeToDelete: Int? = null
 
 
     override fun onCreateViewHolder(
@@ -24,6 +26,7 @@ class MyRecipeRecyclerViewAdapter(
     ): MyRecipeRecyclerViewAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_myrecipe, parent, false)
+
 
 
         return ViewHolder(view)
@@ -39,13 +42,20 @@ class MyRecipeRecyclerViewAdapter(
         holder.recipeImage.setImageBitmap(item.pictureBitMap)
 
         holder.deleteRecipe.setOnClickListener {
-            var dialog = DeleteAlertDialog(item.recipeName, item.pictureBitMap, item.recipeId, "Recipe")
+            Log.v("Elad1", "want to delete")
+            recipeToDelete = position
+            Log.v("Elad1", recipeToDelete.toString())
+            var dialog =
+                DeleteAlertDialog(
+                    item.recipeName, item.pictureBitMap, item.recipeId, "Recipe",this
+
+                )
             dialog.show(childFragmentManager, "DeleteAlertDialog")
         }
 
         holder.ingredientInfo.setOnClickListener {
-            for( i in item.listOfIngredients){
-                Log.v("Elad1","List of ing" + i.ingridentName)
+            for (i in item.listOfIngredients) {
+                Log.v("Elad1", "List of ing" + i.ingridentName)
             }
             var instructions = HowToStroreValue(item.instructions.howToStore)
             var dialog = MyRecipeIngredietns(
@@ -75,7 +85,8 @@ class MyRecipeRecyclerViewAdapter(
         // val idView: TextView = view.findViewById(R.id.item_number)
         //val contentView: TextView = view.findViewById(R.id.content)
         var recipeImage: ImageView = view.findViewById(R.id.imageViewPicRecipe)
-       // var ingredientCart: ImageView = view.findViewById(R.id.imageViewCart)
+
+        // var ingredientCart: ImageView = view.findViewById(R.id.imageViewCart)
         var RecipeName: Button = view.findViewById(R.id.buttonRecipeName)
         var ingredientInfo: ImageView = view.findViewById(R.id.imageViewIngredientsInfo)
         var deleteRecipe: ImageView = view.findViewById(R.id.imageViewDel)
@@ -86,4 +97,12 @@ class MyRecipeRecyclerViewAdapter(
             return super.toString()
         }
     }
+
+    override fun toDelete(isDelete: Boolean) {
+       if(isDelete){
+           mValues.removeAt(recipeToDelete!!)
+           notifyDataSetChanged()
+       }
+    }
+
 }

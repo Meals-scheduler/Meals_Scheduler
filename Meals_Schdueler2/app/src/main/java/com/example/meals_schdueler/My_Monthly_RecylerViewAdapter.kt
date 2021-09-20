@@ -7,20 +7,16 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.allyants.notifyme.NotifyMe
-import com.example.meals_schdueler.dummy.DailySchedule
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStream
@@ -39,7 +35,8 @@ class My_Monthly_RecylerViewAdapter(
     context: Context?,
     acticity: Activity
 
-) : RecyclerView.Adapter<My_Monthly_RecylerViewAdapter.ViewHolder>(), GetAndPost {
+) : RecyclerView.Adapter<My_Monthly_RecylerViewAdapter.ViewHolder>(), GetAndPost,
+    deleteInterface {
 
     private var monthlyValues: ArrayList<MonthlySchedule> = monthlyValues
 
@@ -47,6 +44,8 @@ class My_Monthly_RecylerViewAdapter(
     private var weeklyValues: ArrayList<WeeklySchedule> = ArrayList()
 
     private var childFragmentManager = childFragmentManager
+
+    private var monthlyToDelete: Int? = null
 
     // private lateinit var recipeList: ArrayList<Recipe>
     private var context = context
@@ -119,13 +118,15 @@ class My_Monthly_RecylerViewAdapter(
         holder.delete.setOnClickListener {
             // deleteing this monthly from the map that holds for every monthly its weekly list
 
-
+            monthlyToDelete = position
             var dialog =
                 DeleteAlertDialog(
                     "",
                     null,
                     monthlyValues.get(position)!!.monthlyId,
-                    "Monthly"
+                    "Monthly",
+                    this
+
                 )
             dialog.show(childFragmentManager, "DeleteMonthly")
 
@@ -355,34 +356,31 @@ class My_Monthly_RecylerViewAdapter(
             }
 
 
-
-
-
             // making WeeklyScheudle objects
             var weeklyIdsArr = weeklyIds.splitIgnoreEmpty(" ")
-          //  currentWeeklyID = -1
+            //  currentWeeklyID = -1
             var weekly = -1
             for (i in weeklyIdsArr) {
-                weekly= -1
-                    for (j in weeklyInfo.indices) {
-                        var weeklyInfo2 = weeklyInfo[j].splitIgnoreEmpty("*")
-                        if (i.toInt() == weeklyInfo2[0].toInt() && weeklyValues.size < weeklyIdsArr.size && weekly != weeklyInfo2[0].toInt()) {
-                            weeklyValues!!.add(
-                                WeeklySchedule(
-                                    weeklyInfo2[0].toInt(),
-                                    weeklyInfo2[1].toInt(),
-                                    map.get(weeklyInfo2[0])!!.get(0),
-                                    map.get(weeklyInfo2[0])!!.get(1),
-                                    mapTotalCost.get(weeklyInfo2[0])!!,
-                                    false
+                weekly = -1
+                for (j in weeklyInfo.indices) {
+                    var weeklyInfo2 = weeklyInfo[j].splitIgnoreEmpty("*")
+                    if (i.toInt() == weeklyInfo2[0].toInt() && weeklyValues.size < weeklyIdsArr.size && weekly != weeklyInfo2[0].toInt()) {
+                        weeklyValues!!.add(
+                            WeeklySchedule(
+                                weeklyInfo2[0].toInt(),
+                                weeklyInfo2[1].toInt(),
+                                map.get(weeklyInfo2[0])!!.get(0),
+                                map.get(weeklyInfo2[0])!!.get(1),
+                                mapTotalCost.get(weeklyInfo2[0])!!,
+                                false
 
-                                )
                             )
-                            weekly = weeklyInfo2[0].toInt()
-                        }
-
-
+                        )
+                        weekly = weeklyInfo2[0].toInt()
                     }
+
+
+                }
 
             }
 
@@ -425,5 +423,13 @@ class My_Monthly_RecylerViewAdapter(
 
         }
 
+    }
+
+
+    override fun toDelete(isDelete: Boolean) {
+        if (isDelete) {
+            monthlyValues.removeAt(monthlyToDelete!!)
+            notifyDataSetChanged()
+        }
     }
 }

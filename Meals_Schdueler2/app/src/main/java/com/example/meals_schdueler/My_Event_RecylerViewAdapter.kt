@@ -7,8 +7,6 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +17,6 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.allyants.notifyme.NotifyMe
-import com.example.meals_schdueler.dummy.DailySchedule
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStream
@@ -37,7 +34,8 @@ class My_Event_RecylerViewAdapter(
     context: Context?,
     activity: Activity
 
-) : RecyclerView.Adapter<My_Event_RecylerViewAdapter.ViewHolder>(), GetAndPost {
+) : RecyclerView.Adapter<My_Event_RecylerViewAdapter.ViewHolder>(), GetAndPost,
+    deleteInterface {
 
 
     private var mValues: ArrayList<Event> = values
@@ -46,6 +44,8 @@ class My_Event_RecylerViewAdapter(
     private lateinit var recipeList: ArrayList<Recipe>
     private var context = context
     private var activity = activity
+
+    private var eventToDelete: Int? = null
 
 
     private var date = ""
@@ -68,6 +68,7 @@ class My_Event_RecylerViewAdapter(
     ): My_Event_RecylerViewAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.my_event_schedule, parent, false)
+
 
 
         return ViewHolder(view)
@@ -109,12 +110,14 @@ class My_Event_RecylerViewAdapter(
         }
 
         holder.delete.setOnClickListener {
-
+            eventToDelete = position
             var dialog = DeleteAlertDialog(
                 "",
                 null,
                 mValues.get(position)!!.eventId,
-                "Event"
+                "Event",
+                this
+
             )
             dialog.show(childFragmentManager, "DeleteDaily")
 
@@ -449,6 +452,14 @@ class My_Event_RecylerViewAdapter(
             }
 
 
+        }
+    }
+
+
+    override fun toDelete(isDelete: Boolean) {
+        if (isDelete) {
+            mValues.removeAt(eventToDelete!!)
+            notifyDataSetChanged()
         }
     }
 

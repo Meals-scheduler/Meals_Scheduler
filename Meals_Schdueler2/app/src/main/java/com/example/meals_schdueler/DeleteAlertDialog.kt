@@ -1,5 +1,6 @@
 package com.example.meals_schdueler
 
+import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
@@ -10,10 +11,14 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.RecyclerView
+
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
+
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -22,7 +27,9 @@ class DeleteAlertDialog(
     ingridentName: String,
     pictureBitMap: Bitmap?,
     ingredientID: Int,
-    type : String
+    type: String,
+    toDelete: deleteInterface,
+
 ) :
     DialogFragment(), View.OnClickListener, GetAndPost {
 
@@ -35,6 +42,9 @@ class DeleteAlertDialog(
     var pictureBitMap = pictureBitMap
     var ingredientID = ingredientID
     var type = type
+
+
+    var toDelete = toDelete
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,10 +70,14 @@ class DeleteAlertDialog(
 
 
     override fun onClick(p0: View?) {
-        when (p0) {
-            btnYes -> deleteIngredient()
-            btnNo -> dismiss()
 
+        if (p0 == btnYes) {
+            deleteIngredient()
+            toDelete.toDelete(true)
+
+        } else {
+            toDelete.toDelete(true)
+            dismiss()
         }
         dismiss();
     }
@@ -77,17 +91,22 @@ class DeleteAlertDialog(
 
         var link = ""
 
-        when(type){
-            "Ingredient" ->  link = "https://elad1.000webhostapp.com/delIngredient.php?ingredientID=" + ingredientID
-            "Recipe" ->  link = "https://elad1.000webhostapp.com/deleteRecipe.php?RecipeID=" + ingredientID
+        when (type) {
+            "Ingredient" -> link =
+                "https://elad1.000webhostapp.com/delIngredient.php?ingredientID=" + ingredientID
+            "Recipe" -> link =
+                "https://elad1.000webhostapp.com/deleteRecipe.php?RecipeID=" + ingredientID
             "Daily" -> link = "https://elad1.000webhostapp.com/delDaily.php?DailyID=" + ingredientID
-            "Weekly" -> link = "https://elad1.000webhostapp.com/delWeekly.php?WeeklyID=" + ingredientID
-            "Monthly" -> link = "https://elad1.000webhostapp.com/delMonthly.php?MonthlyID=" + ingredientID
-            "Yearly" -> link = "https://elad1.000webhostapp.com/delYearly.php?YearlyID=" + ingredientID
-            "Event" ->  link = "https://elad1.000webhostapp.com/delEvent.php?EventID=" + ingredientID
-            "Upcoming"  ->  link = "https://elad1.000webhostapp.com/delSchedule.php?ScheduleID=" + ingredientID
+            "Weekly" -> link =
+                "https://elad1.000webhostapp.com/delWeekly.php?WeeklyID=" + ingredientID
+            "Monthly" -> link =
+                "https://elad1.000webhostapp.com/delMonthly.php?MonthlyID=" + ingredientID
+            "Yearly" -> link =
+                "https://elad1.000webhostapp.com/delYearly.php?YearlyID=" + ingredientID
+            "Event" -> link = "https://elad1.000webhostapp.com/delEvent.php?EventID=" + ingredientID
+            "Upcoming" -> link =
+                "https://elad1.000webhostapp.com/delSchedule.php?ScheduleID=" + ingredientID
         }
-
 
 
         val sb = StringBuilder()
@@ -117,6 +136,18 @@ class DeleteAlertDialog(
     override fun getData(str: String) {
         Log.v("Elad1", str)
     }
+
+//    override fun onDismiss(dialog: DialogInterface) {
+//        super.onDismiss(dialog)
+//
+//        val parentFragment:
+//                RecyclerView = childFragmentManager
+//        if (parentFragment is DialogInterface.OnDismissListener) {
+//            (parentFragment as DialogInterface.OnDismissListener?)!!.onDismiss(dialog)
+//        }
+//
+//
+//    }
 
 }
 

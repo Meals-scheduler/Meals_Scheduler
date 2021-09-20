@@ -1,25 +1,16 @@
 package com.example.meals_schdueler
 
-import android.graphics.Bitmap
+import android.content.DialogInterface
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meals_schdueler.dummy.DummyContent.DummyItem
-import java.io.BufferedInputStream
-import java.io.BufferedReader
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
-import java.util.*
 import kotlin.collections.ArrayList
-import com.example.meals_schdueler.MyingredientFragment1 as MyingredientFragment11
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem].
@@ -28,10 +19,12 @@ import com.example.meals_schdueler.MyingredientFragment1 as MyingredientFragment
 class MyItemRecyclerViewAdapter(
     private var values: ArrayList<Ingredient>,
     childFragmentManager: FragmentManager
-) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>(),
+    deleteInterface {
 
-    private var mValues:ArrayList<Ingredient> = values
+    private var mValues: ArrayList<Ingredient> = values
     private var childFragmentManager = childFragmentManager
+    private var ingredientToDelete: Int? = null
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -54,11 +47,14 @@ class MyItemRecyclerViewAdapter(
 
         }
         holder.deleteIngredient.setOnClickListener {
+            ingredientToDelete = position
             var dialog = DeleteAlertDialog(
                 item.ingridentName,
                 item.pictureBitMap,
                 item.ingredientID,
-                "Ingredient"
+                "Ingredient",
+                this
+
             )
             dialog.show(childFragmentManager, "DeleteAlertDialog")
         }
@@ -68,7 +64,6 @@ class MyItemRecyclerViewAdapter(
 //            imgId = item.ingredientID
 //            var s = AsynTaskNew(this, childFragmentManager)
 //            s.execute()
-
 
 
 //            if (isFinished) {
@@ -113,6 +108,14 @@ class MyItemRecyclerViewAdapter(
 
         override fun toString(): String {
             return super.toString()
+        }
+    }
+
+
+    override fun toDelete(isDelete: Boolean) {
+        if(isDelete){
+            mValues.removeAt(ingredientToDelete!!)
+            notifyDataSetChanged()
         }
     }
 

@@ -7,20 +7,16 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.allyants.notifyme.NotifyMe
-import com.example.meals_schdueler.dummy.DailySchedule
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStream
@@ -36,7 +32,8 @@ class My_Yearly_RecylerViewAdapter(
     context: Context?,
     activity: Activity
 
-) : RecyclerView.Adapter<My_Yearly_RecylerViewAdapter.ViewHolder>(), GetAndPost {
+) : RecyclerView.Adapter<My_Yearly_RecylerViewAdapter.ViewHolder>(), GetAndPost,
+    deleteInterface {
 
 
     private var yearlyValues: ArrayList<YearlySchedule> = yearlyValues
@@ -50,6 +47,7 @@ class My_Yearly_RecylerViewAdapter(
     private var context = context
     private var activity = activity
 
+    private var yearlyToDelete: Int? = null
     private var date = ""
     private lateinit var cal: Calendar
     private lateinit var tpd: TimePickerDialog
@@ -69,7 +67,6 @@ class My_Yearly_RecylerViewAdapter(
     ): My_Yearly_RecylerViewAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.my_yearly_schedule, parent, false)
-
 
         return ViewHolder(view)
     }
@@ -115,13 +112,15 @@ class My_Yearly_RecylerViewAdapter(
         holder.delete.setOnClickListener {
             // deleteing this yearly from the map that holds for every yearly its monthly list
 
-
+            yearlyToDelete = position
             var dialog =
                 DeleteAlertDialog(
                     "",
                     null,
                     yearlyValues.get(position)!!.yearlyId,
-                    "Yearly"
+                    "Yearly",
+                    this
+
                 )
             dialog.show(childFragmentManager, "DeleteMonthly")
 
@@ -352,7 +351,6 @@ class My_Yearly_RecylerViewAdapter(
             }
 
 
-
             // making MonthlyScheudle objects
             var monthlyIdsArr = monthlyIds.splitIgnoreEmpty(" ")
             var month = -1
@@ -420,6 +418,13 @@ class My_Yearly_RecylerViewAdapter(
 
         }
 
+    }
+
+    override fun toDelete(isDelete: Boolean) {
+        if (isDelete) {
+            yearlyValues.removeAt(yearlyToDelete!!)
+            notifyDataSetChanged()
+        }
     }
 
 

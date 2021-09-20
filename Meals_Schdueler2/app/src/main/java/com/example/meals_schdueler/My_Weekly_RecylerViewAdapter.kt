@@ -7,14 +7,11 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
@@ -38,7 +35,8 @@ class My_Weekly_RecylerViewAdapter(
     childFragmentManager: FragmentManager,
     context: Context?,
     activity: Activity
-) : RecyclerView.Adapter<My_Weekly_RecylerViewAdapter.ViewHolder>(), GetAndPost {
+) : RecyclerView.Adapter<My_Weekly_RecylerViewAdapter.ViewHolder>(), GetAndPost,
+    deleteInterface {
 
     private var weeklyValues: ArrayList<WeeklySchedule> = weeklyValues
 
@@ -46,7 +44,10 @@ class My_Weekly_RecylerViewAdapter(
     private var dailyValues: ArrayList<DailySchedule> = ArrayList()
 
     private var childFragmentManager = childFragmentManager
+
     //  private lateinit var recipeList: ArrayList<Recipe>
+
+    private var weeklyToDelete: Int? = null
 
     private var context = context
     private var activity = activity
@@ -131,13 +132,15 @@ class My_Weekly_RecylerViewAdapter(
         holder.delete.setOnClickListener {
             // deleteing this weekly from the map that holds for every weekly its daily list
             //  weeklyDaily.remove(item.weeklyId.toString())!!
-
+            weeklyToDelete = position
             var dialog =
                 DeleteAlertDialog(
                     "",
                     null,
                     weeklyValues.get(position)!!.weeklyId,
-                    "Weekly"
+                    "Weekly",
+                    this
+
                 )
             dialog.show(childFragmentManager, "DeleteWeekly")
 
@@ -365,29 +368,29 @@ class My_Weekly_RecylerViewAdapter(
             var dailyIdsArr = dailyIds.splitIgnoreEmpty(" ")
             //var dayid = -1
             for (i in dailyIdsArr) {
-                daily=-1
-               // if (dayid != i.toInt()) {
+                daily = -1
+                // if (dayid != i.toInt()) {
 
-                    for (j in dailyInfo.indices) {
-                        var dailyInfo2 = dailyInfo[j].splitIgnoreEmpty("*")
-                        if (i.toInt() == dailyInfo2[0].toInt() && dailyValues.size < dailyIdsArr.size && daily != dailyInfo2[0].toInt()) {
-                            dailyValues!!.add(
-                                DailySchedule(
-                                    dailyInfo2[0].toInt(),
-                                    dailyInfo2[1].toInt(),
-                                    map.get(dailyInfo2[0])!!.get(1),
-                                    map.get(dailyInfo2[0])!!.get(0),
-                                    map.get(dailyInfo2[0])!!.get(2),
-                                    mapTotalCost.get(dailyInfo2[0])!!,
-                                    false
+                for (j in dailyInfo.indices) {
+                    var dailyInfo2 = dailyInfo[j].splitIgnoreEmpty("*")
+                    if (i.toInt() == dailyInfo2[0].toInt() && dailyValues.size < dailyIdsArr.size && daily != dailyInfo2[0].toInt()) {
+                        dailyValues!!.add(
+                            DailySchedule(
+                                dailyInfo2[0].toInt(),
+                                dailyInfo2[1].toInt(),
+                                map.get(dailyInfo2[0])!!.get(1),
+                                map.get(dailyInfo2[0])!!.get(0),
+                                map.get(dailyInfo2[0])!!.get(2),
+                                mapTotalCost.get(dailyInfo2[0])!!,
+                                false
 
-                                )
                             )
-                            daily = dailyInfo2[0].toInt()
-                        }
+                        )
+                        daily = dailyInfo2[0].toInt()
                     }
-               // }
-               // dayid = dailyInfo2[0].toInt()
+                }
+                // }
+                // dayid = dailyInfo2[0].toInt()
             }
 
             this.setDailyValues(dailyValues)
@@ -428,5 +431,13 @@ class My_Weekly_RecylerViewAdapter(
         }
 
 
+    }
+
+
+    override fun toDelete(isDelete: Boolean) {
+        if(isDelete){
+            weeklyValues.removeAt(weeklyToDelete!!)
+            notifyDataSetChanged()
+        }
     }
 }

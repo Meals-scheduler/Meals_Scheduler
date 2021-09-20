@@ -57,21 +57,23 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
         else if (action is Recipe) {
             if (MyRecipeFragment.getInstance1().isAdded)
                 MyRecipeFragment.getInstance1().startTask()
-        } else if (action is DeleteAlertDialog) {
-
-            when ((action as DeleteAlertDialog).type) {
-                "Ingredient" -> MyingredientFragment1.getInstance1().startTask()
-                "Recipe" -> MyRecipeFragment.getInstance1().startTask()
-                "Daily" -> MyDailyScheduleFragment.getInstance1().startTask()
-                "Weekly" -> MyWeeklyScheduleFragment.getInstance1().startTask()
-                "Monthly" -> MyMonthlyScheudleFragment.getInstance1().startTask()
-                "Yearly" -> MyYearlyScheudleFragment.getInstance1().startTask()
-                "Event" -> MyEventScheduleFragment.getInstance1().startTask()
-                "Upcoming" -> UpcomingScheduleFragment.getInstance1().startTask()
-            }
-
-
-        } else if (action is DailySchedule) {
+        }
+//        else if (action is DeleteAlertDialog) {
+//
+//            when ((action as DeleteAlertDialog).type) {
+//                "Ingredient" -> MyingredientFragment1.getInstance1().startTask()
+//                "Recipe" -> MyRecipeFragment.getInstance1().startTask()
+//                "Daily" -> MyDailyScheduleFragment.getInstance1().startTask()
+//                "Weekly" -> MyWeeklyScheduleFragment.getInstance1().startTask()
+//                "Monthly" -> MyMonthlyScheudleFragment.getInstance1().startTask()
+//                "Yearly" -> MyYearlyScheudleFragment.getInstance1().startTask()
+//                "Event" -> MyEventScheduleFragment.getInstance1().startTask()
+//                "Upcoming" -> UpcomingScheduleFragment.getInstance1().startTask()
+//            }
+//
+//
+//        }
+        else if (action is DailySchedule) {
             // if (MyDailyScheduleFragment.getInstance1().isAdded)
             MyDailyScheduleFragment.getInstance1().startTask()
         }

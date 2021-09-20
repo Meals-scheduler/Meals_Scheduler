@@ -3,19 +3,15 @@ package com.example.meals_schdueler
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
-import android.app.DatePickerDialog.OnDateSetListener
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
@@ -25,7 +21,6 @@ import com.example.meals_schdueler.dummy.DailySchedule
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
-import java.net.URLEncoder
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -37,7 +32,8 @@ class My_Daily_RecylerViewAdapter(
     childFragmentManager: FragmentManager,
     context: Context?,
     activity: Activity
-) : RecyclerView.Adapter<My_Daily_RecylerViewAdapter.ViewHolder>(), GetAndPost {
+) : RecyclerView.Adapter<My_Daily_RecylerViewAdapter.ViewHolder>(), GetAndPost,
+    deleteInterface {
 
     //var builder: java.lang.StringBuilder? = null
 
@@ -47,6 +43,9 @@ class My_Daily_RecylerViewAdapter(
     private lateinit var recipeList: ArrayList<Recipe>
     private var context = context
     private var activity = activity
+
+
+    private var dailyToDelete: Int? = null
 
     private var date = ""
     private lateinit var cal: Calendar
@@ -66,7 +65,6 @@ class My_Daily_RecylerViewAdapter(
     ): My_Daily_RecylerViewAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.my_daily_schedule, parent, false)
-
 
 
         return ViewHolder(view)
@@ -114,12 +112,14 @@ class My_Daily_RecylerViewAdapter(
         }
 
         holder.delete.setOnClickListener {
-
+            dailyToDelete = position
             var dialog = DeleteAlertDialog(
                 "",
                 null,
                 mValues.get(position)!!.dailyId,
-                "Daily"
+                "Daily",
+                this
+
             )
             dialog.show(childFragmentManager, "DeleteDaily")
 
@@ -379,12 +379,9 @@ class My_Daily_RecylerViewAdapter(
             }
 
 
-
-
-
-           // currentID = -1
+            // currentID = -1
             var recipeIdsArr = recipeIDs.splitIgnoreEmpty(" ")
-            for(i in recipeIdsArr){
+            for (i in recipeIdsArr) {
 
                 for (j in recipesAndIngredients.indices) {
 
@@ -393,7 +390,7 @@ class My_Daily_RecylerViewAdapter(
                     if (recipe2.size == 10 && i.toInt() == recipe2[0].toInt()) {
                         //var s = recipe2[0].toInt()
                         //  if (s != currentID)
-                            var instructions = HowToStroreValue(recipe2[9])
+                        var instructions = HowToStroreValue(recipe2[9])
                         recipeList?.add(
                             Recipe(
                                 recipe2[0].toInt(),
@@ -441,11 +438,11 @@ class My_Daily_RecylerViewAdapter(
                     tempRecipeList.add(i)
                 }
 
-                Log.v("Elad1","List size " +tempRecipeList.size )
-                Log.v("Elad1","quantities " +quantitiesStr )
-                Log.v("Elad1","num of meals " +numOfMeals )
-                Log.v("Elad1","recipe ids" +recipeIDs )
-                Log.v("Elad1","daily id " +dailyID )
+                Log.v("Elad1", "List size " + tempRecipeList.size)
+                Log.v("Elad1", "quantities " + quantitiesStr)
+                Log.v("Elad1", "num of meals " + numOfMeals)
+                Log.v("Elad1", "recipe ids" + recipeIDs)
+                Log.v("Elad1", "daily id " + dailyID)
                 var dialog = EditDailyDialog(
                     tempRecipeList,
                     quantitiesStr,
@@ -459,6 +456,14 @@ class My_Daily_RecylerViewAdapter(
             }
 
 
+        }
+    }
+
+
+    override fun toDelete(isDelete: Boolean) {
+        if (isDelete) {
+            mValues.removeAt(dailyToDelete!!)
+            notifyDataSetChanged()
         }
     }
 
