@@ -45,48 +45,7 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
         if (result != null) {
             action.getData(result)
         }
-        // if we upload a new ingredient we want to refresh the MyIngredients tab so that the user will be able to see the new uploaded ingredient.
-//        if (action is Ingredient) {
-//            if (MyingredientFragment1.getInstance1().isAdded){
-//                MyingredientFragment1.getInstance1().startTask()
-//                Log.v("Elad1","HERE YA")
-//
-//            }
-//
-//        }
-        else if (action is Recipe) {
-            if (MyRecipeFragment.getInstance1().isAdded)
-                MyRecipeFragment.getInstance1().startTask()
-        }
-//        else if (action is DeleteAlertDialog) {
-//
-//            when ((action as DeleteAlertDialog).type) {
-//                "Ingredient" -> MyingredientFragment1.getInstance1().startTask()
-//                "Recipe" -> MyRecipeFragment.getInstance1().startTask()
-//                "Daily" -> MyDailyScheduleFragment.getInstance1().startTask()
-//                "Weekly" -> MyWeeklyScheduleFragment.getInstance1().startTask()
-//                "Monthly" -> MyMonthlyScheudleFragment.getInstance1().startTask()
-//                "Yearly" -> MyYearlyScheudleFragment.getInstance1().startTask()
-//                "Event" -> MyEventScheduleFragment.getInstance1().startTask()
-//                "Upcoming" -> UpcomingScheduleFragment.getInstance1().startTask()
-//            }
-//
-//
-//        }
-        else if (action is DailySchedule) {
-            // if (MyDailyScheduleFragment.getInstance1().isAdded)
-            MyDailyScheduleFragment.getInstance1().startTask()
-        }
-        else if (action is WeeklySchedule) {
-            MyWeeklyScheduleFragment.getInstance1().startTask()
-        } else if (action is MonthlySchedule) {
-            MyMonthlyScheudleFragment.getInstance1().startTask()
-        } else if (action is YearlySchedule) {
-            MyYearlyScheudleFragment.getInstance1().startTask()
-        }
-        else if( action is Event){
-            MyEventScheduleFragment.getInstance1().startTask()
-        }
+
         if (!(action is DeleteAlertDialog)) {
             pbDialog.dismiss()
         }

@@ -96,7 +96,9 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
         typeOfMeal.onItemSelectedListener = SpinnerActivity()
         typeOfSeason.onItemSelectedListener = SpinnerActivity()
 
-
+        if(UserInterFace.userID !=-1){
+            buttonApi.visibility = View.INVISIBLE
+        }
 
         return x
     }
