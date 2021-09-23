@@ -236,6 +236,7 @@ class AddEventFragment : Fragment(), View.OnClickListener,
         savedSize = 0
         totalCostDobule = 0.0
         totalCost.setText(totalCostDobule.toString())
+        eventNameEditText.setText("")
         stk.setColumnShrinkable(4, false)
         stk.setColumnShrinkable(5, false)
         stk.setColumnStretchable(5, false)
@@ -253,6 +254,8 @@ class AddEventFragment : Fragment(), View.OnClickListener,
         // the chosen ingredients.
 //        if (!dateClass!!.date.equals(""))
 //            dateEditText.setText(dateClass!!.date)
+        stk.setColumnShrinkable(1, true)
+        stk.setColumnStretchable(1, true)
 
         for (i in listItems!!.list!!) {
 
@@ -306,7 +309,16 @@ class AddEventFragment : Fragment(), View.OnClickListener,
 
                 var t3v: TextView = TextView(context)
                 // t3v.setBackgroundResource(R.drawable.border)
-                t3v.setText(i.recipeName)
+                if(i.recipeName.length>18){
+                    var shorterName = i.recipeName.substring(0,14)
+                    shorterName+="..."
+                    t3v.setText(shorterName)
+                }
+                else{
+                    t3v.setText(i.recipeName)
+                }
+
+                t3v.setTextSize(10F)
                 t3v.setTextColor(Color.BLACK)
                 t3v.gravity = Gravity.CENTER
                 //    t3v.setBackgroundResource(R.drawable.spinner_shape)

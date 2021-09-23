@@ -20,14 +20,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="#3261"
+            android:background="@drawable/instance_shape"
             android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/imageViewX"
                 android:layout_width="38dp"
                 android:layout_height="34dp"
-                android:layout_marginStart="36dp"
+                android:layout_marginStart="4dp"
                 android:src="@drawable/x_icon"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -80,6 +80,7 @@
                 android:id="@+id/saveBtn"
                 android:layout_width="90dp"
                 android:layout_height="48dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="56dp"
                 android:background="@drawable/btn1"
                 android:fontFamily="@font/poppinsbold"
@@ -89,9 +90,9 @@
                 android:text="Save"
                 android:textColor="@drawable/button_states"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/editTextTotalCost"
                 app:layout_constraintTop_toBottomOf="@+id/tableLayout"
-                app:layout_constraintVertical_bias="1.0"
-                tools:layout_editor_absoluteX="289dp"></Button>
+                app:layout_constraintVertical_bias="1.0"></Button>
 
             <TextView
                 android:id="@+id/totalCostTextView"

@@ -20,7 +20,7 @@ class MyItemRecyclerViewAdapter(
     private var values: ArrayList<Ingredient>,
     childFragmentManager: FragmentManager
 ) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>(),
-    deleteInterface {
+    deleteInterface , toCopyIngredient {
 
     private var mValues: ArrayList<Ingredient> = values
     private var childFragmentManager = childFragmentManager
@@ -117,6 +117,11 @@ class MyItemRecyclerViewAdapter(
             mValues.removeAt(ingredientToDelete!!)
             notifyDataSetChanged()
         }
+    }
+
+    override fun toCopy(ingredient: Ingredient) {
+        mValues.add(ingredient!!)
+        notifyDataSetChanged()
     }
 
 

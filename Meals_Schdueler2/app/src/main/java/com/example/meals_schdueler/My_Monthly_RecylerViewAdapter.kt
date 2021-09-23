@@ -17,6 +17,7 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.allyants.notifyme.NotifyMe
+import com.example.meals_schdueler.dummy.DailySchedule
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStream
@@ -36,7 +37,7 @@ class My_Monthly_RecylerViewAdapter(
     acticity: Activity
 
 ) : RecyclerView.Adapter<My_Monthly_RecylerViewAdapter.ViewHolder>(), GetAndPost,
-    deleteInterface {
+    deleteInterface, toCopyRecipe {
 
     private var monthlyValues: ArrayList<MonthlySchedule> = monthlyValues
 
@@ -431,5 +432,10 @@ class My_Monthly_RecylerViewAdapter(
             monthlyValues.removeAt(monthlyToDelete!!)
             notifyDataSetChanged()
         }
+    }
+
+    override fun <T> toCopy(toCopy: T) {
+        monthlyValues.add(toCopy!! as MonthlySchedule)
+        notifyDataSetChanged()
     }
 }

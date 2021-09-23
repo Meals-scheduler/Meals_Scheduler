@@ -157,7 +157,15 @@ class EditEventDailog(
                 var t1v: TextView = TextView(context)
 
                 // t1v.setBackgroundResource(R.drawable.border)
-                t1v.setText(" " + (eventName))
+                if(eventName.length>18){
+                    var shorterName = eventName.substring(0,14)
+                    shorterName+="..."
+                    t1v.setText(shorterName)
+                }
+                else{
+                    t1v.setText(" " + (eventName))
+                }
+
                 t1v.setTextColor(Color.BLACK)
                 t1v.gravity = Gravity.CENTER
                 //  t1v.setBackgroundResource(R.drawable.spinner_shape)
@@ -185,8 +193,17 @@ class EditEventDailog(
 
                 var t3v: TextView = TextView(context)
                 // t3v.setBackgroundResource(R.drawable.border)
-                t3v.setText(i.recipeName)
+                if(i.recipeName.length>18){
+                    var shorterName = i.recipeName.substring(0,14)
+                    shorterName+="..."
+                    t3v.setText(shorterName)
+                }
+                else{
+                    t3v.setText(i.recipeName)
+                }
+
                 t3v.setTextColor(Color.BLACK)
+                t3v.setTextSize(10F)
                 t3v.gravity = Gravity.CENTER
                 //    t3v.setBackgroundResource(R.drawable.spinner_shape)
                 tbrow.addView(t3v)
@@ -440,6 +457,7 @@ class EditEventDailog(
 
 
     override fun onDismiss(dialog: DialogInterface) {
+
         if (flag) {
             recipePos = 0
             val parentFragment: Fragment? = parentFragment
@@ -471,7 +489,16 @@ class EditEventDailog(
                     var t1v: TextView = TextView(context)
 
                     // t1v.setBackgroundResource(R.drawable.border)
-                    t1v.setText(" " + (eventName))
+                    if(eventName.length>18){
+                        var shorterName = eventName.substring(0,14)
+                        shorterName+="..."
+                        t1v.setText(shorterName)
+                    }
+                    else{
+                        t1v.setText(" " + (eventName))
+                    }
+
+
                     t1v.setTextColor(Color.BLACK)
                     t1v.gravity = Gravity.CENTER
                     //  t1v.setBackgroundResource(R.drawable.spinner_shape)
@@ -498,7 +525,16 @@ class EditEventDailog(
 
                     var t3v: TextView = TextView(context)
                     // t3v.setBackgroundResource(R.drawable.border)
-                    t3v.setText(i.recipeName)
+                    if(i.recipeName.length>18){
+                        var shorterName = i.recipeName.substring(0,14)
+                        shorterName+="..."
+                        t3v.setText(shorterName)
+                    }
+                    else{
+                        t3v.setText(i.recipeName)
+                    }
+
+                    t3v.setTextSize(10F)
                     t3v.setTextColor(Color.BLACK)
                     t3v.gravity = Gravity.CENTER
                     //    t3v.setBackgroundResource(R.drawable.spinner_shape)

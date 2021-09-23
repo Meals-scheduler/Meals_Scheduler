@@ -76,7 +76,7 @@ class DeleteAlertDialog(
             toDelete.toDelete(true)
 
         } else {
-            toDelete.toDelete(true)
+            toDelete.toDelete(false)
             dismiss()
         }
         dismiss();

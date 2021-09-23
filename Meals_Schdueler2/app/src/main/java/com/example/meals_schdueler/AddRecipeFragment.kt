@@ -220,6 +220,9 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
 
             var s = AsynTaskNew(recipe, childFragmentManager)
             s.execute()
+
+
+            MyRecipeFragment.getInstance1().getRecycler().toCopy(recipe)
         }
     }
 

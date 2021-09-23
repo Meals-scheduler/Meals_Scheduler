@@ -31,12 +31,11 @@ import kotlin.collections.HashMap
 class My_Weekly_RecylerViewAdapter(
 
     weeklyValues: ArrayList<WeeklySchedule>,
-    // dailyValues: HashMap<String, DailySchedule>,
     childFragmentManager: FragmentManager,
     context: Context?,
     activity: Activity
 ) : RecyclerView.Adapter<My_Weekly_RecylerViewAdapter.ViewHolder>(), GetAndPost,
-    deleteInterface {
+    deleteInterface , toCopyRecipe {
 
     private var weeklyValues: ArrayList<WeeklySchedule> = weeklyValues
 
@@ -76,6 +75,7 @@ class My_Weekly_RecylerViewAdapter(
 
         return ViewHolder(view)
     }
+
 
     override fun onBindViewHolder(holder: My_Weekly_RecylerViewAdapter.ViewHolder, position: Int) {
         var item: WeeklySchedule = weeklyValues[position]!! // each item postion
@@ -439,5 +439,10 @@ class My_Weekly_RecylerViewAdapter(
             weeklyValues.removeAt(weeklyToDelete!!)
             notifyDataSetChanged()
         }
+    }
+
+    override fun <T> toCopy(toCopy: T) {
+        weeklyValues.add(toCopy!! as WeeklySchedule)
+        notifyDataSetChanged()
     }
 }

@@ -245,6 +245,7 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
                 var s = AsynTaskNew(m, childFragmentManager)
                 s.execute()
 
+                MyMonthlyScheudleFragment.getInstance1().getRecycler().toCopy(m)
                 clearTable()
             }
         }
@@ -524,15 +525,42 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
 
             //  recipeNumbers += "" + i + " "
             // making DailyScheudle objects
-            currentDailyID = -1
+//            currentDailyID = -1
+//
+//            var dailyIdsArr = dailyIds.splitIgnoreEmpty(" ")
+//
+//            for (i in dailyIdsArr) {
+//
+//                for (j in dailyInfo.indices) {
+//                    var dailyInfo2 = dailyInfo[j].splitIgnoreEmpty("*")
+//                    if (currentDailyID != dailyInfo2[0].toInt() && i.toInt() == dailyInfo2[0].toInt()) {
+//                        dailyList!!.add(
+//                            DailySchedule(
+//                                dailyInfo2[0].toInt(),
+//                                dailyInfo2[1].toInt(),
+//                                map.get(dailyInfo2[0])!!.get(1),
+//                                map.get(dailyInfo2[0])!!.get(0),
+//                                map.get(dailyInfo2[0])!!.get(2),
+//                                mapTotalCost.get(dailyInfo2[0])!!,
+//                                false
+//
+//                            )
+//                        )
+//                        currentDailyID = dailyInfo2[0].toInt()
+//                    }
+//                }
+//            }
 
+            var daily = -1
             var dailyIdsArr = dailyIds.splitIgnoreEmpty(" ")
-
+            //var dayid = -1
             for (i in dailyIdsArr) {
+                daily=-1
+                // if (dayid != i.toInt()) {
 
                 for (j in dailyInfo.indices) {
                     var dailyInfo2 = dailyInfo[j].splitIgnoreEmpty("*")
-                    if (currentDailyID != dailyInfo2[0].toInt() && i.toInt() == dailyInfo2[0].toInt()) {
+                    if (i.toInt() == dailyInfo2[0].toInt() && dailyList!!.size < dailyIdsArr.size && daily != dailyInfo2[0].toInt()) {
                         dailyList!!.add(
                             DailySchedule(
                                 dailyInfo2[0].toInt(),
@@ -545,14 +573,17 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
 
                             )
                         )
-                        currentDailyID = dailyInfo2[0].toInt()
+                        daily = dailyInfo2[0].toInt()
                     }
                 }
+                // }
+                // dayid = dailyInfo2[0].toInt()
             }
 
 
 
-                Log.v("Elad1", "Num of Days " + numOfDay)
+
+            Log.v("Elad1", "Num of Days " + numOfDay)
                 Log.v("Elad1", "dailyIds " + dailyIds)
 
                 var dialog = WeeklyDialogInfo(

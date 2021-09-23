@@ -57,6 +57,11 @@ class MyYearlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScro
 
     }
 
+    fun getRecycler(): My_Yearly_RecylerViewAdapter {
+        return yearlyRecyclerViewAdapter!!
+    }
+
+
 
     companion object {
 

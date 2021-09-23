@@ -105,8 +105,10 @@ class MyRecipeRecyclerViewAdapter(
         }
     }
 
-    override fun toCopy(recipe: Recipe) {
-        mValues.add(recipe!!)
+
+
+    override fun <T> toCopy(toCopy: T) {
+        mValues.add(toCopy!! as Recipe)
         notifyDataSetChanged()
     }
 

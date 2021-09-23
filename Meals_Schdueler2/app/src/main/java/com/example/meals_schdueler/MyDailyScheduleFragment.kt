@@ -68,6 +68,10 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
 
     }
 
+    fun getRecycler(): My_Daily_RecylerViewAdapter {
+        return dailyRecyclerViewAdapter!!
+    }
+
 
     companion object {
 
@@ -128,8 +132,8 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
     }
 
     override fun DoNetWorkOpreation(): String {
-        if(!isScorlled){
-            page =0
+        if (!isScorlled) {
+            page = 0
         }
         var string = UserInterFace.userID.toString() + " " + page
 

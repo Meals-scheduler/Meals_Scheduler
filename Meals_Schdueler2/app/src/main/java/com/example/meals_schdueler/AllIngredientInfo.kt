@@ -109,6 +109,8 @@ class AllIngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListen
             var s = AsynTaskNew(ingredient1, childFragmentManager)
             s.execute()
 
+            MyingredientFragment1.instance!!.getRecycler().toCopy(ingredient1)
+
 
         } else if (p0 == imageX) {
             dismiss()

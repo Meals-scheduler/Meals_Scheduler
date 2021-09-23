@@ -17,6 +17,7 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.allyants.notifyme.NotifyMe
+import com.example.meals_schdueler.dummy.DailySchedule
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStream
@@ -33,7 +34,7 @@ class My_Yearly_RecylerViewAdapter(
     activity: Activity
 
 ) : RecyclerView.Adapter<My_Yearly_RecylerViewAdapter.ViewHolder>(), GetAndPost,
-    deleteInterface {
+    deleteInterface, toCopyRecipe {
 
 
     private var yearlyValues: ArrayList<YearlySchedule> = yearlyValues
@@ -425,6 +426,11 @@ class My_Yearly_RecylerViewAdapter(
             yearlyValues.removeAt(yearlyToDelete!!)
             notifyDataSetChanged()
         }
+    }
+
+    override fun <T> toCopy(toCopy: T) {
+        yearlyValues.add(toCopy!! as YearlySchedule)
+        notifyDataSetChanged()
     }
 
 

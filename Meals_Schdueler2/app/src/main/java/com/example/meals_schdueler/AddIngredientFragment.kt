@@ -170,6 +170,8 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
             s.execute()
             //pbDialog.dismiss()
 
+            MyingredientFragment1.getInstance1().getRecycler().toCopy(ingredient)
+
 
         } else if (p0 == ingredientImage) {
             val c = CameraIntent(this)

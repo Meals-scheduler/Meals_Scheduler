@@ -88,8 +88,10 @@ class DailyDialogInfo(
     private fun initDaily() {
         var j = 0
 
+       // stk.setColumnShrinkable(2, true)
+        //stk.setColumnStretchable(2, true)
 
-        // converting the strings into arr's
+        // 1converting the strings into arr's
         var numOfMealsArr = numOfMeals.splitIgnoreEmpty(" ")
         var quantitiesArr = quantities.splitIgnoreEmpty(" ")
         var recipeIdsArr = recipeIds.splitIgnoreEmpty(" ")
@@ -150,21 +152,30 @@ class DailyDialogInfo(
                 val scaled = Bitmap.createScaledBitmap(
                     i.pictureBitMap,
                     80,
-                    90,
+                    110,
                     true
                 )
                 //t2v.adjustViewBounds = true
 
-                t2v.scaleType = (ImageView.ScaleType.CENTER_INSIDE)
+                t2v.scaleType = (ImageView.ScaleType.FIT_CENTER)
                 t2v.setImageBitmap(scaled)
                 t2v.foregroundGravity = Gravity.CENTER
+
 
 
                 tbrow.addView(t2v)
 
                 var t3v: TextView = TextView(context)
                 // t3v.setBackgroundResource(R.drawable.border)
-                t3v.setText(i.recipeName)
+                if(i.recipeName.length>18){
+                    var shorterName = i.recipeName.substring(0,14)
+                    shorterName+="..."
+                    t3v.setText(shorterName)
+                }
+                else{
+                    t3v.setText(i.recipeName)
+                }
+
                 t3v.setTextSize(10F)
                 t3v.setTextColor(Color.BLACK)
                 t3v.gravity = Gravity.CENTER

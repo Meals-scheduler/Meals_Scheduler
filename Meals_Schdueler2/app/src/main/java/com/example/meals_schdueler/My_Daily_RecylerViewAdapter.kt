@@ -33,7 +33,7 @@ class My_Daily_RecylerViewAdapter(
     context: Context?,
     activity: Activity
 ) : RecyclerView.Adapter<My_Daily_RecylerViewAdapter.ViewHolder>(), GetAndPost,
-    deleteInterface {
+    deleteInterface , toCopyRecipe{
 
     //var builder: java.lang.StringBuilder? = null
 
@@ -69,6 +69,7 @@ class My_Daily_RecylerViewAdapter(
 
         return ViewHolder(view)
     }
+
 
     override fun onBindViewHolder(holder: My_Daily_RecylerViewAdapter.ViewHolder, position: Int) {
         var item: DailySchedule = mValues[position]!! // each item postion
@@ -465,6 +466,11 @@ class My_Daily_RecylerViewAdapter(
             mValues.removeAt(dailyToDelete!!)
             notifyDataSetChanged()
         }
+    }
+
+    override fun <T> toCopy(toCopy: T) {
+        mValues.add(toCopy!! as DailySchedule)
+        notifyDataSetChanged()
     }
 
 

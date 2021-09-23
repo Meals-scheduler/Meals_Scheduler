@@ -177,7 +177,7 @@ class AddYearlyScheduleFragment : Fragment(), View.OnClickListener,
             monthlyDayss!!.clear()
 
             // getting these month id's
-            for (i in monthlyList!!) {
+            for (i in monthlyListChoose!!) {
                 monthlyIds += "" + i.monthlyId + " "
 
             }
@@ -243,7 +243,7 @@ class AddYearlyScheduleFragment : Fragment(), View.OnClickListener,
                 )
                 var s = AsynTaskNew(m, childFragmentManager)
                 s.execute()
-
+                MyYearlyScheudleFragment.getInstance1().getRecycler().toCopy(m)
                 clearTable()
             }
         }
@@ -530,13 +530,39 @@ class AddYearlyScheduleFragment : Fragment(), View.OnClickListener,
             }
 
             // making WeeklyScheudle objects
-            var weeklyIdsArr = weeklyIds.splitIgnoreEmpty(" ")
-            currentWeeklyID = -1
-            for (i in weeklyIdsArr) {
+//            var weeklyIdsArr = weeklyIds.splitIgnoreEmpty(" ")
+//            currentWeeklyID = -1
+//            for (i in weeklyIdsArr) {
+//
+//                for (j in weeklyInfo.indices) {
+//                    var weeklyInfo2 = weeklyInfo[j].splitIgnoreEmpty("*")
+//                    if (currentWeeklyID != weeklyInfo2[0].toInt() && i.toInt() == weeklyInfo2[0].toInt()) {
+//                        weeklyList!!.add(
+//                            WeeklySchedule(
+//                                weeklyInfo2[0].toInt(),
+//                                weeklyInfo2[1].toInt(),
+//                                map.get(weeklyInfo2[0])!!.get(0),
+//                                map.get(weeklyInfo2[0])!!.get(1),
+//                                mapTotalCost.get(weeklyInfo2[0])!!,
+//                                false
+//
+//                            )
+//                        )
+//                        currentWeeklyID = weeklyInfo2[0].toInt()
+//                    }
+//
+//
+//                }
+//            }
 
+            var weeklyIdsArr = weeklyIds.splitIgnoreEmpty(" ")
+            //  currentWeeklyID = -1
+            var weekly = -1
+            for (i in weeklyIdsArr) {
+                weekly= -1
                 for (j in weeklyInfo.indices) {
                     var weeklyInfo2 = weeklyInfo[j].splitIgnoreEmpty("*")
-                    if (currentWeeklyID != weeklyInfo2[0].toInt() && i.toInt() == weeklyInfo2[0].toInt()) {
+                    if (i.toInt() == weeklyInfo2[0].toInt() && weeklyList!!.size < weeklyIdsArr.size && weekly != weeklyInfo2[0].toInt()) {
                         weeklyList!!.add(
                             WeeklySchedule(
                                 weeklyInfo2[0].toInt(),
@@ -548,14 +574,13 @@ class AddYearlyScheduleFragment : Fragment(), View.OnClickListener,
 
                             )
                         )
-                        currentWeeklyID = weeklyInfo2[0].toInt()
+                        weekly = weeklyInfo2[0].toInt()
                     }
 
 
                 }
+
             }
-
-
 
 
             var dialog = MonthlyDialogInfo(

@@ -164,7 +164,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
             dailyID!!.list!!.clear()
             dailyList!!.clear()
             savedSize = dailyListChoose.size
-            Log.v("Elad1","Saved size is be4" + savedSize)
+            Log.v("Elad1", "Saved size is be4" + savedSize)
 
             var d = Daily_Schedule_Choose_Dialog(
                 dailyList!!,
@@ -254,7 +254,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                     )
                     var s = AsynTaskNew(w, childFragmentManager)
                     s.execute()
-
+                    MyWeeklyScheduleFragment.getInstance1().getRecycler().toCopy(w)
                     clearTable()
                 }
             }
@@ -284,8 +284,8 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
 
     override fun onDismiss(p0: DialogInterface?) {
 
-        Log.v("Elad1","Daily size " + dailyID!!.list!!.size)
-        Log.v("Elad1","Saved size is after" + savedSize)
+        Log.v("Elad1", "Daily size " + dailyID!!.list!!.size)
+        Log.v("Elad1", "Saved size is after" + savedSize)
         for (i in dailyID!!.list!!) {
 
 
@@ -447,8 +447,6 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
     }
 
 
-
-
     fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
         return this.split(*delimiters).filter {
             it.isNotEmpty()
@@ -493,7 +491,6 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
         // ingredient size 15
 
         if (!str.equals("")) {
-
 
 
             val recipesAndIngredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
@@ -585,12 +582,9 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
             }
 
 
-
-
-
             // currentID = -1
             var recipeIdsArr = recipeIDs.splitIgnoreEmpty(" ")
-            for(i in recipeIdsArr){
+            for (i in recipeIdsArr) {
 
                 for (j in recipesAndIngredients.indices) {
 

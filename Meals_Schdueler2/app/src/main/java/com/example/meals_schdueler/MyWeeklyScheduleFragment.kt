@@ -61,6 +61,11 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost,NestedScrollView.OnScrol
 
     }
 
+    fun getRecycler(): My_Weekly_RecylerViewAdapter {
+        return weeklyRecyclerViewAdapter!!
+    }
+
+
     companion object {
 
         var instance: MyWeeklyScheduleFragment? = null

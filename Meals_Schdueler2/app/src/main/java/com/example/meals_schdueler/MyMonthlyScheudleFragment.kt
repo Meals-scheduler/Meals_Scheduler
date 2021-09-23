@@ -57,6 +57,11 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScr
 
     }
 
+    fun getRecycler(): My_Monthly_RecylerViewAdapter {
+        return monthlyRecyclerViewAdapter!!
+    }
+
+
     companion object {
 
         var instance: MyMonthlyScheudleFragment? = null
