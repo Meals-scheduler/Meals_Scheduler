@@ -254,6 +254,10 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                     )
                     var s = AsynTaskNew(w, childFragmentManager)
                     s.execute()
+                    if (MyWeeklyScheduleFragment.instance!!.noWeeklyTextView.visibility == View.VISIBLE) {
+                        MyWeeklyScheduleFragment.instance!!.noWeeklyTextView.visibility = View.INVISIBLE
+                    }
+
                     MyWeeklyScheduleFragment.getInstance1().getRecycler().toCopy(w)
                     clearTable()
                 }

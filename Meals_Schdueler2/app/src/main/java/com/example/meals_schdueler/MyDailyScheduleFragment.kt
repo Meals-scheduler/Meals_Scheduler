@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -39,6 +40,7 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
     private var dailyRecyclerViewAdapter: My_Daily_RecylerViewAdapter? = null
     private lateinit var nestedScroll: NestedScrollView // list of ingredietns
     private var progressBar: ProgressBar? = null
+    public lateinit var noDailyTextView: TextView
     private var page = 0
     private var isScorlled = false
 
@@ -106,6 +108,7 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
         nestedScroll = view!!.findViewById(R.id.scroll_view)
         progressBar = view!!.findViewById(R.id.progress_bar)
         nestedScroll.setOnScrollChangeListener(this)
+        noDailyTextView = view.findViewById(R.id.textViewNoDaily)
 
         instance = this
 
@@ -174,6 +177,11 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
         Log.v("Elad1", "Page is " + page)
         progressBar!!.visibility = View.INVISIBLE
         if (!str.equals("")) {
+            if (noDailyTextView.visibility == View.VISIBLE) {
+                noDailyTextView.visibility = View.INVISIBLE
+            }
+
+
             if (!isScorlled)
                 dailyList!!.clear()
 
@@ -279,6 +287,12 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
             //  UserPropertiesSingelton.getInstance()!!.setUserRecipess(recipeList)
             //dailyRecyclerViewAdapter!!.setmValues(recipeList!!)
             isScorlled = false
+        }
+
+        else{
+            if (dailyList!!.size == 0) {
+                noDailyTextView.visibility = View.VISIBLE
+            }
         }
         isScorlled = false
     }

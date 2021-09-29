@@ -29,7 +29,7 @@ import kotlin.collections.ArrayList
 /**
  * A fragment representing a list of Items.
  */
-class MyingredientFragment1 : Fragment(), GetAndPost,NestedScrollView.OnScrollChangeListener,
+class MyingredientFragment1 : Fragment(), GetAndPost, NestedScrollView.OnScrollChangeListener,
     SearchView.OnQueryTextListener {
 
     private var columnCount = 1
@@ -40,6 +40,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost,NestedScrollView.OnScrollCh
     private var progressBar: ProgressBar? = null
     private lateinit var searchView: SearchView
     private lateinit var noResultsTextView: TextView
+    lateinit var noIngredientsTextView: TextView
     private var isScorlled = false
 
     private var page = 0
@@ -58,7 +59,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost,NestedScrollView.OnScrollCh
         }
     }
 
-    fun getRecycler() :MyItemRecyclerViewAdapter{
+    fun getRecycler(): MyItemRecyclerViewAdapter {
         return ingredientRecyclerViewAdapter!!
     }
 
@@ -75,7 +76,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost,NestedScrollView.OnScrollCh
         searchView = view.findViewById(R.id.search_bar)
         searchView.setOnQueryTextListener(this)
         noResultsTextView = view.findViewById(R.id.tv_emptyTextView)
-
+        noIngredientsTextView = view.findViewById(R.id.textViewNoIngredients)
 
 
         val context = view.context
@@ -124,8 +125,8 @@ class MyingredientFragment1 : Fragment(), GetAndPost,NestedScrollView.OnScrollCh
 
     /// if WEBHOST doesnt work - this query doesnt excuted and the program falls - need to be fixed!!!!!!
     override fun DoNetWorkOpreation(): String {
-        if(!isScorlled){
-            page =0
+        if (!isScorlled) {
+            page = 0
         }
         var string = UserInterFace.userID.toString() + " " + page
 
@@ -179,6 +180,10 @@ class MyingredientFragment1 : Fragment(), GetAndPost,NestedScrollView.OnScrollCh
         // fixed a default .split spaces , and fixed spaces in howToStore.
         // when we add an ingredient it doesnt update in real time. we have to re compile!!!
         if (!str.equals("")) {
+
+            if(noIngredientsTextView.visibility == View.VISIBLE){
+                noIngredientsTextView.visibility = View.INVISIBLE
+            }
             if (!isScorlled)
                 ingredientList!!.clear()
 
@@ -227,12 +232,14 @@ class MyingredientFragment1 : Fragment(), GetAndPost,NestedScrollView.OnScrollCh
             progressBar!!.visibility = View.INVISIBLE
             isScorlled = false
 
-        }
-        else {
+        } else {
             if (isSearch) {
                 ingredientList!!.clear()
                 noResultsTextView.visibility = View.VISIBLE
                 ingredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
+            }
+            else if (ingredientList!!.size == 0){
+                noIngredientsTextView.visibility = View.VISIBLE
             }
         }
         isScorlled = false
@@ -260,7 +267,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost,NestedScrollView.OnScrollCh
     }
 
     override fun onQueryTextSubmit(p0: String?): Boolean {
-        return  false
+        return false
     }
 
     override fun onQueryTextChange(p0: String?): Boolean {

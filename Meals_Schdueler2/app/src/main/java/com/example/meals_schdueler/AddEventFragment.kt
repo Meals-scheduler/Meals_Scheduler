@@ -180,6 +180,9 @@ class AddEventFragment : Fragment(), View.OnClickListener,
             quantities = ""
 
             eventName = eventNameEditText.text.toString()
+            if(eventName.equals("")){
+                eventName = "No Name"
+            }
 
             for (i in recipesID) {
                 recipeIds += "" + i + " "
@@ -207,6 +210,8 @@ class AddEventFragment : Fragment(), View.OnClickListener,
 
             var s = AsynTaskNew(event, childFragmentManager)
             s.execute()
+
+            MyEventScheduleFragment.getInstance1().getRecycler().toCopy(event)
 
             recipeIds = ""
             quantities = ""

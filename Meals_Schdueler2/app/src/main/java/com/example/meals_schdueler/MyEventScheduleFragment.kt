@@ -82,6 +82,10 @@ class MyEventScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
             }
     }
 
+    fun getRecycler(): My_Event_RecylerViewAdapter {
+        return eventRecyclerViewAdapter!!
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

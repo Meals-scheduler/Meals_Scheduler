@@ -33,6 +33,7 @@ class MyRecipeFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChange
     private var progressBar: ProgressBar? = null
     private lateinit var searchView: SearchView
     private lateinit var noResultsTextView: TextView
+    public lateinit var noRecipesTextView: TextView
     private var isScorlled = false
     private var page = 0
     private var isSearch = false
@@ -47,7 +48,7 @@ class MyRecipeFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChange
         }
     }
 
-    fun getRecycler() :MyRecipeRecyclerViewAdapter{
+    fun getRecycler(): MyRecipeRecyclerViewAdapter {
         return recipeRecyclerViewAdapter!!
     }
 
@@ -63,6 +64,7 @@ class MyRecipeFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChange
         searchView = view.findViewById(R.id.search_bar)
         searchView.setOnQueryTextListener(this)
         noResultsTextView = view.findViewById(R.id.tv_emptyTextView)
+        noRecipesTextView = view.findViewById(R.id.textViewNoRecipes)
 
 
         val context = view.context
@@ -160,6 +162,10 @@ class MyRecipeFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChange
         //recipe size 11
         // ingredient size 15
         if (!str.equals("")) {
+
+            if (noRecipesTextView.visibility == View.VISIBLE) {
+                noRecipesTextView.visibility = View.INVISIBLE
+            }
             if (!isScorlled)
                 recipeList!!.clear()
 
@@ -295,24 +301,24 @@ class MyRecipeFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChange
                     var s = recipe2[0].toInt()
                     var instrcutions = HowToStroreValue(recipe2[9])
                     if (s != currentID)
-                    recipeList?.add(
-                        Recipe(
-                            recipe2[0].toInt(),
-                            recipe2[1].toInt(),
-                            recipe2[2],
-                            ImageConvert.StringToBitMap(recipe2[3].toString())!!,
-                            recipe2[4],
-                            recipe2[5],
-                            recipe2[6].toDouble(),
-                            recipe2[7].toBoolean(),
-                            recipe2[8].toBoolean(),
-                            recipeIngredientMap.get(recipe2[0].toInt())!!,
-                            quantities.get(s)!!,
-                            instrcutions
-                            // hashMap.get(recipe2[0].toInt())!!.second
+                        recipeList?.add(
+                            Recipe(
+                                recipe2[0].toInt(),
+                                recipe2[1].toInt(),
+                                recipe2[2],
+                                ImageConvert.StringToBitMap(recipe2[3].toString())!!,
+                                recipe2[4],
+                                recipe2[5],
+                                recipe2[6].toDouble(),
+                                recipe2[7].toBoolean(),
+                                recipe2[8].toBoolean(),
+                                recipeIngredientMap.get(recipe2[0].toInt())!!,
+                                quantities.get(s)!!,
+                                instrcutions
+                                // hashMap.get(recipe2[0].toInt())!!.second
 
+                            )
                         )
-                    )
 
                     currentID = recipe2[0].toInt()
 
@@ -322,6 +328,7 @@ class MyRecipeFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChange
             }
 
             recipeRecyclerViewAdapter!!.setmValues(recipeList!!)
+
             progressBar!!.visibility = View.INVISIBLE
             isScorlled = false
         } else {
@@ -329,6 +336,10 @@ class MyRecipeFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChange
                 recipeList!!.clear()
                 noResultsTextView.visibility = View.VISIBLE
                 recipeRecyclerViewAdapter!!.setmValues(recipeList!!)
+            } else {
+                if (recipeList!!.size == 0) {
+                    noRecipesTextView.visibility = View.VISIBLE
+                }
             }
         }
         progressBar!!.visibility = View.INVISIBLE

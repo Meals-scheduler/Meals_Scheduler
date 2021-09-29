@@ -49,7 +49,17 @@
             android:layout_height="wrap_content"
             android:id="@+id/progress_bar"/>
 
-
+        <TextView
+            android:id="@+id/textViewNoRecipes"
+            android:layout_gravity="center"
+            android:text="No Recipes"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"
+            android:layout_marginLeft="100dp"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+         />
 
 
     </LinearLayout>

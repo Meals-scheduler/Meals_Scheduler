@@ -185,16 +185,25 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
                         recipeIds.add(recipesAndIngredients2[0].toInt())
                         count++
                     } else {
+                        count++
                         start = count
                         break
                     }
 
                 }
             } else {
-                for (j in 0..7) {
-                    var recipesAndIngredients2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
-                    recipeIds.add(recipesAndIngredients2[0].toInt())
+                if (recipesAndIngredients.size < 7) {
+                    for (j in 0..recipesAndIngredients.size-1) {
+                        var recipesAndIngredients2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
+                        recipeIds.add(recipesAndIngredients2[0].toInt())
+                    }
+                } else {
+                    for (j in 0..7) {
+                        var recipesAndIngredients2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
+                        recipeIds.add(recipesAndIngredients2[0].toInt())
+                    }
                 }
+
             }
 
             //var isFirst = true
@@ -206,7 +215,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
 //            var hashMap: HashMap<Int, Pair<ArrayList<String>, ArrayList<Int>>> =
 //                HashMap()
 
-          //  var map: HashMap<Int, ArrayList<Ingredient>> = HashMap()
+            //  var map: HashMap<Int, ArrayList<Ingredient>> = HashMap()
 
 //            var ingredientList: ArrayList<Ingredient> = ArrayList()
 //
@@ -258,9 +267,9 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
 
                     } else {
 
-                            recipeIngredientMap.get(currentIngId)!!.add(ing)
-                            quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toFloat())
-                            ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
+                        recipeIngredientMap.get(currentIngId)!!.add(ing)
+                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toFloat())
+                        ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
 
                     }
 

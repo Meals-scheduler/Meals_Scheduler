@@ -259,6 +259,9 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
             MyDailyScheduleFragment.getInstance1().getRecycler().toCopy(daily)
 
+            if (MyDailyScheduleFragment.instance!!.noDailyTextView.visibility == View.VISIBLE) {
+                MyDailyScheduleFragment.instance!!.noDailyTextView.visibility = View.INVISIBLE
+            }
             recipeIds = ""
             quantities = ""
             recipeNumbers = ""

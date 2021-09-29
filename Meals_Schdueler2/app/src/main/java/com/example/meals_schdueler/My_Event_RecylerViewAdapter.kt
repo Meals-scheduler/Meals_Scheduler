@@ -35,7 +35,7 @@ class My_Event_RecylerViewAdapter(
     activity: Activity
 
 ) : RecyclerView.Adapter<My_Event_RecylerViewAdapter.ViewHolder>(), GetAndPost,
-    deleteInterface {
+    deleteInterface, toCopyRecipe {
 
 
     private var mValues: ArrayList<Event> = values
@@ -461,6 +461,11 @@ class My_Event_RecylerViewAdapter(
             mValues.removeAt(eventToDelete!!)
             notifyDataSetChanged()
         }
+    }
+
+    override fun <T> toCopy(toCopy: T) {
+        mValues.add(toCopy!! as Event)
+        notifyDataSetChanged()
     }
 
 

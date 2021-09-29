@@ -60,7 +60,7 @@ class AllIngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListen
         howToStoreBtn.setOnClickListener(this)
         imageX.setOnClickListener(this)
 
-         setIngredientData()
+        setIngredientData()
 
 
         return x
@@ -72,7 +72,7 @@ class AllIngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListen
         typeOfMeal.setText(ingredient.typeOfMeal)
         typeOfSeason.setText(ingredient.typeofSeason)
         costPerGram.setText(ingredient.costPerGram)
-       ingredientImage.setImageBitmap(ingredient.pictureBitMap)
+        ingredientImage.setImageBitmap(ingredient.pictureBitMap)
 
 
     }
@@ -110,6 +110,11 @@ class AllIngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListen
             s.execute()
 
             MyingredientFragment1.instance!!.getRecycler().toCopy(ingredient1)
+
+
+            if (MyingredientFragment1.instance!!.noIngredientsTextView.visibility == View.VISIBLE) {
+                MyingredientFragment1.instance!!.noIngredientsTextView.visibility = View.INVISIBLE
+            }
 
 
         } else if (p0 == imageX) {

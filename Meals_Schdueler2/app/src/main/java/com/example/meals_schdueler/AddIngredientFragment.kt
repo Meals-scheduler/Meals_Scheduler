@@ -174,6 +174,10 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
 
             MyingredientFragment1.getInstance1().getRecycler().toCopy(ingredient)
 
+            if (MyingredientFragment1.instance!!.noIngredientsTextView.visibility == View.VISIBLE) {
+                MyingredientFragment1.instance!!.noIngredientsTextView.visibility = View.INVISIBLE
+            }
+
 
         } else if (p0 == ingredientImage) {
             val c = CameraIntent(this)
@@ -188,11 +192,11 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
 //            startActivity(i)
 
             var arr: ArrayList<Int> = ArrayList()
-            var id = 55027 // in 55026 we hvae problem with quntities
-           // for (i in 1..2) {
+            var id = 55150 // in 55026 we hvae problem with quntities
+            for (i in 1..2) {
                 arr.add(id)
                 id += 1
-          //  }
+            }
 
             for (i in arr) {
                 var g = ApiFood(i, childFragmentManager, requireContext());

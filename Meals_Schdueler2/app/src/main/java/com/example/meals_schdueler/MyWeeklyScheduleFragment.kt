@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -34,6 +35,7 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost,NestedScrollView.OnScrol
     private var progressBar: ProgressBar? = null
     private var page = 0
     private var isScorlled = false
+    public lateinit var noWeeklyTextView: TextView
     var numOfDay: String = ""
     var dailyIds: String = ""
     private var totalcost = 0.0
@@ -100,6 +102,7 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost,NestedScrollView.OnScrol
         nestedScroll = view!!.findViewById(R.id.scroll_view)
         progressBar = view!!.findViewById(R.id.progress_bar)
         nestedScroll.setOnScrollChangeListener(this)
+        noWeeklyTextView = view.findViewById(R.id.textViewNoWeekly)
 
 
         instance = this
@@ -173,6 +176,10 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost,NestedScrollView.OnScrol
         if (!str.equals("")) {
             if (!isScorlled)
                 weeklyList!!.clear()
+
+            if (noWeeklyTextView.visibility == View.VISIBLE) {
+                noWeeklyTextView.visibility = View.INVISIBLE
+            }
 
 
             numOfDay = ""
@@ -271,6 +278,11 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost,NestedScrollView.OnScrol
            // UserPropertiesSingelton.getInstance()!!.setUserWeekly(sorted)
             isScorlled = false
 
+        }
+        else {
+            if (weeklyList!!.size == 0) {
+                noWeeklyTextView.visibility = View.VISIBLE
+            }
         }
         isScorlled = false
     }

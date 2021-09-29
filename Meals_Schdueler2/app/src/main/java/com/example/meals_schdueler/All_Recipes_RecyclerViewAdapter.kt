@@ -84,6 +84,10 @@ class All_Recipes_RecyclerViewAdapter(
                 var s = AsynTaskNew(ingredient, childFragmentManager)
                 s.execute()
 
+                if (MyRecipeFragment.instance!!.noRecipesTextView.visibility == View.VISIBLE) {
+                    MyRecipeFragment.instance!!.noRecipesTextView.visibility = View.INVISIBLE
+                }
+
                 // because ingredient is transfer by reference we save each "copied ingredient" in tmp list
                 //then when asyn task finished the ingredientID of each element there will be changed
                 //and then when we upload recipe we give it the tmp list with the same ingredients but different id

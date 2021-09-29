@@ -243,6 +243,9 @@ class AddYearlyScheduleFragment : Fragment(), View.OnClickListener,
                 )
                 var s = AsynTaskNew(m, childFragmentManager)
                 s.execute()
+                if (MyYearlyScheudleFragment.instance!!.noYearlyTextView.visibility == View.VISIBLE) {
+                    MyYearlyScheudleFragment.instance!!.noYearlyTextView.visibility = View.INVISIBLE
+                }
                 MyYearlyScheudleFragment.getInstance1().getRecycler().toCopy(m)
                 clearTable()
             }

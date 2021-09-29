@@ -260,15 +260,23 @@ class Recipe_Schedule_Choose_RecyclerViewAdapter(
                         recipeIds.add(recipesAndIngredients2[0].toInt())
                         count++
                     } else {
+                        count++
                         start = count
                         break
                     }
 
                 }
             } else {
-                for (j in 0..7) {
-                    var recipesAndIngredients2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
-                    recipeIds.add(recipesAndIngredients2[0].toInt())
+                if (recipesAndIngredients.size < 7) {
+                    for (j in 0..recipesAndIngredients.size-1) {
+                        var recipesAndIngredients2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
+                        recipeIds.add(recipesAndIngredients2[0].toInt())
+                    }
+                } else {
+                    for (j in 0..7) {
+                        var recipesAndIngredients2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
+                        recipeIds.add(recipesAndIngredients2[0].toInt())
+                    }
                 }
             }
 

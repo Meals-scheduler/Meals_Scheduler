@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -30,6 +31,7 @@ class MyYearlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScro
     private lateinit var nestedScroll: NestedScrollView // list of ingredietns
     private var progressBar: ProgressBar? = null
     private var page = 0
+    public lateinit var noYearlyTextView: TextView
     private var isScorlled = false
 
 
@@ -97,7 +99,7 @@ class MyYearlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScro
         nestedScroll = view!!.findViewById(R.id.scroll_view)
         progressBar = view!!.findViewById(R.id.progress_bar)
         nestedScroll.setOnScrollChangeListener(this)
-
+        noYearlyTextView = view.findViewById(R.id.textViewNoYearly)
 
         instance = this
 
@@ -171,6 +173,9 @@ class MyYearlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScro
         if (!str.equals("")) {
             if (!isScorlled)
                 yearlyList!!.clear()
+            if (noYearlyTextView.visibility == View.VISIBLE) {
+                noYearlyTextView.visibility = View.INVISIBLE
+            }
 
             numOfMonth = ""
             monthlyIds = ""
@@ -262,6 +267,11 @@ class MyYearlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScro
             progressBar!!.visibility = View.INVISIBLE
             isScorlled = false
 
+        }
+        else{
+            if (yearlyList!!.size == 0) {
+                noYearlyTextView.visibility = View.VISIBLE
+            }
         }
 
         isScorlled = false

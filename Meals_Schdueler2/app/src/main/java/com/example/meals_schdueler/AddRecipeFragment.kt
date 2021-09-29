@@ -223,6 +223,10 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
 
 
             MyRecipeFragment.getInstance1().getRecycler().toCopy(recipe)
+
+            if (MyRecipeFragment.instance!!.noRecipesTextView.visibility == View.VISIBLE) {
+                MyRecipeFragment.instance!!.noRecipesTextView.visibility = View.INVISIBLE
+            }
         }
     }
 

@@ -284,6 +284,7 @@ class My_Daily_RecylerViewAdapter(
 
     override fun getData(str: String) {
         var start = 0
+        recipeList = ArrayList()
         recipeList!!.clear()
         //recipe size 11
         // ingredient size 15

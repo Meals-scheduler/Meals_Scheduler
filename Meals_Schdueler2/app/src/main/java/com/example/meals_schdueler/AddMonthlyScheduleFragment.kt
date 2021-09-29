@@ -244,7 +244,9 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
                 )
                 var s = AsynTaskNew(m, childFragmentManager)
                 s.execute()
-
+                if (MyMonthlyScheudleFragment.instance!!.noMonthlyTextView.visibility == View.VISIBLE) {
+                    MyMonthlyScheudleFragment.instance!!.noMonthlyTextView.visibility = View.INVISIBLE
+                }
                 MyMonthlyScheudleFragment.getInstance1().getRecycler().toCopy(m)
                 clearTable()
             }

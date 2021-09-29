@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -29,6 +30,7 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScr
     private var monthlyRecyclerViewAdapter: My_Monthly_RecylerViewAdapter? = null
     private lateinit var nestedScroll: NestedScrollView // list of ingredietns
     private var progressBar: ProgressBar? = null
+    public lateinit var noMonthlyTextView: TextView
     private var page = 0
     private var isScorlled = false
 
@@ -97,7 +99,7 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScr
         progressBar = view!!.findViewById(R.id.progress_bar)
         nestedScroll.setOnScrollChangeListener(this)
 
-
+        noMonthlyTextView = view.findViewById(R.id.textViewNoMonthly)
 
         instance = this
 
@@ -172,6 +174,11 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScr
         if (!str.equals("")) {
             if (!isScorlled)
                 monthlyList!!.clear()
+
+            if (noMonthlyTextView.visibility == View.VISIBLE) {
+                noMonthlyTextView.visibility = View.INVISIBLE
+            }
+
 
             numOfWeek = ""
             weeklyIds = ""
@@ -264,6 +271,11 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScr
             progressBar!!.visibility = View.INVISIBLE
             isScorlled = false
 
+        }
+        else{
+            if (monthlyList!!.size == 0) {
+                noMonthlyTextView.visibility = View.VISIBLE
+            }
         }
         isScorlled = false
 
