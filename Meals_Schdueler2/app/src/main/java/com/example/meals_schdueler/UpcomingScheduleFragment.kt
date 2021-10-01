@@ -153,7 +153,7 @@ class UpcomingScheduleFragment : Fragment(), GetAndPost {
     }
 
     fun startTask() {
-        var s = AsynTaskNew(this, childFragmentManager)
+        var s = AsynTaskNew(this, childFragmentManager,requireContext())
         s.execute()
     }
 

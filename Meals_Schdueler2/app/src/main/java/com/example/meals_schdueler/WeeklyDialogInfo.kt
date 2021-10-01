@@ -158,7 +158,7 @@ class WeeklyDialogInfo(
                 pos = t3v.getTag() as Int + 1
 
 
-                var s = AsynTaskNew(this, childFragmentManager)
+                var s = AsynTaskNew(this, childFragmentManager,requireContext())
                 s.execute()
 
 

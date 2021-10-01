@@ -254,7 +254,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
                 false
             )
 
-            var s = AsynTaskNew(daily, childFragmentManager)
+            var s = AsynTaskNew(daily, childFragmentManager, requireContext())
             s.execute()
 
             MyDailyScheduleFragment.getInstance1().getRecycler().toCopy(daily)

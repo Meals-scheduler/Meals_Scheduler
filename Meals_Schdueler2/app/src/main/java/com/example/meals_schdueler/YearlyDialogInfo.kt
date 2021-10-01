@@ -147,7 +147,7 @@ class YearlyDialogInfo(
                 totalCostMonthly = i.totalCost
 
 
-                var s = AsynTaskNew(this, childFragmentManager)
+                var s = AsynTaskNew(this, childFragmentManager,requireContext())
                 s.execute()
             }
             tbrow.addView(t3v)

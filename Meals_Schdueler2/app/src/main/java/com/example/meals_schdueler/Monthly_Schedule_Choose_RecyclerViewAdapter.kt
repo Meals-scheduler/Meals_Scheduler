@@ -1,5 +1,6 @@
 package com.example.meals_schdueler
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +25,8 @@ class Monthly_Schedule_Choose_RecyclerViewAdapter(
     childFragmentManager: FragmentManager,
     progressbar: ProgressBar?,
     searchView: SearchView?,
-    noResult: TextView?
+    noResult: TextView?,
+    context: Context
 
 ) : RecyclerView.Adapter<Monthly_Schedule_Choose_RecyclerViewAdapter.ViewHolder>(), GetAndPost,
     SearchView.OnQueryTextListener {
@@ -34,7 +36,7 @@ class Monthly_Schedule_Choose_RecyclerViewAdapter(
     private var weeklyList: ArrayList<WeeklySchedule> = ArrayList()
     // private var mValuesDaily: TreeMap<String, DailySchedule> = dailyValues
 
-
+    private var context = context
     //    private var recipe = recipes
     private var childFragmentManager = childFragmentManager
     private var monthlyId = monthlyId
@@ -73,7 +75,7 @@ class Monthly_Schedule_Choose_RecyclerViewAdapter(
 
     fun startTask() {
 
-        var s = AsynTaskNew(this, childFragmentManager)
+        var s = AsynTaskNew(this, childFragmentManager,context)
         s.execute()
     }
 
@@ -97,7 +99,7 @@ class Monthly_Schedule_Choose_RecyclerViewAdapter(
             totalCostDobule = mValues.get(position).totalCost
             info = true
 
-            var s = AsynTaskNew(this, childFragmentManager)
+            var s = AsynTaskNew(this, childFragmentManager,context)
             s.execute()
 
         }

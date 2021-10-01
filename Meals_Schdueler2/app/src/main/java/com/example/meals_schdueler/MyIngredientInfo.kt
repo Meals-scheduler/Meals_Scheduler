@@ -196,7 +196,7 @@ class MyIngredientInfo(item: Ingredient, isRecipeList: Boolean) : DialogFragment
 
 
             )
-            var s = AsynTaskNew(ingredient1, childFragmentManager)
+            var s = AsynTaskNew(ingredient1, childFragmentManager,requireContext())
             s.execute()
 
 

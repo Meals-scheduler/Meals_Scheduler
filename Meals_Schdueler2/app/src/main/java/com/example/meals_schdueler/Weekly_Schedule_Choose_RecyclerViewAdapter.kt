@@ -1,5 +1,6 @@
 package com.example.meals_schdueler
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +29,8 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
     childFragmentManager: FragmentManager,
     progressbar: ProgressBar?,
     searchView: SearchView?,
-    noResult: TextView?
+    noResult: TextView?,
+    context: Context
 ) : RecyclerView.Adapter<Weekly_Schedule_Choose_RecyclerViewAdapter.ViewHolder>(), GetAndPost,
     SearchView.OnQueryTextListener {
 
@@ -36,6 +38,7 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
     private var dailyList: ArrayList<DailySchedule> = ArrayList()
     // private var mValuesDaily: TreeMap<String, DailySchedule> = dailyValues
 
+    private var context = context
 
     //    private var recipe = recipes
     private var childFragmentManager = childFragmentManager
@@ -77,7 +80,7 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
 
     fun startTask() {
 
-        var s = AsynTaskNew(this, childFragmentManager)
+        var s = AsynTaskNew(this, childFragmentManager,context)
         s.execute()
     }
 
@@ -106,7 +109,7 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
             totalCostDobule = mValues.get(position).totalCost
             info = true
 
-            var s = AsynTaskNew(this, childFragmentManager)
+            var s = AsynTaskNew(this, childFragmentManager,context)
             s.execute()
 
         }
@@ -277,7 +280,7 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
                 var dailyIdsArr = dailyIds.splitIgnoreEmpty(" ")
                 //var dayid = -1
                 for (i in dailyIdsArr) {
-                    daily=-1
+                    daily = -1
                     // if (dayid != i.toInt()) {
 
                     for (j in dailyInfo.indices) {
@@ -384,9 +387,6 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
                 }
 
                 // making WeeklyScheudle objects
-
-
-
 
 
                 currentWeeklyID = -1

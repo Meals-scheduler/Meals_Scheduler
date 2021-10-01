@@ -130,7 +130,7 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
     }
 
     fun startTask() {
-        var s = AsynTaskNew(this, childFragmentManager)
+        var s = AsynTaskNew(this, childFragmentManager,requireContext())
         s.execute()
     }
 

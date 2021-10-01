@@ -94,7 +94,7 @@ class My_Monthly_RecylerViewAdapter(
             totalCost = monthlyValues.get(position).totalCost
 
 
-            var s = AsynTaskNew(this, childFragmentManager)
+            var s = AsynTaskNew(this, childFragmentManager,context!!)
             s.execute()
 
         }
@@ -110,7 +110,7 @@ class My_Monthly_RecylerViewAdapter(
             totalCost = monthlyValues.get(position).totalCost
 
 
-            var s = AsynTaskNew(this, childFragmentManager)
+            var s = AsynTaskNew(this, childFragmentManager,context!!)
             s.execute()
 
 
@@ -207,7 +207,7 @@ class My_Monthly_RecylerViewAdapter(
                     )
 
 
-                    var s = AsynTaskNew(upcoming, childFragmentManager)
+                    var s = AsynTaskNew(upcoming, childFragmentManager,context!!)
                     s.execute()
 
 

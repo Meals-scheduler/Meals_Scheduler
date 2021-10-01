@@ -242,7 +242,7 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
                     totalCostDobule,
                     false
                 )
-                var s = AsynTaskNew(m, childFragmentManager)
+                var s = AsynTaskNew(m, childFragmentManager, requireContext())
                 s.execute()
                 if (MyMonthlyScheudleFragment.instance!!.noMonthlyTextView.visibility == View.VISIBLE) {
                     MyMonthlyScheudleFragment.instance!!.noMonthlyTextView.visibility = View.INVISIBLE
@@ -414,7 +414,7 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
                     pos = t3v.getTag() as Int
                     totalCostWeekly =  weeklyListChoose!!.get(t3v.getTag() as Int - 1).totalCost
 
-                    var s = AsynTaskNew(this, childFragmentManager)
+                    var s = AsynTaskNew(this, childFragmentManager,requireContext())
                     s.execute()
 
                 }

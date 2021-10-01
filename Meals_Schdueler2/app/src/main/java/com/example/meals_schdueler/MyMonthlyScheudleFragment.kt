@@ -122,7 +122,7 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScr
     }
 
     fun startTask() {
-        var s = AsynTaskNew(this, childFragmentManager)
+        var s = AsynTaskNew(this, childFragmentManager,requireContext())
         s.execute()
     }
 

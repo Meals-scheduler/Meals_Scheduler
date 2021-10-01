@@ -62,7 +62,7 @@ class Weekly_Schedule_Choose_Dialog(
 
         noResultsTextView = view.findViewById(R.id.tv_emptyTextView)
         weeklyChoosenRecyclerViewAdapter = Weekly_Schedule_Choose_RecyclerViewAdapter(
-            weeklyList!!, l.list, childFragmentManager, progressBar, searchView, noResultsTextView
+            weeklyList!!, l.list, childFragmentManager, progressBar, searchView, noResultsTextView,requireContext()
         )
 
 

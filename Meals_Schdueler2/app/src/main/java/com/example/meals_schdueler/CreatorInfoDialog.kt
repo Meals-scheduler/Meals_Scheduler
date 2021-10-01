@@ -40,7 +40,7 @@ class CreatorInfoDialog(shareInfo: Boolean, ownerId: Int) : DialogFragment() , V
         xImage.setOnClickListener(this)
         // if this user accepts to share his/hers info
         if(shareInfo){
-            var s = AsynTaskNew(this, childFragmentManager)
+            var s = AsynTaskNew(this, childFragmentManager,requireContext())
             s.execute()
         }
 

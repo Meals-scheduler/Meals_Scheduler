@@ -106,7 +106,7 @@ class AllIngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListen
 
 
             )
-            var s = AsynTaskNew(ingredient1, childFragmentManager)
+            var s = AsynTaskNew(ingredient1, childFragmentManager,requireContext())
             s.execute()
 
             MyingredientFragment1.instance!!.getRecycler().toCopy(ingredient1)

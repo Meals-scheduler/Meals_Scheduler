@@ -252,7 +252,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                         totalCostDobule,
                         false
                     )
-                    var s = AsynTaskNew(w, childFragmentManager)
+                    var s = AsynTaskNew(w, childFragmentManager,requireContext())
                     s.execute()
                     if (MyWeeklyScheduleFragment.instance!!.noWeeklyTextView.visibility == View.VISIBLE) {
                         MyWeeklyScheduleFragment.instance!!.noWeeklyTextView.visibility = View.INVISIBLE
@@ -434,7 +434,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                     pos = t3v.getTag() as Int
 
 
-                    var s = AsynTaskNew(this, childFragmentManager)
+                    var s = AsynTaskNew(this, childFragmentManager,requireContext())
                     s.execute()
                 }
                 tbrow.addView(t4v)

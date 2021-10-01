@@ -67,7 +67,7 @@ class Monthly_Schedule_Choose_Dialog(
         noResultsTextView = view.findViewById(R.id.tv_emptyTextView)
 
         monthlyChoosenRecyclerViewAdapter = Monthly_Schedule_Choose_RecyclerViewAdapter(
-            monthlyList!!, l.list, childFragmentManager, progressBar, searchView, noResultsTextView
+            monthlyList!!, l.list, childFragmentManager, progressBar, searchView, noResultsTextView,requireContext()
         )
 
 

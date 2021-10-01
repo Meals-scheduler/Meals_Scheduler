@@ -76,7 +76,7 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
     }
 
     fun startTask() {
-        var s = AsynTaskNew(this, childFragmentManager2)
+        var s = AsynTaskNew(this, childFragmentManager2,context2)
         s.execute()
     }
 
@@ -190,6 +190,9 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
             } else if (dairyFree.equals("true") && vegan.equals("true")) {
                 typeOfMeal = "Parve"
             } else if (dairyFree.equals("false")) {
+                typeOfMeal = "Dairy"
+            }
+            else{
                 typeOfMeal = "Dairy"
             }
             name = name.replace('\'', ' ')
@@ -338,7 +341,7 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
                 )
                 ingredientList.add(ing)
                 k--
-                var s = AsynTaskNew(ing, childFragmentManager2)
+                var s = AsynTaskNew(ing, childFragmentManager2,context2)
                 s.execute()
 
                 Log.v("Sivan", "K Size " + k)
@@ -407,7 +410,7 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
                     instructionsValue!!
                 )
                 //  fcid++
-                var s = AsynTaskNew(recipe, childFragmentManager2)
+                var s = AsynTaskNew(recipe, childFragmentManager2,context2)
                 s.execute()
             }
         }

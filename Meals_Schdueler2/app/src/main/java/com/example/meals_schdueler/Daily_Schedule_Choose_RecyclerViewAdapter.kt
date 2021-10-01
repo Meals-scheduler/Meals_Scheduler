@@ -1,5 +1,6 @@
 package com.example.meals_schdueler
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +27,8 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
     childFragmentManager: FragmentManager,
     progressbar: ProgressBar?,
     searchView: SearchView?,
-    noResult: TextView?
+    noResult: TextView?,
+    context: Context
 ) : RecyclerView.Adapter<Daily_Schedule_Choose_RecyclerViewAdapter.ViewHolder>(), GetAndPost,
     SearchView.OnQueryTextListener {
     private var mValues: ArrayList<DailySchedule> = values
@@ -49,7 +51,7 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
     private var searchView = searchView
     private var noResultsTextView = noResult
     private var info = false
-
+    private var context = context
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -70,7 +72,7 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
 
     fun startTask() {
 
-        var s = AsynTaskNew(this, childFragmentManager)
+        var s = AsynTaskNew(this, childFragmentManager,context)
         s.execute()
     }
 

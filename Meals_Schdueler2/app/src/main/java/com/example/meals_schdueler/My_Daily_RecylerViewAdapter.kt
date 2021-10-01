@@ -88,7 +88,7 @@ class My_Daily_RecylerViewAdapter(
             pos = position + 1
             Log.v("Elad1", "Num of meals " + numOfMeals)
             Log.v("Elad1", "recipe ids " + recipeIDs)
-            var s = AsynTaskNew(this, childFragmentManager)
+            var s = AsynTaskNew(this, childFragmentManager, context!!)
             s.execute()
             // copying the Recipe list so if we edit it and then quit without saving, it wouldn't change the original list
 
@@ -106,7 +106,7 @@ class My_Daily_RecylerViewAdapter(
             pos = position + 1
 
 
-            var s = AsynTaskNew(this, childFragmentManager)
+            var s = AsynTaskNew(this, childFragmentManager, context!!)
             s.execute()
 
 
@@ -200,7 +200,7 @@ class My_Daily_RecylerViewAdapter(
                     )
 
 
-                    var s = AsynTaskNew(upcoming, childFragmentManager)
+                    var s = AsynTaskNew(upcoming, childFragmentManager, context!!)
                     s.execute()
 
 

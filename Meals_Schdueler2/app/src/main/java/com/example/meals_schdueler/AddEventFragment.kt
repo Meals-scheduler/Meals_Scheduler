@@ -208,8 +208,13 @@ class AddEventFragment : Fragment(), View.OnClickListener,
                 false
             )
 
-            var s = AsynTaskNew(event, childFragmentManager)
+            var s = AsynTaskNew(event, childFragmentManager, requireContext())
             s.execute()
+
+
+            if (MyEventScheduleFragment.instance!!.noEventTextView.visibility == View.VISIBLE) {
+                MyEventScheduleFragment.instance!!.noEventTextView.visibility = View.INVISIBLE
+            }
 
             MyEventScheduleFragment.getInstance1().getRecycler().toCopy(event)
 

@@ -168,7 +168,7 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
             ) // owenerId will be changed and will be determined from the user Table in the future.
 //            pbDialog = ProgressBarDialog()
 //            pbDialog.show(childFragmentManager, "ProgressBarDialog")
-            var s = AsynTaskNew(ingredient, childFragmentManager)
+            var s = AsynTaskNew(ingredient, childFragmentManager, requireContext())
             s.execute()
             //pbDialog.dismiss()
 
@@ -192,14 +192,14 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
 //            startActivity(i)
 
             var arr: ArrayList<Int> = ArrayList()
-            var id = 55150 // in 55026 we hvae problem with quntities
-            for (i in 1..2) {
+            var id = 112958 // in 55026 we hvae problem with quntities
+            for (i in 1..3) {
                 arr.add(id)
                 id += 1
             }
 
             for (i in arr) {
-                var g = ApiFood(i, childFragmentManager, requireContext());
+                var g = ApiFood(i, childFragmentManager,requireContext());
                 g.startTask()
             }
         }

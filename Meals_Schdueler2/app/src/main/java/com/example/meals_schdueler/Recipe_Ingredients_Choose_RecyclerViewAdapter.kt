@@ -66,7 +66,7 @@ class Recipe_Ingredients_Choose_RecyclerViewAdapter(
     }
         fun startTask() {
 
-        var s = AsynTaskNew(this, childFragmentManager)
+        var s = AsynTaskNew(this, childFragmentManager,context)
         s.execute()
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -167,8 +167,8 @@ class Recipe_Ingredients_Choose_RecyclerViewAdapter(
         var choose: CheckBox = view.findViewById(R.id.ingCheckBox)
         var cost: EditText = view.findViewById(R.id.editTextCost)
         lateinit var mItem: Ingredient
-        val arr = Array(100, { i -> false })
-        val arr2 = Array(100, { i -> "" })
+        val arr = Array(1000, { i -> false })
+        val arr2 = Array(1000, { i -> "" })
 
 
         override fun toString(): String {
@@ -183,11 +183,11 @@ class Recipe_Ingredients_Choose_RecyclerViewAdapter(
         var string = UserInterFace.userID.toString() + " " + page
 
         var link =
-            "https://elad1.000webhostapp.com/getSharedIngredients.php?ownerIDAndPage=" + string
+            "https://elad1.000webhostapp.com/getMyAndSharedIngredients.php?ownerIDAndPage=" + string
         if (isSearch) {
             string = UserInterFace.userID.toString() + " " + ingredientToSearch
             link =
-                "https://elad1.000webhostapp.com/getSpecificSharedIngredients.php?nameAndIngredient=" + string
+                "https://elad1.000webhostapp.com/getSpecificMyAndSharedIngredients.php?nameAndIngredient=" + string
 
         }
 
@@ -228,33 +228,38 @@ class Recipe_Ingredients_Choose_RecyclerViewAdapter(
             }
             val ingredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
-            for (i in ingredients.indices) {
+            try {
+                for (i in ingredients.indices) {
 
-                var ingredient2 = ingredients[i].splitIgnoreEmpty("*")
+                    var ingredient2 = ingredients[i].splitIgnoreEmpty("*")
 
 
-                var ing = Ingredient(
-                    ingredient2[0].toInt(),
-                    ingredient2[1].toInt(),
-                    ingredient2[2],
-                    ImageConvert.StringToBitMap(ingredient2[3].toString())!!,
-                    ingredient2[4],
-                    ingredient2[5],
-                    ingredient2[6],
-                    ingredient2[7].toBoolean(),
-                    ingredient2[8].toBoolean(),
-                    ingredient2[9].toFloat(),
-                    ingredient2[10].toFloat(),
-                    ingredient2[11].toFloat(),
-                    ingredient2[12],
-                    ingredient2[13],
-                    false
-                )
-                if (!mValues!!.contains(ing)) {
-                    mValues?.add(ing)
+                    var ing = Ingredient(
+                        ingredient2[0].toInt(),
+                        ingredient2[1].toInt(),
+                        ingredient2[2],
+                        ImageConvert.StringToBitMap(ingredient2[3].toString())!!,
+                        ingredient2[4],
+                        ingredient2[5],
+                        ingredient2[6],
+                        ingredient2[7].toBoolean(),
+                        ingredient2[8].toBoolean(),
+                        ingredient2[9].toFloat(),
+                        ingredient2[10].toFloat(),
+                        ingredient2[11].toFloat(),
+                        ingredient2[12],
+                        ingredient2[13],
+                        false
+                    )
+                    if (!mValues!!.contains(ing)) {
+                        mValues?.add(ing)
+                    }
+
+
                 }
-
-
+            }
+            catch (e: Exception) {
+                Log.v("Elad1", "Failled")
             }
 
 

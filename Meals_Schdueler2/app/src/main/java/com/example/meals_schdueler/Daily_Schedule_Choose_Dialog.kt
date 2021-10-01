@@ -70,7 +70,7 @@ class Daily_Schedule_Choose_Dialog(
 
         noResultsTextView = view.findViewById(R.id.tv_emptyTextView)
         dailyChoosenRecyclerViewAdapter = Daily_Schedule_Choose_RecyclerViewAdapter(
-            dailyList!!, recipeList,l.list, childFragmentManager,progressBar,searchView,noResultsTextView
+            dailyList!!, recipeList,l.list, childFragmentManager,progressBar,searchView,noResultsTextView,requireContext()
         )
 
         dailyChoosenRecyclerViewAdapter!!.setmValues(dailyList!!)

@@ -218,7 +218,7 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
                 instructions!!
                 )
 
-            var s = AsynTaskNew(recipe, childFragmentManager)
+            var s = AsynTaskNew(recipe, childFragmentManager,requireContext())
             s.execute()
 
 

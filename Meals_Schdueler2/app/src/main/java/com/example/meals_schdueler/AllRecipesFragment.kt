@@ -28,7 +28,7 @@ class AllRecipesFragment : Fragment(), GetAndPost {
         super.onCreate(savedInstanceState)
         recipeList = ArrayList<Recipe>()
         AllRecipeRecyclerViewAdapter =
-            All_Recipes_RecyclerViewAdapter(recipeList!!, childFragmentManager)
+            All_Recipes_RecyclerViewAdapter(recipeList!!, childFragmentManager, requireContext())
 
         arguments?.let {
             columnCount = it.getInt(AllingredientsFragment1.ARG_COLUMN_COUNT)
@@ -302,7 +302,7 @@ class AllRecipesFragment : Fragment(), GetAndPost {
 //    }
 
     fun startTask() {
-        var s = AsynTaskNew(this, childFragmentManager)
+        var s = AsynTaskNew(this, childFragmentManager,requireContext())
         s.execute()
     }
 }

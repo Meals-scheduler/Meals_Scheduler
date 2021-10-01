@@ -93,7 +93,7 @@ class My_Weekly_RecylerViewAdapter(
             pos = position + 1
 
 
-            var s = AsynTaskNew(this, childFragmentManager)
+            var s = AsynTaskNew(this, childFragmentManager,context!!)
             s.execute()
 
         }
@@ -110,7 +110,7 @@ class My_Weekly_RecylerViewAdapter(
             totalCost = weeklyValues.get(position)!!.totalCost.toDouble()
 
 
-            var s = AsynTaskNew(this, childFragmentManager)
+            var s = AsynTaskNew(this, childFragmentManager,context!!)
             s.execute()
 
             // Log.v("Elad1","HH" + weeklyDaily.get(item.weeklyId.toString())!!.get(1).recipeIds)
@@ -220,7 +220,7 @@ class My_Weekly_RecylerViewAdapter(
                     )
 
 
-                    var s = AsynTaskNew(upcoming, childFragmentManager)
+                    var s = AsynTaskNew(upcoming, childFragmentManager,context!!)
                     s.execute()
 
 

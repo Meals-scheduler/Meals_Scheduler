@@ -425,7 +425,7 @@ class EditEventDailog(
                     true
                 )
 
-                var s = AsynTaskNew(event, childFragmentManager)
+                var s = AsynTaskNew(event, childFragmentManager,requireContext())
                 s.execute()
 
                 recipeIds = ""

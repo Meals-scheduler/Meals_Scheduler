@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GetAndPost,Compo
 //    lateinit var mFragmentTransaction: FragmentTransaction
 //
 
+
     lateinit var btnLogin: Button
     lateinit var signUpText: TextView
     lateinit var userName: EditText
@@ -70,7 +71,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GetAndPost,Compo
             // check if username and password currect
             username = userName.text.toString()
             password = passWord.text.toString()
-            var s = AsynTaskNew(this,supportFragmentManager)
+            var s = AsynTaskNew(this,supportFragmentManager,baseContext)
             s.execute()
 
         } else if (p0 == signUpText) {

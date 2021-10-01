@@ -241,7 +241,7 @@ class AddYearlyScheduleFragment : Fragment(), View.OnClickListener,
                     totalCostDobule,
                     false
                 )
-                var s = AsynTaskNew(m, childFragmentManager)
+                var s = AsynTaskNew(m, childFragmentManager,requireContext())
                 s.execute()
                 if (MyYearlyScheudleFragment.instance!!.noYearlyTextView.visibility == View.VISIBLE) {
                     MyYearlyScheudleFragment.instance!!.noYearlyTextView.visibility = View.INVISIBLE
@@ -409,7 +409,7 @@ class AddYearlyScheduleFragment : Fragment(), View.OnClickListener,
                     pos = t3v.getTag() as Int
                     totalCostMonthly = monthlyListChoose!!.get(t3v.getTag() as Int - 1).totalCost
 
-                    var s = AsynTaskNew(this, childFragmentManager)
+                    var s = AsynTaskNew(this, childFragmentManager,requireContext())
                     s.execute()
 
                 }

@@ -41,7 +41,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
         recipeList = ArrayList()
 
         AllRecipeRecyclerViewAdapter =
-            All_Recipes_RecyclerViewAdapter(recipeList!!, childFragmentManager)
+            All_Recipes_RecyclerViewAdapter(recipeList!!, childFragmentManager,requireContext())
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
@@ -84,7 +84,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
 
 
     fun startTask() {
-        var s = AsynTaskNew(this, childFragmentManager)
+        var s = AsynTaskNew(this, childFragmentManager,requireContext())
         s.execute()
     }
 

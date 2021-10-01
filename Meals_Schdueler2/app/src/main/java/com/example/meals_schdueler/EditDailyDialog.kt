@@ -476,7 +476,7 @@ class EditDailyDialog(
                     true
                 )
 
-                var s = AsynTaskNew(daily, childFragmentManager)
+                var s = AsynTaskNew(daily, childFragmentManager,requireContext())
                 s.execute()
 
                 recipeIds = ""

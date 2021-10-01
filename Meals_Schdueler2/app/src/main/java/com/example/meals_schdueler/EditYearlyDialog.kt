@@ -233,7 +233,7 @@ class EditYearlyDialog(
                     totalCostMonthly = i.totalCost
 
 
-                    var s = AsynTaskNew(this, childFragmentManager)
+                    var s = AsynTaskNew(this, childFragmentManager,requireContext())
                     s.execute()
                 }
                 tbrow.addView(t3v)
@@ -451,7 +451,7 @@ class EditYearlyDialog(
                         totalCostMonthly = i.totalCost
 
 
-                        var s = AsynTaskNew(this, childFragmentManager)
+                        var s = AsynTaskNew(this, childFragmentManager,requireContext())
                         s.execute()
                     }
                     tbrow.addView(t3v)
@@ -580,7 +580,7 @@ class EditYearlyDialog(
                         true
                     )
 
-                    var s = AsynTaskNew(weekly, childFragmentManager)
+                    var s = AsynTaskNew(weekly, childFragmentManager,requireContext())
                     s.execute()
 
                     numOfMonth = ""

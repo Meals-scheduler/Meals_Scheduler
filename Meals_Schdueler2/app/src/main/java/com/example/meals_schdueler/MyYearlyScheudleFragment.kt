@@ -121,7 +121,7 @@ class MyYearlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScro
     }
 
     fun startTask() {
-        var s = AsynTaskNew(this, childFragmentManager)
+        var s = AsynTaskNew(this, childFragmentManager,requireContext())
         s.execute()
     }
 

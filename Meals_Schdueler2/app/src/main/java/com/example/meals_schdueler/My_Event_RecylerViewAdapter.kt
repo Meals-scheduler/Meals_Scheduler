@@ -1,12 +1,11 @@
 package com.example.meals_schdueler
 
-import android.app.Activity
-import android.app.AlertDialog
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
+import android.app.*
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.os.Build
+import android.provider.Settings.Global.getString
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +13,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.allyants.notifyme.NotifyMe
@@ -23,9 +24,9 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
-
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class My_Event_RecylerViewAdapter(
 
@@ -41,7 +42,7 @@ class My_Event_RecylerViewAdapter(
     private var mValues: ArrayList<Event> = values
     private var childFragmentManager = childFragmentManager
     private var numOfEvent = 1
-    private lateinit var recipeList: ArrayList<Recipe>
+    private  var recipeList: ArrayList<Recipe> = ArrayList()
     private var context = context
     private var activity = activity
 
@@ -89,7 +90,7 @@ class My_Event_RecylerViewAdapter(
             pos = position + 1
             eventName = mValues.get(position)!!.eventName
 
-            var s = AsynTaskNew(this, childFragmentManager)
+            var s = AsynTaskNew(this, childFragmentManager,context!!)
             s.execute()
         }
 
@@ -104,7 +105,7 @@ class My_Event_RecylerViewAdapter(
             eventName = mValues.get(position)!!.eventName
             pos = position + 1
 
-            var s = AsynTaskNew(this, childFragmentManager)
+            var s = AsynTaskNew(this, childFragmentManager,context!!)
             s.execute()
 
         }
@@ -167,15 +168,27 @@ class My_Event_RecylerViewAdapter(
                         DialogInterface.OnClickListener { dialog, which ->
                             when (which) {
                                 DialogInterface.BUTTON_POSITIVE -> {
-                                    val notifyMe: NotifyMe =
-                                        NotifyMe.Builder(context).title("Meals-Scheudler")
-                                            .content("Hey, Event is coming").color(255, 0, 0, 255)
-                                            .led_color(255, 255, 255, 255).time(cal)
-                                            .addAction(Intent(), "Snooze", false)
-                                            .key("test").addAction(Intent(), "Dismiss", true, false)
-                                            .large_icon(R.mipmap.ic_launcher_round).build()
+                                    var CHANNEL_ID = "1"
 
-                                    Log.v("Elad1", "clicked yes")
+
+                                    val intent = Intent(context, MainActivity::class.java).apply {
+                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    }
+                                    val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+
+                                    val builder = NotificationCompat.Builder(context!!, CHANNEL_ID)
+                                        .setSmallIcon(R.drawable.yearly_icon)
+                                        .setContentTitle("Event Schedule")
+                                        .setContentText("Hey , you got an event schedule  check it out!")
+                                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                        // Set the intent that will fire when the user taps the notification
+                                        .setContentIntent(pendingIntent)
+                                        .setAutoCancel(true)
+
+                                    with(NotificationManagerCompat.from(context!!)) {
+                                        // notificationId is a unique int for each notification that you must define
+                                        notify(1, builder.build())
+                                    }
 
                                 }
                                 DialogInterface.BUTTON_NEGATIVE -> {
@@ -197,7 +210,7 @@ class My_Event_RecylerViewAdapter(
                     )
 
 
-                    var s = AsynTaskNew(upcoming, childFragmentManager)
+                    var s = AsynTaskNew(upcoming, childFragmentManager,context!!)
                     s.execute()
 
 
@@ -210,6 +223,7 @@ class My_Event_RecylerViewAdapter(
 
 
     }
+
 
     fun setmValues(mValues: ArrayList<Event>) {
 

@@ -50,10 +50,10 @@ class LoadingData : AppCompatActivity(), GetAndPost {
     }
 
     fun startTask() {
-        for (i in 0..2) {
-            var s = AsynTaskNew(this, supportFragmentManager)
-            s.execute()
-        }
+//        for (i in 0..2) {
+//            var s = AsynTaskNew(this, supportFragmentManager,)
+//            s.execute()
+//        }
 
     }
 

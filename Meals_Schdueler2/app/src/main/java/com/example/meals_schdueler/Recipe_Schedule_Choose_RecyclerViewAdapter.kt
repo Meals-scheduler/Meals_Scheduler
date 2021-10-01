@@ -1,6 +1,7 @@
 package com.example.meals_schdueler
 
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,7 +26,8 @@ class Recipe_Schedule_Choose_RecyclerViewAdapter(
     childFragmentManager: FragmentManager,
     progressbar: ProgressBar?,
     searchView: SearchView?,
-    noResult: TextView?
+    noResult: TextView?,
+    context: Context
 ) : RecyclerView.Adapter<Recipe_Schedule_Choose_RecyclerViewAdapter.ViewHolder>(), GetAndPost,
     SearchView.OnQueryTextListener {
 
@@ -40,7 +42,7 @@ class Recipe_Schedule_Choose_RecyclerViewAdapter(
     private var progressBar = progressbar
     private var searchView = searchView
     private var noResultsTextView = noResult
-
+    private var context = context
 
     var str: String = ""
 
@@ -58,7 +60,7 @@ class Recipe_Schedule_Choose_RecyclerViewAdapter(
 
     fun startTask() {
 
-        var s = AsynTaskNew(this, childFragmentManager)
+        var s = AsynTaskNew(this, childFragmentManager,context)
         s.execute()
     }
 
@@ -173,6 +175,7 @@ class Recipe_Schedule_Choose_RecyclerViewAdapter(
 //        val arr2 = Array(mValues.size, {i->""})
 
 
+
         override fun toString(): String {
             return super.toString()
         }
@@ -187,11 +190,11 @@ class Recipe_Schedule_Choose_RecyclerViewAdapter(
         var string = UserInterFace.userID.toString() + " " + page
 
         var link =
-            "https://elad1.000webhostapp.com/getSharedRecipes.php?ownerIDAndPage=" + string
+            "https://elad1.000webhostapp.com/getMyAndSharedRecipes.php?ownerIDAndPage=" + string
         if (isSearch) {
             string = UserInterFace.userID.toString() + " " + recipeToSearch
             link =
-                "https://elad1.000webhostapp.com/getSpecificSharedRecipes.php?nameAndRecipe=" + string
+                "https://elad1.000webhostapp.com/getSpecificMyAndSharedRecipes.php?nameAndRecipe=" + string
 
         }
 
@@ -280,20 +283,6 @@ class Recipe_Schedule_Choose_RecyclerViewAdapter(
                 }
             }
 
-            //var isFirst = true
-
-            // saving all the ingredietns and quantities of each Recipe in map.
-            // first we extract the ids and quantity into map.
-            // then we use another map to convert all ids to real ingredients.
-
-//            var hashMap: HashMap<Int, Pair<ArrayList<String>, ArrayList<Int>>> =
-//                HashMap()
-
-            //  var map: HashMap<Int, ArrayList<Ingredient>> = HashMap()
-
-//            var ingredientList: ArrayList<Ingredient> = ArrayList()
-//
-//            var quantities: ArrayList<Int> = ArrayList()
 
             var ingredientList: ArrayList<Ingredient> = ArrayList()
 

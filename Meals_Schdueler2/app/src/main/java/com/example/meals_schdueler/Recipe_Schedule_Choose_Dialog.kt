@@ -61,7 +61,8 @@ class Recipe_Schedule_Choose_Dialog(
         noResultsTextView = view.findViewById(R.id.tv_emptyTextView)
 
         recipesChoosenRecyclerViewAdapter = Recipe_Schedule_Choose_RecyclerViewAdapter(
-            recipesList!!, l.list!!, quantitiess.list!!, childFragmentManager,progressBar,searchView,noResultsTextView
+            recipesList!!, l.list!!, quantitiess.list!!, childFragmentManager,progressBar,searchView,noResultsTextView,
+            context!!
         )
 
         recipesChoosenRecyclerViewAdapter!!.setmValues(recipesList!!)

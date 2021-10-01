@@ -1,5 +1,6 @@
 package com.example.meals_schdueler
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,11 +15,13 @@ import kotlin.math.max
 class All_Recipes_RecyclerViewAdapter(
 
     private val values: ArrayList<Recipe>,
-    childFragmentManager: FragmentManager
+    childFragmentManager: FragmentManager,
+    context: Context
 ) : RecyclerView.Adapter<All_Recipes_RecyclerViewAdapter.ViewHolder>() {
 
     private var mValues: ArrayList<Recipe> = values
     private var childFragmentManager = childFragmentManager
+    private var contex = context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -81,7 +84,7 @@ class All_Recipes_RecyclerViewAdapter(
                 )
 
 
-                var s = AsynTaskNew(ingredient, childFragmentManager)
+                var s = AsynTaskNew(ingredient, childFragmentManager,contex)
                 s.execute()
 
                 if (MyRecipeFragment.instance!!.noRecipesTextView.visibility == View.VISIBLE) {
@@ -113,7 +116,7 @@ class All_Recipes_RecyclerViewAdapter(
                 instructions
             )
 
-            var s = AsynTaskNew(recipe, childFragmentManager)
+            var s = AsynTaskNew(recipe, childFragmentManager,contex)
             s.execute()
 
             MyRecipeFragment.instance!!.getRecycler().toCopy(recipe)

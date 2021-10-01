@@ -1,13 +1,13 @@
 package com.example.meals_schdueler
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
 import androidx.fragment.app.FragmentManager
-import com.example.meals_schdueler.dummy.DailySchedule
 
 
-class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
+class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager ,context: Context) :
     AsyncTask<Void, Void, String>() {
 
     //Android AsyncTask: You can interact with UI thread (Main Thread) with AsynTask when you have to do some background task.
@@ -19,15 +19,26 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
     var action: GetAndPost = action
     var childFragmentManager = childFragmentManager
     lateinit var pbDialog: ProgressBarDialog
+    var context = context
+
 
 
     override fun doInBackground(vararg params: Void?): String? {
         // ...
-        Log.v("Elad1", "don in background good")
+        try{
+            Log.v("Elad1", "don in background good")
 
-        return action.DoNetWorkOpreation()
+            return action.DoNetWorkOpreation()
 
+        }
+        catch (e: Exception) {
+            Log.v("Elad1", "Failled")
+            pbDialog.dismiss()
+            val builder = AlertDialog.Builder(context)
+            builder.setMessage("Sorry,something went wrong. try again!").show()
+        }
 
+        return ""
     }
 
     override fun onPreExecute() {
@@ -42,12 +53,25 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager) :
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
 
-        if (result != null) {
-            action.getData(result)
+        try{
+            if (result != null) {
+                action.getData(result)
+            }
+
+            if (!(action is DeleteAlertDialog)) {
+                pbDialog.dismiss()
+            }
+        }
+        catch (e: Exception) {
+            Log.v("Elad1", "Failled")
+            pbDialog.dismiss()
+
+
+            val builder = AlertDialog.Builder(context)
+            builder.setMessage("Sorry,something went wrong. try again!").show()
+
+
         }
 
-        if (!(action is DeleteAlertDialog)) {
-            pbDialog.dismiss()
-        }
     }
 }

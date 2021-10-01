@@ -351,7 +351,7 @@ class MyRecipeFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChange
 
     fun startTask() {
 
-        var s = AsynTaskNew(this, childFragmentManager)
+        var s = AsynTaskNew(this, childFragmentManager,requireContext())
         s.execute()
     }
 

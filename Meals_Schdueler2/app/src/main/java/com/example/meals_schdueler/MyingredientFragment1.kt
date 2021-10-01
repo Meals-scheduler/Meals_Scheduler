@@ -228,6 +228,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost, NestedScrollView.OnScrollC
             // should do it on another place !!!
             //  UserPropertiesSingelton.getInstance()!!.setUserIngredientss(sorted)
             // sending the last to the adapter.
+            Log.v("Elad1","FINISHED")
             ingredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
             progressBar!!.visibility = View.INVISIBLE
             isScorlled = false
@@ -247,7 +248,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost, NestedScrollView.OnScrollC
     }
 
     fun startTask() {
-        var s = AsynTaskNew(this, childFragmentManager)
+        var s = AsynTaskNew(this, childFragmentManager,requireContext())
         s.execute()
     }
 

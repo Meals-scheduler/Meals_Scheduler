@@ -67,7 +67,7 @@ class SignUp : AppCompatActivity() ,View.OnClickListener,GetAndPost {
                 email = userEmail.text.toString()
                 password = userPassword.text.toString()
                 picture = "Nothing ATM"
-                var s = AsynTaskNew(this, supportFragmentManager)
+                var s = AsynTaskNew(this, supportFragmentManager,baseContext)
                 s.execute()
             }
        }

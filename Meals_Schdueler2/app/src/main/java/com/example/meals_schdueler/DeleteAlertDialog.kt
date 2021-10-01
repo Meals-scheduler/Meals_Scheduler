@@ -83,7 +83,7 @@ class DeleteAlertDialog(
     }
 
     private fun deleteIngredient() {
-        var s = AsynTaskNew(this, childFragmentManager)
+        var s = AsynTaskNew(this, childFragmentManager,requireContext())
         s.execute()
     }
 

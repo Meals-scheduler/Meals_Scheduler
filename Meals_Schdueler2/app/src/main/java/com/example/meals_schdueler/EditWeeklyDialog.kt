@@ -257,7 +257,7 @@ class EditWeeklyDialog(
                         pos = t3v.getTag() as Int + 1
 
 
-                        var s = AsynTaskNew(this, childFragmentManager)
+                        var s = AsynTaskNew(this, childFragmentManager,requireContext())
                         s.execute()
 
                     }
@@ -418,7 +418,7 @@ class EditWeeklyDialog(
                     pos = t3v.getTag() as Int + 1
 
 
-                    var s = AsynTaskNew(this, childFragmentManager)
+                    var s = AsynTaskNew(this, childFragmentManager,requireContext())
                     s.execute()
                 }
                 tbrow.addView(t3v)
@@ -578,7 +578,7 @@ class EditWeeklyDialog(
                         true
                     )
 
-                    var s = AsynTaskNew(weekly, childFragmentManager)
+                    var s = AsynTaskNew(weekly, childFragmentManager,requireContext())
                     s.execute()
 
                     numOfDay = ""

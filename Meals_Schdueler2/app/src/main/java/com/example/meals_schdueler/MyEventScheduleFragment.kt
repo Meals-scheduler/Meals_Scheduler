@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -30,6 +31,7 @@ class MyEventScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
     private lateinit var nestedScroll: NestedScrollView // list of ingredietns
     private var progressBar: ProgressBar? = null
     private var page = 0
+    public lateinit var noEventTextView: TextView
     private var isScorlled = false
 
 
@@ -96,6 +98,7 @@ class MyEventScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
         nestedScroll = view!!.findViewById(R.id.scroll_view)
         progressBar = view!!.findViewById(R.id.progress_bar)
         nestedScroll.setOnScrollChangeListener(this)
+        noEventTextView = view.findViewById(R.id.textViewNoEvent)
 
 
         instance = this
@@ -118,7 +121,7 @@ class MyEventScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
     }
 
     fun startTask() {
-        var s = AsynTaskNew(this, childFragmentManager)
+        var s = AsynTaskNew(this, childFragmentManager,requireContext())
         s.execute()
     }
 
@@ -169,6 +172,10 @@ class MyEventScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
         if (!str.equals("")) {
             if (!isScorlled)
                 eventList!!.clear()
+
+            if (noEventTextView.visibility == View.VISIBLE) {
+                noEventTextView.visibility = View.INVISIBLE
+            }
 
             quantities = ""
             recipeIds = ""
@@ -247,6 +254,11 @@ class MyEventScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
             progressBar!!.visibility = View.INVISIBLE
 
             isScorlled = false
+        }
+        else{
+            if (eventList!!.size == 0) {
+                noEventTextView.visibility = View.VISIBLE
+            }
         }
 
         isScorlled = false
