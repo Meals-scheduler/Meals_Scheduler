@@ -1,9 +1,6 @@
 package com.example.meals_schdueler
 
-import android.app.Activity
-import android.app.AlertDialog
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
+import android.app.*
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -171,6 +168,7 @@ class My_Monthly_RecylerViewAdapter(
                     var month = cal.get(Calendar.MONTH) + 1
                     date = cal.get(Calendar.YEAR).toString() + "-" + month
                         .toString() + "-" + cal.get(Calendar.DAY_OF_MONTH).toString()
+
 
 
                     val dialogClickListener =

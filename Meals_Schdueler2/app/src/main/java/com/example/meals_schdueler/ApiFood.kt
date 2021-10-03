@@ -87,16 +87,16 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
         if (isRecipe) {
             Log.v("Sivan", "here is recipe")
             link =
-                " https://api.spoonacular.com/recipes/" + fcid + "/information?apiKey=bd6b560e6d934e2ebe9cd08f20c7ee42&includeNutrition=true"
+                " https://api.spoonacular.com/recipes/" + fcid + "/information?apiKey=8ec327f4413e489ba67798bb1b6ab085&includeNutrition=true"
             // fcid += 1
         } else if (isIngredient) {
             Log.v("Sivan", "here is ingredient")
             link =
 
-                "https://api.spoonacular.com/food/ingredients/" + ingredientsIds.get(j++) + "/information?amount=1&apiKey=bd6b560e6d934e2ebe9cd08f20c7ee42"
+                "https://api.spoonacular.com/food/ingredients/" + ingredientsIds.get(j++) + "/information?amount=1&apiKey=8ec327f4413e489ba67798bb1b6ab085"
         } else {
             link =
-                "https://api.spoonacular.com/recipes/" + fcid + "/analyzedInstructions?apiKey=bd6b560e6d934e2ebe9cd08f20c7ee42"
+                "https://api.spoonacular.com/recipes/" + fcid + "/analyzedInstructions?apiKey=8ec327f4413e489ba67798bb1b6ab085"
 
         }
 
@@ -133,10 +133,10 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
     }
 
     override fun getData(str: String) {
-        Log.v("Elad1", str)
+      //  Log.v("Elad1", str)
 
         if (isRecipe && !wantToUpload) {
-            Log.v("Sivan", "first here talking ing ids")
+           // Log.v("Sivan", "first here talking ing ids")
             isRecipe = false
             val jsonObject = JSONObject(str)
             val ingredients = jsonObject.getString("extendedIngredients")
@@ -157,7 +157,7 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
                     ingredientsIds.add(id)
                 k = ingredientsIds.size
 //            description = jsonSecondary.getString("description")
-                Log.v("Elad1", "id " + id)
+           //     Log.v("Elad1", "id " + id)
 
                 //var myObj = JSONObject(num)
                 //var name2 = myObj.getString("name")
@@ -263,7 +263,7 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
             val jsonObject = JSONObject(str)
             val id = jsonObject.getString("id")
             var name = jsonObject.getString("original")
-            Log.v("Elad1", "Ingredient Name " + name)
+         //   Log.v("Elad1", "Ingredient Name " + name)
             val image = jsonObject.getString("image")
             val imageToUpload = "https://spoonacular.com/cdn/ingredients_250x250/" + image
             val cost = jsonObject.getString("estimatedCost")
@@ -282,13 +282,13 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
                 var title = jsonSecondary.getString("title")
                 if (title.equals("Protein")) {
                     proteinAmount = jsonSecondary.getString("amount").toFloat() // 0.05
-                    Log.v("Elad1", "amount " + proteinAmount)
+                   // Log.v("Elad1", "amount " + proteinAmount)
                 } else if (title.equals("Fat")) {
                     fatAmount = jsonSecondary.getString("amount").toFloat() // 0.01
-                    Log.v("Elad1", "amount " + fatAmount)
+                  //  Log.v("Elad1", "amount " + fatAmount)
                 } else if (title.equals("Carbohydrates")) { // 0.07
                     carbsAmount = jsonSecondary.getString("amount").toFloat()
-                    Log.v("Elad1", "amount " + carbsAmount)
+                  //  Log.v("Elad1", "amount " + carbsAmount)
                 }
 
                 // Log.v("Elad1", "title " + title)
@@ -302,9 +302,9 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
             carbsAmount *= 100
             fatAmount *= 100
 
-            Log.v("elad1", proteinAmount.toString())
-            Log.v("elad1", carbsAmount.toString())
-            Log.v("elad1", fatAmount.toString())
+        //    Log.v("elad1", proteinAmount.toString())
+        //    Log.v("elad1", carbsAmount.toString())
+       //     Log.v("elad1", fatAmount.toString())
 
 
             var bitmap: Bitmap? = null
@@ -313,13 +313,13 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
 
 
                 //var imageBitmap = getBitmapFromURL(imageToUpload)
-                Log.v("Sivan", "Ingredients:::")
-                Log.v("Sivan", id.toString())
-                Log.v("Sivan", name)
-                Log.v("Sivan", proteinAmount.toString())
-                Log.v("Sivan", carbsAmount.toString())
-                Log.v("Sivan", fatAmount.toString())
-                Log.v("Sivan", value.toString())
+              //  Log.v("Sivan", "Ingredients:::")
+               // Log.v("Sivan", id.toString())
+               // Log.v("Sivan", name)
+               // Log.v("Sivan", proteinAmount.toString())
+               // Log.v("Sivan", carbsAmount.toString())
+               // Log.v("Sivan", fatAmount.toString())
+              //  Log.v("Sivan", value.toString())
 
                 var ing = Ingredient(
                     id.toInt(),
@@ -344,7 +344,7 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
                 var s = AsynTaskNew(ing, childFragmentManager2,context2)
                 s.execute()
 
-                Log.v("Sivan", "K Size " + k)
+              //  Log.v("Sivan", "K Size " + k)
                 if (k == 0) {
                     Log.v("Sivan", "third trying to upload recipe")
                     isIngredient = false
@@ -366,7 +366,7 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
                 if (nameOfStep.equals("")) {
                     nameOfStep = name
                 }
-                Log.v("Sivan", "Step name " + name)
+               // Log.v("Sivan", "Step name " + name)
                 instructions += name + ":\n"
 
                 val arr2 = JSONArray(jsonSecondary.getString("steps"))
@@ -374,7 +374,7 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
                 for (j in 0 until arr2.length()) {
                     val jsonSecondary2 = arr2.getJSONObject(j)
                     var step = jsonSecondary2.getString("step")
-                    Log.v("Sivan", "Step is " + step)
+                  //  Log.v("Sivan", "Step is " + step)
                     instructions+= "" + stepNum +") " +step
                     stepNum++
                 }
@@ -385,16 +385,16 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
             lifecycleScope.launch {
                 var bitmap = getBitMap(image)
 
-                Log.v("Sivan", "Recipes:::")
-                Log.v("Sivan", fcid.toString())
-                Log.v("Sivan", name)
-                Log.v("Sivan", typeOfMeal.toString())
-                Log.v("Sivan", portions.toString())
-                Log.v("Sivan", totalcost.toString())
-                Log.v("Sivan", ingredientList.toString())
-                Log.v("Sivan", ingredientsQuantity.toString())
+              //  Log.v("Sivan", "Recipes:::")
+              //  Log.v("Sivan", fcid.toString())
+              //  Log.v("Sivan", name)
+             //   Log.v("Sivan", typeOfMeal.toString())
+              //  Log.v("Sivan", portions.toString())
+             //   Log.v("Sivan", totalcost.toString())
+              //  Log.v("Sivan", ingredientList.toString())
+             //   Log.v("Sivan", ingredientsQuantity.toString())
 
-
+                name = name.replace('\'', ' ')
                 var recipe = Recipe(
                     fcid,
                     -1,

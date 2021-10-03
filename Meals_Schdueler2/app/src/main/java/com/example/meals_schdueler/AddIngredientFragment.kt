@@ -193,7 +193,7 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
 
             var arr: ArrayList<Int> = ArrayList()
             var id = 112958 // in 55026 we hvae problem with quntities
-            for (i in 1..3) {
+            for (i in 1..2) {
                 arr.add(id)
                 id += 1
             }
