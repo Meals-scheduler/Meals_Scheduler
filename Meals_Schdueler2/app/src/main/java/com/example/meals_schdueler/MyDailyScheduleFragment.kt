@@ -176,125 +176,128 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
     override fun getData(str: String) {
         Log.v("Elad1", "Page is " + page)
         progressBar!!.visibility = View.INVISIBLE
-        if (!str.equals("")) {
-            if (noDailyTextView.visibility == View.VISIBLE) {
-                noDailyTextView.visibility = View.INVISIBLE
-            }
+        try {
+            if (!str.equals("")) {
+                if (noDailyTextView.visibility == View.VISIBLE) {
+                    noDailyTextView.visibility = View.INVISIBLE
+                }
 
 
-            if (!isScorlled)
-                dailyList!!.clear()
+                if (!isScorlled)
+                    dailyList!!.clear()
 
-            quantities = ""
-            numOfMeal = ""
-            recipeIds = ""
+                quantities = ""
+                numOfMeal = ""
+                recipeIds = ""
 
 
-            val dailyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+                val dailyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
-            // map to map each DailyID with a key as ID and contains all 3
-            // array lists (e.g - quantities,recipeIds,numOfMeals)
-            var map: HashMap<String, ArrayList<String>> = HashMap()
-            var mapTotalCost: HashMap<String, Double> = HashMap()
-            // first attach each meal to its dailyID.
-            var dailyInfo2 = dailyInfo[0].splitIgnoreEmpty("*")
-            var currentDailyID = dailyInfo2[0].toInt()
-            for (i in dailyInfo.indices) {
-                dailyInfo2 = dailyInfo[i].splitIgnoreEmpty("*")
-                //means we switch to the next DailyID
-                if (dailyInfo2[0].toInt() != currentDailyID) {
+                // map to map each DailyID with a key as ID and contains all 3
+                // array lists (e.g - quantities,recipeIds,numOfMeals)
+                var map: HashMap<String, ArrayList<String>> = HashMap()
+                var mapTotalCost: HashMap<String, Double> = HashMap()
+                // first attach each meal to its dailyID.
+                var dailyInfo2 = dailyInfo[0].splitIgnoreEmpty("*")
+                var currentDailyID = dailyInfo2[0].toInt()
+                for (i in dailyInfo.indices) {
+                    dailyInfo2 = dailyInfo[i].splitIgnoreEmpty("*")
+                    //means we switch to the next DailyID
+                    if (dailyInfo2[0].toInt() != currentDailyID) {
+                        var totalLists: ArrayList<String> = ArrayList()
+                        totalLists.add(quantities)
+                        totalLists.add(numOfMeal)
+                        totalLists.add(recipeIds)
+
+                        // gathering all quantities , numOfMeal and recipeIds under
+                        // the key of that DailyID
+                        map.put(currentDailyID.toString(), totalLists)
+                        mapTotalCost.put(currentDailyID.toString(), totalcost)
+                        //switching to the next DailyID
+                        currentDailyID = dailyInfo2[0].toInt()
+
+                        // clearing the variables for next DailyID
+                        quantities = ""
+                        numOfMeal = ""
+                        recipeIds = ""
+                    }
+                    quantities += "" + dailyInfo2[5] + " "
+                    numOfMeal += "" + dailyInfo2[3] + " "
+                    recipeIds += "" + dailyInfo2[4] + " "
+                    // saving the last total cost
+                    totalcost = dailyInfo2[2].toDouble()
+                }
+                if (!quantities.equals("")) {
                     var totalLists: ArrayList<String> = ArrayList()
                     totalLists.add(quantities)
                     totalLists.add(numOfMeal)
                     totalLists.add(recipeIds)
-
-                    // gathering all quantities , numOfMeal and recipeIds under
-                    // the key of that DailyID
                     map.put(currentDailyID.toString(), totalLists)
                     mapTotalCost.put(currentDailyID.toString(), totalcost)
-                    //switching to the next DailyID
-                    currentDailyID = dailyInfo2[0].toInt()
-
-                    // clearing the variables for next DailyID
-                    quantities = ""
-                    numOfMeal = ""
-                    recipeIds = ""
                 }
-                quantities += "" + dailyInfo2[5] + " "
-                numOfMeal += "" + dailyInfo2[3] + " "
-                recipeIds += "" + dailyInfo2[4] + " "
-                // saving the last total cost
-                totalcost = dailyInfo2[2].toDouble()
-            }
-            if (!quantities.equals("")) {
-                var totalLists: ArrayList<String> = ArrayList()
-                totalLists.add(quantities)
-                totalLists.add(numOfMeal)
-                totalLists.add(recipeIds)
-                map.put(currentDailyID.toString(), totalLists)
-                mapTotalCost.put(currentDailyID.toString(), totalcost)
-            }
 
-            //  recipeNumbers += "" + i + " "
-            // making DailyScheudle objects
-            currentDailyID = -1
-            for (i in dailyInfo.indices) {
-                var dailyInfo2 = dailyInfo[i].splitIgnoreEmpty("*")
-                if (dailyInfo2[0].toInt() != currentDailyID) {
-                    dailyList!!.add(
-                        DailySchedule(
-                            dailyInfo2[0].toInt(),
-                            dailyInfo2[1].toInt(),
-                            map.get(dailyInfo2[0])!!.get(1),
-                            map.get(dailyInfo2[0])!!.get(0),
-                            map.get(dailyInfo2[0])!!.get(2),
-                            mapTotalCost.get(dailyInfo2[0])!!,
-                            false
+                //  recipeNumbers += "" + i + " "
+                // making DailyScheudle objects
+                currentDailyID = -1
+                for (i in dailyInfo.indices) {
+                    var dailyInfo2 = dailyInfo[i].splitIgnoreEmpty("*")
+                    if (dailyInfo2[0].toInt() != currentDailyID) {
+                        dailyList!!.add(
+                            DailySchedule(
+                                dailyInfo2[0].toInt(),
+                                dailyInfo2[1].toInt(),
+                                map.get(dailyInfo2[0])!!.get(1),
+                                map.get(dailyInfo2[0])!!.get(0),
+                                map.get(dailyInfo2[0])!!.get(2),
+                                mapTotalCost.get(dailyInfo2[0])!!,
+                                false
 
+                            )
                         )
-                    )
-                    currentDailyID = dailyInfo2[0].toInt()
+                        currentDailyID = dailyInfo2[0].toInt()
+                    }
                 }
-            }
 
-            // TreeMap to store values of HashMap
+                // TreeMap to store values of HashMap
 
-            // TreeMap to store values of HashMap
-            // sorted = TreeMap<String, DailySchedule>()
+                // TreeMap to store values of HashMap
+                // sorted = TreeMap<String, DailySchedule>()
 
-            // Copy all data from hashMap into TreeMap
+                // Copy all data from hashMap into TreeMap
 
-            // Copy all data from hashMap into TreeMap
-
-
-            // now getting the recipes for each daily
+                // Copy all data from hashMap into TreeMap
 
 
-            currentDailyID = -1
+                // now getting the recipes for each daily
 
 
-            //UserPropertiesSingelton.getInstance()!!.setUserDaily(sorted)
-            dailyRecyclerViewAdapter!!.setmValues(dailyList!!)
-            dailyRecyclerViewAdapter!!.setRecipeList(recipeList!!)
-            progressBar!!.visibility = View.INVISIBLE
+                currentDailyID = -1
+
+
+                //UserPropertiesSingelton.getInstance()!!.setUserDaily(sorted)
+                dailyRecyclerViewAdapter!!.setmValues(dailyList!!)
+                dailyRecyclerViewAdapter!!.setRecipeList(recipeList!!)
+                progressBar!!.visibility = View.INVISIBLE
 
 
 //            dailyList!!.clear()
 //            recipeList!!.clear()
 
 
-            //save it also in singleton
-            //  UserPropertiesSingelton.getInstance()!!.setUserRecipess(recipeList)
-            //dailyRecyclerViewAdapter!!.setmValues(recipeList!!)
+                //save it also in singleton
+                //  UserPropertiesSingelton.getInstance()!!.setUserRecipess(recipeList)
+                //dailyRecyclerViewAdapter!!.setmValues(recipeList!!)
+                isScorlled = false
+            } else {
+                if (dailyList!!.size == 0) {
+                    noDailyTextView.visibility = View.VISIBLE
+                }
+            }
             isScorlled = false
         }
-
-        else{
-            if (dailyList!!.size == 0) {
-                noDailyTextView.visibility = View.VISIBLE
-            }
+        catch (e: Exception) {
+            Log.v("Elad1", "Failled  ")
         }
-        isScorlled = false
     }
 
     override fun onScrollChange(

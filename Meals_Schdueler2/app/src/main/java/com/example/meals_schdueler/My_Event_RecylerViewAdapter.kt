@@ -4,8 +4,6 @@ import android.app.*
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.os.Build
-import android.provider.Settings.Global.getString
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -168,28 +166,20 @@ class My_Event_RecylerViewAdapter(
                         DialogInterface.OnClickListener { dialog, which ->
                             when (which) {
                                 DialogInterface.BUTTON_POSITIVE -> {
-                                    var CHANNEL_ID = "1"
+
 
 
                                     val intent = Intent(context, MainActivity::class.java).apply {
                                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     }
-                                    val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
-                                    val builder = NotificationCompat.Builder(context!!, CHANNEL_ID)
-                                        .setSmallIcon(R.drawable.yearly_icon)
-                                        .setContentTitle("Event Schedule")
-                                        .setContentText("Hey , you got an event schedule  check it out!")
-                                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                                        // Set the intent that will fire when the user taps the notification
-                                        .setContentIntent(pendingIntent)
-                                        .setAutoCancel(true)
-
-                                    with(NotificationManagerCompat.from(context!!)) {
-                                        // notificationId is a unique int for each notification that you must define
-                                        notify(1, builder.build())
-                                    }
-
+                                    val notifyMe: NotifyMe =
+                                        NotifyMe.Builder(context).title("Meals-Scheudler")
+                                            .content("Hey, Event is coming").color(255, 0, 0, 255)
+                                            .led_color(255, 255, 255, 255).time(cal)
+                                            .addAction(intent, "Check it out!", true)
+                                            .key("test").addAction(Intent(), "Dismiss", true, false)
+                                            .large_icon(R.mipmap.ic_launcher_round).build()
                                 }
                                 DialogInterface.BUTTON_NEGATIVE -> {
 

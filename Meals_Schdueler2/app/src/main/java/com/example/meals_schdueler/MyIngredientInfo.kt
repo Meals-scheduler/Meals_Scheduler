@@ -1,6 +1,7 @@
 package com.example.meals_schdueler
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -199,6 +200,11 @@ class MyIngredientInfo(item: Ingredient, isRecipeList: Boolean) : DialogFragment
             var s = AsynTaskNew(ingredient1, childFragmentManager,requireContext())
             s.execute()
 
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setMessage("Updated successfully!")
+            builder.setPositiveButton(
+                "Got it!"
+            ) { dialog, id -> dialog.cancel() }.show()
 
 
         }

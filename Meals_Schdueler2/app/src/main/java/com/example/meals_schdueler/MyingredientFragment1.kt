@@ -179,73 +179,78 @@ class MyingredientFragment1 : Fragment(), GetAndPost, NestedScrollView.OnScrollC
 
         // fixed a default .split spaces , and fixed spaces in howToStore.
         // when we add an ingredient it doesnt update in real time. we have to re compile!!!
-        if (!str.equals("")) {
+        try {
+            if (!str.equals("")) {
 
-            if(noIngredientsTextView.visibility == View.VISIBLE){
-                noIngredientsTextView.visibility = View.INVISIBLE
-            }
-            if (!isScorlled)
-                ingredientList!!.clear()
+                if (noIngredientsTextView.visibility == View.VISIBLE) {
+                    noIngredientsTextView.visibility = View.INVISIBLE
+                }
+                if (!isScorlled)
+                    ingredientList!!.clear()
 
-            if (isSearch) {
-                ingredientList!!.clear()
+                if (isSearch) {
+                    ingredientList!!.clear()
 
-            }
-            val ingredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+                }
+                val ingredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
-            for (i in ingredients.indices) {
+                for (i in ingredients.indices) {
 
-                var ingredient2 = ingredients[i].splitIgnoreEmpty("*")
+                    var ingredient2 = ingredients[i].splitIgnoreEmpty("*")
 
 
 
-                ingredientList?.add(
-                    Ingredient(
-                        ingredient2[0].toInt(),
-                        ingredient2[1].toInt(),
-                        ingredient2[2],
-                        ImageConvert.StringToBitMap(ingredient2[3].toString())!!,
-                        ingredient2[4],
-                        ingredient2[5],
-                        ingredient2[6],
-                        ingredient2[7].toBoolean(),
-                        ingredient2[8].toBoolean(),
-                        ingredient2[9].toFloat(),
-                        ingredient2[10].toFloat(),
-                        ingredient2[11].toFloat(),
-                        ingredient2[12],
-                        ingredient2[13],
-                        false
+                    ingredientList?.add(
+                        Ingredient(
+                            ingredient2[0].toInt(),
+                            ingredient2[1].toInt(),
+                            ingredient2[2],
+                            ImageConvert.StringToBitMap(ingredient2[3].toString())!!,
+                            ingredient2[4],
+                            ingredient2[5],
+                            ingredient2[6],
+                            ingredient2[7].toBoolean(),
+                            ingredient2[8].toBoolean(),
+                            ingredient2[9].toFloat(),
+                            ingredient2[10].toFloat(),
+                            ingredient2[11].toFloat(),
+                            ingredient2[12],
+                            ingredient2[13],
+                            false
 
+                        )
                     )
-                )
 
 
-            }
+                }
 
 
-            // initializing the singelton with the user's ingredients list to keep it here on code.
-            // should do it on another place !!!
-            //  UserPropertiesSingelton.getInstance()!!.setUserIngredientss(sorted)
-            // sending the last to the adapter.
-            Log.v("Elad1","FINISHED")
-            ingredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
-            progressBar!!.visibility = View.INVISIBLE
-            isScorlled = false
-
-        } else {
-            if (isSearch) {
-                ingredientList!!.clear()
-                noResultsTextView.visibility = View.VISIBLE
+                // initializing the singelton with the user's ingredients list to keep it here on code.
+                // should do it on another place !!!
+                //  UserPropertiesSingelton.getInstance()!!.setUserIngredientss(sorted)
+                // sending the last to the adapter.
+                Log.v("Elad1", "FINISHED")
                 ingredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
+                progressBar!!.visibility = View.INVISIBLE
+                isScorlled = false
+
+            } else {
+                if (isSearch) {
+                    ingredientList!!.clear()
+                    noResultsTextView.visibility = View.VISIBLE
+                    ingredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
+                } else if (ingredientList!!.size == 0) {
+                    noIngredientsTextView.visibility = View.VISIBLE
+                }
             }
-            else if (ingredientList!!.size == 0){
-                noIngredientsTextView.visibility = View.VISIBLE
-            }
+            isScorlled = false
+            progressBar!!.visibility = View.INVISIBLE
         }
-        isScorlled = false
-        progressBar!!.visibility = View.INVISIBLE
+        catch (e: Exception) {
+            Log.v("Elad1", "Failled because of builder ")
+        }
     }
+
 
     fun startTask() {
         var s = AsynTaskNew(this, childFragmentManager,requireContext())

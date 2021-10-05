@@ -1,6 +1,7 @@
 package com.example.meals_schdueler
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -171,114 +172,117 @@ class MyMonthlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScr
 
     override fun getData(str: String) {
         progressBar!!.visibility = View.INVISIBLE
-        if (!str.equals("")) {
-            if (!isScorlled)
-                monthlyList!!.clear()
+        try {
+            if (!str.equals("")) {
+                if (!isScorlled)
+                    monthlyList!!.clear()
 
-            if (noMonthlyTextView.visibility == View.VISIBLE) {
-                noMonthlyTextView.visibility = View.INVISIBLE
-            }
-
-
-            numOfWeek = ""
-            weeklyIds = ""
-            // recipeList!!.clear()
-            // monthlyList!!.clear()
+                if (noMonthlyTextView.visibility == View.VISIBLE) {
+                    noMonthlyTextView.visibility = View.INVISIBLE
+                }
 
 
-            val monthlyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+                numOfWeek = ""
+                weeklyIds = ""
+                // recipeList!!.clear()
+                // monthlyList!!.clear()
 
 
-            // map to map each MonthlyID with a key as ID and contains all 2
-            // array lists (e.g - numOfDay,dailyIds)
-            var map: HashMap<String, ArrayList<String>> = HashMap()
-            var mapTotalCost: HashMap<String, Double> = HashMap()
+                val monthlyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
 
-            var monthlyInfo2 = monthlyInfo[0].splitIgnoreEmpty("*")
-            var currentMonthlyID = monthlyInfo2[0].toInt()
+                // map to map each MonthlyID with a key as ID and contains all 2
+                // array lists (e.g - numOfDay,dailyIds)
+                var map: HashMap<String, ArrayList<String>> = HashMap()
+                var mapTotalCost: HashMap<String, Double> = HashMap()
 
 
-            for (i in monthlyInfo.indices) {
+                var monthlyInfo2 = monthlyInfo[0].splitIgnoreEmpty("*")
+                var currentMonthlyID = monthlyInfo2[0].toInt()
 
-                monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
 
-                //means we switch to the next WeeklyID
-                if (monthlyInfo2[0].toInt() != currentMonthlyID) {
+                for (i in monthlyInfo.indices) {
 
-                    // to keep each Weekly its dailys ids and its num of day.(days in a week)
+                    monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
+
+                    //means we switch to the next WeeklyID
+                    if (monthlyInfo2[0].toInt() != currentMonthlyID) {
+
+                        // to keep each Weekly its dailys ids and its num of day.(days in a week)
+                        var totalLists: ArrayList<String> = ArrayList()
+                        totalLists.add(numOfWeek)
+                        totalLists.add(weeklyIds)
+                        // saving this weekly daily ids and num of days
+                        map.put(currentMonthlyID.toString(), totalLists)
+                        // saving this weekly total cost
+                        mapTotalCost.put(currentMonthlyID.toString(), totalcost)
+
+                        //switching to the next WeeklyID
+                        currentMonthlyID = monthlyInfo2[0].toInt()
+
+                        // clearing the variables for next WeeeklyID
+                        numOfWeek = ""
+                        weeklyIds = ""
+
+                    }
+
+                    numOfWeek += "" + monthlyInfo2[3] + " "
+                    weeklyIds += "" + monthlyInfo2[4] + " "
+                    // saving the last total cost
+                    totalcost = monthlyInfo2[2].toDouble()
+
+
+                }
+
+                // not to skip on the last Weeekly
+
+                if (!numOfWeek.equals("")) {
                     var totalLists: ArrayList<String> = ArrayList()
                     totalLists.add(numOfWeek)
                     totalLists.add(weeklyIds)
-                    // saving this weekly daily ids and num of days
                     map.put(currentMonthlyID.toString(), totalLists)
-                    // saving this weekly total cost
                     mapTotalCost.put(currentMonthlyID.toString(), totalcost)
-
-                    //switching to the next WeeklyID
-                    currentMonthlyID = monthlyInfo2[0].toInt()
-
-                    // clearing the variables for next WeeeklyID
-                    numOfWeek = ""
-                    weeklyIds = ""
-
                 }
 
-                numOfWeek += "" + monthlyInfo2[3] + " "
-                weeklyIds += "" + monthlyInfo2[4] + " "
-                // saving the last total cost
-                totalcost = monthlyInfo2[2].toDouble()
+                // making MonthlyScheudle objects
 
+                currentMonthlyID = -1
+                for (i in monthlyInfo.indices) {
+                    var monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
+                    if (monthlyInfo2[0].toInt() != currentMonthlyID) {
+                        monthlyList!!.add(
+                            MonthlySchedule(
+                                monthlyInfo2[0].toInt(),
+                                monthlyInfo2[1].toInt(),
+                                map.get(monthlyInfo2[0])!!.get(0),
+                                map.get(monthlyInfo2[0])!!.get(1),
+                                mapTotalCost.get(monthlyInfo2[0])!!,
+                                false
 
-            }
-
-            // not to skip on the last Weeekly
-
-            if (!numOfWeek.equals("")) {
-                var totalLists: ArrayList<String> = ArrayList()
-                totalLists.add(numOfWeek)
-                totalLists.add(weeklyIds)
-                map.put(currentMonthlyID.toString(), totalLists)
-                mapTotalCost.put(currentMonthlyID.toString(), totalcost)
-            }
-
-            // making MonthlyScheudle objects
-
-            currentMonthlyID = -1
-            for (i in monthlyInfo.indices) {
-                var monthlyInfo2 = monthlyInfo[i].splitIgnoreEmpty("*")
-                if (monthlyInfo2[0].toInt() != currentMonthlyID) {
-                    monthlyList!!.add(
-                        MonthlySchedule(
-                            monthlyInfo2[0].toInt(),
-                            monthlyInfo2[1].toInt(),
-                            map.get(monthlyInfo2[0])!!.get(0),
-                            map.get(monthlyInfo2[0])!!.get(1),
-                            mapTotalCost.get(monthlyInfo2[0])!!,
-                            false
-
+                            )
                         )
-                    )
 
-                    currentMonthlyID = monthlyInfo2[0].toInt()
+                        currentMonthlyID = monthlyInfo2[0].toInt()
+                    }
+                }
+
+
+
+                monthlyRecyclerViewAdapter!!.setMonthlyValues(monthlyList!!)!!
+                monthlyRecyclerViewAdapter!!.setWeeklyValues(weeklyList!!)
+                progressBar!!.visibility = View.INVISIBLE
+                isScorlled = false
+
+            } else {
+                if (monthlyList!!.size == 0) {
+                    noMonthlyTextView.visibility = View.VISIBLE
                 }
             }
-
-
-
-            monthlyRecyclerViewAdapter!!.setMonthlyValues(monthlyList!!)!!
-            monthlyRecyclerViewAdapter!!.setWeeklyValues(weeklyList!!)
-            progressBar!!.visibility = View.INVISIBLE
             isScorlled = false
-
         }
-        else{
-            if (monthlyList!!.size == 0) {
-                noMonthlyTextView.visibility = View.VISIBLE
-            }
+        catch (e: Exception) {
+            Log.v("Elad1", "Failled because of builder ")
         }
-        isScorlled = false
-
 
     }
 

@@ -175,16 +175,20 @@ class My_Monthly_RecylerViewAdapter(
                         DialogInterface.OnClickListener { dialog, which ->
                             when (which) {
                                 DialogInterface.BUTTON_POSITIVE -> {
+
+
+
+                                    val intent = Intent(context, MainActivity::class.java).apply {
+                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    }
+
                                     val notifyMe: NotifyMe =
                                         NotifyMe.Builder(context).title("Meals-Scheudler")
                                             .content("Hey, Event is coming").color(255, 0, 0, 255)
                                             .led_color(255, 255, 255, 255).time(cal)
-                                            .addAction(Intent(), "Snooze", false)
+                                            .addAction(intent, "Check it out!", true)
                                             .key("test").addAction(Intent(), "Dismiss", true, false)
                                             .large_icon(R.mipmap.ic_launcher_round).build()
-
-                                    Log.v("Elad1", "clicked yes")
-
                                 }
                                 DialogInterface.BUTTON_NEGATIVE -> {
 

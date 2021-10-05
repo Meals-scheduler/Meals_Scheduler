@@ -161,189 +161,199 @@ class MyRecipeFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChange
         var start = 0
         //recipe size 11
         // ingredient size 15
-        if (!str.equals("")) {
+        try {
+            if (!str.equals("")) {
 
-            if (noRecipesTextView.visibility == View.VISIBLE) {
-                noRecipesTextView.visibility = View.INVISIBLE
-            }
-            if (!isScorlled)
-                recipeList!!.clear()
+                if (noRecipesTextView.visibility == View.VISIBLE) {
+                    noRecipesTextView.visibility = View.INVISIBLE
+                }
+                if (!isScorlled)
+                    recipeList!!.clear()
 
-            //  recipeList!!.clear()
-            val recipesAndIngredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
-            if (isSearch) {
-                recipeList!!.clear()
+                //  recipeList!!.clear()
+                val recipesAndIngredients: Array<String> =
+                    str.splitIgnoreEmpty("***").toTypedArray()
+                if (isSearch) {
+                    recipeList!!.clear()
 
-            }
-            // first recipe id
+                }
+                // first recipe id
 
-            var recipesAndIngredients2 = recipesAndIngredients[0].splitIgnoreEmpty("*")
-            // first recipe id
-            var currentID = recipesAndIngredients2[0].toInt()
-            var currentIngId = -1
-            // taking 4 Recipe ids to classifiy the ingredients to them.
+                var recipesAndIngredients2 = recipesAndIngredients[0].splitIgnoreEmpty("*")
+                // first recipe id
+                var currentID = recipesAndIngredients2[0].toInt()
+                var currentIngId = -1
+                // taking 4 Recipe ids to classifiy the ingredients to them.
 
-            var recipeIds: ArrayList<Int> = ArrayList()
+                var recipeIds: ArrayList<Int> = ArrayList()
 
 
 //
-            var recipeIngredientMap: HashMap<Int, ArrayList<Ingredient>> = HashMap()
+                var recipeIngredientMap: HashMap<Int, ArrayList<Ingredient>> = HashMap()
 
-            if (isSearch) {
+                if (isSearch) {
 
-                for (j in recipesAndIngredients.indices) {
-                    var recipesAndIngredients2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
-                    if (recipesAndIngredients2.size == 10) {
-                        recipeIds.add(recipesAndIngredients2[0].toInt())
+                    for (j in recipesAndIngredients.indices) {
+                        var recipesAndIngredients2 = recipesAndIngredients[j].splitIgnoreEmpty("*")
+                        if (recipesAndIngredients2.size == 10) {
+                            recipeIds.add(recipesAndIngredients2[0].toInt())
+                            start++
+                        } else {
+
+                            break
+                        }
+
+                    }
+                } else {
+                    var j = 0
+                    while (true) {
+
+                        var recipesAndIngredients2 =
+                            recipesAndIngredients[j++].splitIgnoreEmpty("*")
+                        if (recipesAndIngredients2.size != 10) {
+                            break
+                        }
                         start++
-                    } else {
-
-                        break
+                        recipeIds.add(recipesAndIngredients2[0].toInt())
                     }
-
                 }
-            } else {
-                var j = 0
-                while (true) {
 
-                    var recipesAndIngredients2 = recipesAndIngredients[j++].splitIgnoreEmpty("*")
-                    if (recipesAndIngredients2.size != 10) {
-                        break
-                    }
-                    start++
-                    recipeIds.add(recipesAndIngredients2[0].toInt())
-                }
-            }
+                //var isFirst = true
 
-            //var isFirst = true
-
-            // saving all the ingredietns and quantities of each Recipe in map.
-            // first we extract the ids and quantity into map.
-            // then we use another map to convert all ids to real ingredients.
+                // saving all the ingredietns and quantities of each Recipe in map.
+                // first we extract the ids and quantity into map.
+                // then we use another map to convert all ids to real ingredients.
 
 //            var hashMap: HashMap<Int, Pair<ArrayList<String>, ArrayList<Int>>> =
 //                HashMap()
 
-            var map: HashMap<Int, ArrayList<Ingredient>> = HashMap()
+                var map: HashMap<Int, ArrayList<Ingredient>> = HashMap()
 
 //            var ingredientList: ArrayList<Ingredient> = ArrayList()
 //
 //            var quantities: ArrayList<Int> = ArrayList()
 
-            var ingredientList: ArrayList<Ingredient> = ArrayList()
+                var ingredientList: ArrayList<Ingredient> = ArrayList()
 
-            var quantities: HashMap<Int, ArrayList<Float>> = HashMap()
+                var quantities: HashMap<Int, ArrayList<Float>> = HashMap()
 
-            var ids: HashMap<Int, ArrayList<Int>> = HashMap()
+                var ids: HashMap<Int, ArrayList<Int>> = HashMap()
 
-            // first extracting all ingredients ids and make them Ingredients.
-            for (i in start..recipesAndIngredients.size - 1) {
+                // first extracting all ingredients ids and make them Ingredients.
+                for (i in start..recipesAndIngredients.size - 1) {
 
-                var recipesAndIngredients2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
-                currentIngId = recipesAndIngredients2[15].toInt()
+                    var recipesAndIngredients2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
+                    currentIngId = recipesAndIngredients2[15].toInt()
 
-                //if its ingredients details
-                if (recipesAndIngredients2.size == 16 && recipeIds.contains(recipesAndIngredients2[15].toInt())) {
+                    //if its ingredients details
+                    if (recipesAndIngredients2.size == 16 && recipeIds.contains(
+                            recipesAndIngredients2[15].toInt()
+                        )
+                    ) {
 
-                    var ing = Ingredient(
-                        recipesAndIngredients2[0].toInt(),
-                        recipesAndIngredients2[1].toInt(),
-                        recipesAndIngredients2[2],
-                        ImageConvert.StringToBitMap(recipesAndIngredients2[3].toString())!!,
-                        recipesAndIngredients2[4],
-                        recipesAndIngredients2[5],
-                        recipesAndIngredients2[6],
-                        recipesAndIngredients2[7].toBoolean(),
-                        recipesAndIngredients2[8].toBoolean(),
-                        recipesAndIngredients2[9].toFloat(),
-                        recipesAndIngredients2[10].toFloat(),
-                        recipesAndIngredients2[11].toFloat(),
-                        recipesAndIngredients2[12],
-                        recipesAndIngredients2[13],
-                        false
+                        var ing = Ingredient(
+                            recipesAndIngredients2[0].toInt(),
+                            recipesAndIngredients2[1].toInt(),
+                            recipesAndIngredients2[2],
+                            ImageConvert.StringToBitMap(recipesAndIngredients2[3].toString())!!,
+                            recipesAndIngredients2[4],
+                            recipesAndIngredients2[5],
+                            recipesAndIngredients2[6],
+                            recipesAndIngredients2[7].toBoolean(),
+                            recipesAndIngredients2[8].toBoolean(),
+                            recipesAndIngredients2[9].toFloat(),
+                            recipesAndIngredients2[10].toFloat(),
+                            recipesAndIngredients2[11].toFloat(),
+                            recipesAndIngredients2[12],
+                            recipesAndIngredients2[13],
+                            false
 
-                    )
-                    ingredientList?.add(ing)
+                        )
+                        ingredientList?.add(ing)
 
-                    if (!recipeIngredientMap.containsKey(currentIngId)) {
-                        var recipeIngredients: ArrayList<Ingredient> = ArrayList()
-                        var quantitiy: ArrayList<Float> = ArrayList()
-                        var idss: ArrayList<Int> = ArrayList()
-                        recipeIngredientMap.put(currentIngId, recipeIngredients)
-                        recipeIngredientMap.get(currentIngId)!!.add(ing)
-                        quantities.put(currentIngId, quantitiy)
-                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toFloat())
-                        ids.put(currentIngId, idss)
-                        ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
+                        if (!recipeIngredientMap.containsKey(currentIngId)) {
+                            var recipeIngredients: ArrayList<Ingredient> = ArrayList()
+                            var quantitiy: ArrayList<Float> = ArrayList()
+                            var idss: ArrayList<Int> = ArrayList()
+                            recipeIngredientMap.put(currentIngId, recipeIngredients)
+                            recipeIngredientMap.get(currentIngId)!!.add(ing)
+                            quantities.put(currentIngId, quantitiy)
+                            quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toFloat())
+                            ids.put(currentIngId, idss)
+                            ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
+
+                        } else {
+                            recipeIngredientMap.get(currentIngId)!!.add(ing)
+                            quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toFloat())
+                            ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
+                        }
+
+
+                        //quantities.add(recipesAndIngredients2[14].toInt())
+                        //ids.add(recipesAndIngredients2[0])
+
+                    }
+                }
+
+
+
+
+
+                currentID = -1
+                for (i in recipesAndIngredients.indices) {
+
+                    var recipe2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
+                    if (recipe2.size == 10) {
+                        var s = recipe2[0].toInt()
+                        var instrcutions = HowToStroreValue(recipe2[9])
+                        if (s != currentID)
+                            recipeList?.add(
+                                Recipe(
+                                    recipe2[0].toInt(),
+                                    recipe2[1].toInt(),
+                                    recipe2[2],
+                                    ImageConvert.StringToBitMap(recipe2[3].toString())!!,
+                                    recipe2[4],
+                                    recipe2[5],
+                                    recipe2[6].toDouble(),
+                                    recipe2[7].toBoolean(),
+                                    recipe2[8].toBoolean(),
+                                    recipeIngredientMap.get(recipe2[0].toInt())!!,
+                                    quantities.get(s)!!,
+                                    instrcutions
+                                    // hashMap.get(recipe2[0].toInt())!!.second
+
+                                )
+                            )
+
+                        currentID = recipe2[0].toInt()
 
                     } else {
-                        recipeIngredientMap.get(currentIngId)!!.add(ing)
-                        quantities.get(currentIngId)!!.add(recipesAndIngredients2[14].toFloat())
-                        ids.get(currentIngId)!!.add(recipesAndIngredients2[0].toInt())
+                        break
                     }
-
-
-                    //quantities.add(recipesAndIngredients2[14].toInt())
-                    //ids.add(recipesAndIngredients2[0])
-
                 }
-            }
 
+                recipeRecyclerViewAdapter!!.setmValues(recipeList!!)
 
-
-
-
-            currentID = -1
-            for (i in recipesAndIngredients.indices) {
-
-                var recipe2 = recipesAndIngredients[i].splitIgnoreEmpty("*")
-                if (recipe2.size == 10) {
-                    var s = recipe2[0].toInt()
-                    var instrcutions = HowToStroreValue(recipe2[9])
-                    if (s != currentID)
-                        recipeList?.add(
-                            Recipe(
-                                recipe2[0].toInt(),
-                                recipe2[1].toInt(),
-                                recipe2[2],
-                                ImageConvert.StringToBitMap(recipe2[3].toString())!!,
-                                recipe2[4],
-                                recipe2[5],
-                                recipe2[6].toDouble(),
-                                recipe2[7].toBoolean(),
-                                recipe2[8].toBoolean(),
-                                recipeIngredientMap.get(recipe2[0].toInt())!!,
-                                quantities.get(s)!!,
-                                instrcutions
-                                // hashMap.get(recipe2[0].toInt())!!.second
-
-                            )
-                        )
-
-                    currentID = recipe2[0].toInt()
-
+                progressBar!!.visibility = View.INVISIBLE
+                isScorlled = false
+            } else {
+                if (isSearch) {
+                    recipeList!!.clear()
+                    noResultsTextView.visibility = View.VISIBLE
+                    recipeRecyclerViewAdapter!!.setmValues(recipeList!!)
                 } else {
-                    break
+                    if (recipeList!!.size == 0) {
+                        noRecipesTextView.visibility = View.VISIBLE
+                    }
                 }
             }
-
-            recipeRecyclerViewAdapter!!.setmValues(recipeList!!)
-
             progressBar!!.visibility = View.INVISIBLE
             isScorlled = false
-        } else {
-            if (isSearch) {
-                recipeList!!.clear()
-                noResultsTextView.visibility = View.VISIBLE
-                recipeRecyclerViewAdapter!!.setmValues(recipeList!!)
-            } else {
-                if (recipeList!!.size == 0) {
-                    noRecipesTextView.visibility = View.VISIBLE
-                }
-            }
         }
-        progressBar!!.visibility = View.INVISIBLE
-        isScorlled = false
+        catch (e: Exception) {
+            Log.v("Elad1", "Failled because of builder ")
+        }
 
 
     }

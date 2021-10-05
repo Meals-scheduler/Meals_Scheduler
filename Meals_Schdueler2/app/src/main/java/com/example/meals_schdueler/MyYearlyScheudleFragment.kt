@@ -1,6 +1,7 @@
 package com.example.meals_schdueler
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -170,111 +171,115 @@ class MyYearlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScro
 
     override fun getData(str: String) {
         progressBar!!.visibility = View.INVISIBLE
-        if (!str.equals("")) {
-            if (!isScorlled)
-                yearlyList!!.clear()
-            if (noYearlyTextView.visibility == View.VISIBLE) {
-                noYearlyTextView.visibility = View.INVISIBLE
-            }
+        try {
+            if (!str.equals("")) {
+                if (!isScorlled)
+                    yearlyList!!.clear()
+                if (noYearlyTextView.visibility == View.VISIBLE) {
+                    noYearlyTextView.visibility = View.INVISIBLE
+                }
 
-            numOfMonth = ""
-            monthlyIds = ""
-            // recipeList!!.clear()
-
-
-            val yearlyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+                numOfMonth = ""
+                monthlyIds = ""
+                // recipeList!!.clear()
 
 
-            // map to map each MonthlyID with a key as ID and contains all 2
-            // array lists (e.g - numOfDay,dailyIds)
-            var map: HashMap<String, ArrayList<String>> = HashMap()
-            var mapTotalCost: HashMap<String, Double> = HashMap()
+                val yearlyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
 
-            var yearlyInfo2 = yearlyInfo[0].splitIgnoreEmpty("*")
-            var currentYearlyID = yearlyInfo2[0].toInt()
+                // map to map each MonthlyID with a key as ID and contains all 2
+                // array lists (e.g - numOfDay,dailyIds)
+                var map: HashMap<String, ArrayList<String>> = HashMap()
+                var mapTotalCost: HashMap<String, Double> = HashMap()
 
-            for (i in yearlyInfo.indices) {
 
-                yearlyInfo2 = yearlyInfo[i].splitIgnoreEmpty("*")
+                var yearlyInfo2 = yearlyInfo[0].splitIgnoreEmpty("*")
+                var currentYearlyID = yearlyInfo2[0].toInt()
 
-                //means we switch to the next WeeklyID
-                if (yearlyInfo2[0].toInt() != currentYearlyID) {
+                for (i in yearlyInfo.indices) {
 
-                    // to keep each Weekly its dailys ids and its num of day.(days in a week)
+                    yearlyInfo2 = yearlyInfo[i].splitIgnoreEmpty("*")
+
+                    //means we switch to the next WeeklyID
+                    if (yearlyInfo2[0].toInt() != currentYearlyID) {
+
+                        // to keep each Weekly its dailys ids and its num of day.(days in a week)
+                        var totalLists: ArrayList<String> = ArrayList()
+                        totalLists.add(numOfMonth)
+                        totalLists.add(monthlyIds)
+                        // saving this weekly daily ids and num of days
+                        map.put(currentYearlyID.toString(), totalLists)
+                        // saving this weekly total cost
+                        mapTotalCost.put(currentYearlyID.toString(), totalcost)
+
+                        //switching to the next WeeklyID
+                        currentYearlyID = yearlyInfo2[0].toInt()
+
+                        // clearing the variables for next WeeeklyID
+                        numOfMonth = ""
+                        monthlyIds = ""
+
+                    }
+
+                    numOfMonth += "" + yearlyInfo2[3] + " "
+                    monthlyIds += "" + yearlyInfo2[4] + " "
+                    // saving the last total cost
+                    totalcost = yearlyInfo2[2].toDouble()
+
+
+                }
+
+                // not to skip on the last Weeekly
+
+                if (!numOfMonth.equals("")) {
                     var totalLists: ArrayList<String> = ArrayList()
                     totalLists.add(numOfMonth)
                     totalLists.add(monthlyIds)
-                    // saving this weekly daily ids and num of days
                     map.put(currentYearlyID.toString(), totalLists)
-                    // saving this weekly total cost
                     mapTotalCost.put(currentYearlyID.toString(), totalcost)
-
-                    //switching to the next WeeklyID
-                    currentYearlyID = yearlyInfo2[0].toInt()
-
-                    // clearing the variables for next WeeeklyID
-                    numOfMonth = ""
-                    monthlyIds = ""
-
                 }
 
-                numOfMonth += "" + yearlyInfo2[3] + " "
-                monthlyIds += "" + yearlyInfo2[4] + " "
-                // saving the last total cost
-                totalcost = yearlyInfo2[2].toDouble()
+                // making MonthlyScheudle objects
 
+                currentYearlyID = -1
+                for (i in yearlyInfo.indices) {
+                    var yearlyInfo2 = yearlyInfo[i].splitIgnoreEmpty("*")
+                    if (yearlyInfo2[0].toInt() != currentYearlyID) {
 
-            }
+                        yearlyList!!.add(
+                            YearlySchedule(
+                                yearlyInfo2[0].toInt(),
+                                yearlyInfo2[1].toInt(),
+                                map.get(yearlyInfo2[0])!!.get(0),
+                                map.get(yearlyInfo2[0])!!.get(1),
+                                mapTotalCost.get(yearlyInfo2[0])!!,
+                                false
 
-            // not to skip on the last Weeekly
-
-            if (!numOfMonth.equals("")) {
-                var totalLists: ArrayList<String> = ArrayList()
-                totalLists.add(numOfMonth)
-                totalLists.add(monthlyIds)
-                map.put(currentYearlyID.toString(), totalLists)
-                mapTotalCost.put(currentYearlyID.toString(), totalcost)
-            }
-
-            // making MonthlyScheudle objects
-
-            currentYearlyID = -1
-            for (i in yearlyInfo.indices) {
-                var yearlyInfo2 = yearlyInfo[i].splitIgnoreEmpty("*")
-                if (yearlyInfo2[0].toInt() != currentYearlyID) {
-
-                    yearlyList!!.add(
-                        YearlySchedule(
-                            yearlyInfo2[0].toInt(),
-                            yearlyInfo2[1].toInt(),
-                            map.get(yearlyInfo2[0])!!.get(0),
-                            map.get(yearlyInfo2[0])!!.get(1),
-                            mapTotalCost.get(yearlyInfo2[0])!!,
-                            false
-
+                            )
                         )
-                    )
-                    currentYearlyID = yearlyInfo2[0].toInt()
+                        currentYearlyID = yearlyInfo2[0].toInt()
 
+                    }
+                }
+
+
+
+                yearlyRecyclerViewAdapter!!.setYearlyValues(yearlyList!!)!!
+                yearlyRecyclerViewAdapter!!.setMonthlyValues(monthlyList!!)
+                progressBar!!.visibility = View.INVISIBLE
+                isScorlled = false
+
+            } else {
+                if (yearlyList!!.size == 0) {
+                    noYearlyTextView.visibility = View.VISIBLE
                 }
             }
 
-
-
-            yearlyRecyclerViewAdapter!!.setYearlyValues(yearlyList!!)!!
-            yearlyRecyclerViewAdapter!!.setMonthlyValues(monthlyList!!)
-            progressBar!!.visibility = View.INVISIBLE
             isScorlled = false
-
         }
-        else{
-            if (yearlyList!!.size == 0) {
-                noYearlyTextView.visibility = View.VISIBLE
-            }
+        catch (e: Exception) {
+            Log.v("Elad1", "Failled because of builder ")
         }
-
-        isScorlled = false
     }
 
 

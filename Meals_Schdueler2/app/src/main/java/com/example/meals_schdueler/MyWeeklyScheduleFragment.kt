@@ -173,118 +173,119 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost,NestedScrollView.OnScrol
 
     override fun getData(str: String) {
         progressBar!!.visibility = View.INVISIBLE
-        if (!str.equals("")) {
-            if (!isScorlled)
-                weeklyList!!.clear()
+        try {
+            if (!str.equals("")) {
+                if (!isScorlled)
+                    weeklyList!!.clear()
 
-            if (noWeeklyTextView.visibility == View.VISIBLE) {
-                noWeeklyTextView.visibility = View.INVISIBLE
-            }
-
-
-            numOfDay = ""
-            dailyIds = ""
-            // recipeList!!.clear()
-
-           // weeklyList!!.clear()
-
-            val weeklyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+                if (noWeeklyTextView.visibility == View.VISIBLE) {
+                    noWeeklyTextView.visibility = View.INVISIBLE
+                }
 
 
-            // map to map each WeeklyID with a key as ID and contains all 2
-            // array lists (e.g - numOfDay,dailyIds)
-            var map: HashMap<String, ArrayList<String>> = HashMap()
-            var mapTotalCost: HashMap<String, Double> = HashMap()
+                numOfDay = ""
+                dailyIds = ""
+                // recipeList!!.clear()
 
-            var weeklyInfo2 = weeklyInfo[0].splitIgnoreEmpty("*")
-            var currentWeeklyID = weeklyInfo2[0].toInt()
+                // weeklyList!!.clear()
 
-            for (i in weeklyInfo.indices) {
+                val weeklyInfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
-                weeklyInfo2 = weeklyInfo[i].splitIgnoreEmpty("*")
 
-                //means we switch to the next WeeklyID
-                if (weeklyInfo2[0].toInt() != currentWeeklyID) {
+                // map to map each WeeklyID with a key as ID and contains all 2
+                // array lists (e.g - numOfDay,dailyIds)
+                var map: HashMap<String, ArrayList<String>> = HashMap()
+                var mapTotalCost: HashMap<String, Double> = HashMap()
 
-                    // to keep each Weekly its dailys ids and its num of day.(days in a week)
+                var weeklyInfo2 = weeklyInfo[0].splitIgnoreEmpty("*")
+                var currentWeeklyID = weeklyInfo2[0].toInt()
+
+                for (i in weeklyInfo.indices) {
+
+                    weeklyInfo2 = weeklyInfo[i].splitIgnoreEmpty("*")
+
+                    //means we switch to the next WeeklyID
+                    if (weeklyInfo2[0].toInt() != currentWeeklyID) {
+
+                        // to keep each Weekly its dailys ids and its num of day.(days in a week)
+                        var totalLists: ArrayList<String> = ArrayList()
+                        totalLists.add(numOfDay)
+                        totalLists.add(dailyIds)
+                        // saving this weekly daily ids and num of days
+                        map.put(currentWeeklyID.toString(), totalLists)
+                        // saving this weekly total cost
+                        mapTotalCost.put(currentWeeklyID.toString(), totalcost)
+
+                        //switching to the next WeeklyID
+                        currentWeeklyID = weeklyInfo2[0].toInt()
+
+                        // clearing the variables for next WeeeklyID
+                        numOfDay = ""
+                        dailyIds = ""
+
+                    }
+
+                    numOfDay += "" + weeklyInfo2[3] + " "
+                    dailyIds += "" + weeklyInfo2[4] + " "
+                    // saving the last total cost
+                    totalcost = weeklyInfo2[2].toDouble()
+
+
+                }
+
+                // not to skip on the last Weeekly
+
+                if (!numOfDay.equals("")) {
                     var totalLists: ArrayList<String> = ArrayList()
                     totalLists.add(numOfDay)
                     totalLists.add(dailyIds)
-                    // saving this weekly daily ids and num of days
                     map.put(currentWeeklyID.toString(), totalLists)
-                    // saving this weekly total cost
                     mapTotalCost.put(currentWeeklyID.toString(), totalcost)
-
-                    //switching to the next WeeklyID
-                    currentWeeklyID = weeklyInfo2[0].toInt()
-
-                    // clearing the variables for next WeeeklyID
-                    numOfDay = ""
-                    dailyIds = ""
-
                 }
 
-                numOfDay += "" + weeklyInfo2[3] + " "
-                dailyIds += "" + weeklyInfo2[4] + " "
-                // saving the last total cost
-                totalcost = weeklyInfo2[2].toDouble()
+                // making WeeklyScheudle objects
 
 
-            }
+                currentWeeklyID = -1
+                for (i in weeklyInfo.indices) {
 
-            // not to skip on the last Weeekly
+                    var dailyInfo2 = weeklyInfo[i].splitIgnoreEmpty("*")
+                    if (dailyInfo2[0].toInt() != currentWeeklyID) {
+                        weeklyList!!.add(
+                            WeeklySchedule(
+                                dailyInfo2[0].toInt(),
+                                dailyInfo2[1].toInt(),
+                                map.get(dailyInfo2[0])!!.get(0),
+                                map.get(dailyInfo2[0])!!.get(1),
+                                mapTotalCost.get(dailyInfo2[0])!!,
+                                false
 
-            if (!numOfDay.equals("")) {
-                var totalLists: ArrayList<String> = ArrayList()
-                totalLists.add(numOfDay)
-                totalLists.add(dailyIds)
-                map.put(currentWeeklyID.toString(), totalLists)
-                mapTotalCost.put(currentWeeklyID.toString(), totalcost)
-            }
-
-            // making WeeklyScheudle objects
-
-
-
-
-
-            currentWeeklyID = -1
-            for (i in weeklyInfo.indices) {
-
-                var dailyInfo2 = weeklyInfo[i].splitIgnoreEmpty("*")
-                if (dailyInfo2[0].toInt() != currentWeeklyID) {
-                    weeklyList!!.add(
-                        WeeklySchedule(
-                            dailyInfo2[0].toInt(),
-                            dailyInfo2[1].toInt(),
-                            map.get(dailyInfo2[0])!!.get(0),
-                            map.get(dailyInfo2[0])!!.get(1),
-                            mapTotalCost.get(dailyInfo2[0])!!,
-                            false
-
+                            )
                         )
-                    )
-                    currentWeeklyID = dailyInfo2[0].toInt()
+                        currentWeeklyID = dailyInfo2[0].toInt()
+                    }
+
+
                 }
 
 
+
+                weeklyRecyclerViewAdapter!!.setWeeklyValues(weeklyList!!)
+                weeklyRecyclerViewAdapter!!.setDailyValues(dailyList!!)
+                progressBar!!.visibility = View.INVISIBLE
+                // UserPropertiesSingelton.getInstance()!!.setUserWeekly(sorted)
+                isScorlled = false
+
+            } else {
+                if (weeklyList!!.size == 0) {
+                    noWeeklyTextView.visibility = View.VISIBLE
+                }
             }
-
-
-
-            weeklyRecyclerViewAdapter!!.setWeeklyValues(weeklyList!!)
-            weeklyRecyclerViewAdapter!!.setDailyValues(dailyList!!)
-            progressBar!!.visibility = View.INVISIBLE
-           // UserPropertiesSingelton.getInstance()!!.setUserWeekly(sorted)
             isScorlled = false
-
         }
-        else {
-            if (weeklyList!!.size == 0) {
-                noWeeklyTextView.visibility = View.VISIBLE
-            }
+        catch (e: Exception) {
+            Log.v("Elad1", "Failled because of builder ")
         }
-        isScorlled = false
     }
 
     override fun onScrollChange(

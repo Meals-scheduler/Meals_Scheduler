@@ -1,5 +1,6 @@
 package com.example.meals_schdueler
 
+import android.app.AlertDialog
 import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -30,7 +31,7 @@ class DeleteAlertDialog(
     type: String,
     toDelete: deleteInterface,
 
-) :
+    ) :
     DialogFragment(), View.OnClickListener, GetAndPost {
 
 
@@ -74,6 +75,12 @@ class DeleteAlertDialog(
         if (p0 == btnYes) {
             deleteIngredient()
             toDelete.toDelete(true)
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setMessage("Added successfully!")
+            builder.setPositiveButton(
+                "Got it!"
+            ) { dialog, id -> dialog.cancel() }.show()
+
 
         } else {
             toDelete.toDelete(false)
@@ -83,7 +90,7 @@ class DeleteAlertDialog(
     }
 
     private fun deleteIngredient() {
-        var s = AsynTaskNew(this, childFragmentManager,requireContext())
+        var s = AsynTaskNew(this, childFragmentManager, requireContext())
         s.execute()
     }
 
@@ -135,19 +142,15 @@ class DeleteAlertDialog(
 
     override fun getData(str: String) {
         Log.v("Elad1", str)
+
+
+
+
+
+
     }
 
-//    override fun onDismiss(dialog: DialogInterface) {
-//        super.onDismiss(dialog)
-//
-//        val parentFragment:
-//                RecyclerView = childFragmentManager
-//        if (parentFragment is DialogInterface.OnDismissListener) {
-//            (parentFragment as DialogInterface.OnDismissListener?)!!.onDismiss(dialog)
-//        }
-//
-//
-//    }
+
 
 }
 

@@ -25,18 +25,23 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager, con
     override fun doInBackground(vararg params: Void?): String? {
         // ...
         try {
+
             Log.v("Elad1", "don in background good")
+
 
             return action.DoNetWorkOpreation()
 
         } catch (e: Exception) {
             Log.v("Elad1", "Failled")
-            pbDialog.dismiss()
+         //   pbDialog.dismiss()
+
 
 
             try {
-                val builder = AlertDialog.Builder(context)
-                builder.setMessage("Sorry,something went wrong. try again!").show()
+                if(!(action is DeleteAlertDialog)) {
+                    val builder = AlertDialog.Builder(context)
+                    builder.setMessage("Sorry,something went wrong. try again!").show()
+                }
 
             } catch (e: Exception) {
                 Log.v("Elad1", "Failled because of builder ")
@@ -51,8 +56,8 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager, con
     override fun onPreExecute() {
         super.onPreExecute()
         // ...
-        pbDialog = ProgressBarDialog()
-        pbDialog.show(childFragmentManager, "progressbar")
+            // pbDialog = ProgressBarDialog()
+        //pbDialog.show(childFragmentManager, "progressbar")
 
 
     }
@@ -62,20 +67,26 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager, con
 
         try {
             if (result != null) {
+
                 action.getData(result)
+
             }
 
-            if (!(action is DeleteAlertDialog)) {
-                pbDialog.dismiss()
-            }
+
+//            if (!(action is DeleteAlertDialog)) {
+//                pbDialog.dismiss()
+//            }
         } catch (e: Exception) {
             Log.v("Elad1", "Failled")
-            pbDialog.dismiss()
+          //  pbDialog.dismiss()
+
 
 
             try {
-                val builder = AlertDialog.Builder(context)
-                builder.setMessage("Sorry,something went wrong. try again!").show()
+                if(!(action is DeleteAlertDialog)) {
+                    val builder = AlertDialog.Builder(context)
+                    builder.setMessage("Sorry,something went wrong. try again!").show()
+                }
 
             } catch (e: Exception) {
                 Log.v("Elad1", "Failled because of builder ")

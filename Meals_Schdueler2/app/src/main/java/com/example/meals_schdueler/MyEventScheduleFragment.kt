@@ -1,6 +1,7 @@
 package com.example.meals_schdueler
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -169,99 +170,102 @@ class MyEventScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
 
     override fun getData(str: String) {
         progressBar!!.visibility = View.INVISIBLE
-        if (!str.equals("")) {
-            if (!isScorlled)
-                eventList!!.clear()
+        try {
+            if (!str.equals("")) {
+                if (!isScorlled)
+                    eventList!!.clear()
 
-            if (noEventTextView.visibility == View.VISIBLE) {
-                noEventTextView.visibility = View.INVISIBLE
-            }
+                if (noEventTextView.visibility == View.VISIBLE) {
+                    noEventTextView.visibility = View.INVISIBLE
+                }
 
-            quantities = ""
-            recipeIds = ""
-          //  recipeList!!.clear()
+                quantities = ""
+                recipeIds = ""
+                //  recipeList!!.clear()
 
 
-            // extracting dividing the data
+                // extracting dividing the data
 
-            val eventinfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
+                val eventinfo: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
-            var map: HashMap<String, ArrayList<String>> = HashMap()
-            var mapTotalCost: HashMap<String, Double> = HashMap()
+                var map: HashMap<String, ArrayList<String>> = HashMap()
+                var mapTotalCost: HashMap<String, Double> = HashMap()
 
-            var eventInfo2 = eventinfo[0].splitIgnoreEmpty("*")
-            var currentEventID = eventInfo2[0].toInt()
+                var eventInfo2 = eventinfo[0].splitIgnoreEmpty("*")
+                var currentEventID = eventInfo2[0].toInt()
 
-            for (i in eventinfo.indices) {
-                eventInfo2 = eventinfo[i].splitIgnoreEmpty("*")
-                //means we switch to the next DailyID
-                if (eventInfo2[0].toInt() != currentEventID) {
+                for (i in eventinfo.indices) {
+                    eventInfo2 = eventinfo[i].splitIgnoreEmpty("*")
+                    //means we switch to the next DailyID
+                    if (eventInfo2[0].toInt() != currentEventID) {
+                        var totalLists: ArrayList<String> = ArrayList()
+                        totalLists.add(quantities)
+                        totalLists.add(recipeIds)
+
+                        // gathering all quantities , numOfMeal and recipeIds under
+                        // the key of that DailyID
+                        map.put(currentEventID.toString(), totalLists)
+                        mapTotalCost.put(currentEventID.toString(), totalcost)
+                        //switching to the next DailyID
+                        currentEventID = eventInfo2[0].toInt()
+
+                        // clearing the variables for next DailyID
+                        quantities = ""
+                        recipeIds = ""
+                    }
+                    quantities += "" + eventInfo2[5] + " "
+                    recipeIds += "" + eventInfo2[4] + " "
+                    // saving the last total cost
+                    totalcost = eventInfo2[3].toDouble()
+                }
+
+                if (!quantities.equals("")) {
                     var totalLists: ArrayList<String> = ArrayList()
                     totalLists.add(quantities)
                     totalLists.add(recipeIds)
-
-                    // gathering all quantities , numOfMeal and recipeIds under
-                    // the key of that DailyID
                     map.put(currentEventID.toString(), totalLists)
                     mapTotalCost.put(currentEventID.toString(), totalcost)
-                    //switching to the next DailyID
-                    currentEventID = eventInfo2[0].toInt()
-
-                    // clearing the variables for next DailyID
-                    quantities = ""
-                    recipeIds = ""
                 }
-                quantities += "" + eventInfo2[5] + " "
-                recipeIds += "" + eventInfo2[4] + " "
-                // saving the last total cost
-                totalcost = eventInfo2[3].toDouble()
-            }
 
-            if (!quantities.equals("")) {
-                var totalLists: ArrayList<String> = ArrayList()
-                totalLists.add(quantities)
-                totalLists.add(recipeIds)
-                map.put(currentEventID.toString(), totalLists)
-                mapTotalCost.put(currentEventID.toString(), totalcost)
-            }
+                // making Event objects by the extracted data
+                currentEventID = -1
+                for (i in eventinfo.indices) {
+                    var eventinfo2 = eventinfo[i].splitIgnoreEmpty("*")
+                    if (eventinfo2[0].toInt() != currentEventID) {
+                        eventList!!.add(
 
-            // making Event objects by the extracted data
-            currentEventID = -1
-            for (i in eventinfo.indices) {
-                var eventinfo2 = eventinfo[i].splitIgnoreEmpty("*")
-                if (eventinfo2[0].toInt() != currentEventID) {
-                    eventList!!.add(
+                            Event(
+                                eventinfo2[0].toInt(),
+                                eventinfo2[1].toInt(),
+                                eventinfo2[2],
+                                map.get(eventinfo2[0])!!.get(0),
+                                map.get(eventinfo2[0])!!.get(1),
+                                mapTotalCost.get(eventinfo2[0])!!,
+                                false
 
-                        Event(
-                            eventinfo2[0].toInt(),
-                            eventinfo2[1].toInt(),
-                            eventinfo2[2],
-                            map.get(eventinfo2[0])!!.get(0),
-                            map.get(eventinfo2[0])!!.get(1),
-                            mapTotalCost.get(eventinfo2[0])!!,
-                            false
-
+                            )
                         )
-                    )
-                    currentEventID = eventinfo2[0].toInt()
+                        currentEventID = eventinfo2[0].toInt()
+                    }
+                }
+
+
+
+                eventRecyclerViewAdapter!!.setmValues(eventList!!)
+                eventRecyclerViewAdapter!!.setRecipeList(recipeList!!)
+                progressBar!!.visibility = View.INVISIBLE
+
+                isScorlled = false
+            } else {
+                if (eventList!!.size == 0) {
+                    noEventTextView.visibility = View.VISIBLE
                 }
             }
-
-
-
-            eventRecyclerViewAdapter!!.setmValues(eventList!!)
-            eventRecyclerViewAdapter!!.setRecipeList(recipeList!!)
-            progressBar!!.visibility = View.INVISIBLE
 
             isScorlled = false
+        }catch (e: Exception) {
+            Log.v("Elad1", "Failled because of builder ")
         }
-        else{
-            if (eventList!!.size == 0) {
-                noEventTextView.visibility = View.VISIBLE
-            }
-        }
-
-        isScorlled = false
     }
 
     override fun onScrollChange(

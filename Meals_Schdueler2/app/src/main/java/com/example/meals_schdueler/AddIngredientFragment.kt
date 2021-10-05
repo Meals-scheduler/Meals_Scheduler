@@ -1,25 +1,21 @@
 package com.example.meals_schdueler
 
-import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import java.io.*
+
 
 open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInterface {
 
@@ -37,7 +33,7 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
     lateinit var typeOfMeall: String
     lateinit var typeSeasson: String
     lateinit var ingredientImage: ImageView
-    lateinit var bitmap: Bitmap
+    var bitmap: Bitmap? = null
     private var imageUri: Uri? = null
     var notritousValue: NutritousValues? = null
     var howToStoreValue: HowToStroreValue? = null
@@ -59,7 +55,6 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
 
     var isFirstTimeNutrtious: Boolean = true
     var isFirstTimeHowToStore: Boolean = true
-    var howToStoreDes: String = ""
 
 
     override fun onCreateView(
@@ -86,6 +81,7 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
         buttonApi.setOnClickListener(this)
 
 
+
         // Log.v("Elad1","USER IDDDDDDDD" + UserInterFace.userID.toString())
 
 
@@ -96,7 +92,7 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
         typeOfMeal.onItemSelectedListener = SpinnerActivity()
         typeOfSeason.onItemSelectedListener = SpinnerActivity()
 
-        if(UserInterFace.userID !=-1){
+        if (UserInterFace.userID != -1) {
             buttonApi.visibility = View.INVISIBLE
         }
 
@@ -145,13 +141,15 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
             dialog.show(childFragmentManager, "HowToStoreDialog")
         } else if (p0 == saveBtn) {
 
-
+            if (bitmap == null) {
+                setDefaultPic()
+            }
             var ingredient = Ingredient(
 
                 1,
                 UserInterFace.userID,
                 ingredientName.getText().toString(),
-                bitmap,
+                bitmap!!,
                 typeOfMeall,
                 typeSeasson,
                 howToStoreValue!!.howToStore,
@@ -178,6 +176,12 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
                 MyingredientFragment1.instance!!.noIngredientsTextView.visibility = View.INVISIBLE
             }
 
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setMessage("Added successfully!")
+            builder.setPositiveButton(
+                "Got it!"
+            ) { dialog, id -> dialog.cancel() }.show()
+
 
         } else if (p0 == ingredientImage) {
             val c = CameraIntent(this)
@@ -192,17 +196,24 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
 //            startActivity(i)
 
             var arr: ArrayList<Int> = ArrayList()
-            var id = 112958 // in 55026 we hvae problem with quntities
+            var id = 46774 // in 55026 we hvae problem with quntities
             for (i in 1..2) {
                 arr.add(id)
                 id += 1
             }
 
             for (i in arr) {
-                var g = ApiFood(i, childFragmentManager,requireContext());
+                var g = ApiFood(i, childFragmentManager, requireContext());
                 g.startTask()
             }
         }
+    }
+
+    private fun setDefaultPic() {
+        bitmap = BitmapFactory.decodeResource(
+            requireContext().resources,
+            R.drawable.question_mark
+        )
     }
     // for camera
 

@@ -1,14 +1,15 @@
 package com.example.meals_schdueler
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +28,7 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
     lateinit var typeOfMeal: Spinner
     lateinit var numOfPortions: Spinner
     lateinit var numOfPortionss: String
-    lateinit var bitmap: Bitmap
+     var bitmap: Bitmap? = null
 
     //lateinit var typeOfSeason: Spinner
     lateinit var nutritiousBtn: Button
@@ -203,11 +204,15 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
 
 
         } else if (p0 == saveBtn) {
+
+            if (bitmap == null) {
+                setDefaultPic()
+            }
             var recipe = Recipe(
                 1,
                 UserInterFace.userID,
                 recipeName.text.toString(),
-                bitmap,
+                bitmap!!,
                 typeOfMeall,
                 numOfPortionss,
                 totalCost.text.toString().toDouble(),
@@ -227,9 +232,21 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
             if (MyRecipeFragment.instance!!.noRecipesTextView.visibility == View.VISIBLE) {
                 MyRecipeFragment.instance!!.noRecipesTextView.visibility = View.INVISIBLE
             }
+
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setMessage("Added successfully!")
+            builder.setPositiveButton(
+                "Got it!"
+            ) { dialog, id -> dialog.cancel() }.show()
         }
     }
 
+    private fun setDefaultPic() {
+        bitmap = BitmapFactory.decodeResource(
+            requireContext().resources,
+            R.drawable.question_mark
+        )
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {

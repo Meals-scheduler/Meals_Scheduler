@@ -1,5 +1,6 @@
 package com.example.meals_schdueler
 
+import android.app.AlertDialog
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -61,6 +62,8 @@ class All_Recipes_RecyclerViewAdapter(
 
         holder.copyImage.setOnClickListener {
 
+
+
             var tmp: ArrayList<Ingredient> = ArrayList()
             for (i in item.listOfIngredients) {
                 var ingredient = Ingredient(
@@ -91,6 +94,7 @@ class All_Recipes_RecyclerViewAdapter(
                     MyRecipeFragment.instance!!.noRecipesTextView.visibility = View.INVISIBLE
                 }
 
+
                 // because ingredient is transfer by reference we save each "copied ingredient" in tmp list
                 //then when asyn task finished the ingredientID of each element there will be changed
                 //and then when we upload recipe we give it the tmp list with the same ingredients but different id
@@ -119,11 +123,28 @@ class All_Recipes_RecyclerViewAdapter(
             var s = AsynTaskNew(recipe, childFragmentManager,contex)
             s.execute()
 
+
             MyRecipeFragment.instance!!.getRecycler().toCopy(recipe)
+
+
+
+
+            val builder = AlertDialog.Builder(contex)
+            builder.setMessage("Recipe has been copied successfully!")
+            builder.setPositiveButton(
+                "Got it!"
+            ) { dialog, id -> dialog.cancel() }.show()
+
+
 
 
         }
     }
+
+
+
+
+
 
     fun setmValues(mValues: ArrayList<Recipe>) {
         this.mValues = mValues
