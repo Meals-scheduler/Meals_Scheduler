@@ -82,7 +82,6 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
 
 
 
-        // Log.v("Elad1","USER IDDDDDDDD" + UserInterFace.userID.toString())
 
 
         saveBtn.setOnClickListener(this)
@@ -196,7 +195,7 @@ open class AddIngredientFragment : Fragment(), View.OnClickListener, CameraInter
 //            startActivity(i)
 
             var arr: ArrayList<Int> = ArrayList()
-            var id = 46774 // in 55026 we hvae problem with quntities
+            var id = 46883 // in 55026 we hvae problem with quntities
             for (i in 1..2) {
                 arr.add(id)
                 id += 1

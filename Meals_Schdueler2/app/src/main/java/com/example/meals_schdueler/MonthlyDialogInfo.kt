@@ -239,7 +239,7 @@ class MonthlyDialogInfo(
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 

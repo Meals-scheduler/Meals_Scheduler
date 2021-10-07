@@ -160,7 +160,7 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost,NestedScrollView.OnScrol
         }
 
 
-        // Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 
@@ -284,7 +284,7 @@ class MyWeeklyScheduleFragment : Fragment(), GetAndPost,NestedScrollView.OnScrol
             isScorlled = false
         }
         catch (e: Exception) {
-            Log.v("Elad1", "Failled because of builder ")
+
         }
     }
 

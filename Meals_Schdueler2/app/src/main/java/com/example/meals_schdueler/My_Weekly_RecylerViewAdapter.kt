@@ -113,25 +113,14 @@ class My_Weekly_RecylerViewAdapter(
             var s = AsynTaskNew(this, childFragmentManager,context!!)
             s.execute()
 
-            // Log.v("Elad1","HH" + weeklyDaily.get(item.weeklyId.toString())!!.get(1).recipeIds)
-//            Log.v("Elad1", "FF2" + item.weeklyId.toString())
-//            var dialog = WeeklyDialogInfo(
-//               // weeklyDaily.get(item.weeklyId.toString())!!,
-//                item.numOfDay,
-//                item.dailyIds,
-//                item.totalCost,
-//                (position + 1)
-//            )
-//
-//
-//            dialog.show(childFragmentManager, "WeeklyDialogInfo")
+
+
 
 
         }
 
         holder.delete.setOnClickListener {
-            // deleteing this weekly from the map that holds for every weekly its daily list
-            //  weeklyDaily.remove(item.weeklyId.toString())!!
+
             weeklyToDelete = position
             var dialog =
                 DeleteAlertDialog(
@@ -207,7 +196,7 @@ class My_Weekly_RecylerViewAdapter(
                                 }
                                 DialogInterface.BUTTON_NEGATIVE -> {
 
-                                    Log.v("Elad1", "clicked no")
+
                                 }
                             }
                         }
@@ -303,7 +292,7 @@ class My_Weekly_RecylerViewAdapter(
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 
@@ -399,8 +388,6 @@ class My_Weekly_RecylerViewAdapter(
 
             this.setDailyValues(dailyValues)
             if (queryToExcute.equals("info")) {
-                Log.v("Elad1", "Num of Days " + numOfDay)
-                Log.v("Elad1", "dailyIds " + dailyIds)
 
                 var dialog = WeeklyDialogInfo(
 

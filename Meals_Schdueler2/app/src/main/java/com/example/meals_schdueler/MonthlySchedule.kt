@@ -50,7 +50,8 @@ class MonthlySchedule(
                 "https://elad1.000webhostapp.com/postMonthlySchedule.php"
 
             if (isUpdate) {
-                Log.v("Elad1", "did updateedd")
+
+
                 link = "https://elad1.000webhostapp.com/updateMonthly.php"
 
             }
@@ -68,7 +69,7 @@ class MonthlySchedule(
 
 
 
-            Log.v("Elad1", "data is " + data)
+
             val url = URL(link)
             val conn = url.openConnection()
             conn.readTimeout = 10000
@@ -86,10 +87,10 @@ class MonthlySchedule(
                 break
             }
             builder.toString()
-            Log.v("Elad1", builder.toString())
-            Log.v("Elad1", "asyn worked")
+
+
         } catch (e: Exception) {
-            Log.v("Elad1", "Failled")
+
         }.toString()
 
     }
@@ -118,7 +119,7 @@ class MonthlySchedule(
         }
 
 
-        // Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 

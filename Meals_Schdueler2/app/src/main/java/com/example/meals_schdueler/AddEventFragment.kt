@@ -160,7 +160,7 @@ class AddEventFragment : Fragment(), View.OnClickListener,
 
     override fun onClick(p0: View?) {
         if (p0 == chooseBtn) {
-            //    Log.v("Elad1","RecipeQuantity Size breakfast: " + recipesQuantities!!.list!!.size)
+
             listItems!!.list!!.clear()
             savedSize = recipeListChoose.size
                recipeList.clear()

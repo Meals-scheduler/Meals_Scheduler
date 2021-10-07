@@ -185,7 +185,7 @@ class EditYearlyDialog(
                     totalCost.setText(totalCostDobule.toString())
                     monthlyList!!.removeAt(t4v.getTag() as Int)
                     monthlyIdsArrlist.removeAt(t4v.getTag() as Int)
-                    // Log.v("Elad1", "Daily days after del" + monthlyDayss)
+
                     // CONTINUE HERE
                     //  dailyDayss.remove()
                     tablePosition--
@@ -535,7 +535,7 @@ class EditYearlyDialog(
 
                     }
                     monthlyDayss.add(value as Int)
-                    Log.v("Elad1", "YOSIII " + value)
+
 
 
                 }
@@ -626,7 +626,7 @@ class EditYearlyDialog(
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 

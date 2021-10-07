@@ -105,7 +105,7 @@ class Monthly_Schedule_Choose_RecyclerViewAdapter(
         }
 
         if (position == getItemCount() - 1 && !isSearch) {
-            Log.v("Elad1", "AAAAAAAAAAAAa")
+
             page = page + 8
             isScorlled = true
             progressBar!!.visibility = View.VISIBLE
@@ -185,7 +185,7 @@ class Monthly_Schedule_Choose_RecyclerViewAdapter(
             if (!isScorlled) {
                 page = 0
             }
-            Log.v("Elad1", "HHHHHHHHHHHHH")
+
             var string = UserInterFace.userID.toString() + " " + page
 
             link = "https://elad1.000webhostapp.com/getMonthly.php?ownerIDAndPage=" + string
@@ -213,7 +213,7 @@ class Monthly_Schedule_Choose_RecyclerViewAdapter(
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 

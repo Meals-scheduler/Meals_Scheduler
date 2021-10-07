@@ -125,7 +125,7 @@ class SignUp : AppCompatActivity() ,View.OnClickListener,GetAndPost {
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 
@@ -173,7 +173,7 @@ class SignUp : AppCompatActivity() ,View.OnClickListener,GetAndPost {
             builder.toString()
 
         } catch (e: Exception) {
-            Log.v("Elad1", "Failled")
+
         }.toString()
 
         return builder.toString()

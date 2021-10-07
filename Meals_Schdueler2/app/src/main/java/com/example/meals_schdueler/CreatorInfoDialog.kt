@@ -79,7 +79,7 @@ class CreatorInfoDialog(shareInfo: Boolean, ownerId: Int) : DialogFragment() , V
         }
 
 
-       // Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 

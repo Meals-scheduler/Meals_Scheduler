@@ -139,7 +139,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
 
     }
@@ -337,7 +337,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
         oldScrollX: Int,
         oldScrollY: Int
     ) {
-        Log.v("Elad1", "NESTEDDDDDDDD")
+
         if (scrollY == v!!.getChildAt(0).measuredHeight - v.measuredHeight) {
             if (!isSearch) {
                 page = page + 8
@@ -352,7 +352,7 @@ class AllRecipesFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnScroll
     }
 
     override fun onQueryTextChange(p0: String?): Boolean {
-        Log.v("Elad1", "YESSFSS" + p0)
+
         if (p0 != "") {
             noResultsTextView.visibility = View.INVISIBLE
             isSearch = true

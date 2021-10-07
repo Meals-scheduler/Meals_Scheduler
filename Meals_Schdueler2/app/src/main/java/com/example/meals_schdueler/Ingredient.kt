@@ -109,7 +109,7 @@ class Ingredient(
         }
 
 
-        // Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 
@@ -190,10 +190,10 @@ class Ingredient(
                 builder!!.append(line)
                 break
             }
-            Log.v("Sivan","Ingredient : " + builder.toString())
+
             builder.toString()
         } catch (e: Exception) {
-            Log.v("Elad1", "Failled")
+
         }.toString()
     }
 

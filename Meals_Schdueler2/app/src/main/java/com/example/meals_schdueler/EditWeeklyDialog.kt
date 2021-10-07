@@ -375,12 +375,12 @@ class EditWeeklyDialog(
                     savedSize = dailyList.size
 
                     tablePosition--
-                    Log.v("Elad1", "HEREEEEEEE")
+
 
 
                     for (x in stk) {
-                        Log.v("Elad1", "I is " + i)
-                        Log.v("Elad1", " row tage is " + x.getTag())
+
+
                         if (x.getTag() as Int == 0)
                             continue
                         if (x.getTag() as Int > i) {
@@ -526,7 +526,7 @@ class EditWeeklyDialog(
 
                     }
                     dailyDayss.add(value as Int)
-                    Log.v("Elad1", "YOSIII " + value)
+
 
 
                 }
@@ -624,7 +624,7 @@ class EditWeeklyDialog(
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 
@@ -796,70 +796,5 @@ class EditWeeklyDialog(
 }
 
 
-//    inner class SpinnerActivity() : Activity(),
-//        AdapterView.OnItemSelectedListener {
-//
-//
-//        override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-//            // An item was selected. You can retrieve the selected item using
-//            // parent.getItemAtPosition(pos)\
-////            Log.v("Elad1", "position in table " + positionInTable)
-////            Log.v("Elad1", "deleted is " + deletedTimes)
-////            Log.v("Elad1", "Daily days" + dailyDayss)
-////            positionInTable -= deletedTimes
-//            var tmp = 0
-//            when (parent.getItemAtPosition(pos)) {
-//                "Sunday" -> tmp = 0
-//                "Monday" -> tmp = 1
-//                "Tuesday" -> tmp = 2
-//                "Wednesday" -> tmp = 3
-//                "Thursday" -> tmp = 4
-//                "Friday" -> tmp = 5
-//                "Saturday" -> tmp = 6
-//            }
-////            //Log.v("Elad1","Dup" + duplicateDay)
-////            if ((dailyDayss!!.contains(duplicateDay)) && !flag) {
-////                dailyDayss!!.remove(duplicateDay)
-////
-////            }
-////            // if we dont add new day and just change the day
-////            Log.v("Elad1", "Saved is " + savedSize)
-////            if (dailyDayss.size == savedSize) {
-////                Log.v("Elad1", "daily size " + dailyDayss.size)
-////                Log.v("Elad1", "didnt add new day")
-////                // means we change the last day
-////                if (positionInTable - deletedTimes == dailyDayss.size - 1) {
-////                    Log.v("Elad1", "End")
-////                    dailyDayss.removeAt(dailyDayss.size - 1)
-////                    dailyDayss.add(tmp)
-////                }
-////
-////                // first day and day in the middle changes are the same
-////                else if (positionInTable - deletedTimes == 0) {
-////                    Log.v("Elad1", "start")
-////                    dailyDayss.add(positionInTable, tmp)
-////                    dailyDayss.removeAt(positionInTable + 1)
-////                }
-////                // middle day change
-////                else {
-////                    Log.v("Elad1", "mid")
-////                    dailyDayss.add(positionInTable, tmp)
-////                    dailyDayss.removeAt(positionInTable + 1)
-////                }
-////
-////            } else {
-////                Log.v("Elad1", "add new day")
-////                dailyDayss.add(tmp)
-////            }
-////
-////            Log.v("Elad1", "Daily days2" + dailyDayss)
-//        }
-//
-//        override fun onNothingSelected(parent: AdapterView<*>) {
-//            // Another interface callback
-//
-//
-//        }
-//    }
 
 

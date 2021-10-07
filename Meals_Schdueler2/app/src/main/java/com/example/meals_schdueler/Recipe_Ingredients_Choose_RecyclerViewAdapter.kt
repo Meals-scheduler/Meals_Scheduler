@@ -91,8 +91,7 @@ class Recipe_Ingredients_Choose_RecyclerViewAdapter(
 
         holder.choose.setChecked(holder.arr[position]);
         holder.cost.setText(holder.arr2.get(position))
-        //  holder.choose.setChecked(holder.arr[position]);
-        // holder.cost.setText(holder.arr2[position])
+
         holder.choose.setOnClickListener() {
 
 
@@ -143,16 +142,7 @@ class Recipe_Ingredients_Choose_RecyclerViewAdapter(
 
     fun setmValues(mValues: ArrayList<Ingredient>) {
         this.mValues = mValues
-        //  Log.v("Elad1","List size " + mValues.size)
-//        if (mValues.size > arr.size) {
-//            for (i in 0..(mValues.size-arr.size)-1) {
-//                arr.add(false)
-//                arr2.add("")
-//            }
-//        }
 
-//        Log.v("Elad1","arr size" + arr.size)
-//        Log.v("Elad1","List sie" + mValues.size.toString())
         notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
     }
 
@@ -211,16 +201,14 @@ class Recipe_Ingredients_Choose_RecyclerViewAdapter(
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 
     override fun getData(str: String) {
-        // fixed a default .split spaces , and fixed spaces in howToStore.
-        // when we add an ingredient it doesnt update in real time. we have to re compile!!!
+
         if (!str.equals("")) {
-//            if (!isScorlled)
-//                ingredientList!!.clear()
+
 
             if (isSearch) {
                 mValues!!.clear()
@@ -259,27 +247,24 @@ class Recipe_Ingredients_Choose_RecyclerViewAdapter(
                 }
             }
             catch (e: Exception) {
-                Log.v("Elad1", "Failled")
+
             }
 
 
-            // initializing the singelton with the user's ingredients list to keep it here on code.
-            // should do it on another place !!!
-            //  UserPropertiesSingelton.getInstance()!!.setUserIngredientss(sorted)
-            // sending the last to the adapter.
+
             this!!.setmValues(mValues!!)
             progressBar!!.visibility = View.INVISIBLE
-            //isScorlled = false
+
 
         } else {
             progressBar!!.visibility = View.INVISIBLE
             if (isSearch) {
                 mValues!!.clear()
-              //  noResultsTextView.visibility = View.VISIBLE
+
                 this!!.setmValues(mValues!!)
             }
         }
-     //   isScorlled = false
+
 
         progressBar!!.visibility = View.INVISIBLE
     }
@@ -294,11 +279,7 @@ class Recipe_Ingredients_Choose_RecyclerViewAdapter(
         return false
     }
 
-//    fun startTask() {
-//
-//        var s = AsynTaskNew(this, childFragmentManager)
-//        s.execute()
-//    }
+
 
 
     override fun onQueryTextChange(p0: String?): Boolean {

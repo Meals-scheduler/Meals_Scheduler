@@ -54,7 +54,7 @@ class YearlySchedule(
                 "https://elad1.000webhostapp.com/postYearlySchedule.php"
 
             if (isUpdate) {
-                Log.v("Elad1", "did updateedd")
+
                 link = "https://elad1.000webhostapp.com/updateYearly.php"
 
             }
@@ -72,7 +72,7 @@ class YearlySchedule(
 
 
 
-            Log.v("Elad1", "data is " + data)
+
             val url = URL(link)
             val conn = url.openConnection()
             conn.readTimeout = 10000
@@ -90,10 +90,9 @@ class YearlySchedule(
                 break
             }
             builder.toString()
-            Log.v("Elad1", builder.toString())
-            Log.v("Elad1", "asyn worked")
+
         } catch (e: Exception) {
-            Log.v("Elad1", "Failled")
+
         }.toString()
 
     }
@@ -123,7 +122,6 @@ class YearlySchedule(
         }
 
 
-        Log.v("Elad1", "Id came is" + sb.toString())
         return sb.toString()
     }
 

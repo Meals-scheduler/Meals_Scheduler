@@ -175,7 +175,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
     override fun onClick(p0: View?) {
         if (p0 == breakfastBtn) {
-            //    Log.v("Elad1","RecipeQuantity Size breakfast: " + recipesQuantities!!.list!!.size)
+
 
             listItems!!.list!!.clear()
             recipeList.clear()
@@ -192,7 +192,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
             dialog.show(childFragmentManager, "Recipe_Schuedle_Choose")
 
         } else if (p0 == lunchBtn) {
-            //     Log.v("Elad1","RecipeQuantity Size lunch: " + recipesQuantities!!.list!!.size)
+
 
             listItems!!.list!!.clear()
             recipeList.clear()
@@ -209,7 +209,7 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
             dialog.show(childFragmentManager, "Recipe_Schuedle_Choose")
 
         } else if (p0 == dinnerBtn) {
-            //  Log.v("Elad1","RecipeQuantity Size dinner: " + recipesQuantities!!.list!!.size)
+
 
             listItems!!.list!!.clear()
             recipeList.clear()
@@ -300,8 +300,8 @@ class AddDailyScheduleFragment : Fragment(), View.OnClickListener,
 
 
         }
-        Log.v("Elad1", "Quan" + recipesQuantities!!.list!!.size)
-        Log.v("Elad1", "RECIPE LIST " + recipeList.size)
+
+
         // for buttons to shirnk them
 
 

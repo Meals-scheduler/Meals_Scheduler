@@ -42,9 +42,9 @@ class MyRecipeRecyclerViewAdapter(
         holder.recipeImage.setImageBitmap(item.pictureBitMap)
 
         holder.deleteRecipe.setOnClickListener {
-            Log.v("Elad1", "want to delete")
+
             recipeToDelete = position
-            Log.v("Elad1", recipeToDelete.toString())
+
             var dialog =
                 DeleteAlertDialog(
                     item.recipeName, item.pictureBitMap, item.recipeId, "Recipe", this
@@ -54,9 +54,7 @@ class MyRecipeRecyclerViewAdapter(
         }
 
         holder.ingredientInfo.setOnClickListener {
-            for (i in item.listOfIngredients) {
-                Log.v("Elad1", "List of ing" + i.ingridentName)
-            }
+
             var instructions = HowToStroreValue(item.instructions.howToStore)
             var dialog = MyRecipeIngredietns(
                 item.listOfIngredients,

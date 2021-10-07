@@ -35,23 +35,6 @@ class UserInterFace : AppCompatActivity() {
         mFragmentTransaction.replace(R.id.containerView, IngredientsFragment()).commitNow()
 
 
-            // mFragmentManager.beginTransaction().add(R.id.containerView, IngredientsFragment(), "Elad")
-            // .add(R.id.containerView, RecipesFragments(), "Sivan").commitNow()
-//        mFragmentManager.beginTransaction().replace(R.id.containerView, Ingredients1Fragment())
-////            .add(R.id.containerView, DailyScheduleFragments())
-////            .add(R.id.containerView, WeeklySchedukeFragments())
-////            .add(R.id.containerView, MonthlySchedukeFragments())
-//            .commit()
-
-
-//        Log.v("Elad1", "Fragmetns size" + supportFragmentManager.fragments.size)
-//        val fragment = supportFragmentManager.findFragmentByTag("Sivan")
-//        if (fragment != null) {
-//            Log.v("Elad1", "removing")
-//            supportFragmentManager.beginTransaction().remove(fragment)
-//                .replace(R.id.containerView, IngredientsFragment()).commit()
-//
-//        }
 
 
         var i: Intent = getIntent()
@@ -71,7 +54,6 @@ class UserInterFace : AppCompatActivity() {
             }
 
             if (menuItem.itemId == R.id.nav_item_recipes) {
-                AllingredientsFragment1.instance = null
                 val ft = mFragmentManager.beginTransaction()
                 ft.replace(R.id.containerView, RecipesFragments()).commit()
             }
@@ -121,12 +103,11 @@ class UserInterFace : AppCompatActivity() {
                 editor.putString("remember", "false")
                 editor.apply()
                 // change the singletone into null
-                UserPropertiesSingelton.getInstance()!!.logout_setNULL()
+
                 val i = Intent(applicationContext, MainActivity::class.java)
                 startActivity(i)
                 // to avoid constant loading of AllIngredients Data
-                AllingredientsFragment1.instance = null;
-                AllRecipesFragment.instance = null
+
             }
             false
 

@@ -192,7 +192,7 @@ class My_Monthly_RecylerViewAdapter(
                                 }
                                 DialogInterface.BUTTON_NEGATIVE -> {
 
-                                    Log.v("Elad1", "clicked no")
+
                                 }
                             }
                         }
@@ -281,7 +281,7 @@ class My_Monthly_RecylerViewAdapter(
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 

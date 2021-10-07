@@ -164,7 +164,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
             dailyID!!.list!!.clear()
             dailyList!!.clear()
             savedSize = dailyListChoose.size
-            Log.v("Elad1", "Saved size is be4" + savedSize)
+
 
             var d = Daily_Schedule_Choose_Dialog(
                 dailyList!!,
@@ -212,7 +212,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                     }
 
                     dailyDayss!!.add(value as Int)
-                    Log.v("Elad1", "YOSIII " + value)
+
 
 
                 }
@@ -288,8 +288,6 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
 
     override fun onDismiss(p0: DialogInterface?) {
 
-        Log.v("Elad1", "Daily size " + dailyID!!.list!!.size)
-        Log.v("Elad1", "Saved size is after" + savedSize)
         for (i in dailyID!!.list!!) {
 
 
@@ -390,9 +388,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
                     totalCostDobule = (DecimalFormat("##.##").format(totalCostDobule)).toDouble()
                     totalCost.setText(totalCostDobule.toString())
                     dailyListChoose!!.removeAt(t3v.getTag() as Int - 1)
-                    // CONTINUE HERE
-                    //   dailyDayss!!.removeAt(t3v.getTag() as Int - 1)
-                    Log.v("Elad1", "Daily days after delete" + dailyDayss)
+
                     tablePosition--
 
                     for (x in stk) {
@@ -484,7 +480,7 @@ class AddWeeklyScheduleFragment : Fragment(), View.OnClickListener,
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 

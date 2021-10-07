@@ -462,7 +462,7 @@ class AddYearlyScheduleFragment : Fragment(), View.OnClickListener,
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 

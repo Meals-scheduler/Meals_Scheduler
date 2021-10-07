@@ -114,7 +114,7 @@ class AllIngredientsFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnSc
         var link =
             "https://elad1.000webhostapp.com/getSharedIngredients.php?ownerIDAndPage=" + string
         if (isSearch) {
-            Log.v("Elad1", "search")
+
             string = UserInterFace.userID.toString() + " " + ingredientToSearch
             link =
                 "https://elad1.000webhostapp.com/getSpecificSharedIngredients.php?nameAndIngredient=" + string
@@ -140,7 +140,7 @@ class AllIngredientsFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnSc
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 
@@ -165,7 +165,7 @@ class AllIngredientsFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnSc
             val ingredients: Array<String> = str.splitIgnoreEmpty("***").toTypedArray()
 
             for (i in ingredients.indices) {
-                Log.v("Elad1", ingredients.indices.toString())
+
                 var ingredient2 = ingredients[i].splitIgnoreEmpty("*")
                 ingredientList?.add(
                     Ingredient(
@@ -222,7 +222,7 @@ class AllIngredientsFragmentTest : Fragment(), GetAndPost, NestedScrollView.OnSc
 
     override fun onQueryTextChange(p0: String?): Boolean {
         if (p0 != "") {
-            Log.v("Elad1", "wanna search")
+
             noResultsTextView.visibility = View.INVISIBLE
             isSearch = true
             ingredientToSearch = p0!!

@@ -86,8 +86,7 @@ class My_Daily_RecylerViewAdapter(
             recipeIDs = mValues.get(position)!!.recipeIds
             numOfMeals = mValues.get(position)!!.numOfMeals
             pos = position + 1
-            Log.v("Elad1", "Num of meals " + numOfMeals)
-            Log.v("Elad1", "recipe ids " + recipeIDs)
+
             var s = AsynTaskNew(this, childFragmentManager, context!!)
             s.execute()
             // copying the Recipe list so if we edit it and then quit without saving, it wouldn't change the original list
@@ -187,7 +186,7 @@ class My_Daily_RecylerViewAdapter(
                                 }
                                 DialogInterface.BUTTON_NEGATIVE -> {
 
-                                    Log.v("Elad1", "clicked no")
+
                                 }
                             }
                         }
@@ -276,7 +275,7 @@ class My_Daily_RecylerViewAdapter(
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 
@@ -444,11 +443,6 @@ class My_Daily_RecylerViewAdapter(
                     tempRecipeList.add(i)
                 }
 
-                Log.v("Elad1", "List size " + tempRecipeList.size)
-                Log.v("Elad1", "quantities " + quantitiesStr)
-                Log.v("Elad1", "num of meals " + numOfMeals)
-                Log.v("Elad1", "recipe ids" + recipeIDs)
-                Log.v("Elad1", "daily id " + dailyID)
                 var dialog = EditDailyDialog(
                     tempRecipeList,
                     quantitiesStr,

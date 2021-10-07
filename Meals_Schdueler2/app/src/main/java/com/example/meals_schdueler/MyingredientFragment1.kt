@@ -136,7 +136,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost, NestedScrollView.OnScrollC
 
 
         if (isSearch) {
-            Log.v("Elad1", "search")
+
             string = UserInterFace.userID.toString() + " " + ingredientToSearch
             link =
                 "https://elad1.000webhostapp.com/getSpecificMyIngredients.php?nameAndIngredient=" + string
@@ -163,7 +163,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost, NestedScrollView.OnScrollC
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 
@@ -225,11 +225,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost, NestedScrollView.OnScrollC
                 }
 
 
-                // initializing the singelton with the user's ingredients list to keep it here on code.
-                // should do it on another place !!!
-                //  UserPropertiesSingelton.getInstance()!!.setUserIngredientss(sorted)
-                // sending the last to the adapter.
-                Log.v("Elad1", "FINISHED")
+
                 ingredientRecyclerViewAdapter!!.setmValues(ingredientList!!)
                 progressBar!!.visibility = View.INVISIBLE
                 isScorlled = false
@@ -247,7 +243,8 @@ class MyingredientFragment1 : Fragment(), GetAndPost, NestedScrollView.OnScrollC
             progressBar!!.visibility = View.INVISIBLE
         }
         catch (e: Exception) {
-            Log.v("Elad1", "Failled because of builder ")
+
+
         }
     }
 
@@ -278,7 +275,7 @@ class MyingredientFragment1 : Fragment(), GetAndPost, NestedScrollView.OnScrollC
 
     override fun onQueryTextChange(p0: String?): Boolean {
         if (p0 != "") {
-            Log.v("Elad1", "wanna search")
+
             noResultsTextView.visibility = View.INVISIBLE
             isSearch = true
             ingredientToSearch = p0!!

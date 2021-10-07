@@ -174,7 +174,7 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
     }
 
     override fun getData(str: String) {
-        Log.v("Elad1", "Page is " + page)
+
         progressBar!!.visibility = View.INVISIBLE
         try {
             if (!str.equals("")) {
@@ -296,7 +296,7 @@ class MyDailyScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
             isScorlled = false
         }
         catch (e: Exception) {
-            Log.v("Elad1", "Failled  ")
+
         }
     }
 

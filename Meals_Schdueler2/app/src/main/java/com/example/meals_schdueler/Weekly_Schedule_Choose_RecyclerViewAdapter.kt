@@ -23,8 +23,7 @@ import kotlin.collections.HashMap
 class Weekly_Schedule_Choose_RecyclerViewAdapter(
 
     var weeklyValues: ArrayList<WeeklySchedule>,
-    //var dailyValues: TreeMap<String, DailySchedule>,
-    //var recipes:HashMap<String, Recipe>,
+
     weeklyId: ArrayList<Int>?,
     childFragmentManager: FragmentManager,
     progressbar: ProgressBar?,
@@ -36,7 +35,7 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
 
     private var mValues: ArrayList<WeeklySchedule> = weeklyValues
     private var dailyList: ArrayList<DailySchedule> = ArrayList()
-    // private var mValuesDaily: TreeMap<String, DailySchedule> = dailyValues
+
 
     private var context = context
 
@@ -93,7 +92,7 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
 
         //var bitmap2 = ImageConvert.StringToBitMap(item.picture)
         if (position == getItemCount() - 1 && !isSearch) {
-            Log.v("Elad1", "AAAAAAAAAAAAa")
+
             page = page + 8
             isScorlled = true
             progressBar!!.visibility = View.VISIBLE
@@ -187,7 +186,7 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
             if (!isScorlled) {
                 page = 0
             }
-            Log.v("Elad1", "HHHHHHHHHHHHH")
+
             var string = UserInterFace.userID.toString() + " " + page
 
             link = "https://elad1.000webhostapp.com/getWeekly.php?ownerIDAndPage=" + string
@@ -213,7 +212,7 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 
@@ -306,8 +305,6 @@ class Weekly_Schedule_Choose_RecyclerViewAdapter(
                 }
 
 
-                Log.v("Elad1", "Num of Days " + numOfDay)
-                Log.v("Elad1", "dailyIds " + dailyIds)
                 this.setDailyList(dailyList)
 
                 var dialog = WeeklyDialogInfo(

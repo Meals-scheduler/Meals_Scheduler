@@ -87,16 +87,16 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
         if (isRecipe) {
             Log.v("Sivan", "here is recipe")
             link =
-                " https://api.spoonacular.com/recipes/" + fcid + "/information?apiKey=bd6b560e6d934e2ebe9cd08f20c7ee42&includeNutrition=true"
+                " https://api.spoonacular.com/recipes/" + fcid + "/information?apiKey=8ec327f4413e489ba67798bb1b6ab085&includeNutrition=true"
             // fcid += 1
         } else if (isIngredient) {
             Log.v("Sivan", "here is ingredient")
             link =
 
-                "https://api.spoonacular.com/food/ingredients/" + ingredientsIds.get(j++) + "/information?amount=1&apiKey=bd6b560e6d934e2ebe9cd08f20c7ee42"
+                "https://api.spoonacular.com/food/ingredients/" + ingredientsIds.get(j++) + "/information?amount=1&apiKey=8ec327f4413e489ba67798bb1b6ab085"
         } else {
             link =
-                "https://api.spoonacular.com/recipes/" + fcid + "/analyzedInstructions?apiKey=bd6b560e6d934e2ebe9cd08f20c7ee42"
+                "https://api.spoonacular.com/recipes/" + fcid + "/analyzedInstructions?apiKey=8ec327f4413e489ba67798bb1b6ab085"
 
         }
 
@@ -198,9 +198,10 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
 
 
             val ingredients = jsonObject.getString("extendedIngredients")
-            var instructions = jsonObject.get("summary").toString()
-
-            //  instructions = instructions.replace('\'', ' ')
+           var info = jsonObject.get("summary").toString()
+//
+            info = info.replaceFirst("</b>","")
+            info = info.replaceFirst("<b>","")
 
             val arr = JSONArray(ingredients)
 
@@ -379,7 +380,7 @@ class ApiFood(id: Int, childFragmentManager: FragmentManager, context: Context) 
                     stepNum++
                 }
             }
-
+            instructions = instructions.replace('\'', ' ')
             instructionsValue = HowToStroreValue(instructions)
             var bitmap: Bitmap? = null
             lifecycleScope.launch {

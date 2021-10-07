@@ -151,18 +151,18 @@ class Recipe(
                 builder!!.append(line)
                 break
             }
-            Log.v("Sivan","Recipe : " + builder.toString())
+
             builder.toString()
 
         } catch (e: Exception) {
-            Log.v("Elad1", "Failled")
+
         }.toString()
 
     }
 
     private fun getRecipe(): String {
         val link = "https://elad1.000webhostapp.com/getRecipeID.php"
-        Log.v("Elad1", "here")
+
 
         val sb = StringBuilder()
 
@@ -184,7 +184,6 @@ class Recipe(
         }
 
 
-        Log.v("Elad1", "Id came is" + sb.toString())
         return sb.toString()
     }
 

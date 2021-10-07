@@ -264,7 +264,7 @@ class MyEventScheduleFragment : Fragment(), GetAndPost, NestedScrollView.OnScrol
 
             isScorlled = false
         }catch (e: Exception) {
-            Log.v("Elad1", "Failled because of builder ")
+
         }
     }
 

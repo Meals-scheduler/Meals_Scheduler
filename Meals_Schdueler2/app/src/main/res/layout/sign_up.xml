@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/untitled_artwork"
     tools:context=".SignUp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,8 +21,8 @@
             android:fontFamily="@font/poppinsbold"
             android:gravity="center"
             android:text="SignUp"
+            android:textColor="@color/white"
             android:textSize="30sp"
-            android:textColor="@color/design_default_color_secondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,6 +44,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/firstName"
+                android:textColorHint="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@android:drawable/btn_star"
@@ -99,8 +101,8 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:hint="Password"
-            app:passwordToggleEnabled="true"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUsername"
+            app:passwordToggleEnabled="true"
             tools:layout_editor_absoluteX="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -111,7 +113,6 @@
                 android:fontFamily="@font/poppinsmedium"
                 tools:targetApi="jelly_bean" />
         </com.google.android.material.textfield.TextInputLayout>
-
 
 
         <ProgressBar
@@ -125,10 +126,11 @@
 
         <Button
             android:id="@+id/buttonSignUp"
-            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:background="@drawable/btn1"
+            android:fontFamily="@font/poppinsbold"
             android:text="Sign up"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -136,11 +138,14 @@
 
         <TextView
             android:id="@+id/loginText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
             android:layout_marginTop="40dp"
-            android:fontFamily="@font/poppinsmedium"
+            android:fontFamily="@font/poppinsbold"
+            android:gravity="center"
             android:text="@string/text_view_hover2"
+            android:textColor="@color/white"
+            android:textSize="19dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonSignUp"

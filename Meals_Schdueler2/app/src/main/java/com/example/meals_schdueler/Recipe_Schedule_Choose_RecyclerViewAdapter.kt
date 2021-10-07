@@ -218,7 +218,7 @@ class Recipe_Schedule_Choose_RecyclerViewAdapter(
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 

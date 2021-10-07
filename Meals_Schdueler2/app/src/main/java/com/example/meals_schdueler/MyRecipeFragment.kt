@@ -146,7 +146,8 @@ class MyRecipeFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChange
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
+
         return sb.toString()
     }
 
@@ -352,7 +353,7 @@ class MyRecipeFragment : Fragment(), GetAndPost, NestedScrollView.OnScrollChange
             isScorlled = false
         }
         catch (e: Exception) {
-            Log.v("Elad1", "Failled because of builder ")
+
         }
 
 

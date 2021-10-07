@@ -158,7 +158,7 @@ class MyYearlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScro
         }
 
 
-        // Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 
@@ -278,7 +278,7 @@ class MyYearlyScheudleFragment : Fragment(), GetAndPost, NestedScrollView.OnScro
             isScorlled = false
         }
         catch (e: Exception) {
-            Log.v("Elad1", "Failled because of builder ")
+
         }
     }
 

@@ -466,7 +466,7 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 
@@ -585,8 +585,6 @@ class AddMonthlyScheduleFragment : Fragment(), View.OnClickListener,
 
 
 
-            Log.v("Elad1", "Num of Days " + numOfDay)
-                Log.v("Elad1", "dailyIds " + dailyIds)
 
                 var dialog = WeeklyDialogInfo(
 

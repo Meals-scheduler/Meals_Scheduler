@@ -183,7 +183,7 @@ class My_Event_RecylerViewAdapter(
                                 }
                                 DialogInterface.BUTTON_NEGATIVE -> {
 
-                                    Log.v("Elad1", "clicked no")
+
                                 }
                             }
                         }
@@ -274,7 +274,7 @@ class My_Event_RecylerViewAdapter(
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 

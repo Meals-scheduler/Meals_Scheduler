@@ -85,7 +85,7 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
 
         //var bitmap2 = ImageConvert.StringToBitMap(item.picture)
         if (position == getItemCount() - 1 && !isSearch) {
-            Log.v("Elad1","AAAAAAAAAAAAa")
+
             page = page + 8
             isScorlled = true
             progressBar!!.visibility = View.VISIBLE
@@ -210,7 +210,7 @@ class Daily_Schedule_Choose_RecyclerViewAdapter(
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 

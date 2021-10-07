@@ -244,7 +244,7 @@ class WeeklyDialogInfo(
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 

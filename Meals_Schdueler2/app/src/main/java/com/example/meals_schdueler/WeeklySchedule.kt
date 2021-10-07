@@ -53,7 +53,7 @@ class WeeklySchedule(
                 "https://elad1.000webhostapp.com/postWeeklySchedule.php"
 
             if (isUpdate){
-                Log.v("Elad1" , "did updateedd")
+
                 link = "https://elad1.000webhostapp.com/updateWeekly.php"
 
             }
@@ -71,7 +71,7 @@ class WeeklySchedule(
 
 
 
-            Log.v("Elad1" , "data is " + data)
+
             val url = URL(link)
             val conn = url.openConnection()
             conn.readTimeout = 10000
@@ -89,10 +89,10 @@ class WeeklySchedule(
                 break
             }
             builder.toString()
-            Log.v("Elad1", builder.toString())
-            Log.v("Elad1", "asyn worked")
+
+
         } catch (e: Exception) {
-            Log.v("Elad1", "Failled")
+
         }.toString()
 
     }
@@ -123,7 +123,7 @@ class WeeklySchedule(
         }
 
 
-       // Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
     override fun getData(str: String) {

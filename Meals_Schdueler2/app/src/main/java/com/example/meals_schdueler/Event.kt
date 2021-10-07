@@ -96,9 +96,9 @@ class Event(
                 break
             }
             builder.toString()
-            Log.v("Elad1", "buidler " +      builder.toString())
+
         } catch (e: Exception) {
-            Log.v("Elad1", "Failled")
+
         }.toString()
 
     }
@@ -128,7 +128,7 @@ class Event(
         }
 
 
-        // Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 

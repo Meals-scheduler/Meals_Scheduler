@@ -134,7 +134,7 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
         //ingredientImageInit = initImage(ingredientImage)
 
 
-        //  Log.v("Elad1", "USER IDDDDDDDD222" + UserInterFace.userID.toString())
+
 
         addBtn.setOnClickListener(this)
         saveBtn.setOnClickListener(this)
@@ -346,17 +346,17 @@ class AddRecipeFragment : Fragment(), View.OnClickListener, CameraInterface,
 
 
             var cur = costList!!.get(j) * i.carbs_.toFloat() / 100
-           // Log.v("Elad1","Carbs " + cur)
+
             notritousValue!!.carbs += cur
-           // Log.v("Elad1"," total Carbs " +     notritousValue!!.carbs)
+
             cur = costList!!.get(j) * i.protein_.toFloat() / 100
-          //  Log.v("Elad1","Protein " + cur)
+
             notritousValue!!.protein += cur
-          //  Log.v("Elad1"," total protein " +     notritousValue!!.protein)
+
             cur = costList!!.get(j) * i.fat.toFloat() / 100
-           // Log.v("Elad1","Fats " + cur)
+
             notritousValue!!.fats += cur
-           // Log.v("Elad1"," total fats " +     notritousValue!!.fats)
+
             j++
         }
         savedSize = ingredientListChoosen!!.size

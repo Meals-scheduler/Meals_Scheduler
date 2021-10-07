@@ -26,13 +26,12 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager, con
         // ...
         try {
 
-            Log.v("Elad1", "don in background good")
 
 
             return action.DoNetWorkOpreation()
 
         } catch (e: Exception) {
-            Log.v("Elad1", "Failled")
+
          //   pbDialog.dismiss()
 
 
@@ -77,7 +76,7 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager, con
 //                pbDialog.dismiss()
 //            }
         } catch (e: Exception) {
-            Log.v("Elad1", "Failled")
+
           //  pbDialog.dismiss()
 
 

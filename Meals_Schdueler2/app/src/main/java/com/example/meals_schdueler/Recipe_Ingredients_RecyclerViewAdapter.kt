@@ -45,14 +45,14 @@ class Recipe_Ingredients_RecyclerViewAdapter(
         }
 
         holder.deleteIngredient.setOnClickListener {
-           // Log.v("Elad1", "PoS" + position)
+
             mValues.removeAt(position)
             mIntValues.list!!.removeAt(position)
             notifyDataSetChanged()
             l!!.calculateCost()
             l!!.calculateNutritiousValues()
             l!!.costList!!.removeAt(position)
-           // Log.v("Elad1", mIntValues.list!!.size.toString())
+
         }
 
 

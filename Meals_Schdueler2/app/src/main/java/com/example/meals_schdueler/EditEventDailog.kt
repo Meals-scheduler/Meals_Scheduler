@@ -394,9 +394,9 @@ class EditEventDailog(
 
         } else if (p0 == saveBtn) {
 
-            Log.v("Elad1", "event name be4" + eventName)
+
             eventName = eventNameEdit.text.toString()
-            Log.v("Elad1", "event name after" + eventName)
+
             if (recipesID.isNotEmpty()) {
                 recipeIds = ""
                 quantities = ""

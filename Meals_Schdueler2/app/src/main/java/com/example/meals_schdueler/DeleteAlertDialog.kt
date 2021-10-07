@@ -136,17 +136,12 @@ class DeleteAlertDialog(
         }
 
 
-        //Log.v("Elad1", "Id came is" + sb.toString())
+
         return sb.toString()
     }
 
     override fun getData(str: String) {
-        Log.v("Elad1", str)
-
-
-
-
-
+        print("D")
 
     }
 

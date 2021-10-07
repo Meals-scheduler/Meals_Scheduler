@@ -85,14 +85,16 @@
 
         <Button
             android:id="@+id/buttonLogin"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_width="142dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="60dp"
+            android:background="@drawable/btn1"
+            android:fontFamily="@font/poppinsbold"
             android:text="Login"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.637"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/checkBoxRemember"
             app:layout_constraintTop_toBottomOf="@+id/progress" />
 
         <TextView
@@ -112,11 +114,10 @@
             android:id="@+id/checkBoxRemember"
             android:layout_width="135dp"
             android:layout_height="45dp"
+            android:layout_marginStart="28dp"
             android:layout_marginTop="4dp"
             android:text="Remember me"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/buttonLogin"
-            app:layout_constraintHorizontal_bias="0.422"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword" />
 
