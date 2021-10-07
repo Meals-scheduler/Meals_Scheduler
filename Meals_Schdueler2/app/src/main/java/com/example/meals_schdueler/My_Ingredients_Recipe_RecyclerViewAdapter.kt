@@ -67,7 +67,6 @@ class My_Ingredients_Recipe_RecyclerViewAdapter(
         // val idView: TextView = view.findViewById(R.id.item_number)
         //val contentView: TextView = view.findViewById(R.id.content)
         var ingredientImage: ImageView = view.findViewById(R.id.imageViewPicIngr)
-        var ingredientCart: ImageView = view.findViewById(R.id.imageViewCart)
         var ingredientName: Button = view.findViewById(R.id.buttonIngredientName)
         var ingredientInfo: ImageView = view.findViewById(R.id.imageViewInfo)
         var quantity: EditText = view.findViewById(R.id.editTextCost)

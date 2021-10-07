@@ -82,21 +82,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageViewInfo" />
 
-    <ImageView
-        android:id="@+id/imageViewCart"
-        android:layout_width="41dp"
-        android:layout_height="59dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="16dp"
-        android:layout_weight="3"
-        android:adjustViewBounds="false"
-        android:contentDescription="TODO"
-        android:maxWidth="100dip"
-        android:scaleType="fitCenter"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/cart"
-        tools:srcCompat="@tools:sample/avatars" />
+
 
     <TextView
         android:id="@+id/textView3"
