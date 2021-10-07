@@ -1,5 +1,6 @@
 package com.example.meals_schdueler
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -70,6 +71,14 @@ class SignUp : AppCompatActivity() ,View.OnClickListener,GetAndPost {
                 var s = AsynTaskNew(this, supportFragmentManager,baseContext)
                 s.execute()
             }
+           else{
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("Sorry,you must fill all details,try again!")
+                builder.setPositiveButton(
+                    "Got it!"
+                ) { dialog, id -> dialog.cancel() }.show()
+            }
+
        }
         else if(p0 == loginText){
            val i = Intent(applicationContext, MainActivity::class.java)
@@ -78,7 +87,8 @@ class SignUp : AppCompatActivity() ,View.OnClickListener,GetAndPost {
     }
 
     private fun CheckValidity(): Boolean {
-        if(userFirstName.text.equals("") || userEmail.text.equals("") || userPassword.text.equals("") || userLastName.equals("") ){
+
+        if(userFirstName.text.length == 0 || userEmail.text.length == 0  || userPassword.text.length == 0 || userLastName.text.length == 0 ){
             return false
         }
         return  true

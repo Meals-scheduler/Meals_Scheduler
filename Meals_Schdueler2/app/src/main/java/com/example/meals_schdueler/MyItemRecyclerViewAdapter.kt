@@ -58,32 +58,6 @@ class MyItemRecyclerViewAdapter(
             )
             dialog.show(childFragmentManager, "DeleteAlertDialog")
         }
-//
-//        if (position >= 0) {
-//            pos = position
-//            imgId = item.ingredientID
-//            var s = AsynTaskNew(this, childFragmentManager)
-//            s.execute()
-
-
-//            if (isFinished) {
-//                var j = pos
-//                var i = 4
-//                while (i != 0) {
-//                    mValues[pos].pictureBitMap = imagesArr.get(pos)
-//                    holder.ingredientImage.setImageBitmap(imagesArr.get(pos))
-//                    notifyDataSetChanged()
-//                    //  item.pictureBitMap = imagesArr.get(pos)
-//                    j++
-//                    i--
-//                }
-//                isFinished = false
-//
-//            }
-
-
-        //holder.idView.text = item.id
-        // holder.contentView.text = item.content
     }
 
     fun setmValues(mValues: ArrayList<Ingredient>) {

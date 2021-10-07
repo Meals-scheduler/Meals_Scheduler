@@ -27,19 +27,21 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager, con
         try {
 
 
-
             return action.DoNetWorkOpreation()
 
         } catch (e: Exception) {
 
-         //   pbDialog.dismiss()
-
+            //   pbDialog.dismiss()
 
 
             try {
-                if(!(action is DeleteAlertDialog)) {
+                if (!(action is DeleteAlertDialog)) {
                     val builder = AlertDialog.Builder(context)
-                    builder.setMessage("Sorry,something went wrong. try again!").show()
+                    builder.setMessage("Sorry,something went wrong. try again!")
+                    builder.setPositiveButton(
+                        "Got it!"
+                    ) { dialog, id -> dialog.cancel() }.show()
+
                 }
 
             } catch (e: Exception) {
@@ -55,14 +57,19 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager, con
     override fun onPreExecute() {
         super.onPreExecute()
         // ...
-            // pbDialog = ProgressBarDialog()
-        //pbDialog.show(childFragmentManager, "progressbar")
+        if (action is SignUp || action is MainActivity) {
+            pbDialog = ProgressBarDialog()
+            pbDialog.show(childFragmentManager, "progressbar")
+        }
 
 
     }
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
+        if (action is SignUp || action is MainActivity) {
+            pbDialog.dismiss()
+        }
 
         try {
             if (result != null) {
@@ -72,19 +79,19 @@ class AsynTaskNew(action: GetAndPost, childFragmentManager: FragmentManager, con
             }
 
 
-//            if (!(action is DeleteAlertDialog)) {
-//                pbDialog.dismiss()
-//            }
+
         } catch (e: Exception) {
 
-          //  pbDialog.dismiss()
-
+            //  pbDialog.dismiss()
 
 
             try {
-                if(!(action is DeleteAlertDialog)) {
+                if (!(action is DeleteAlertDialog)) {
                     val builder = AlertDialog.Builder(context)
-                    builder.setMessage("Sorry,something went wrong. try again!").show()
+                    builder.setMessage("Sorry,something went wrong. try again!")
+                    builder.setPositiveButton(
+                        "Got it!"
+                    ) { dialog, id -> dialog.cancel() }.show()
                 }
 
             } catch (e: Exception) {

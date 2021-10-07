@@ -1,5 +1,6 @@
 package com.example.meals_schdueler
 
+import android.app.AlertDialog
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -115,6 +116,12 @@ class AllIngredientInfo(item: Ingredient) : DialogFragment(), View.OnClickListen
             if (MyingredientFragment1.instance!!.noIngredientsTextView.visibility == View.VISIBLE) {
                 MyingredientFragment1.instance!!.noIngredientsTextView.visibility = View.INVISIBLE
             }
+
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setMessage("Ingredient was copied successfully!")
+            builder.setPositiveButton(
+                "Got it!"
+            ) { dialog, id -> dialog.cancel() }.show()
 
 
         } else if (p0 == imageX) {

@@ -76,7 +76,7 @@ class DeleteAlertDialog(
             deleteIngredient()
             toDelete.toDelete(true)
             val builder = AlertDialog.Builder(requireContext())
-            builder.setMessage("Added successfully!")
+            builder.setMessage("Deleted successfully!")
             builder.setPositiveButton(
                 "Got it!"
             ) { dialog, id -> dialog.cancel() }.show()

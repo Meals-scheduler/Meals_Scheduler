@@ -32,7 +32,7 @@
 
     <item
         android:id="@+id/nav_item_events"
-        android:icon="@drawable/yearly_icon"
+        android:icon="@drawable/eventsss"
         android:title="Events" />
 
 
