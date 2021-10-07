@@ -60,16 +60,6 @@
         app:srcCompat="@drawable/man_icon"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <ImageView
-        android:id="@+id/imageViewCart"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:adjustViewBounds="false"
-        android:contentDescription="TODO"
-        android:maxWidth="100dip"
-        android:scaleType="fitCenter"
-        app:srcCompat="@drawable/ic_launcher_background"
-        tools:srcCompat="@tools:sample/avatars" />
+
 
 </LinearLayout>

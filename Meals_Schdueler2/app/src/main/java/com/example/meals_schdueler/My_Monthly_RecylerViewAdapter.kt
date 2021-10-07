@@ -28,7 +28,7 @@ import kotlin.collections.HashMap
 class My_Monthly_RecylerViewAdapter(
 
     monthlyValues: ArrayList<MonthlySchedule>,
-    // weeklyValues: HashMap<String, WeeklySchedule>,
+
     childFragmentManager: FragmentManager,
     context: Context?,
     acticity: Activity
@@ -38,7 +38,7 @@ class My_Monthly_RecylerViewAdapter(
 
     private var monthlyValues: ArrayList<MonthlySchedule> = monthlyValues
 
-    // private var weeklyValues: HashMap<String, WeeklySchedule> = weeklyValues
+
     private var weeklyValues: ArrayList<WeeklySchedule> = ArrayList()
 
     private var childFragmentManager = childFragmentManager
@@ -62,7 +62,7 @@ class My_Monthly_RecylerViewAdapter(
     private var totalCost = 0.0
 
 
-    private var monthlyList: ArrayList<MonthlySchedule> = ArrayList()
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -245,7 +245,7 @@ class My_Monthly_RecylerViewAdapter(
         var edit: Button = view.findViewById(R.id.buttonEdit)
         var date: Button = view.findViewById(R.id.buttonSchedule)
         var delete: Button = view.findViewById(R.id.buttonDel)
-        var cart: ImageView = view.findViewById(R.id.imageViewCart)
+
         lateinit var mItem: MonthlySchedule
 
 

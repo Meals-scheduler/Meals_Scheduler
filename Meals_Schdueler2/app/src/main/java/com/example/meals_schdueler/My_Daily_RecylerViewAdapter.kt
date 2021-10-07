@@ -240,7 +240,7 @@ class My_Daily_RecylerViewAdapter(
         var edit: Button = view.findViewById(R.id.buttonEdit)
         var date: Button = view.findViewById(R.id.buttonSchedule)
         var delete: Button = view.findViewById(R.id.buttonDel)
-        var cart: ImageView = view.findViewById(R.id.imageViewCart)
+
         lateinit var mItem: DailySchedule
 
 

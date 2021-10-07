@@ -39,12 +39,12 @@ class My_Weekly_RecylerViewAdapter(
 
     private var weeklyValues: ArrayList<WeeklySchedule> = weeklyValues
 
-    //private var dailyValues: HashMap<String, DailySchedule> = dailyValues
+
     private var dailyValues: ArrayList<DailySchedule> = ArrayList()
 
     private var childFragmentManager = childFragmentManager
 
-    //  private lateinit var recipeList: ArrayList<Recipe>
+
 
     private var weeklyToDelete: Int? = null
 
@@ -240,11 +240,7 @@ class My_Weekly_RecylerViewAdapter(
     }
 
 
-//    fun setRecipeList(recipeList: ArrayList<Recipe>) {
-//
-//        this.recipeList = recipeList
-//        notifyDataSetChanged() // notifying android that we changed the list,refresh the list that was empty at first.
-//    }
+
 
     override fun getItemCount(): Int = weeklyValues.size
 
@@ -256,7 +252,7 @@ class My_Weekly_RecylerViewAdapter(
         var edit: Button = view.findViewById(R.id.buttonEdit)
         var date: Button = view.findViewById(R.id.buttonSchedule)
         var delete: Button = view.findViewById(R.id.buttonDel)
-        var cart: ImageView = view.findViewById(R.id.imageViewCart)
+
         lateinit var mItem: WeeklySchedule
 
 

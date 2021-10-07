@@ -39,12 +39,12 @@ class My_Yearly_RecylerViewAdapter(
 
     private var yearlyValues: ArrayList<YearlySchedule> = yearlyValues
 
-    // private var weeklyValues: HashMap<String, WeeklySchedule> = weeklyValues
+
     private var monthlyValues: ArrayList<MonthlySchedule> = ArrayList()
 
     private var childFragmentManager = childFragmentManager
 
-    // private lateinit var recipeList: ArrayList<Recipe>
+
     private var context = context
     private var activity = activity
 
@@ -241,7 +241,7 @@ class My_Yearly_RecylerViewAdapter(
         var edit: Button = view.findViewById(R.id.buttonEdit)
         var date: Button = view.findViewById(R.id.buttonSchedule)
         var delete: Button = view.findViewById(R.id.buttonDel)
-        var cart: ImageView = view.findViewById(R.id.imageViewCart)
+
         lateinit var mItem: YearlySchedule
 
 
